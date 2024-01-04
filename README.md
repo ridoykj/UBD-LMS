@@ -7,9 +7,12 @@ It contains all the necessary configuration and some placeholder files to get yo
 
 
 ## Initilize package
+npm i react  
 npm i --save-dev @types/react   
 npm i --save-dev @types/react-dom
+
 npm install -D tailwindcss postcss autoprefixer
+
 npx tailwindcss init 
 
 npm install react-icons

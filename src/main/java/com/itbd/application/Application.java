@@ -18,7 +18,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @Theme(value = "ubd-lms")
 @PWA(name = "UBD-LMS", shortName = "UBD-LMS", iconPath = "favicon/favicon.png")
 public class Application implements AppShellConfigurator {
-
     public static void main(String[] args) {
         SpringApplication.run(Application.class, args);        
     }

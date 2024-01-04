@@ -32,11 +32,10 @@ public class SubjectDAO {
     private String status;
 
     @Column
-    private Integer order;
+    private Integer orders;
 
     @Column
     private Boolean excludeInResult;
-
     @Column(name = "id_instructor_key")
     private Long instructorId;
 }
