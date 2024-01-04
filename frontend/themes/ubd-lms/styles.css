@@ -1,0 +1,95 @@
+/* @import "theme-editor.css"; */
+@import url('./components/account-switcher.css');
+@import url('./components/app-bar.css');
+@import url('./components/brand-expression.css');
+@import url('./components/charts.css');
+@import url('./components/details-drawer.css');
+@import url('./components/floating-action-button.css');
+@import url('./components/floating-button.css');
+@import url('./components/grid.css');
+@import url('./components/list-item.css');
+@import url('./components/navi-drawer.css');
+@import url('./components/navi-item.css');
+@import url('./components/navi-menu.css');
+@import url('./components/tab-bar.css');
+@import url('./components/view-frame.css');
+
+@import url('./lumo/border-radius.css');
+@import url('./lumo/icon-size.css');
+@import url('./lumo/margin.css');
+@import url('./lumo/padding.css');
+@import url('./lumo/shadow.css');
+@import url('./lumo/spacing.css');
+@import url('./lumo/typography.css');
+
+@import url('./misc/box-shadow-borders.css');
+
+@import url('./views/statistics.css');
+@import url('./views/image-list-view.css');
+
+:root {
+  --app-bar-height: var(--lumo-size-xl);
+
+  --navi-drawer-width: calc(var(--lumo-size-m) * 7);
+  --navi-drawer-rail-width: calc(var(--lumo-size-m) * 1.75);
+  --navi-item-indentation: calc(var(--lumo-icon-size-s) + var(--lumo-space-l));
+
+  --details-drawer-width: calc(var(--lumo-size-m) * 11);
+
+  --transition-duration-s: 160ms;
+  --transition-duration-m: 240ms;
+  --transition-duration-l: 320ms;
+
+  /* Responsive sizing and spacing */
+  --lumo-space-r-m: var(--lumo-space-m);
+  --lumo-space-r-l: var(--lumo-space-l);
+  --lumo-space-r-x: var(--lumo-space-l);
+  --lumo-space-wide-r-m: var(--lumo-space-wide-m);
+  --lumo-space-wide-r-l: var(--lumo-space-wide-l);
+}
+
+@media (max-width: 479px) {
+  :root {
+    --lumo-space-r-x: 0;
+  }
+}
+
+@media (min-width: 480px) and (max-width: 1023px) {
+  :root {
+    --lumo-space-r-x: var(--lumo-space-m);
+  }
+}
+
+@media (max-width: 1023px) {
+  :root {
+    --lumo-space-r-m: var(--lumo-space-s);
+    --lumo-space-r-l: var(--lumo-space-m);
+    --lumo-space-wide-r-m: var(--lumo-space-wide-s);
+    --lumo-space-wide-r-l: var(--lumo-space-wide-m);
+  }
+}
+
+html,
+body {
+  height: 100%;
+  overflow: hidden;
+  width: 100%;
+  --lumo-border-radius: calc(var(--lumo-size-m) / 2);
+}
+
+.root {
+  background-color: var(--lumo-contrast-5pct);
+}
+
+.app-header-outer,
+.app-footer-outer {
+  z-index: 3;
+}
+
+vaadin-grid-cell-content {
+  text-overflow: ellipsis;
+}
+
+vaadin-text-field {
+  align-self: auto;
+}
