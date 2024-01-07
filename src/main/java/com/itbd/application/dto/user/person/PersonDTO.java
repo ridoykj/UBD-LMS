@@ -1,6 +1,5 @@
 package com.itbd.application.dto.user.person;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import com.itbd.application.dao.user.person.AddressDAO;
@@ -16,8 +15,8 @@ public record PersonDTO(
             @NotBlank String additionalName,
             @NotBlank String familyName,
             String alternateName,
-            LocalDate birthDate,
-            LocalDate deathDate,
+            LocalDateTime birthDate,
+            LocalDateTime deathDate,
             String refPerson,
             String follows,
             Boolean hasOccupation,

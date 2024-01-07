@@ -22,7 +22,7 @@ public record DocumentRecordsDTO(
                         document.getEducationRecords(),
                         document.getNationalRecords(),
                         document.getMedicalRecords(),
-                        document.getRewardRecords(),
+                        document.getEmploymentRecords(),
                         document.getCreatedAt(),
                         document.getUpdatedAt());
       }
@@ -33,7 +33,7 @@ public record DocumentRecordsDTO(
             documentRecordsDAO.setEducationRecords(documentRecordsDTO.educationRecords());
             documentRecordsDAO.setNationalRecords(documentRecordsDTO.nationalRecords());
             documentRecordsDAO.setMedicalRecords(documentRecordsDTO.medicalRecords());
-            documentRecordsDAO.setRewardRecords(documentRecordsDTO.rewardRecords());
+            documentRecordsDAO.setEmploymentRecords(documentRecordsDTO.rewardRecords());
             documentRecordsDAO.setCreatedAt(documentRecordsDTO.createdAt());
             documentRecordsDAO.setUpdatedAt(documentRecordsDTO.updatedAt());
 

@@ -1,0 +1,81 @@
+package com.itbd.application.dto.org.edu;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.List;
+
+import com.itbd.application.dao.org.edu.BatchDAO;
+import com.itbd.application.dao.org.edu.ProgrammeDAO;
+import com.itbd.application.dao.org.edu.ReservationDAO;
+import com.itbd.application.dao.user.StudentDAO;
+
+public record BatchDTO(
+        Long id,
+        String name,
+        String code,
+        String description,
+        String status,
+        String session,
+        LocalDate graduationDate,
+        LocalDate startDate,
+        LocalDate endDate,
+        LocalDateTime admissionStartDate,
+        LocalDateTime admissionEndDate,
+        Long numberOfStudents,
+        Long numberOfLecture,
+        Long numberOfTutorial,
+        Long numberOfPractical,
+        Long numberOfCredits,
+        Long numberOfSemester,
+        ProgrammeDAO programme,
+        List<ReservationDAO> reservations,
+        List<StudentDAO> students) {
+
+    public static BatchDTO fromEntity(BatchDAO batch) {
+        return new BatchDTO(
+                batch.getId(),
+                batch.getName(),
+                batch.getCode(),
+                batch.getDescription(),
+                batch.getStatus(),
+                batch.getSession(),
+                batch.getGraduationDate(),
+                batch.getStartDate(),
+                batch.getEndDate(),
+                batch.getAdmissionStartDate(),
+                batch.getAdmissionEndDate(),
+                batch.getNumberOfStudents(),
+                batch.getNumberOfLecture(),
+                batch.getNumberOfTutorial(),
+                batch.getNumberOfPractical(),
+                batch.getNumberOfCredits(),
+                batch.getNumberOfSemester(),
+                batch.getProgramme(),
+                batch.getReservations(),
+                batch.getStudents());
+    }
+
+    public static void fromDTO(BatchDTO batchDTO, BatchDAO batchDAO) {
+        batchDAO.setId(batchDTO.id());
+        batchDAO.setName(batchDTO.name());
+        batchDAO.setCode(batchDTO.code());
+        batchDAO.setDescription(batchDTO.description());
+        batchDAO.setStatus(batchDTO.status());
+        batchDAO.setSession(batchDTO.session());
+        batchDAO.setGraduationDate(batchDTO.graduationDate());
+        batchDAO.setStartDate(batchDTO.startDate());
+        batchDAO.setEndDate(batchDTO.endDate());
+        batchDAO.setAdmissionStartDate(batchDTO.admissionStartDate());
+        batchDAO.setAdmissionEndDate(batchDTO.admissionEndDate());
+        batchDAO.setNumberOfStudents(batchDTO.numberOfStudents());
+        batchDAO.setNumberOfLecture(batchDTO.numberOfLecture());
+        batchDAO.setNumberOfTutorial(batchDTO.numberOfTutorial());
+        batchDAO.setNumberOfPractical(batchDTO.numberOfPractical());
+        batchDAO.setNumberOfCredits(batchDTO.numberOfCredits());
+        batchDAO.setNumberOfSemester(batchDTO.numberOfSemester());
+        batchDAO.setProgramme(batchDTO.programme());
+        batchDAO.setReservations(batchDTO.reservations());
+        batchDAO.setStudents(batchDTO.students());
+    }
+
+}
