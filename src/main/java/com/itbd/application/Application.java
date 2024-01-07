@@ -14,6 +14,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  *
  */
 // https://github.com/hrshadhin/school-management-system
+// https://github.com/ADi7YA26/Student-Dashboard
 @SpringBootApplication
 @Theme(value = "ubd-lms")
 @PWA(name = "UBD-LMS", shortName = "UBD-LMS", iconPath = "favicon/favicon.png")
