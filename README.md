@@ -7,7 +7,7 @@ It contains all the necessary configuration and some placeholder files to get yo
 
 
 ## Initilize package
-npm i react  
+npm i react
 npm i --save-dev @types/react   
 npm i --save-dev @types/react-dom
 

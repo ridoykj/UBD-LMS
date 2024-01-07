@@ -1,4 +1,7 @@
 {
+  "name": "no-name",
+  "license": "UNLICENSED",
+  "type": "module",
   "dependencies": {
     "@headlessui/react": "^1.7.17",
     "@hilla/form": "2.5.5",
@@ -95,11 +98,6 @@
   "overrides": {
     "@vaadin/bundles": "$@vaadin/bundles",
     "@hilla/react-components": "$@hilla/react-components",
-    "@headlessui/react": "$@headlessui/react",
-    "@types/react": "$@types/react",
-    "@types/react-dom": "$@types/react-dom",
-    "react": "$react",
-    "react-icons": "$react-icons",
     "@vaadin/common-frontend": "$@vaadin/common-frontend",
     "construct-style-sheets-polyfill": "$construct-style-sheets-polyfill",
     "lit": "$lit",
@@ -118,6 +116,11 @@
     "@hilla/generator-typescript-plugin-subtypes": "$@hilla/generator-typescript-plugin-subtypes",
     "@hilla/react-crud": "$@hilla/react-crud",
     "@hilla/generator-typescript-plugin-backbone": "$@hilla/generator-typescript-plugin-backbone",
-    "@hilla/generator-typescript-cli": "$@hilla/generator-typescript-cli"
+    "@hilla/generator-typescript-cli": "$@hilla/generator-typescript-cli",
+    "@headlessui/react": "$@headlessui/react",
+    "react": "$react",
+    "react-icons": "$react-icons",
+    "@types/react": "$@types/react",
+    "@types/react-dom": "$@types/react-dom"
   }
 }
