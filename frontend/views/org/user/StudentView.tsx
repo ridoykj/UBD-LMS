@@ -1,18 +1,14 @@
 import { VerticalLayout } from "@hilla/react-components/VerticalLayout";
 import { AutoCrud } from "@hilla/react-crud";
-import PersonMargeDTOModel from "Frontend/generated/com/itbd/application/dto/user/person/PersonMargeDTOModel";
-import { PersonMargeDtoCrudService } from "Frontend/generated/endpoints";
+import StudentDTOModel from "Frontend/generated/com/itbd/application/dto/user/StudentDTOModel";
+import { StudentDtoCrudService } from "Frontend/generated/endpoints";
 
 const StudentView = () => {
 
   return (
     <VerticalLayout style={{ alignItems: 'stretch', height: '100%', width: '100%' }}>
       <AutoCrud
-        // service={PersonDtoCrudService} model={PersonDTOModel}
-        // service={ProductDtoCrudService} model={ProductDtoModel}
-        // service={EmployeeService} model={EmployeeModel}
-        // service={ContactDtoCrudService} model={ContactDTOModel}
-        service={PersonMargeDtoCrudService} model={PersonMargeDTOModel}
+        service={StudentDtoCrudService} model={StudentDTOModel}
 
         style={{ height: '100%', width: '100%' }}
       // formProps={{

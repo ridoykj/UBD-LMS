@@ -11,11 +11,11 @@ import org.springframework.transaction.annotation.Transactional;
 import com.itbd.application.dao.org.place.FloorDAO;
 import com.itbd.application.dto.org.place.FloorDTO;
 import com.itbd.application.repos.org.place.FloorRepo;
-import com.itbd.application.repos.user.AddressRepo;
-import com.itbd.application.repos.user.ContactRepo;
-import com.itbd.application.repos.user.DocumentRecordsRepo;
-import com.itbd.application.repos.user.MedicalRepo;
-import com.itbd.application.repos.user.OccupationRepo;
+import com.itbd.application.repos.user.person.AddressRepo;
+import com.itbd.application.repos.user.person.ContactRepo;
+import com.itbd.application.repos.user.person.DocumentRecordsRepo;
+import com.itbd.application.repos.user.person.MedicalRepo;
+import com.itbd.application.repos.user.person.OccupationRepo;
 import com.vaadin.flow.server.auth.AnonymousAllowed;
 
 import dev.hilla.BrowserCallable;

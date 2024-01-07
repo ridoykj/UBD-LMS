@@ -186,13 +186,13 @@ public class OrganizationDAO {
     // private String subOrganization;
 
     @Column(name = "tx_tax_id")
-    private String taxID;
+    private String taxId;
 
     @Column(name = "tx_telephone")
     private String telephone;
 
     @Column(name = "tx_vat_id")
-    private String vatID;
+    private String vatId;
 
     // @Column(name = "tx_additional_type")
     // private String additionalType;

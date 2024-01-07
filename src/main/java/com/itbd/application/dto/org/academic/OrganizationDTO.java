@@ -6,8 +6,13 @@ import java.util.List;
 import com.itbd.application.dao.org.academic.OrganizationDAO;
 import com.itbd.application.dao.org.edu.DepartmentDAO;
 
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
+
 public record OrganizationDTO(
                 Long id,
+                @NotNull
+                @NotEmpty
                 String name,
                 String description,
                 String email,
@@ -34,9 +39,9 @@ public record OrganizationDTO(
                 String review,
                 String seeks,
                 String slogan,
-                String taxID,
+                String taxId,
                 String telephone,
-                String vatID,
+                String vatId,
                 String alternateName,
                 String identifier,
                 String image,
@@ -72,9 +77,9 @@ public record OrganizationDTO(
                                 organization.getReview(),
                                 organization.getSeeks(),
                                 organization.getSlogan(),
-                                organization.getTaxID(),
+                                organization.getTaxId(),
                                 organization.getTelephone(),
-                                organization.getVatID(),
+                                organization.getVatId(),
                                 organization.getAlternateName(),
                                 organization.getIdentifier(),
                                 organization.getImage(),
@@ -111,9 +116,9 @@ public record OrganizationDTO(
                 organizationDAO.setReview(organizationDTO.review());
                 organizationDAO.setSeeks(organizationDTO.seeks());
                 organizationDAO.setSlogan(organizationDTO.slogan());
-                organizationDAO.setTaxID(organizationDTO.taxID());
+                organizationDAO.setTaxId(organizationDTO.taxId());
                 organizationDAO.setTelephone(organizationDTO.telephone());
-                organizationDAO.setVatID(organizationDTO.vatID());
+                organizationDAO.setVatId(organizationDTO.vatId());
                 organizationDAO.setAlternateName(organizationDTO.alternateName());
                 organizationDAO.setIdentifier(organizationDTO.identifier());
                 organizationDAO.setImage(organizationDTO.image());

@@ -2,9 +2,13 @@ package com.itbd.application.dao.org.edu;
 
 import java.util.List;
 
+import com.itbd.application.constants.ProgrammeTypeEnum;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -29,11 +33,14 @@ public class ProgrammeDAO {
     @Column(name = "tx_name")
     private String name;
 
-    @Column(name = "tx_description")
-    private String description;
+    @Enumerated(EnumType.STRING)
+    private ProgrammeTypeEnum studyLevel;
 
     @Column(name = "tx_status")
     private String status;
+
+    @Column(name = "tx_description")
+    private String description;
 
     @ManyToOne
     @JoinColumn(name = "id_department_key", nullable = false)

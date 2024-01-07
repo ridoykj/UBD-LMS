@@ -2,6 +2,7 @@ package com.itbd.application.dto.org.edu;
 
 import java.util.List;
 
+import com.itbd.application.constants.ProgrammeTypeEnum;
 import com.itbd.application.dao.org.edu.BatchDAO;
 import com.itbd.application.dao.org.edu.CourseDAO;
 import com.itbd.application.dao.org.edu.DepartmentDAO;
@@ -10,6 +11,7 @@ import com.itbd.application.dao.org.edu.ProgrammeDAO;
 public record ProgrammeDTO(
         Long id,
         String name,
+        ProgrammeTypeEnum studyLevel,
         String description,
         String status,
         DepartmentDAO department,
@@ -20,6 +22,7 @@ public record ProgrammeDTO(
         return new ProgrammeDTO(
                 programee.getId(),
                 programee.getName(),
+                programee.getStudyLevel(),
                 programee.getDescription(),
                 programee.getStatus(),
                 programee.getDepartment(),
@@ -30,8 +33,10 @@ public record ProgrammeDTO(
     public static void fromDTO(ProgrammeDTO programeeDTO, ProgrammeDAO programeeDAO) {
         programeeDAO.setId(programeeDTO.id());
         programeeDAO.setName(programeeDTO.name());
-        programeeDAO.setDescription(programeeDTO.description());
+        programeeDAO.setStudyLevel(programeeDTO.studyLevel());
+
         programeeDAO.setStatus(programeeDTO.status());
+        programeeDAO.setDescription(programeeDTO.description());
         programeeDAO.setDepartment(programeeDTO.department());
         programeeDAO.setBatches(programeeDTO.batches());
         programeeDAO.setCourses(programeeDTO.courses());

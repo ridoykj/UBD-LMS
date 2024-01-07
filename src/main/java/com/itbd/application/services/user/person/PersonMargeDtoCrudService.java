@@ -15,12 +15,12 @@ import com.itbd.application.dao.user.person.MedicalDAO;
 import com.itbd.application.dao.user.person.OccupationDAO;
 import com.itbd.application.dao.user.person.PersonDAO;
 import com.itbd.application.dto.user.person.PersonMargeDTO;
-import com.itbd.application.repos.user.AddressRepo;
-import com.itbd.application.repos.user.ContactRepo;
-import com.itbd.application.repos.user.DocumentRecordsRepo;
-import com.itbd.application.repos.user.MedicalRepo;
-import com.itbd.application.repos.user.OccupationRepo;
-import com.itbd.application.repos.user.PersonRepo;
+import com.itbd.application.repos.user.person.AddressRepo;
+import com.itbd.application.repos.user.person.ContactRepo;
+import com.itbd.application.repos.user.person.DocumentRecordsRepo;
+import com.itbd.application.repos.user.person.MedicalRepo;
+import com.itbd.application.repos.user.person.OccupationRepo;
+import com.itbd.application.repos.user.person.PersonRepo;
 import com.vaadin.flow.server.auth.AnonymousAllowed;
 
 import dev.hilla.BrowserCallable;

@@ -1,5 +1,6 @@
 package com.itbd.application.services.org.academic;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,11 +12,11 @@ import org.springframework.transaction.annotation.Transactional;
 import com.itbd.application.dao.org.academic.OrganizationDAO;
 import com.itbd.application.dto.org.academic.OrganizationDTO;
 import com.itbd.application.repos.org.academic.OrganizationRepo;
-import com.itbd.application.repos.user.AddressRepo;
-import com.itbd.application.repos.user.ContactRepo;
-import com.itbd.application.repos.user.DocumentRecordsRepo;
-import com.itbd.application.repos.user.MedicalRepo;
-import com.itbd.application.repos.user.OccupationRepo;
+import com.itbd.application.repos.user.person.AddressRepo;
+import com.itbd.application.repos.user.person.ContactRepo;
+import com.itbd.application.repos.user.person.DocumentRecordsRepo;
+import com.itbd.application.repos.user.person.MedicalRepo;
+import com.itbd.application.repos.user.person.OccupationRepo;
 import com.vaadin.flow.server.auth.AnonymousAllowed;
 
 import dev.hilla.BrowserCallable;
@@ -60,7 +61,10 @@ public class OrganizationDtoCrudService implements CrudService<OrganizationDTO, 
                 ? jpaFilterConverter.toSpec(filter, OrganizationDAO.class)
                 : Specification.anyOf();
         Page<OrganizationDAO> persons = personRepo.findAll(spec, pageable);
-       return persons.stream().map(OrganizationDTO::fromEntity).toList();
+        return persons.stream().map(o -> {
+            o.setDepartments(null);
+            return o;
+        }).map(OrganizationDTO::fromEntity).toList();
     }
 
     @Override

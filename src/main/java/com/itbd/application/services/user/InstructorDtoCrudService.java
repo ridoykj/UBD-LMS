@@ -1,4 +1,4 @@
-package com.itbd.application.services.org.place;
+package com.itbd.application.services.user;
 
 import java.util.List;
 
@@ -8,9 +8,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.itbd.application.dao.org.place.RoomDAO;
-import com.itbd.application.dto.org.place.RoomDTO;
-import com.itbd.application.repos.org.place.RoomRepo;
+import com.itbd.application.dao.user.InstructorDAO;
+import com.itbd.application.dto.user.InstructorDTO;
+import com.itbd.application.repos.user.InstructorRepo;
 import com.itbd.application.repos.user.person.AddressRepo;
 import com.itbd.application.repos.user.person.ContactRepo;
 import com.itbd.application.repos.user.person.DocumentRecordsRepo;
@@ -27,13 +27,13 @@ import dev.hilla.crud.filter.Filter;
 
 @BrowserCallable
 @AnonymousAllowed
-public class RoomDtoCrudService implements CrudService<RoomDTO, Long> {
+public class InstructorDtoCrudService implements CrudService<InstructorDTO, Long> {
 
     @Autowired
     private JpaFilterConverter jpaFilterConverter;
 
     @Autowired
-    private RoomRepo personRepo;
+    private InstructorRepo personRepo;
     @Autowired
     private AddressRepo addressRepo;
     @Autowired
@@ -45,7 +45,7 @@ public class RoomDtoCrudService implements CrudService<RoomDTO, Long> {
     @Autowired
     private OccupationRepo occupationRepo;
 
-    // public PersonMargeDtoCrudService(RoomRepo personRepo, AddressRepo
+    // public PersonMargeDtoCrudService(BatchRepo personRepo, AddressRepo
     // addressRepo) {
     // this.personRepo = personRepo;
     // this.addressRepo = addressRepo;
@@ -53,27 +53,27 @@ public class RoomDtoCrudService implements CrudService<RoomDTO, Long> {
 
     @Override
     @Nonnull
-    public List<@Nonnull RoomDTO> list(Pageable pageable, @Nullable Filter filter) {
+    public List<@Nonnull InstructorDTO> list(Pageable pageable, @Nullable Filter filter) {
         // Basic list implementation that only covers pagination,
         // but not sorting or filtering
-        Specification<RoomDAO> spec = filter != null
-                ? jpaFilterConverter.toSpec(filter, RoomDAO.class)
+        Specification<InstructorDAO> spec = filter != null
+                ? jpaFilterConverter.toSpec(filter, InstructorDAO.class)
                 : Specification.anyOf();
-        Page<RoomDAO> persons = personRepo.findAll(spec, pageable);
-         return persons.stream().map(RoomDTO::fromEntity).toList();
+        Page<InstructorDAO> persons = personRepo.findAll(spec, pageable);
+        return persons.stream().map(InstructorDTO::fromEntity).toList();
     }
 
     @Override
     @Transactional
-    public @Nullable RoomDTO save(RoomDTO value) {
+    public @Nullable InstructorDTO save(InstructorDTO value) {
         boolean check = value.id() != null && value.id() > 0;
-        RoomDAO person = check
+        InstructorDAO person = check
                 ? personRepo.getReferenceById(value.id())
-                : new RoomDAO();
+                : new InstructorDAO();
 
         // person.setRecordComment(check ? "UPDATE" : "NEW");
-        RoomDTO.fromDTO(value, person);
-        return RoomDTO.fromEntity(personRepo.save(person));
+        InstructorDTO.fromDTO(value, person);
+        return InstructorDTO.fromEntity(personRepo.save(person));
     }
 
     @Override

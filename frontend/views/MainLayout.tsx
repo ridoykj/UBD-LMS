@@ -6,7 +6,7 @@ import AvatarControl from 'Frontend/components/profile/AvaterControl';
 import RNavItem from 'Frontend/components/sidebar/RNavItem';
 import { useRouteMetadata } from 'Frontend/util/routing';
 import { Suspense } from 'react';
-import { FaChartArea, FaClipboard, FaDoorOpen, FaHome, FaKey, FaReceipt, FaUserTie } from 'react-icons/fa';
+import { FaChartArea, FaClipboard, FaDoorOpen, FaHome, FaKey, FaPaintRoller, FaReceipt, FaScroll, FaUserTie } from 'react-icons/fa';
 import { FaBarsStaggered, FaBuildingCircleCheck, FaCalendarDay, FaCircleDollarToSlot, FaGear, FaShop, FaUser, FaUserGear, FaUserGraduate } from 'react-icons/fa6';
 import { Outlet } from 'react-router-dom';
 
@@ -34,7 +34,9 @@ export default function MainLayout() {
             <RNavItem name='Dashboard' icon={<FaChartArea />} route='/' />
             <RNavItem name='Organization' icon={<FaHome />} route='' subItems={[
               { name: 'Profile', icon: <FaUserGear />, route: '/academic/organization' },
-              { name: 'Programme', icon: <FaShop />, route: '/edu/programme' },
+              { name: 'Department', icon: <FaShop />, route: '/edu/department' },
+              { name: 'Programme', icon: <FaPaintRoller />, route: '/edu/programme' },
+              { name: 'Batch', icon: <FaScroll />, route: '/edu/batch' },
               { name: 'Course', icon: <FaBarsStaggered />, route: '/edu/course' },
               { name: 'Reservation', icon: <FaCalendarDay />, route: '/edu/reservation' }
             ]} />
