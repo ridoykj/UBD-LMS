@@ -5,7 +5,7 @@ import { GridColumn } from "@hilla/react-components/GridColumn.js";
 import { HorizontalLayout } from "@hilla/react-components/HorizontalLayout.js";
 import { VerticalLayout } from "@hilla/react-components/VerticalLayout.js";
 import { getUsers } from "Frontend/generated/Users";
-import User from "Frontend/generated/com/example/application/services/Users/User";
+import User from "Frontend/generated/com/itbd/application/services/Users/User";
 import { Users } from "Frontend/generated/endpoints";
 import React, { useEffect, useState } from "react";
 
