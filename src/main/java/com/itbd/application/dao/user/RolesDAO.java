@@ -28,7 +28,7 @@ public class RolesDAO extends AbstractEntity<Long> {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false, unique = true, name = "tx_name")
     private String name;
 
     @Column(name = "tx_description")
@@ -37,6 +37,6 @@ public class RolesDAO extends AbstractEntity<Long> {
     @Column(columnDefinition = "longtext")
     private String permissions;
     @ManyToMany
-    @JoinTable(name = "user_roles", joinColumns = @JoinColumn(name = "role_id"), inverseJoinColumns = @JoinColumn(name = "user_id"))
+    @JoinTable(name = "map_user_roles", joinColumns = @JoinColumn(name = "role_id"), inverseJoinColumns = @JoinColumn(name = "user_id"))
     private Set<UserDAO> users = new HashSet<>();
 }

@@ -2,7 +2,6 @@ package com.itbd.application.dao.user.person;
 
 import com.itbd.application.dao.AbstractEntity;
 
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -23,17 +22,16 @@ public class OccupationDAO extends AbstractEntity<Long> {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(columnDefinition = "longtext")
+    @Column(columnDefinition = "longtext", name = "tx_records")
     private String records;
 
-    @Column
+    @Column(name = "has_occupation")
     private String hasOccupation;
 
     // @ManyToOne(fetch = FetchType.LAZY)
     // @JoinColumn(name = "id_person_key", nullable = false)
-        @OneToOne
+    @OneToOne
     // @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "id_person_key")
     private PersonDAO personKey;
-
 }

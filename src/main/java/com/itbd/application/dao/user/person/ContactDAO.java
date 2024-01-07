@@ -2,7 +2,6 @@ package com.itbd.application.dao.user.person;
 
 import com.itbd.application.dao.AbstractEntity;
 
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -23,27 +22,27 @@ public class ContactDAO extends AbstractEntity<Long> {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(columnDefinition = "longtext")
+    @Column(columnDefinition = "longtext", name = "tx_email")
     private String email;
 
-    @Column(columnDefinition = "longtext")
-    private String phone;
+    @Column(columnDefinition = "longtext", name = "tx_mobile")
+    private String mobile;
 
-    @Column(columnDefinition = "longtext")
+    @Column(columnDefinition = "longtext", name = "tx_telephone")
     private String telephone;
 
-    @Column(columnDefinition = "longtext")
+    @Column(columnDefinition = "longtext", name = "tx_fax_number")
     private String faxNumber;
 
-    @Column
+    @Column(name = "id_contact_point")
     private Long contactPoint;
 
-    @Column(columnDefinition = "longtext")
+    @Column(columnDefinition = "longtext", name = "tx_web_profile")
     private String webProfile;
 
     // @ManyToOne(fetch = FetchType.LAZY)
     // @JoinColumn(name = "id_person_key", nullable = false)
-        @OneToOne
+    @OneToOne
     // @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "id_person_key")
     private PersonDAO personKey;

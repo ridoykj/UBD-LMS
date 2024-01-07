@@ -5,7 +5,6 @@ import java.math.BigDecimal;
 import com.itbd.application.constants.GenderEnum;
 import com.itbd.application.dao.AbstractEntity;
 
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -28,14 +27,17 @@ public class MedicalDAO extends AbstractEntity<Long> {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(precision = 8, scale = 3)
+    @Column(precision = 8, scale = 3, name = "flt_weight")
     private BigDecimal weight;
 
-    @Column(precision = 8, scale = 3)
+    @Column(precision = 8, scale = 3, name = "flt_height")
     private BigDecimal height;
 
-    @Column
+    @Column(name = "ct_children")
     private Long children;
+
+    @Column(name = "tx_medical_history")
+    private String medicalHistory;
 
     @Enumerated(EnumType.STRING)
     private GenderEnum gender;

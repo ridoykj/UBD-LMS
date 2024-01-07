@@ -10,7 +10,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Entity
-@Table(name = "t_org_section")
+@Table(name = "t_aca_section")
 @Getter
 @Setter
 public class SectionDAO {

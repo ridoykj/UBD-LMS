@@ -22,19 +22,19 @@ public class AddressDAO extends AbstractEntity<Long> {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column
+    @Column(name = "tx_birth_place")
     private String birthPlace;
 
-    @Column
+    @Column(name = "tx_death_place")
     private String deathPlace;
 
-    @Column
+    @Column(name = "tx_home_location")
     private String homeLocation;
 
-    @Column
+    @Column(name = "tx_present_address")
     private String presentAddress;
 
-    @Column
+    @Column(name = "tx_permanent_address")
     private String permanentAddress;
 
     // @ManyToOne(fetch = FetchType.LAZY)

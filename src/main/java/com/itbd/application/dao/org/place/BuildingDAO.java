@@ -2,6 +2,7 @@ package com.itbd.application.dao.org.place;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
 
 import com.itbd.application.constants.BuildingTypeEnum;
 
@@ -12,6 +13,9 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -24,100 +28,127 @@ public class BuildingDAO {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column
-    private String buildingName;
+    @Column(name = "tx_name")
+    private String name;
 
     @Enumerated(EnumType.STRING)
     private BuildingTypeEnum type;
 
-    @Column
+    @Column(name = "tx_block")
     private String block;
 
-    @Column
-    private Integer floor;
+    @Column(name = "ct_floor")
+    private Integer totalFloor;
 
-    @Column
-    private String room;
+    @Column(name = "ct_room")
+    private Integer totalRoom;
 
-    @Column
+    @Column(name = "tx_alternate_name")
     private String alternateName;
 
-    @Column
+    @Column(name = "dtt_opening_time")
     private LocalDateTime openingTime;
 
-    @Column
+    @Column(name = "dtt_closing_time")
     private LocalDateTime closingTime;
 
-    @Column
+    @Column(name = "ct_total_elevators")
     private Integer totalElevators;
 
-    @Column
+    @Column(name = "has_elevators")
     private Boolean hasElevators;
 
-    @Column
+    @Column(name = "ct_total_stair")
     private Integer totalStair;
 
-    @Column
+    @Column(name = "has_stair_available")
     private Boolean hasStairAvailable;
 
-    @Column
+    @Column(name = "ct_total_escalator")
     private Integer totalEscalator;
 
-    @Column
+    @Column(name = "has_escalator_available")
     private Boolean hasEscalatorAvailable;
 
-    @Column
+    @Column(name = "has_emergency_exit")
     private Boolean hasEmergencyExit;
 
-    @Column
-    private Boolean hasparkingAvailable;
+    @Column(name = "has_parking_available")
+    private Boolean hasParkingAvailable;
 
-    @Column
+    @Column(name = "has_toilet_available")
     private Boolean hasToiletAvailable;
 
-    @Column
+    @Column(name = "has_cafeteria_available")
     private Boolean hasCafeteriaAvailable;
 
-    @Column
+    @Column(name = "has_public_access")
     private Boolean hasPublicAccess;
 
-    @Column
+    @Column(name = "has_pets_allowed")
     private Boolean hasPetsAllowed;
 
-    @Column
+    @Column(name = "has_smoking_allowed")
     private Boolean hasSmokingAllowed;
 
-    @Column
-    private Boolean parkingAvailable;
+    @Column(name = "has_wifi_available")
+    private Boolean hasWifiAvailable;
 
-    @Column
+    @Column(name = "has_cctv_available")
+    private Boolean hasCctvAvailable;
+
+    @Column(name = "has_security_guard")
+    private Boolean hasSecurityGuard;
+
+    @Column(name = "has_fire_alarm")
+    private Boolean hasFireAlarm;
+
+    @Column(name = "has_fire_extinguisher")
+    private Boolean hasFireExtinguisher;
+
+    @Column(name = "has_fire_hydrant")
+    private Boolean hasFireHydrant;
+
+    @Column(name = "tx_address")
     private String address;
 
-    @Column
+    @Column(name = "tx_contact")
     private String contact;
 
-    @Column
+    @Column(name = "flt_building_height")
     private BigDecimal buildingHeight;
 
-    @Column
+    @Column(name = "flt_building_width")
     private BigDecimal buildingWidth;
 
-    @Column
+    @Column(name = "flt_building_length")
     private BigDecimal buildingLength;
 
-    @Column
+    @Column(name = "tx_building_color")
     private String buildingColor;
 
-    @Column
+    @Column(name = "tx_building_color_code")
+    private String buildingColorCode;
+
+    @Column(name = "tx_building_image")
     private String pincode;
 
-    @Column
-    private String latitude;
+    @Column(name = "flt_latitude")
+    private BigDecimal latitude;
 
-    @Column
-    private String longitude;
+    @Column(name = "flt_longitude")
+    private BigDecimal longitude;
 
-    @Column
+    @Column(name = "tx_google_map_link")
     private String googleMapLink;
+
+    @OneToMany(mappedBy = "building")
+    private List<FloorDAO> floors;
+
+    
+    @ManyToOne
+    @JoinColumn(name = "id_sector_key")
+    private SectorDAO sector;
+
 
 }

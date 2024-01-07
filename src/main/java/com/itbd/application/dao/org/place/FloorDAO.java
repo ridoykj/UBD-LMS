@@ -1,12 +1,16 @@
 package com.itbd.application.dao.org.place;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -19,42 +23,55 @@ public class FloorDAO {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column
-    private String floorName;
+    @Column(name = "tx_name")
+    private String name;
 
-    @Column
+    @Column(name = "tx_alternate_name")
     private String alternateName;
 
-    @Column
+    @Column(name = "tx_description")
     private String description;
 
-    @Column
+    @Column(name = "tx_contact")
     private String contact;
 
-    @Column
+    @Column(name = "tx_block")
     private Integer floorLevel;
 
-    @Column
+    @Column(name = "flt_height")
     private BigDecimal floorHeight;
 
-    @Column
+    @Column(name = "flt_width")
     private BigDecimal floorWidth;
 
-    @Column
+    @Column(name = "flt_length")
     private BigDecimal floorLength;
 
-    @Column
+    @Column(name = "tx_color")
     private String floorColor;
 
-    @Column
+    @Column(name = "tx_color_code")
+    private String floorColorCode;
+
+    @Column(name = "ct_total_rooms")
     private Integer totalRooms;
 
-    @Column
+    @Column(name = "ct_total_blocks")
     private Integer totalBlocks;
 
-    @Column
+    @Column(name = "ct_total_units")
     private Integer totalUnits;
 
-    @Column
+    @Column(name = "ct_total_exits")
     private Integer totalExits;
+
+    
+    @OneToMany(mappedBy = "floor")
+    private List<RoomDAO> rooms;
+
+    
+    @ManyToOne
+    @JoinColumn(name = "id_building_key")
+    private BuildingDAO building;
+
 }

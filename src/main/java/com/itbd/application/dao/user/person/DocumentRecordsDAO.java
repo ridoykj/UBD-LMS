@@ -2,7 +2,6 @@ package com.itbd.application.dao.user.person;
 
 import com.itbd.application.dao.AbstractEntity;
 
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -23,23 +22,23 @@ public class DocumentRecordsDAO extends AbstractEntity<Long> {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(columnDefinition = "longtext")
+    @Column(columnDefinition = "longtext", name = "tx_records")
     private String records;
 
-    @Column(columnDefinition = "longtext")
+    @Column(columnDefinition = "longtext", name = "tx_education_records")
     private String educationRecords;
 
-    @Column(columnDefinition = "longtext")
+    @Column(columnDefinition = "longtext", name = "tx_national_records")
     private String nationalRecords;
 
-    @Column(columnDefinition = "longtext")
+    @Column(columnDefinition = "longtext", name = "tx_medical_records")
     private String medicalRecords;
 
-    @Column(columnDefinition = "longtext")
-    private String rewardRecords;
+    @Column(columnDefinition = "longtext", name = "tx_employment_records")
+    private String employmentRecords;
     // @ManyToOne(fetch = FetchType.LAZY)
     // @JoinColumn(name = "id_person_key", nullable = false)
-       @OneToOne
+    @OneToOne
     // @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "id_person_key")
     private PersonDAO personKey;

@@ -1,10 +1,13 @@
 package com.itbd.application.dao.org.place;
 
+import java.util.List;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -17,24 +20,27 @@ public class SectorDAO {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column
-    private String sectorName;
+    @Column(name = "tx_name")
+    private String name;
 
-    @Column
+    @Column(name = "tx_alternate_name")
     private String alternateName;
 
-    @Column
+    @Column(name = "tx_sector_code")
     private String city;
 
-    @Column
+    @Column(name = "tx_state")
     private String state;
 
-    @Column
+    @Column(name = "tx_country")
     private String country;
 
-    @Column
+    @Column(name = "tx_contact")
     private String contact;
 
-    @Column
+    @Column(name = "description")
     private String description;
+
+    @OneToMany(mappedBy = "sector")
+    private List<BuildingDAO> buildings;
 }

@@ -10,7 +10,7 @@ import jakarta.persistence.Id;
 import lombok.Getter;
 import lombok.Setter;
 
-@Entity(name = "t_attendance")
+@Entity(name = "t_aca_attendance")
 @Getter
 @Setter
 public class AttendanceDAO {

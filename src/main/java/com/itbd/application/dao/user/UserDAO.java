@@ -28,32 +28,32 @@ public class UserDAO extends AbstractEntity<Long> {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false, unique = true, name = "tx_username")
     private String username;
 
-    @Column(nullable = false)
+    @Column(nullable = false, name = "tx_password")
     private String password;
 
-    @Column(length = 64)
+    @Column(length = 64, name = "tx_primary_phone")
     private String primaryPhone;
 
-    @Column(length = 128)
+    @Column(length = 128, name = "tx_primary_email")
     private String primaryEmail;
 
-    @Column(columnDefinition = "longtext")
+    @Column(columnDefinition = "longtext", name = "tx_permissions")
     private String permissions;
 
-    @Column
-    private Boolean isLocked;
+    @Column(name = "has_locked")
+    private Boolean hasLocked;
 
-    @Column
-    private Boolean isExpired;
+    @Column(name = "has_expired")
+    private Boolean hasExpired;
 
     @OneToOne
     @JoinColumn(name = "id_person_key")
     private PersonDAO personKey;
 
     @ManyToMany
-    @JoinTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
+    @JoinTable(name = "map_user_roles", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<RolesDAO> roles = new HashSet<>();
 }

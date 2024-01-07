@@ -1,9 +1,12 @@
 package com.itbd.application.dao.user.person;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import com.itbd.application.constants.BloodGroupsEnum;
 import com.itbd.application.dao.AbstractEntity;
+import com.itbd.application.dao.user.InstructorDAO;
+import com.itbd.application.dao.user.StudentDAO;
 import com.itbd.application.dao.user.UserDAO;
 
 import jakarta.persistence.CascadeType;
@@ -33,58 +36,58 @@ public class PersonDAO extends AbstractEntity<Long> {
     @Version
     private Long version;
 
-    @Column(length = 128)
+    @Column(length = 128, name = "tx_given_name")
     private String givenName;
 
-    @Column(length = 64)
+    @Column(length = 64, name = "tx_additional_name")
     private String additionalName;
 
-    @Column(length = 64)
+    @Column(length = 64, name = "tx_family_name")
     private String familyName;
 
-    @Column(length = 64)
+    @Column(length = 64, name = "tx_full_name")
     private String alternateName;
 
-    @Column
-    private LocalDate birthDate;
+    @Column(name = "dtt_birth")
+    private LocalDateTime birthDate;
 
-    @Column
-    private LocalDate deathDate;
+    @Column(name = "dtt_death")
+    private LocalDateTime deathDate;
 
-    @Column(columnDefinition = "longtext")
+    @Column(columnDefinition = "longtext", name = "tx_ref_person")
     private String refPerson;
 
-    @Column(columnDefinition = "longtext")
+    @Column(columnDefinition = "longtext", name = "tx_fllows")
     private String follows;
 
-    @Column
+    @Column(name = "has_occupation")
     private Boolean hasOccupation;
 
-    @Column(length = 8)
+    @Column(length = 8, name = "tx_honorific_prefix")
     private String honorificPrefix;
 
-    @Column(length = 8)
+    @Column(length = 8, name = "tx_honorific_suffix")
     private String honorificSuffix;
 
-    @Column(length = 64)
+    @Column(length = 64, name = "tx_father_name")
     private String fatherName;
 
-    @Column(length = 16)
-    private String fatherPhoneNo;
+    @Column(length = 16, name = "tx_father_phone")
+    private String fatherPhone;
 
-    @Column(length = 64)
+    @Column(length = 64, name = "tx_mother_name")
     private String motherName;
 
-    @Column(length = 16)
-    private String motherPhoneNo;
+    @Column(length = 16, name = "tx_mother_phone")
+    private String motherPhone;
 
-    @Column(columnDefinition = "longtext")
+    @Column(columnDefinition = "longtext", name = "tx_knows_language")
     private String knowsLanguage;
 
-    @Column(columnDefinition = "longtext")
+    @Column(columnDefinition = "longtext", name = "tx_nationality")
     private String nationality;
 
-    @Column(columnDefinition = "longtext")
+    @Column(columnDefinition = "longtext", name = "tx_sponsor")
     private String sponsor;
 
     @Enumerated(EnumType.STRING)
@@ -110,5 +113,11 @@ public class PersonDAO extends AbstractEntity<Long> {
 
     @OneToOne(mappedBy = "personKey", cascade = CascadeType.ALL)
     private UserDAO users;
+
+    @OneToOne(mappedBy = "personKey", cascade = CascadeType.ALL)
+    private StudentDAO student;
+
+    @OneToOne(mappedBy = "personKey", cascade = CascadeType.ALL)
+    private InstructorDAO instructor;
 
 }

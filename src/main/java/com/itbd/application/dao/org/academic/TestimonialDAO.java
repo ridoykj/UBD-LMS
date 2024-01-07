@@ -14,7 +14,7 @@ import jakarta.persistence.Id;
 import lombok.Getter;
 import lombok.Setter;
 
-@Entity(name = "t_testimonial")
+@Entity(name = "t_aca_testimonial")
 @Getter
 @Setter
 public class TestimonialDAO {
@@ -34,14 +34,14 @@ public class TestimonialDAO {
     private LocalDateTime testimonialDate;
 
     @Enumerated(EnumType.STRING)
-    private TestimonialTypeEnum testimonialType;
+    private TestimonialTypeEnum type;
 
     @Column
-    private String testimonialStatus;
+    private String status;
 
     @Column
-    private String testimonialRemarks;
+    private String remarks;
 
     @Column
-    private String testimonialAttachment;
+    private String attachment;
 }
