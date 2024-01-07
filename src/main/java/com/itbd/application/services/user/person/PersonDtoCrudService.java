@@ -7,8 +7,8 @@ import org.springframework.data.domain.Pageable;
 
 import com.itbd.application.dao.user.person.PersonDAO;
 import com.itbd.application.dto.user.person.PersonDTO;
-import com.itbd.application.repos.AddressRepo;
-import com.itbd.application.repos.PersonRepo;
+import com.itbd.application.repos.user.AddressRepo;
+import com.itbd.application.repos.user.PersonRepo;
 import com.vaadin.flow.server.auth.AnonymousAllowed;
 
 import dev.hilla.BrowserCallable;
