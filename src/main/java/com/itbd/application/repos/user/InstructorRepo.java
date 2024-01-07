@@ -3,7 +3,7 @@ package com.itbd.application.repos.user;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
-import com.itbd.application.dao.user.person.PersonDAO;
+import com.itbd.application.dao.user.InstructorDAO;
 
-public interface PersonRepo extends JpaRepository<PersonDAO, Long>, JpaSpecificationExecutor<PersonDAO> {
+public interface InstructorRepo extends JpaRepository<InstructorDAO, Long>, JpaSpecificationExecutor<InstructorDAO> {
 }
