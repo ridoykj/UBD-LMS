@@ -7,8 +7,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.itbd.application.dao.org.academic.OrganizationDAO;
 import com.itbd.application.dao.org.edu.DepartmentDAO;
 import com.itbd.application.dto.org.edu.DepartmentDTO;
@@ -70,7 +68,7 @@ public class DepartmentDtoCrudService implements CrudService<DepartmentDTO, Long
             OrganizationDAO organization = d.getOrganization();
             organization.setDepartments(null);
             d.setOrganization(organization);
-            d.setProgrammes(null);
+            d.setProgrammes(List.of());
             return d;
         }).map(DepartmentDTO::fromEntity).toList();
     }

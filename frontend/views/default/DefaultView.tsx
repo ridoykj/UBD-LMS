@@ -19,14 +19,22 @@ const messages: CSSProperties = {
 };
 export default function DefaultView() {
   const [name, setName] = useState('');
+  // return (
+  //   <>
+  //     <h1 style={{
+  //       fontSize: '40px',
+  //     }}>Not Implemented</h1>
+  //     <div style={messages}>
+  //       Sorry, this feature is not available yet.
+  //     </div >
+  //   </>
+  // )
+
   return (
-    <>
-      <h1 style={{
-        fontSize: '40px',
-      }}>Not Implemented</h1>
-      <div style={messages}>
-        Sorry, this feature is not available yet.
-      </div >
-    </>
-  )
+    <div className="flex flex-col h-full items-center justify-center p-l text-center box-border">
+      <img style={{ width: '200px' }} src="images/empty-plant.png" />
+      <h2>This place intentionally left empty</h2>
+      <p>It’s a place where you can grow your own UI 🤗</p>
+    </div>
+  );
 }
