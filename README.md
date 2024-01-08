@@ -11,6 +11,8 @@ npm i react
 npm i --save-dev @types/react   
 npm i --save-dev @types/react-dom
 
+npm i @fullcalendar/core @fullcalendar/react @fullcalendar/daygrid @fullcalendar/timegrid @fullcalendar/interaction
+
 npm install -D tailwindcss postcss autoprefixer
 
 npx tailwindcss init 
