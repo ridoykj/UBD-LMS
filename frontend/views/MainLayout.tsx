@@ -1,6 +1,7 @@
 
 import { AppLayout } from '@hilla/react-components/AppLayout.js';
 import { DrawerToggle } from '@hilla/react-components/DrawerToggle.js';
+import { Scroller } from '@hilla/react-components/Scroller.js';
 import Placeholder from 'Frontend/components/placeholder/Placeholder';
 import AvatarControl from 'Frontend/components/profile/AvaterControl';
 import RNavItem from 'Frontend/components/sidebar/RNavItem';
@@ -22,42 +23,52 @@ export default function MainLayout() {
             {/* <img src="images/move-right.png" alt="" className='w-10' />            
             <h1 className="text-3xl uppercase text-indigo-500">My App</h1> */}
             {/* <img src="images/logo_uoa.svg" alt="" className='w-30' /> */}
-            <img src="images/move-right.png" alt="" className='w-20' />
-            <h1 className="text-3xl uppercase text-indigo-500"></h1>
+            {/* <img src="images/move-right.png" alt="" className='w-20' /> */}
+            {/* <h1 className="text-3xl uppercase text-indigo-500 font-bold">AFG College with the Univerity of Aberdeen</h1> */}
+            <h1 className="text-xl text-indigo-500 font-bold">AFG College with the Univerity of Aberdeen</h1>
           </div>
           <nav>
-            {/* <RNavItem name='Home' icon={<FaHome />} route='/' />
+            <Scroller
+              scrollDirection="vertical"
+              style={{
+                borderBottom: '1px solid var(--lumo-contrast-10pct)',
+                // padding: 'var(--lumo-space-m)',
+                height: 'calc(100vh - 5rem)',
+              }}
+            >
+              {/* <RNavItem name='Home' icon={<FaHome />} route='/' />
             <RNavItem name='Shop' icon={<FaShoppingCart />} route='/shop' />
             <RNavItem name='Group' icon={<FaIoxhost />} route='' subItems={[{ name: 'Grid', icon: <FaTable />, route: '/grid' }, { name: 'About', icon: <FaQuestionCircle />, route: '/About' }]} />
             <RNavItem name='Users' icon={<FaRegUser />} route='/users' />
             <RNavItem name='Profiles' icon={<FaRegUser />} route='/profiles' /> */}
 
-            <RNavItem name='Dashboard' icon={<FaChartArea />} route='/' />
-            <RNavItem name='Organization' icon={<FaHome />} route='' subItems={[
-              { name: 'Profile', icon: <FaUserGear />, route: '/academic/organization' },
-              { name: 'Department', icon: <FaShop />, route: '/edu/department' },
-              { name: 'Programme', icon: <FaPaintRoller />, route: '/edu/programme' },
-              { name: 'Batch', icon: <FaScroll />, route: '/edu/batch' },
-              { name: 'Course', icon: <FaBarsStaggered />, route: '/edu/course' },
-              { name: 'Reservation', icon: <FaCalendarDay />, route: '/edu/reservation' }
-            ]} />
-            <RNavItem name='User' icon={<FaUser />} route='' subItems={[
-              { name: 'Professor', icon: <FaUserTie />, route: '/user/instructors' },
-              { name: 'Student', icon: <FaUserGraduate />, route: '/user/students' },
-              { name: 'Authorization', icon: <FaKey />, route: '/user/authorization' }
-            ]} />
-            <RNavItem name='Report' icon={<FaClipboard />} route='' subItems={[
-              { name: 'Schedule', icon: <FaCalendarDay />, route: '/default' },
-              { name: 'Result', icon: <FaReceipt />, route: '/default' },
-              { name: 'Revenue', icon: <FaCircleDollarToSlot />, route: '/default' }
-            ]} />
-            <RNavItem name='Configration' icon={<FaGear />} route='' subItems={[
-              { name: 'Building', icon: <FaBuildingCircleCheck />, route: '/place/building' },
-              { name: 'Floor', icon: <FaBarsStaggered />, route: '/place/floor' },
-              { name: 'Room', icon: <FaDoorOpen />, route: '/place/room' }
-            ]} />
-            {/* <RNavItem name='Users' icon={<FaRegUser />} route='/users' />
+              <RNavItem name='Dashboard' icon={<FaChartArea />} route='/' />
+              <RNavItem name='Organization' icon={<FaHome />} route='' subItems={[
+                { name: 'Profile', icon: <FaUserGear />, route: '/academic/organization' },
+                { name: 'Department', icon: <FaShop />, route: '/edu/department' },
+                { name: 'Programme', icon: <FaPaintRoller />, route: '/edu/programme' },
+                { name: 'Batch', icon: <FaScroll />, route: '/edu/batch' },
+                { name: 'Course', icon: <FaBarsStaggered />, route: '/edu/course' },
+                { name: 'Reservation', icon: <FaCalendarDay />, route: '/edu/reservation' }
+              ]} />
+              <RNavItem name='User' icon={<FaUser />} route='' subItems={[
+                { name: 'Professor', icon: <FaUserTie />, route: '/user/instructors' },
+                { name: 'Student', icon: <FaUserGraduate />, route: '/user/students' },
+                { name: 'Authorization', icon: <FaKey />, route: '/user/authorization' }
+              ]} />
+              <RNavItem name='Report' icon={<FaClipboard />} route='' subItems={[
+                { name: 'Schedule', icon: <FaCalendarDay />, route: '/default' },
+                { name: 'Result', icon: <FaReceipt />, route: '/default' },
+                { name: 'Revenue', icon: <FaCircleDollarToSlot />, route: '/default' }
+              ]} />
+              <RNavItem name='Configration' icon={<FaGear />} route='' subItems={[
+                { name: 'Building', icon: <FaBuildingCircleCheck />, route: '/place/building' },
+                { name: 'Floor', icon: <FaBarsStaggered />, route: '/place/floor' },
+                { name: 'Room', icon: <FaDoorOpen />, route: '/place/room' }
+              ]} />
+              {/* <RNavItem name='Users' icon={<FaRegUser />} route='/users' />
             <RNavItem name='Profiles' icon={<FaRegUser />} route='/profiles' /> */}
+            </Scroller>
           </nav>
         </header>
       </div>

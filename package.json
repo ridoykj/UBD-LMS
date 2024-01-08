@@ -3,6 +3,11 @@
   "license": "UNLICENSED",
   "type": "module",
   "dependencies": {
+    "@fullcalendar/core": "^6.1.10",
+    "@fullcalendar/daygrid": "^6.1.10",
+    "@fullcalendar/interaction": "^6.1.10",
+    "@fullcalendar/react": "^6.1.10",
+    "@fullcalendar/timegrid": "^6.1.10",
     "@headlessui/react": "^1.7.17",
     "@hilla/form": "2.5.5",
     "@hilla/frontend": "2.5.5",
@@ -93,7 +98,7 @@
       "workbox-core": "7.0.0",
       "workbox-precaching": "7.0.0"
     },
-    "hash": "66c99c0dac42f2a1b36aefed899920a25e140d91e0404085c4d6792a7bb79275"
+    "hash": "0ad87384f0930826915b7a534ea8090ff3b9acc55c20f31f9f63e61de42eb4fb"
   },
   "overrides": {
     "@vaadin/bundles": "$@vaadin/bundles",
@@ -121,6 +126,11 @@
     "react": "$react",
     "react-icons": "$react-icons",
     "@types/react": "$@types/react",
-    "@types/react-dom": "$@types/react-dom"
+    "@types/react-dom": "$@types/react-dom",
+    "@fullcalendar/core": "$@fullcalendar/core",
+    "@fullcalendar/daygrid": "$@fullcalendar/daygrid",
+    "@fullcalendar/interaction": "$@fullcalendar/interaction",
+    "@fullcalendar/react": "$@fullcalendar/react",
+    "@fullcalendar/timegrid": "$@fullcalendar/timegrid"
   }
 }
