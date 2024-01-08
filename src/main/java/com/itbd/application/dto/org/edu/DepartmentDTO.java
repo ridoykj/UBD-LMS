@@ -6,15 +6,18 @@ import com.itbd.application.dao.org.academic.OrganizationDAO;
 import com.itbd.application.dao.org.edu.DepartmentDAO;
 import com.itbd.application.dao.org.edu.ProgrammeDAO;
 
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
+
 public record DepartmentDTO(
                 Long id,
-                String name,
+                @NotNull @NotEmpty String name,
                 String code,
                 String description,
                 String status,
                 String headOfDepartment,
                 List<ProgrammeDAO> programmes,
-                OrganizationDAO organization) {
+                @NotNull OrganizationDAO organization) {
 
         public static DepartmentDTO fromEntity(DepartmentDAO department) {
                 return new DepartmentDTO(
