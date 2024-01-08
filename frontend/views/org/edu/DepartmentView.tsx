@@ -1,18 +1,18 @@
 import { ComboBox, ComboBoxDataProviderCallback, ComboBoxDataProviderParams } from '@hilla/react-components/ComboBox';
+import { FormLayout } from '@hilla/react-components/FormLayout.js';
+import { HorizontalLayout } from '@hilla/react-components/HorizontalLayout.js';
 import { TextArea } from "@hilla/react-components/TextArea";
 import { VerticalLayout } from "@hilla/react-components/VerticalLayout";
 import { AutoCrud } from "@hilla/react-crud";
+import { FormItem } from '@hilla/react-components/FormItem.js';
 import OrganizationDTOModel from 'Frontend/generated/com/itbd/application/dto/org/academic/OrganizationDTOModel';
 import DepartmentDTO from 'Frontend/generated/com/itbd/application/dto/org/edu/DepartmentDTO';
 import DepartmentDTOModel from 'Frontend/generated/com/itbd/application/dto/org/edu/DepartmentDTOModel';
+import PropertyStringFilter from 'Frontend/generated/dev/hilla/crud/filter/PropertyStringFilter';
+import Matcher from 'Frontend/generated/dev/hilla/crud/filter/PropertyStringFilter/Matcher';
 import { DepartmentDtoCrudService, OrganizationDtoCrudService } from "Frontend/generated/endpoints";
 import { comboBoxLazyFilter } from 'Frontend/util/comboboxLazyFilterUtil';
 import { useMemo, useState } from 'react';
-import { Select, SelectItem } from '@hilla/react-components/Select.js';
-import { HorizontalLayout } from '@hilla/react-components/HorizontalLayout.js';
-import PropertyStringFilter from 'Frontend/generated/dev/hilla/crud/filter/PropertyStringFilter';
-import AndFilter from 'Frontend/generated/dev/hilla/crud/filter/AndFilter';
-import Matcher from 'Frontend/generated/dev/hilla/crud/filter/PropertyStringFilter/Matcher';
 
 const DepartmentView = () => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -20,11 +20,9 @@ const DepartmentView = () => {
 
   function PriceRenderer({ item }: { item: DepartmentDTO }) {
     const { organization } = item;
-    // const color = name. === 'D' ? 'red' : 'green';
-    // console.log('item', item);
     return <span style={{ fontWeight: 'bold' }}>{organization?.name}</span>;
   }
-  const [nameFilterValue, setNameFilterValue] = useState('');
+  const [orgNameFilter, setOrgNameFilter] = useState('');
 
   const filter = useMemo(() => {
     // const categoryFilter: PropertyStringFilter = {
@@ -35,8 +33,8 @@ const DepartmentView = () => {
     // };
 
     const nameFilter: PropertyStringFilter = {
-      propertyId: 'name',
-      filterValue: nameFilterValue,
+      propertyId: 'organization.name',
+      filterValue: orgNameFilter,
       matcher: Matcher.CONTAINS,
       '@type': 'propertyString',
     };
@@ -48,7 +46,7 @@ const DepartmentView = () => {
 
     // return searchTerm == 'All' ? nameFilter : andFilter;
     return nameFilter;
-  }, [searchTerm, nameFilterValue]);
+  }, [searchTerm, orgNameFilter]);
 
   const dataProvider = useMemo(
     () =>
@@ -63,27 +61,37 @@ const DepartmentView = () => {
           callback(result, 2);
         });
       },
-    [searchTerm]
+    [searchTerm, orgNameFilter]
   );
 
+  const responsiveSteps = [
+    { minWidth: '0', columns: 1 },
+    { minWidth: '500px', columns: 2 },
+  ];
 
   return (
     <VerticalLayout style={{ alignItems: 'stretch', height: '100%', width: '100%' }}>
       <HorizontalLayout style={{ alignItems: 'stretch', width: '100%' }}>
-        <ComboBox label="Profile" dataProvider={dataProvider} itemLabelPath='name' itemValuePath='name' onValueChanged={
-          (e) => {
-            console.log('value', e.detail.value);
-            const searchTerm = (e.detail.value || '').trim().toLowerCase();
-            console.log('searchTerm', searchTerm);
-            setSearchTerm(searchTerm);
-          }
-        } />
+        <FormLayout responsiveSteps={responsiveSteps}>
+          <FormItem>
+            <label slot="label">Profile</label>
+            <ComboBox dataProvider={dataProvider} itemLabelPath='name' itemValuePath='name' clearButtonVisible={true} onValueChanged={
+              (e) => {
+                console.log('value', e.detail.value);
+                const searchTerm = (e.detail.value || '').trim().toLowerCase();
+                console.log('searchTerm', searchTerm);
+                setSearchTerm(searchTerm);
+                setOrgNameFilter(searchTerm);
+              }
+            } />
+          </FormItem>
+        </FormLayout>
       </HorizontalLayout>
       <AutoCrud
         service={DepartmentDtoCrudService} model={DepartmentDTOModel}
         style={{ height: '100%', width: '100%' }}
         gridProps={{
-          visibleColumns: ['name', 'code', 'status', 'organization.name', 'programmes'],
+          visibleColumns: ['name', 'code', 'status', 'organization.name',],
           rowNumbers: true,
           experimentalFilter: filter,
           columnOptions: {
@@ -97,7 +105,7 @@ const DepartmentView = () => {
           visibleFields: ['organization', 'name', 'code', 'status', 'description',],
           fieldOptions: {
             organization: {
-              renderer: ({ field }) => <ComboBox {...field} label="Profile" dataProvider={dataProvider} itemLabelPath='name' itemValuePath='id' />,
+              renderer: ({ field }) => <ComboBox {...field} label="Profile" dataProvider={dataProvider} itemLabelPath='name' itemValuePath='id' required={true} />,
             },
             description: {
               renderer: ({ field }) => <TextArea {...field} label="Full Description" />,
