@@ -23,7 +23,7 @@ import React, { useMemo, useState } from "react";
 const ProgrammeView = () => {
   const [orgNameFilter, setOrgNameFilter] = useState('');
   const [departmentNameFilter, setDepartmentNameFilter] = useState('');
-  const [clear, setClear] = useState('');
+  const [clear, setClear] = useState<DepartmentDTOModel>();
 
   function PriceRenderer({ item }: { item: ProgrammeDTO }) {
     const { department } = item;
@@ -155,7 +155,6 @@ const ProgrammeView = () => {
                 const searchTerm = (e.detail.value || '').trim().toLowerCase();
                 console.log('searchTerm', searchTerm);
                 setOrgNameFilter(searchTerm);
-                // setClear('');
               }
             } />
           </FormItem>
