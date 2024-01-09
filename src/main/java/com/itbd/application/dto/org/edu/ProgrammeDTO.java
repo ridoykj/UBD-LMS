@@ -8,9 +8,11 @@ import com.itbd.application.dao.org.edu.CourseDAO;
 import com.itbd.application.dao.org.edu.DepartmentDAO;
 import com.itbd.application.dao.org.edu.ProgrammeDAO;
 
+import jakarta.validation.constraints.NotNull;
+
 public record ProgrammeDTO(
         Long id,
-        String name,
+        @NotNull String name,
         ProgrammeTypeEnum studyLevel,
         String description,
         String status,

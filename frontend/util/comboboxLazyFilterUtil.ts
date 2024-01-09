@@ -1,21 +1,13 @@
 import { ComboBoxDataProviderParams } from '@hilla/react-components/ComboBox';
+import AndFilter from 'Frontend/generated/dev/hilla/crud/filter/AndFilter';
+import Filter from 'Frontend/generated/dev/hilla/crud/filter/Filter';
+import OrFilter from 'Frontend/generated/dev/hilla/crud/filter/OrFilter';
+import PropertyStringFilter from 'Frontend/generated/dev/hilla/crud/filter/PropertyStringFilter';
+import Matcher from 'Frontend/generated/dev/hilla/crud/filter/PropertyStringFilter/Matcher';
 import Pageable from 'Frontend/generated/dev/hilla/mappedtypes/Pageable';
 
-type Child = {
-  "@type": string;
-  propertyId: string;
-  filterValue: string;
-  matcher: string;
-};
-
-type Filters = {
-  '@type': string;
-  children: Child[];
-}
-
-export function comboBoxLazyFilter(comboBoxDataProviderParams: ComboBoxDataProviderParams, propertyId: string) {
+export function comboBoxLazyFilter(comboBoxDataProviderParams: ComboBoxDataProviderParams, type: string, property: PropertyStringFilter[]) {
   const { page, pageSize, filter } = comboBoxDataProviderParams;
-
   const pagination: Pageable = {
     pageNumber: page,
     pageSize: pageSize,
@@ -24,16 +16,9 @@ export function comboBoxLazyFilter(comboBoxDataProviderParams: ComboBoxDataProvi
     },
   };
 
-  const filters: Filters = {
-    '@type': 'or',
-    children: [
-      {
-        '@type': 'propertyString',
-        propertyId: propertyId,
-        filterValue: filter,
-        matcher: 'CONTAINS'
-      }
-    ]
+  const filters: Filter = {
+    '@type': type,
+    children: property
   };
 
   return { pagination, filters };

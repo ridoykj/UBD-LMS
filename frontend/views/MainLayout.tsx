@@ -23,9 +23,9 @@ export default function MainLayout() {
             {/* <img src="images/move-right.png" alt="" className='w-10' />            
             <h1 className="text-3xl uppercase text-indigo-500">My App</h1> */}
             {/* <img src="images/logo_uoa.svg" alt="" className='w-30' /> */}
-            {/* <img src="images/move-right.png" alt="" className='w-20' /> */}
+            <img src="images/move-right.png" alt="" className='w-20' />
             {/* <h1 className="text-3xl uppercase text-indigo-500 font-bold">AFG College with the Univerity of Aberdeen</h1> */}
-            <h1 className="text-xl text-indigo-500 font-bold">AFG College with the Univerity of Aberdeen</h1>
+            {/* <h1 className="text-xl text-indigo-500 font-bold">AFG College with the Univerity of Aberdeen</h1> */}
           </div>
           <nav>
             <Scroller

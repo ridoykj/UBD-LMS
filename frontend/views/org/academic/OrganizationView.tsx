@@ -15,7 +15,7 @@ const OrganizationView = () => {
           visibleColumns: ['name', 'alternateName', 'foundingDate', 'email', 'phone', 'taxId', 'vatId', 'address', 'website',],
         }}
         formProps={{
-          visibleFields: ['name', 'alternateName', 'foundingDate', 'email', 'phone', 'taxId', 'vatId', 'address', 'description', 'website',],
+          visibleFields: ['name', 'alternateName', 'foundingDate', 'email', 'phone', 'taxId', 'vatId', 'address', 'website', 'description',],
           fieldOptions: {
             name: { label: 'Name' },
             description: {

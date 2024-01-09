@@ -2,20 +2,15 @@ package com.itbd.application.services.org.edu;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.itbd.application.dao.org.edu.DepartmentDAO;
 import com.itbd.application.dao.org.edu.ProgrammeDAO;
 import com.itbd.application.dto.org.edu.ProgrammeDTO;
 import com.itbd.application.repos.org.edu.ProgrammeRepo;
-import com.itbd.application.repos.user.person.AddressRepo;
-import com.itbd.application.repos.user.person.ContactRepo;
-import com.itbd.application.repos.user.person.DocumentRecordsRepo;
-import com.itbd.application.repos.user.person.MedicalRepo;
-import com.itbd.application.repos.user.person.OccupationRepo;
 import com.vaadin.flow.server.auth.AnonymousAllowed;
 
 import dev.hilla.BrowserCallable;
@@ -28,28 +23,13 @@ import dev.hilla.crud.filter.Filter;
 @BrowserCallable
 @AnonymousAllowed
 public class ProgrammeDtoCrudService implements CrudService<ProgrammeDTO, Long> {
+    private final JpaFilterConverter jpaFilterConverter;
+    private final ProgrammeRepo personRepo;
 
-    @Autowired
-    private JpaFilterConverter jpaFilterConverter;
-
-    @Autowired
-    private ProgrammeRepo personRepo;
-    @Autowired
-    private AddressRepo addressRepo;
-    @Autowired
-    private ContactRepo contactRepo;
-    @Autowired
-    private DocumentRecordsRepo documentRecordsRepo;
-    @Autowired
-    private MedicalRepo medicalRepo;
-    @Autowired
-    private OccupationRepo occupationRepo;
-
-    // public PersonMargeDtoCrudService(ProgrammeRepo personRepo, AddressRepo
-    // addressRepo) {
-    // this.personRepo = personRepo;
-    // this.addressRepo = addressRepo;
-    // }
+    public ProgrammeDtoCrudService(JpaFilterConverter jpaFilterConverter, ProgrammeRepo personRepo) {
+        this.jpaFilterConverter = jpaFilterConverter;
+        this.personRepo = personRepo;
+    }
 
     @Override
     @Nonnull
@@ -60,7 +40,17 @@ public class ProgrammeDtoCrudService implements CrudService<ProgrammeDTO, Long> 
                 ? jpaFilterConverter.toSpec(filter, ProgrammeDAO.class)
                 : Specification.anyOf();
         Page<ProgrammeDAO> persons = personRepo.findAll(spec, pageable);
-         return persons.stream().map(ProgrammeDTO::fromEntity).toList();
+        return persons.stream().map(p -> {
+            DepartmentDAO department = p.getDepartment();
+            // OrganizationDAO organization = department.getOrganization();
+            // department.setOrganization(organization);
+            department.setProgrammes(null);
+            department.setOrganization(null);
+            p.setDepartment(department);
+            p.setBatches(null);
+            p.setCourses(null);
+            return p;
+        }).map(ProgrammeDTO::fromEntity).toList();
     }
 
     @Override
