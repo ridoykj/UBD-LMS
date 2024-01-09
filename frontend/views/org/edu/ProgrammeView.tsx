@@ -1,10 +1,13 @@
 import { ComboBox, ComboBoxDataProviderCallback, ComboBoxDataProviderParams } from "@hilla/react-components/ComboBox.js";
 import { FormItem } from "@hilla/react-components/FormItem.js";
 import { FormLayout } from "@hilla/react-components/FormLayout.js";
+import { Grid, GridDataProviderCallback, GridDataProviderParams } from "@hilla/react-components/Grid.js";
+import { GridColumn } from "@hilla/react-components/GridColumn.js";
+import { GridFilterColumn } from '@hilla/react-components/GridFilterColumn.js';
+import { GridSortColumn } from '@hilla/react-components/GridSortColumn.js';
 import { HorizontalLayout } from "@hilla/react-components/HorizontalLayout.js";
-import { TextArea } from "@hilla/react-components/TextArea.js";
 import { VerticalLayout } from "@hilla/react-components/VerticalLayout";
-import { AutoCrud, AutoGridRef } from "@hilla/react-crud";
+import { AutoGridRef } from "@hilla/react-crud";
 import OrganizationDTOModel from "Frontend/generated/com/itbd/application/dto/org/academic/OrganizationDTOModel";
 import DepartmentDTOModel from "Frontend/generated/com/itbd/application/dto/org/edu/DepartmentDTOModel";
 import ProgrammeDTO from "Frontend/generated/com/itbd/application/dto/org/edu/ProgrammeDTO";
@@ -14,21 +17,19 @@ import PropertyStringFilter from "Frontend/generated/dev/hilla/crud/filter/Prope
 import Matcher from "Frontend/generated/dev/hilla/crud/filter/PropertyStringFilter/Matcher";
 import { DepartmentDtoCrudService, OrganizationDtoCrudService, ProgrammeDtoCrudService } from "Frontend/generated/endpoints";
 import { comboBoxLazyFilter } from "Frontend/util/comboboxLazyFilterUtil";
+import { gridLazyFilter } from "Frontend/util/gridLazyFilterUtil";
 import React, { useMemo, useState } from "react";
 
 const ProgrammeView = () => {
   const [orgNameFilter, setOrgNameFilter] = useState('');
   const [departmentNameFilter, setDepartmentNameFilter] = useState('');
-  const autoGridRef = React.useRef<AutoGridRef>(null);
+  const [clear, setClear] = useState('');
 
   function PriceRenderer({ item }: { item: ProgrammeDTO }) {
     const { department } = item;
     return <span style={{ fontWeight: 'bold' }}>{department?.name}</span>;
   }
 
-  function refreshGrid() {
-    autoGridRef.current?.refresh();
-  }
 
   const filter = useMemo(() => {
     const orgFilter: PropertyStringFilter = {
@@ -62,7 +63,7 @@ const ProgrammeView = () => {
         const { pagination, filters } = comboBoxLazyFilter(params, 'and', [{
           '@type': 'propertyString',
           propertyId: 'name',
-          filterValue: departmentNameFilter,
+          filterValue: params.filter,
           matcher: Matcher.CONTAINS
         },]);
 
@@ -72,7 +73,7 @@ const ProgrammeView = () => {
           callback(result);
         });
       },
-    [departmentNameFilter]
+    [orgNameFilter]
   );
 
   const departmentDataProvider = useMemo(
@@ -100,9 +101,43 @@ const ProgrammeView = () => {
           callback(result);
         });
       },
-    [orgNameFilter]
+    [departmentNameFilter]
   );
+  const programmeDataProvider = useMemo(
+    () =>
+      async (
+        params: GridDataProviderParams<ProgrammeDTOModel>,
+        callback: GridDataProviderCallback<ProgrammeDTOModel>
+      ) => {
+        console.log('params', params);
 
+        const child: PropertyStringFilter[] = [{
+          '@type': 'propertyString',
+          propertyId: 'department.name',
+          filterValue: departmentNameFilter,
+          // filterValue: params.filters?.filter,
+          matcher: Matcher.CONTAINS
+        },];
+
+        params.filters?.forEach((filter) => {
+          child.push({
+            '@type': 'propertyString',
+            propertyId: filter.path,
+            filterValue: filter.value,
+            // filterValue: params.filters?.filter,
+            matcher: Matcher.CONTAINS
+          });
+        });
+
+        const { pagination, filter } = gridLazyFilter(params, 'and', child);
+        ProgrammeDtoCrudService.list(pagination, filter).then((result: any) => {
+          console.log('result', result);
+          console.log('filters', filter);
+          callback(result, result.length);
+        });
+      },
+    [departmentNameFilter]
+  );
   const responsiveSteps = [
     { minWidth: '0', columns: 1 },
     { minWidth: '500px', columns: 2 },
@@ -114,18 +149,19 @@ const ProgrammeView = () => {
         <FormLayout responsiveSteps={responsiveSteps}>
           <FormItem>
             <label slot="label">Profile</label>
-            <ComboBox dataProvider={organizationDataProvider} itemLabelPath='name' itemValuePath='name' clearButtonVisible={true} onValueChanged={
+            <ComboBox dataProvider={organizationDataProvider} itemLabelPath='name' itemValuePath='name' clearButtonVisible onValueChanged={
               (e) => {
                 console.log('value', e.detail.value);
                 const searchTerm = (e.detail.value || '').trim().toLowerCase();
                 console.log('searchTerm', searchTerm);
                 setOrgNameFilter(searchTerm);
+                // setClear('');
               }
             } />
           </FormItem>
           <FormItem>
             <label slot="label">Department</label>
-            <ComboBox dataProvider={departmentDataProvider} itemLabelPath='name' itemValuePath='name' clearButtonVisible={true} onValueChanged={
+            <ComboBox dataProvider={departmentDataProvider} itemLabelPath='name' itemValuePath='name' clearButtonVisible onValueChanged={
               (e) => {
                 console.log('value', e.detail.value);
                 const searchTerm = (e.detail.value || '').trim().toLowerCase();
@@ -136,43 +172,13 @@ const ProgrammeView = () => {
           </FormItem>
         </FormLayout>
       </HorizontalLayout>
-      <AutoCrud
-        service={ProgrammeDtoCrudService} model={ProgrammeDTOModel}
-        style={{ height: '100%', width: '100%' }}
-        gridProps={{
-          visibleColumns: ['name', 'studyLevel', 'status', 'department.name',],
-          rowNumbers: true,
-          experimentalFilter: filter,
-          columnOptions: {
-            'department.name': {
-              header: 'Department',
-              renderer: PriceRenderer,
-            },
-          },
-        }}
-        formProps={{
-          visibleFields: ['department', 'name', 'studyLevel', 'status', 'description',],
-          fieldOptions: {
-            name: {
-              validators: [
-                {
-                  message: 'Name must be more than 3 characters',
-                  validate: (value: string) => value.length > 3,
-                },],
-            },
-            'department': {
-              renderer: ({ field }) => <ComboBox {...field} label="Department" dataProvider={departmentDataProvider} itemLabelPath='name' itemValuePath='id' clearButtonVisible={true} required={true} />,
-            },
-            description: {
-              renderer: ({ field }) => <TextArea {...field} label="Full Description" maxlength={255} style={{ flexGrow: 1 }} />,
-              validators: [{
-                message: 'Description must be less than 255 characters',
-                validate: (value: string) => value.length < 255
-              }],
-            },
-          },
-        }}
-      />
+
+      <Grid dataProvider={programmeDataProvider}>
+        <GridSortColumn path="name" header="Name" rowHeader={false} role="" onClick={() => console.log("done")} />
+        <GridFilterColumn path="studyLevel" />
+        <GridFilterColumn path="department.name" />
+        <GridColumn path="department.name" header="Department" />
+      </Grid>
     </VerticalLayout>
   );
 };
