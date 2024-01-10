@@ -138,7 +138,7 @@ function CalenderBoardView() {
   }
 
   function timeSheet() {
-    const hours = ['5 AM', '6 AM', '7 AM', '8 AM', '9 AM', '10 AM', '11 AM', '12 PM', '1 PM', '2 PM', '3 PM', '4 PM', '5 PM', '6 PM', '7 PM', '8 PM','9 PM'];
+    const hours = ['5 AM', '6 AM', '7 AM', '8 AM', '9 AM', '10 AM', '11 AM', '12 PM', '1 PM', '2 PM', '3 PM', '4 PM', '5 PM', '6 PM', '7 PM', '8 PM',];
 
     return (
       hours.map((hour, index) => (
@@ -179,7 +179,7 @@ function CalenderBoardView() {
 
           <div className="row-start-[17] col-start-[8]"></div>
           {/* Calendar contents  */}
-          <div className="row-start-[2] col-start-3 row-span-4 bg-blue-400/20 dark:bg-sky-600/50 border border-blue-700/10 dark:border-sky-500 rounded-lg m-1 p-1 flex flex-col">
+          {/* <div className="row-start-[2] col-start-3 row-span-4 bg-blue-400/20 dark:bg-sky-600/50 border border-blue-700/10 dark:border-sky-500 rounded-lg m-1 p-1 flex flex-col">
             <span className="text-xs text-blue-600 dark:text-sky-100">5 AM</span>
             <span className="text-xs font-medium text-blue-600 dark:text-sky-100">Flight to vancouver</span>
             <span className="text-xs text-blue-600 dark:text-sky-100">Toronto YYZ</span>
@@ -193,7 +193,7 @@ function CalenderBoardView() {
             <span className="text-xs text-pink-600 dark:text-indigo-100">5 PM</span>
             <span className="text-xs font-medium text-pink-600 dark:text-indigo-100">🎉 Party party 🎉</span>
             <span className="text-xs text-pink-600 dark:text-indigo-100">We like to party!</span>
-          </div>
+          </div> */}
         </div>
       </VerticalLayout>
     </>
