@@ -23,6 +23,7 @@ import ProfileView from './views/profile/ProfileView';
 import ShopView from './views/shop/ShopView';
 import UserView from './views/users/UserView';
 import DefaultView from './views/default/DefaultView';
+import CalenderBoardView from './views/profile/dashboard/CalenderBoardView';
 
 const AboutView = lazy(async () => import('Frontend/views/about/AboutView.js'));
 
@@ -32,6 +33,7 @@ export const routes: RouteObject[] = [
     handle: { title: 'Main' },
     children: [
       { path: '/', element: <DashboardView />, handle: { title: 'Dashboard' } },
+      { path: '/cal', element: <CalenderBoardView />, handle: { title: 'Calender Board' } },
       { path: '/default', element: <DefaultView />, handle: { title: 'Not Implemented' } },
       { path: '/shop', element: <ShopView />, handle: { title: 'Shop' } },
       { path: '/grid', element: <GridView />, handle: { title: 'Grid' } },
