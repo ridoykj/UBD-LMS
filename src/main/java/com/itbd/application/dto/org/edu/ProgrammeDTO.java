@@ -16,7 +16,7 @@ public record ProgrammeDTO(
         ProgrammeTypeEnum studyLevel,
         String description,
         String status,
-        DepartmentDAO department,
+        @NotNull DepartmentDAO department,
         List<BatchDAO> batches,
         List<CourseDAO> courses) {
 

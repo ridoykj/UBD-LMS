@@ -8,12 +8,12 @@ import { GridFilterColumn } from '@hilla/react-components/GridFilterColumn.js';
 import { GridSortColumn } from '@hilla/react-components/GridSortColumn.js';
 import { HorizontalLayout } from "@hilla/react-components/HorizontalLayout.js";
 import { Icon } from '@hilla/react-components/Icon.js';
+import { Notification, NotificationPosition } from '@hilla/react-components/Notification.js';
 import { Scroller } from "@hilla/react-components/Scroller.js";
 import { Select } from '@hilla/react-components/Select.js';
 import { SplitLayout } from '@hilla/react-components/SplitLayout.js';
 import { TextField } from '@hilla/react-components/TextField.js';
 import { VerticalLayout } from "@hilla/react-components/VerticalLayout";
-import { AutoGridRef } from "@hilla/react-crud";
 import { useForm } from "@hilla/react-form";
 import ProgrammeTypeEnum from "Frontend/generated/com/itbd/application/constants/ProgrammeTypeEnum";
 import OrganizationDTOModel from "Frontend/generated/com/itbd/application/dto/org/academic/OrganizationDTOModel";
@@ -25,25 +25,60 @@ import Matcher from "Frontend/generated/dev/hilla/crud/filter/PropertyStringFilt
 import { DepartmentDtoCrudService, OrganizationDtoCrudService, ProgrammeDtoCrudService } from "Frontend/generated/endpoints";
 import { comboBoxLazyFilter } from "Frontend/util/comboboxLazyFilterUtil";
 import { gridLazyFilter } from "Frontend/util/gridLazyFilterUtil";
-import React from "react";
-import { useMemo, useState } from "react";
+import React, { useMemo, useState } from "react";
 
 const ProgrammeView = () => {
   const [orgNameFilter, setOrgNameFilter] = useState('');
   const [departmentNameFilter, setDepartmentNameFilter] = useState('');
   const [departmentReset, setDepartmentReset] = useState('' || undefined);
+  const [refreshGrid, setRefreshGrid] = useState(false);
   const [selectedProgrameeItems, setSelectedProgrameeItems] = useState<ProgrammeDTO[]>([]);
+  const [openedNotifications, setOpenedNotifications] = React.useState<number[]>([]);
+
   const { model, field, value, read, submit, clear, reset, visited, dirty, invalid, submitting } = useForm(ProgrammeDTOModel, {
     onSubmit: async (programme) => {
       await ProgrammeDtoCrudService.save(programme).then((result) => {
-        // setSelectedProgrameeItems(value ? [value] : []);     
-        // setSelectedProgrameeItems(result ? [result] : []);
-        // setRefreshGrid(true);
-        // setDepartmentNameFilter((d) => '');
-        console.log('result', result);
+        open(0);
+        setRefreshGrid(!refreshGrid);
       });
     }
   });
+
+  function open(index: number) {
+    setOpenedNotifications([...openedNotifications, index]);
+  }
+
+  function close(index: number) {
+    setOpenedNotifications(openedNotifications.filter((n) => n !== index));
+  }
+
+  const checkNotification = (index: number) => {
+    return (
+      <>
+        <Notification
+          theme="success"
+          position='top-center'
+          opened={openedNotifications.includes(0)}
+          onOpenedChanged={(e) => {
+            if (!e.detail.value) {
+              close(0);
+            }
+          }}
+        >
+          <HorizontalLayout theme="spacing" style={{ alignItems: 'center' }}>
+            <Icon icon="vaadin:check-circle" />
+            <div>Application submitted!</div>
+            <Button style={{ margin: '0 0 0 var(--lumo-space-l)' }} onClick={() => close(0)}>
+              View
+            </Button>
+            <Button theme="tertiary-inline" onClick={() => close(0)} aria-label="Close">
+              <Icon icon="lumo:cross" />
+            </Button>
+          </HorizontalLayout>
+        </Notification>
+      </>
+    )
+  };
 
   const studyLevels = Object.values(ProgrammeTypeEnum).map(level => ({ label: level, value: level }));
 
@@ -126,7 +161,7 @@ const ProgrammeView = () => {
           callback(result, result.length);
         });
       },
-    [departmentNameFilter]
+    [departmentNameFilter, refreshGrid]
   );
 
   const responsiveSteps = [
@@ -146,83 +181,98 @@ const ProgrammeView = () => {
     setDepartmentNameFilter((d) => searchTerm);
   };
 
-  return (
-    <SplitLayout className="h-full w-full">
-      <VerticalLayout className="h-full w-full items-stretch">
-        <HorizontalLayout className="w-full items-stretch">
-          <FormLayout responsiveSteps={responsiveSteps}>
-            <FormItem>
-              <label slot="label">Profile</label>
-              <ComboBox dataProvider={organizationDataProvider} itemLabelPath='name' itemValuePath='name' clearButtonVisible onValueChanged={handleProfileComboBoxChange} />
-            </FormItem>
-            <FormItem>
-              <label slot="label">Department</label>
-              <ComboBox dataProvider={departmentDataProvider} itemLabelPath='name' itemValuePath='name' clearButtonVisible selectedItem={departmentReset} onValueChanged={handleDepartmentComboBoxChange} />
-            </FormItem>
-          </FormLayout>
-        </HorizontalLayout>
-        <Grid dataProvider={programmeDataProvider} selectedItems={selectedProgrameeItems}
-          onActiveItemChanged={(e) => {
-            const item = e.detail.value;
-            setSelectedProgrameeItems(item ? [item] : []);
-            read(item);
-            console.log('item', item);
-          }}>
-          <GridSortColumn path="name" header="Name" />
-          <GridFilterColumn path="studyLevel" />
-          <GridColumn path="department.name" header="Department" />
-        </Grid>
-      </VerticalLayout>
-      <VerticalLayout className="w-1/4 min-w-96">
-        <header className="bg-gray-100 w-full">
-          <div className="flex flex-row space-x-4">
-            <p className="text-blue-600 text-xl font-bold p-1 m-1 w-full"># Title</p>
-            <Button className="text-white content-end bg-blue-600" onClick={clear}>
-              <Icon icon="vaadin:plus" />New
-            </Button>
-          </div>
-        </header>
-        <Scroller scrollDirection="vertical" className="w-full h-full">
-          <FormLayout responsiveSteps={responsiveSteps} className="w-fit h-fit mx-5">
-            <label slot="label">Profile</label>
-            <ComboBox label={'Department'}  {...field(model.department)} dataProvider={departmentDataProvider} itemLabelPath='name' itemValuePath='name' clearButtonVisible />
-            <TextField label={'Name'}  {...field(model.name)} />
-            <Select label={'Study Level'}  {...field(model.studyLevel)} items={studyLevels} />
-            <TextField label={'Description'}  {...field(model.description)} />
-            <TextField label={'Status'}  {...field(model.status)} />
-          </FormLayout>
-        </Scroller>
-        <footer className="flex flex-row bg-gray-100 w-full">
-          <div className="w-full">
-            {
-              selectedProgrameeItems[0]?.id === undefined ? null : <Button className="text-white bg-orange-500">Delete</Button>
-            }
-          </div>
-          {
-            value.name === undefined ? null :
-              <div className="flex flex-row content-end space-x-4">
-                <Button className={`text-white bg-${!dirty ? 'gray-900' : 'indigo-500'}`} disabled={!dirty} onClick={reset}>Discard</Button>
-                <Button
-                  className={`text-white bg-${invalid || submitting || !dirty ? 'gray-900' : 'emerald-500'}`}
-                  disabled={invalid || submitting || !dirty}
-                  onClick={() => {
-                    submit();
-                    console.log('submit', departmentNameFilter);
+  const discardButtonColors: { [key: string]: string } = {
+    true: 'text-white bg-indigo-400 hover:bg-indigo-500',
+    false: 'text-white bg-gray-300',
+  };
 
-                  }}
-                >
-                  {selectedProgrameeItems[0]?.id !== undefined ? 'Update' : 'Save'}
-                </Button>
-              </div>
-          }
-        </footer>
-      </VerticalLayout>
-    </SplitLayout>
+  const saveButtonColors: { [key: string]: string } = {
+    true: 'text-white bg-emerald-400 hover:bg-emerald-500',
+    false: 'text-white bg-gray-300',
+  };
+
+  return (
+    <>
+      {checkNotification(0)}
+      <SplitLayout className="h-full w-full">
+        <VerticalLayout className="h-full w-full items-stretch">
+          <HorizontalLayout className="w-full items-stretch">
+            <FormLayout responsiveSteps={responsiveSteps}>
+              <FormItem>
+                <label slot="label">Profile</label>
+                <ComboBox dataProvider={organizationDataProvider} itemLabelPath='name' itemValuePath='name' clearButtonVisible onValueChanged={handleProfileComboBoxChange} />
+              </FormItem>
+              <FormItem>
+                <label slot="label">Department</label>
+                <ComboBox dataProvider={departmentDataProvider} itemLabelPath='name' itemValuePath='name' clearButtonVisible selectedItem={departmentReset} onValueChanged={handleDepartmentComboBoxChange} />
+              </FormItem>
+            </FormLayout>
+          </HorizontalLayout>
+          <Grid dataProvider={programmeDataProvider} selectedItems={selectedProgrameeItems}
+            onActiveItemChanged={(e) => {
+              const item = e.detail.value;
+              setSelectedProgrameeItems(item ? [item] : []);
+              read(item);
+              console.log('item', item);
+            }}
+          >
+            <GridSortColumn path="name" header="Name" />
+            <GridFilterColumn path="studyLevel" />
+            <GridColumn path="department.name" header="Department" />
+          </Grid>
+        </VerticalLayout>
+        <VerticalLayout className="w-1/4 min-w-96">
+          <header className="bg-gray-100 w-full">
+            <div className="flex flex-row space-x-4">
+              <p className="text-blue-600 text-xl font-bold p-1 m-1 w-full"># Title</p>
+              <Button className="text-white content-end bg-blue-500 hover:bg-blue-600" onClick={clear}>
+                <Icon icon="vaadin:plus" />New
+              </Button>
+            </div>
+          </header>
+          <Scroller scrollDirection="vertical" className="w-full h-full">
+            <FormLayout responsiveSteps={responsiveSteps} className="w-fit h-fit mx-5">
+              <label slot="label">Profile</label>
+              <ComboBox label={'Department'}  {...field(model.department)} dataProvider={departmentDataProvider} itemLabelPath='name' itemValuePath='name' clearButtonVisible />
+              <TextField label={'Name'}  {...field(model.name)} />
+              <Select label={'Study Level'}  {...field(model.studyLevel)} items={studyLevels} />
+              <TextField label={'Description'}  {...field(model.description)} />
+              <TextField label={'Status'}  {...field(model.status)} />
+            </FormLayout>
+          </Scroller>
+          <footer className="flex flex-row bg-gray-100 w-full">
+            <div className="w-full">
+              {
+                selectedProgrameeItems[0]?.id === undefined ? null : <Button className="text-white bg-red-400 hover:bg-red-500">Delete</Button>
+              }
+            </div>
+            {
+              value.name === undefined ? null :
+                <div className="flex flex-row content-end space-x-4">
+                  <Button
+                    className={discardButtonColors[dirty.toString()]}
+                    disabled={!dirty}
+                    onClick={reset}
+                  >
+                    Discard
+                  </Button>
+                  <Button
+                    className={saveButtonColors[dirty.toString()]}
+                    disabled={invalid || submitting || !dirty}
+                    onClick={() => {
+                      submit();
+                      // console.log('submit', departmentNameFilter);
+                    }}
+                  >
+                    {selectedProgrameeItems[0]?.id !== undefined ? 'Update' : 'Save'}
+                  </Button>
+                </div>
+            }
+          </footer>
+        </VerticalLayout>
+      </SplitLayout>
+    </>
   );
 };
 
 export default ProgrammeView;
-function useEffect(arg0: () => void, arg1: boolean[]) {
-  throw new Error("Function not implemented.");
-}
-
