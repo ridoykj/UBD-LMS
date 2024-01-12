@@ -1,107 +1,48 @@
 import { Button } from "@hilla/react-components/Button.js";
 import { ComboBox, ComboBoxDataProviderCallback, ComboBoxDataProviderParams } from "@hilla/react-components/ComboBox.js";
-import { FormItem } from "@hilla/react-components/FormItem.js";
+import { ConfirmDialog } from '@hilla/react-components/ConfirmDialog.js';
 import { FormLayout } from "@hilla/react-components/FormLayout.js";
 import { Grid, GridDataProviderCallback, GridDataProviderParams } from "@hilla/react-components/Grid.js";
-import { GridColumn } from "@hilla/react-components/GridColumn.js";
 import { GridFilterColumn } from '@hilla/react-components/GridFilterColumn.js';
-import { GridSortColumn } from '@hilla/react-components/GridSortColumn.js';
-import { HorizontalLayout } from "@hilla/react-components/HorizontalLayout.js";
 import { Icon } from '@hilla/react-components/Icon.js';
-import { Notification, NotificationPosition } from '@hilla/react-components/Notification.js';
 import { Scroller } from "@hilla/react-components/Scroller.js";
 import { Select } from '@hilla/react-components/Select.js';
 import { SplitLayout } from '@hilla/react-components/SplitLayout.js';
 import { TextField } from '@hilla/react-components/TextField.js';
 import { VerticalLayout } from "@hilla/react-components/VerticalLayout";
 import { useForm } from "@hilla/react-form";
+import BranchRC from "Frontend/components/branch/BranchRC";
 import ProgrammeTypeEnum from "Frontend/generated/com/itbd/application/constants/ProgrammeTypeEnum";
-import OrganizationDTOModel from "Frontend/generated/com/itbd/application/dto/org/academic/OrganizationDTOModel";
 import DepartmentDTOModel from "Frontend/generated/com/itbd/application/dto/org/edu/DepartmentDTOModel";
 import ProgrammeDTO from "Frontend/generated/com/itbd/application/dto/org/edu/ProgrammeDTO";
 import ProgrammeDTOModel from "Frontend/generated/com/itbd/application/dto/org/edu/ProgrammeDTOModel";
 import PropertyStringFilter from "Frontend/generated/dev/hilla/crud/filter/PropertyStringFilter";
 import Matcher from "Frontend/generated/dev/hilla/crud/filter/PropertyStringFilter/Matcher";
-import { DepartmentDtoCrudService, OrganizationDtoCrudService, ProgrammeDtoCrudService } from "Frontend/generated/endpoints";
+import { DepartmentDtoCrudService, ProgrammeDtoCrudService } from "Frontend/generated/endpoints";
+import NotificationUtil from "Frontend/util/NotificationUtil";
 import { comboBoxLazyFilter } from "Frontend/util/comboboxLazyFilterUtil";
 import { gridLazyFilter } from "Frontend/util/gridLazyFilterUtil";
-import React, { useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 
 const ProgrammeView = () => {
   const [orgNameFilter, setOrgNameFilter] = useState('');
   const [departmentNameFilter, setDepartmentNameFilter] = useState('');
-  const [departmentReset, setDepartmentReset] = useState('' || undefined);
-  const [refreshGrid, setRefreshGrid] = useState(false);
+  const [refreshGrid, setRefreshGrid] = useState<boolean>(false);
+  const [dialogOpened, setDialogOpened] = useState<boolean>(false);
+  const [successNotification, setSuccessNotification] = useState<boolean>(false);
+
   const [selectedProgrameeItems, setSelectedProgrameeItems] = useState<ProgrammeDTO[]>([]);
-  const [openedNotifications, setOpenedNotifications] = React.useState<number[]>([]);
 
   const { model, field, value, read, submit, clear, reset, visited, dirty, invalid, submitting } = useForm(ProgrammeDTOModel, {
     onSubmit: async (programme) => {
       await ProgrammeDtoCrudService.save(programme).then((result) => {
-        open(0);
         setRefreshGrid(!refreshGrid);
+        setSuccessNotification(true);
       });
     }
   });
 
-  function open(index: number) {
-    setOpenedNotifications([...openedNotifications, index]);
-  }
-
-  function close(index: number) {
-    setOpenedNotifications(openedNotifications.filter((n) => n !== index));
-  }
-
-  const checkNotification = (index: number) => {
-    return (
-      <>
-        <Notification
-          theme="success"
-          position='top-center'
-          opened={openedNotifications.includes(0)}
-          onOpenedChanged={(e) => {
-            if (!e.detail.value) {
-              close(0);
-            }
-          }}
-        >
-          <HorizontalLayout theme="spacing" style={{ alignItems: 'center' }}>
-            <Icon icon="vaadin:check-circle" />
-            <div>Application submitted!</div>
-            <Button style={{ margin: '0 0 0 var(--lumo-space-l)' }} onClick={() => close(0)}>
-              View
-            </Button>
-            <Button theme="tertiary-inline" onClick={() => close(0)} aria-label="Close">
-              <Icon icon="lumo:cross" />
-            </Button>
-          </HorizontalLayout>
-        </Notification>
-      </>
-    )
-  };
-
   const studyLevels = Object.values(ProgrammeTypeEnum).map(level => ({ label: level, value: level }));
-
-  const organizationDataProvider = useMemo(
-    () =>
-      async (
-        params: ComboBoxDataProviderParams,
-        callback: ComboBoxDataProviderCallback<OrganizationDTOModel>
-      ) => {
-        console.log('params organization', params);
-        const { pagination, filters } = comboBoxLazyFilter(params, 'and', [{
-          '@type': 'propertyString',
-          propertyId: 'name',
-          filterValue: params.filter,
-          matcher: Matcher.CONTAINS
-        },]);
-
-        OrganizationDtoCrudService.list(pagination, filters).then((result: any) => {
-          callback(result);
-        });
-      },
-    []
-  );
 
   const departmentDataProvider = useMemo(
     () =>
@@ -124,7 +65,7 @@ const ProgrammeView = () => {
 
         const { pagination, filters } = comboBoxLazyFilter(params, 'and', child);
         DepartmentDtoCrudService.list(pagination, filters).then((result: any) => {
-          callback(result);
+          callback(result, result.length);
         });
       },
     [orgNameFilter]
@@ -140,10 +81,11 @@ const ProgrammeView = () => {
         const child: PropertyStringFilter[] = [{
           '@type': 'propertyString',
           propertyId: 'department.name',
-          filterValue: departmentNameFilter,
+          filterValue: departmentNameFilter !== undefined ? departmentNameFilter : '',
           matcher: Matcher.CONTAINS
         },];
 
+        console.log('departmentNameFilter >>>>>>>>', departmentNameFilter, departmentNameFilter !== undefined ? departmentDataProvider.length : 0);
         params.filters?.forEach((filter) => {
           if (filter.path !== 'department.name') {
             child.push({
@@ -154,8 +96,8 @@ const ProgrammeView = () => {
             });
           }
         });
-        console.log('child programme', child);
 
+        console.log('child programme', child);
         const { pagination, filter } = gridLazyFilter(params, 'and', child);
         ProgrammeDtoCrudService.list(pagination, filter).then((result: any) => {
           callback(result, result.length);
@@ -169,18 +111,6 @@ const ProgrammeView = () => {
     { minWidth: '600px', columns: 2 },
   ];
 
-  const handleProfileComboBoxChange = (e: any) => {
-    const searchTerm = (e.detail.value || '').trim();
-    setDepartmentReset((dr) => undefined); // Reset department combobox
-    setOrgNameFilter((o) => searchTerm);
-  };
-
-  const handleDepartmentComboBoxChange = (e: any) => {
-    const searchTerm = (e.detail.value || '').trim();
-    setDepartmentReset((dr) => searchTerm);
-    setDepartmentNameFilter((d) => searchTerm);
-  };
-
   const discardButtonColors: { [key: string]: string } = {
     true: 'text-white bg-indigo-400 hover:bg-indigo-500',
     false: 'text-white bg-gray-300',
@@ -193,22 +123,56 @@ const ProgrammeView = () => {
 
   return (
     <>
-      {checkNotification(0)}
+      <NotificationUtil opened={successNotification} type="update"
+        message={{
+          title: 'Successfully Updated',
+          description: value.name,
+        }}
+        onOpenedChanged={(event) => {
+          if (!event.detail.value) {
+            setSuccessNotification(event.detail.value);
+          }
+        }}
+        onClick={() => { setSuccessNotification(false) }}
+      />
+      <ConfirmDialog
+        header="Delete Item"
+        cancelButtonVisible
+        rejectButtonVisible
+        rejectText="Discard"
+        confirmText="Confirm"
+        confirmTheme="error primary"
+        opened={dialogOpened}
+        onOpenedChanged={(event) => {
+          setDialogOpened(event.detail.value);
+          if (event.detail.value) {
+            // setStatus('');
+          }
+        }}
+        onConfirm={() => {
+          ProgrammeDtoCrudService.delete(selectedProgrameeItems[0]?.id).then((result) => {
+            setRefreshGrid(!refreshGrid);
+            setSelectedProgrameeItems([]);
+            reset();
+          });
+        }}>
+        {`Do you want to delete?${value.name}`}
+      </ConfirmDialog >
       <SplitLayout className="h-full w-full">
         <VerticalLayout className="h-full w-full items-stretch">
-          <HorizontalLayout className="w-full items-stretch">
-            <FormLayout responsiveSteps={responsiveSteps}>
-              <FormItem>
-                <label slot="label">Profile</label>
-                <ComboBox dataProvider={organizationDataProvider} itemLabelPath='name' itemValuePath='name' clearButtonVisible onValueChanged={handleProfileComboBoxChange} />
-              </FormItem>
-              <FormItem>
-                <label slot="label">Department</label>
-                <ComboBox dataProvider={departmentDataProvider} itemLabelPath='name' itemValuePath='name' clearButtonVisible selectedItem={departmentReset} onValueChanged={handleDepartmentComboBoxChange} />
-              </FormItem>
-            </FormLayout>
-          </HorizontalLayout>
+          <BranchRC
+            organization={{
+              organizationName: orgNameFilter,
+              setOrganizationName: setOrgNameFilter
+            }}
+            department={{
+              departmentName: departmentNameFilter,
+              setDepartmentName: setDepartmentNameFilter
+            }}
+          />
           <Grid dataProvider={programmeDataProvider} selectedItems={selectedProgrameeItems}
+            className="h-full w-full m-0"
+            theme="row-stripes"
             onActiveItemChanged={(e) => {
               const item = e.detail.value;
               setSelectedProgrameeItems(item ? [item] : []);
@@ -216,15 +180,16 @@ const ProgrammeView = () => {
               console.log('item', item);
             }}
           >
-            <GridSortColumn path="name" header="Name" />
-            <GridFilterColumn path="studyLevel" />
-            <GridColumn path="department.name" header="Department" />
+            <GridFilterColumn path="name" header="Name" autoWidth flexGrow={2} />
+            <GridFilterColumn path="studyLevel" header="Study Level" autoWidth flexGrow={2} />
+            <GridFilterColumn path="department.name" header="Department" autoWidth flexGrow={2} />
+            <GridFilterColumn path="status" header="Status" autoWidth flexGrow={1} />
           </Grid>
         </VerticalLayout>
         <VerticalLayout className="w-1/4 min-w-96">
           <header className="bg-gray-100 w-full">
             <div className="flex flex-row space-x-4">
-              <p className="text-blue-600 text-xl font-bold p-1 m-1 w-full"># Title</p>
+              <p className="text-blue-600 text-xl font-bold p-1 m-1 w-full"># {value.name?.substring(0, 15) || 'Unkown Title'}</p>
               <Button className="text-white content-end bg-blue-500 hover:bg-blue-600" onClick={clear}>
                 <Icon icon="vaadin:plus" />New
               </Button>
@@ -243,7 +208,14 @@ const ProgrammeView = () => {
           <footer className="flex flex-row bg-gray-100 w-full">
             <div className="w-full">
               {
-                selectedProgrameeItems[0]?.id === undefined ? null : <Button className="text-white bg-red-400 hover:bg-red-500">Delete</Button>
+                selectedProgrameeItems[0]?.id === undefined ? null :
+                  <Button
+                    className="text-white bg-red-400 hover:bg-red-500"
+                    onClick={() => {
+                      setDialogOpened(true);
+                      console.log('delete', selectedProgrameeItems[0]?.id);
+                    }}
+                  >Delete</Button>
               }
             </div>
             {
@@ -259,10 +231,7 @@ const ProgrammeView = () => {
                   <Button
                     className={saveButtonColors[dirty.toString()]}
                     disabled={invalid || submitting || !dirty}
-                    onClick={() => {
-                      submit();
-                      // console.log('submit', departmentNameFilter);
-                    }}
+                    onClick={submit}
                   >
                     {selectedProgrameeItems[0]?.id !== undefined ? 'Update' : 'Save'}
                   </Button>

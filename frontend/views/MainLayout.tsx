@@ -3,8 +3,8 @@ import { AppLayout } from '@hilla/react-components/AppLayout.js';
 import { DrawerToggle } from '@hilla/react-components/DrawerToggle.js';
 import { Scroller } from '@hilla/react-components/Scroller.js';
 import Placeholder from 'Frontend/components/placeholder/Placeholder';
-import AvatarControl from 'Frontend/components/profile/AvaterControl';
-import RNavItem from 'Frontend/components/sidebar/RNavItem';
+import AvatarControlRC from 'Frontend/components/profile/AvaterControlRC';
+import RNavItemRC from 'Frontend/components/sidebar/NavItemRC';
 import { useRouteMetadata } from 'Frontend/util/routing';
 import { Suspense } from 'react';
 import { FaChartArea, FaClipboard, FaDoorOpen, FaHome, FaKey, FaPaintRoller, FaReceipt, FaScroll, FaUserTie } from 'react-icons/fa';
@@ -42,9 +42,9 @@ export default function MainLayout() {
             <RNavItem name='Users' icon={<FaRegUser />} route='/users' />
             <RNavItem name='Profiles' icon={<FaRegUser />} route='/profiles' /> */}
 
-              <RNavItem name='Dashboard' icon={<FaChartArea />} route='/' />
-              <RNavItem name='Calender' icon={<FaChartArea />} route='/cal' />
-              <RNavItem name='Organization' icon={<FaHome />} route='' subItems={[
+              <RNavItemRC name='Dashboard' icon={<FaChartArea />} route='/' />
+              <RNavItemRC name='Calender' icon={<FaChartArea />} route='/cal' />
+              <RNavItemRC name='Organization' icon={<FaHome />} route='' subItems={[
                 { name: 'Profile', icon: <FaUserGear />, route: '/academic/organization' },
                 { name: 'Department', icon: <FaShop />, route: '/edu/department' },
                 { name: 'Programme', icon: <FaPaintRoller />, route: '/edu/programme' },
@@ -52,17 +52,17 @@ export default function MainLayout() {
                 { name: 'Course', icon: <FaBarsStaggered />, route: '/edu/course' },
                 { name: 'Reservation', icon: <FaCalendarDay />, route: '/edu/reservation' }
               ]} />
-              <RNavItem name='User' icon={<FaUser />} route='' subItems={[
+              <RNavItemRC name='User' icon={<FaUser />} route='' subItems={[
                 { name: 'Professor', icon: <FaUserTie />, route: '/user/instructors' },
                 { name: 'Student', icon: <FaUserGraduate />, route: '/user/students' },
                 { name: 'Authorization', icon: <FaKey />, route: '/user/authorization' }
               ]} />
-              <RNavItem name='Report' icon={<FaClipboard />} route='' subItems={[
+              <RNavItemRC name='Report' icon={<FaClipboard />} route='' subItems={[
                 { name: 'Schedule', icon: <FaCalendarDay />, route: '/default' },
                 { name: 'Result', icon: <FaReceipt />, route: '/default' },
                 { name: 'Revenue', icon: <FaCircleDollarToSlot />, route: '/default' }
               ]} />
-              <RNavItem name='Configration' icon={<FaGear />} route='' subItems={[
+              <RNavItemRC name='Configration' icon={<FaGear />} route='' subItems={[
                 { name: 'Building', icon: <FaBuildingCircleCheck />, route: '/place/building' },
                 { name: 'Floor', icon: <FaBarsStaggered />, route: '/place/floor' },
                 { name: 'Room', icon: <FaDoorOpen />, route: '/place/room' }
@@ -76,7 +76,7 @@ export default function MainLayout() {
 
       <DrawerToggle slot="navbar" aria-label="Menu toggle"></DrawerToggle>
       <h2 slot="navbar" className="text-l m-0">{currentTitle}</h2>
-      <AvatarControl />
+      <AvatarControlRC />
 
       <Suspense fallback={<Placeholder />}>
         <Outlet />
