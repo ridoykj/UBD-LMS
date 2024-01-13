@@ -70,22 +70,20 @@ const ProgrammeView = () => {
       },
     [orgNameFilter]
   );
+
   const programmeDataProvider = useMemo(
     () =>
       async (
         params: GridDataProviderParams<ProgrammeDTO>,
         callback: GridDataProviderCallback<ProgrammeDTO>
       ) => {
-        console.log('params programme', params);
-
         const child: PropertyStringFilter[] = [{
           '@type': 'propertyString',
           propertyId: 'department.name',
-          filterValue: departmentNameFilter !== undefined ? departmentNameFilter : '',
+          filterValue: departmentNameFilter,
           matcher: Matcher.CONTAINS
         },];
 
-        console.log('departmentNameFilter >>>>>>>>', departmentNameFilter, departmentNameFilter !== undefined ? departmentDataProvider.length : 0);
         params.filters?.forEach((filter) => {
           if (filter.path !== 'department.name') {
             child.push({
@@ -97,7 +95,6 @@ const ProgrammeView = () => {
           }
         });
 
-        console.log('child programme', child);
         const { pagination, filter } = gridLazyFilter(params, 'and', child);
         ProgrammeDtoCrudService.list(pagination, filter).then((result: any) => {
           callback(result, result.length);
@@ -123,44 +120,12 @@ const ProgrammeView = () => {
 
   return (
     <>
-      <NotificationUtil opened={successNotification} type="update"
-        message={{
-          title: 'Successfully Updated',
-          description: value.name,
-        }}
-        onOpenedChanged={(event) => {
-          if (!event.detail.value) {
-            setSuccessNotification(event.detail.value);
-          }
-        }}
-        onClick={() => { setSuccessNotification(false) }}
-      />
-      <ConfirmDialog
-        header="Delete Item"
-        cancelButtonVisible
-        rejectButtonVisible
-        rejectText="Discard"
-        confirmText="Confirm"
-        confirmTheme="error primary"
-        opened={dialogOpened}
-        onOpenedChanged={(event) => {
-          setDialogOpened(event.detail.value);
-          if (event.detail.value) {
-            // setStatus('');
-          }
-        }}
-        onConfirm={() => {
-          ProgrammeDtoCrudService.delete(selectedProgrameeItems[0]?.id).then((result) => {
-            setRefreshGrid(!refreshGrid);
-            setSelectedProgrameeItems([]);
-            reset();
-          });
-        }}>
-        {`Do you want to delete?${value.name}`}
-      </ConfirmDialog >
       <SplitLayout className="h-full w-full">
         <VerticalLayout className="h-full w-full items-stretch">
           <BranchRC
+            visibleFields={
+              { organization: true, department: true }
+            }
             organization={{
               organizationName: orgNameFilter,
               setOrganizationName: setOrgNameFilter
@@ -240,6 +205,41 @@ const ProgrammeView = () => {
           </footer>
         </VerticalLayout>
       </SplitLayout>
+      <NotificationUtil opened={successNotification} type="update"
+        message={{
+          title: 'Successfully Updated',
+          description: value.name,
+        }}
+        onOpenedChanged={(event) => {
+          if (!event.detail.value) {
+            setSuccessNotification(event.detail.value);
+          }
+        }}
+        onClick={() => { setSuccessNotification(false) }}
+      />
+      <ConfirmDialog
+        header="Delete Item"
+        cancelButtonVisible
+        rejectButtonVisible
+        rejectText="Discard"
+        confirmText="Confirm"
+        confirmTheme="error primary"
+        opened={dialogOpened}
+        onOpenedChanged={(event) => {
+          setDialogOpened(event.detail.value);
+          if (event.detail.value) {
+            // setStatus('');
+          }
+        }}
+        onConfirm={() => {
+          ProgrammeDtoCrudService.delete(selectedProgrameeItems[0]?.id).then((result) => {
+            setRefreshGrid(!refreshGrid);
+            setSelectedProgrameeItems([]);
+            reset();
+          });
+        }}>
+        {`Do you want to delete?${value.name}`}
+      </ConfirmDialog >
     </>
   );
 };
