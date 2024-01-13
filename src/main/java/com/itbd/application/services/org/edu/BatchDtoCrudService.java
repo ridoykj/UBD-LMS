@@ -9,6 +9,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.itbd.application.dao.org.edu.BatchDAO;
+import com.itbd.application.dao.org.edu.ProgrammeDAO;
 import com.itbd.application.dto.org.edu.BatchDTO;
 import com.itbd.application.repos.org.edu.BatchRepo;
 import com.itbd.application.repos.user.person.AddressRepo;
@@ -60,7 +61,16 @@ public class BatchDtoCrudService implements CrudService<BatchDTO, Long> {
                 ? jpaFilterConverter.toSpec(filter, BatchDAO.class)
                 : Specification.anyOf();
         Page<BatchDAO> persons = personRepo.findAll(spec, pageable);
-        return persons.stream().map(BatchDTO::fromEntity).toList();
+        return persons.stream().map(b -> {
+            ProgrammeDAO programme = b.getProgramme();
+            programme.setDepartment(null);
+            programme.setBatches(null);            
+            programme.setCourses(null);
+            b.setProgramme(programme);
+            b.setReservations(null);
+            b.setStudents(null);
+            return b;
+        }).map(BatchDTO::fromEntity).toList();
     }
 
     @Override
