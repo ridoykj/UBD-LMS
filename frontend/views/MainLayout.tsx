@@ -75,7 +75,7 @@ export default function MainLayout() {
       </div>
 
       <DrawerToggle slot="navbar" aria-label="Menu toggle"></DrawerToggle>
-      <h2 slot="navbar" className="text-l m-0">{currentTitle}</h2>
+      <p slot="navbar" className="text-lg font-semibold m-0">{currentTitle}</p>
       <AvatarControlRC />
 
       <Suspense fallback={<Placeholder />}>
