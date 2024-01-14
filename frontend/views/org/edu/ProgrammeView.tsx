@@ -2,8 +2,6 @@ import { Button } from "@hilla/react-components/Button.js";
 import { ComboBox, ComboBoxDataProviderCallback, ComboBoxDataProviderParams } from "@hilla/react-components/ComboBox.js";
 import { ConfirmDialog } from '@hilla/react-components/ConfirmDialog.js';
 import { FormLayout } from "@hilla/react-components/FormLayout.js";
-import { Grid, GridDataProviderCallback, GridDataProviderParams } from "@hilla/react-components/Grid.js";
-import { GridFilterColumn } from '@hilla/react-components/GridFilterColumn.js';
 import { Icon } from '@hilla/react-components/Icon.js';
 import { Scroller } from "@hilla/react-components/Scroller.js";
 import { Select } from '@hilla/react-components/Select.js';
@@ -12,6 +10,7 @@ import { TextField } from '@hilla/react-components/TextField.js';
 import { VerticalLayout } from "@hilla/react-components/VerticalLayout";
 import { useForm } from "@hilla/react-form";
 import BranchRC from "Frontend/components/branch/BranchRC";
+import { AutoGrid, AutoGridRef } from "Frontend/components/grid/autogrid";
 import ProgrammeTypeEnum from "Frontend/generated/com/itbd/application/constants/ProgrammeTypeEnum";
 import DepartmentDTOModel from "Frontend/generated/com/itbd/application/dto/org/edu/DepartmentDTOModel";
 import ProgrammeDTO from "Frontend/generated/com/itbd/application/dto/org/edu/ProgrammeDTO";
@@ -21,27 +20,31 @@ import Matcher from "Frontend/generated/dev/hilla/crud/filter/PropertyStringFilt
 import { DepartmentDtoCrudService, ProgrammeDtoCrudService } from "Frontend/generated/endpoints";
 import NotificationUtil from "Frontend/util/NotificationUtil";
 import { comboBoxLazyFilter } from "Frontend/util/comboboxLazyFilterUtil";
-import { gridLazyFilter } from "Frontend/util/gridLazyFilterUtil";
-import { useMemo, useState } from "react";
+import React, { useMemo, useState } from "react";
 
 const ProgrammeView = () => {
   const [orgNameFilter, setOrgNameFilter] = useState('');
   const [departmentNameFilter, setDepartmentNameFilter] = useState('');
-  const [refreshGrid, setRefreshGrid] = useState<boolean>(false);
   const [dialogOpened, setDialogOpened] = useState<boolean>(false);
   const [successNotification, setSuccessNotification] = useState<boolean>(false);
+
+  const autoGridRef = React.useRef<AutoGridRef>(null);
 
   const [selectedProgrameeItems, setSelectedProgrameeItems] = useState<ProgrammeDTO[]>([]);
 
   const { model, field, value, read, submit, clear, reset, visited, dirty, invalid, submitting } = useForm(ProgrammeDTOModel, {
     onSubmit: async (programme) => {
       await ProgrammeDtoCrudService.save(programme).then((result) => {
-        setRefreshGrid(!refreshGrid);
+        refreshGrid();
+        setSelectedProgrameeItems(result ? [result] : []);
         setSuccessNotification(true);
       });
     }
   });
 
+  function refreshGrid() {
+    autoGridRef.current?.refresh();
+  }
   const studyLevels = Object.values(ProgrammeTypeEnum).map(level => ({ label: level, value: level }));
 
   const departmentDataProvider = useMemo(
@@ -69,38 +72,6 @@ const ProgrammeView = () => {
         });
       },
     [orgNameFilter]
-  );
-
-  const programmeDataProvider = useMemo(
-    () =>
-      async (
-        params: GridDataProviderParams<ProgrammeDTO>,
-        callback: GridDataProviderCallback<ProgrammeDTO>
-      ) => {
-        const child: PropertyStringFilter[] = [{
-          '@type': 'propertyString',
-          propertyId: 'department.name',
-          filterValue: departmentNameFilter,
-          matcher: Matcher.CONTAINS
-        },];
-
-        params.filters?.forEach((filter) => {
-          if (filter.path !== 'department.name') {
-            child.push({
-              '@type': 'propertyString',
-              propertyId: filter.path,
-              filterValue: filter.value,
-              matcher: Matcher.CONTAINS
-            });
-          }
-        });
-
-        const { pagination, filter } = gridLazyFilter(params, 'and', child);
-        ProgrammeDtoCrudService.list(pagination, filter).then((result: any) => {
-          callback(result, result.length);
-        });
-      },
-    [departmentNameFilter, refreshGrid]
   );
 
   const responsiveSteps = [
@@ -135,21 +106,23 @@ const ProgrammeView = () => {
               setDepartmentName: setDepartmentNameFilter
             }}
           />
-          <Grid dataProvider={programmeDataProvider} selectedItems={selectedProgrameeItems}
-            className="h-full w-full m-0"
+          <AutoGrid service={ProgrammeDtoCrudService} model={ProgrammeDTOModel} ref={autoGridRef}
+            visibleColumns={['name', 'studyLevel', 'department.name', 'status',]}
+            selectedItems={selectedProgrameeItems}
             theme="row-stripes"
             onActiveItemChanged={(e) => {
               const item = e.detail.value;
               setSelectedProgrameeItems(item ? [item] : []);
               read(item);
-              console.log('item', item);
             }}
-          >
-            <GridFilterColumn path="name" header="Name" autoWidth flexGrow={2} />
-            <GridFilterColumn path="studyLevel" header="Study Level" autoWidth flexGrow={2} />
-            <GridFilterColumn path="department.name" header="Department" autoWidth flexGrow={2} />
-            <GridFilterColumn path="status" header="Status" autoWidth flexGrow={1} />
-          </Grid>
+            columnOptions={{
+              'department.name': {
+                header: 'Department',
+                externalValue: departmentNameFilter,
+                setExternalValue: setDepartmentNameFilter,
+              },
+            }}
+          />
         </VerticalLayout>
         <VerticalLayout className="w-1/4 min-w-96">
           <header className="bg-gray-100 w-full">
@@ -233,7 +206,7 @@ const ProgrammeView = () => {
         }}
         onConfirm={() => {
           ProgrammeDtoCrudService.delete(selectedProgrameeItems[0]?.id).then((result) => {
-            setRefreshGrid(!refreshGrid);
+            refreshGrid();
             setSelectedProgrameeItems([]);
             reset();
           });

@@ -1,22 +1,16 @@
 import { Button } from "@hilla/react-components/Button.js";
 import { ComboBox, ComboBoxDataProviderCallback, ComboBoxDataProviderParams } from "@hilla/react-components/ComboBox.js";
 import { ConfirmDialog } from "@hilla/react-components/ConfirmDialog.js";
-import { DatePicker, DatePickerDate, DatePickerElement } from '@hilla/react-components/DatePicker.js';
+import { DatePicker, DatePickerDate } from '@hilla/react-components/DatePicker.js';
 import { DateTimePicker } from '@hilla/react-components/DateTimePicker.js';
 import { FormLayout } from "@hilla/react-components/FormLayout.js";
-import { GridDataProviderCallback, GridDataProviderParams } from "@hilla/react-components/Grid.js";
-import { GridFilterColumnElement } from "@hilla/react-components/GridFilterColumn.js";
 import { Icon } from "@hilla/react-components/Icon.js";
-import { Item } from '@hilla/react-components/Item.js';
-import { ListBox } from '@hilla/react-components/ListBox.js';
 import { Scroller } from "@hilla/react-components/Scroller.js";
-import { Select, SelectElement } from "@hilla/react-components/Select.js";
 import { SplitLayout } from "@hilla/react-components/SplitLayout.js";
 import { TextField } from "@hilla/react-components/TextField.js";
 import { VerticalLayout } from "@hilla/react-components/VerticalLayout.js";
 import { useForm } from "@hilla/react-form";
 import BranchRC from "Frontend/components/branch/BranchRC";
-import { GridRC } from "Frontend/components/filter/grid/gridRC";
 import { AutoGrid, AutoGridRef } from "Frontend/components/grid/autogrid";
 import BatchDTO from "Frontend/generated/com/itbd/application/dto/org/edu/BatchDTO";
 import BatchDTOModel from "Frontend/generated/com/itbd/application/dto/org/edu/BatchDTOModel";
@@ -26,10 +20,10 @@ import Matcher from "Frontend/generated/dev/hilla/crud/filter/PropertyStringFilt
 import { BatchDtoCrudService, ProgrammeDtoCrudService } from "Frontend/generated/endpoints";
 import NotificationUtil from "Frontend/util/NotificationUtil";
 import { comboBoxLazyFilter } from "Frontend/util/comboboxLazyFilterUtil";
-import { gridLazyFilter } from "Frontend/util/gridLazyFilterUtil";
-import { format, parse, set } from 'date-fns';
-import React from "react";
-import { ReactElement, useEffect, useMemo, useRef, useState } from "react";
+import { format, parse } from 'date-fns';
+import React, { useMemo, useState } from "react";
+import { Upload, UploadSuccessEvent } from "@hilla/react-components/Upload.js";
+import { UploadBeforeEvent } from "@vaadin/upload";
 
 
 function formatDateIso8601(dateParts: DatePickerDate) {
@@ -48,7 +42,7 @@ const BatchView = () => {
   const [departmentNameFilter, setDepartmentNameFilter] = useState('');
   const [programmeNameFilter, setProgrammeNameFilter] = useState('');
 
-  const [refreshGrid, setRefreshGrid] = useState<boolean>(false);
+  const autoGridRef = React.useRef<AutoGridRef>(null);
 
   const [dialogOpened, setDialogOpened] = useState<boolean>(false);
   const [successNotification, setSuccessNotification] = useState<boolean>(false);
@@ -57,11 +51,17 @@ const BatchView = () => {
   const { model, field, value, read, submit, clear, reset, visited, dirty, invalid, submitting } = useForm(BatchDTOModel, {
     onSubmit: async (batch) => {
       await BatchDtoCrudService.save(batch).then((result) => {
-        setRefreshGrid(!refreshGrid);
+        refreshGrid();
+        setSelectedBatchItems(result ? [result] : []);
         setSuccessNotification(true);
+        // setProgrammeNameFilter(result?.programme?.name ?? '');
       });
     }
   });
+
+  function refreshGrid() {
+    autoGridRef.current?.refresh();
+  }
 
   const programmeDataProvider = useMemo(
     () =>
@@ -92,41 +92,6 @@ const BatchView = () => {
     [departmentNameFilter]
   );
 
-
-  const batchDataProvider = useMemo(
-    () =>
-      async (
-        params: GridDataProviderParams<BatchDTO>,
-        callback: GridDataProviderCallback<BatchDTO>
-      ) => {
-        const child: PropertyStringFilter[] = [{
-          '@type': 'propertyString',
-          propertyId: 'programme.name',
-          filterValue: programmeNameFilter,
-          matcher: Matcher.CONTAINS
-        },];
-
-        params.filters?.forEach((filter) => {
-          if (filter.path !== 'programme.name') {
-            child.push({
-              '@type': 'propertyString',
-              propertyId: filter.path,
-              filterValue: filter.value,
-              matcher: Matcher.CONTAINS
-            });
-          }
-        });
-
-        console.log('params', params);
-
-        const { pagination, filter } = gridLazyFilter(params, 'and', child);
-        BatchDtoCrudService.list(pagination, filter).then((result: any) => {
-          callback(result, result.length);
-        });
-      },
-    [programmeNameFilter, refreshGrid]
-  );
-
   const responsiveSteps = [
     { minWidth: '0', columns: 1 },
     { minWidth: '600px', columns: 2 },
@@ -141,12 +106,6 @@ const BatchView = () => {
     true: 'text-white bg-emerald-400 hover:bg-emerald-500',
     false: 'text-white bg-gray-300',
   };
-
-  const autoGridRef = React.useRef<AutoGridRef>(null);
-
-  function refreshGrid1() {
-    autoGridRef.current?.refresh();
-  }
 
   return (
     <>
@@ -169,27 +128,7 @@ const BatchView = () => {
               setProgrammeName: setProgrammeNameFilter
             }}
           />
-          {/* <Grid dataProvider={batchDataProvider} selectedItems={selectedBatchItems}
-            className="h-full w-full m-0"
-            theme="row-stripes"
-            onActiveItemChanged={(e) => {
-              const item = e.detail.value;
-              setSelectedBatchItems(item ? [item] : []);
-              read(item);
-              console.log('item', item);
-            }}
-          >
-            <GridFilterColumn path="name" header="Name" autoWidth flexGrow={2} />
-            <GridColumn path="graduationDate" header="Graduation Date" autoWidth flexGrow={2} headerRenderer={(e) => {
-              return dateFilterHeader(e.original.header ?? '', e.original);
-            }} />
-            <GridFilterColumn path="admissionStartDate" header="Admission Start" autoWidth flexGrow={2} />
-            <GridFilterColumn path="admissionEndDate" header="Admission End" autoWidth flexGrow={2} inputMode="decimal" />
-            <GridFilterColumn path="status" header="Status" autoWidth flexGrow={1} />
-            <GridColumn path="programme.name" header="Programme" autoWidth flexGrow={2} />
-          </Grid> */}
-
-          <AutoGrid service={BatchDtoCrudService} model={BatchDTOModel}
+          <AutoGrid service={BatchDtoCrudService} model={BatchDTOModel} ref={autoGridRef}
             visibleColumns={['name', 'programme.name', 'graduationDate', 'admissionStartDate', 'admissionEndDate', 'status',]}
             selectedItems={selectedBatchItems}
             theme="row-stripes"
@@ -219,16 +158,31 @@ const BatchView = () => {
             </div>
           </header>
           <Scroller scrollDirection="vertical" className="w-full h-full">
-            <FormLayout responsiveSteps={responsiveSteps} className="w-fit h-fit mx-5">
+            <FormLayout responsiveSteps={responsiveSteps} className="w-fit h-fit p-2">
               <label slot="label">Profile</label>
               <ComboBox label={'Programme'}  {...field(model.programme)} dataProvider={programmeDataProvider} itemLabelPath='name' itemValuePath='name' clearButtonVisible />
               <TextField label={'Name'}  {...field(model.name)} />
               <TextField label={'Description'}  {...field(model.description)} />
-              {/* <DatePicker label={'Graduation Date'}  {...field(model.graduationDate)} className="max-w-60" /> */}
-              <DatePicker label={'Graduation Date'}  {...field(model.graduationDate)} className="max-w-60" />
-              <DateTimePicker label={'Admission Start'}  {...field(model.admissionStartDate)} className="max-w-60" />
-              <DateTimePicker label={'Admission End'}  {...field(model.admissionEndDate)} className="max-w-60" />
+              <DatePicker label={'Graduation Date'}  {...field(model.graduationDate)} />
+              <DateTimePicker label={'Admission Start'}  {...field(model.admissionStartDate)} />
+              <DateTimePicker label={'Admission End'}  {...field(model.admissionEndDate)} />
               <TextField label={'Status'}  {...field(model.status)} />
+              <Upload capture="camera" accept="image/*" max-files="1"
+                method="POST"
+                target="http://localhost:8080/api/v1/org/edu/batch/upload"
+                onUploadBefore={async (e: UploadBeforeEvent) => {
+                  const file = e.detail.file;
+                  // e.preventDefault();
+                  console.log('file', file);
+                  // if (form.value) {
+                  //   form.value.avatarBase64 = await readAsDataURL(file);
+                  // }
+                }}
+                onUploadSuccess={(e: UploadSuccessEvent) => {
+                  const file = e.detail.file;
+                  console.log('file s', file);
+                }}
+              ></Upload>
             </FormLayout>
           </Scroller>
           <footer className="flex flex-row bg-gray-100 w-full">
@@ -294,7 +248,7 @@ const BatchView = () => {
         }}
         onConfirm={() => {
           BatchDtoCrudService.delete(selectedBatchItems[0]?.id).then((result) => {
-            setRefreshGrid(!refreshGrid);
+            refreshGrid();
             setSelectedBatchItems([]);
             reset();
           });
