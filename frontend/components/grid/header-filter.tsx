@@ -1,43 +1,19 @@
 import { _enum, type EnumModel } from '@hilla/form';
 import { DatePicker } from '@hilla/react-components/DatePicker.js';
-import type { GridColumnProps } from '@hilla/react-components/GridColumn.js';
 import { Item } from '@hilla/react-components/Item.js';
 import { ListBox } from '@hilla/react-components/ListBox.js';
 import { NumberField } from '@hilla/react-components/NumberField.js';
 import { Select, type SelectElement } from '@hilla/react-components/Select.js';
 import { TextField, type TextFieldElement } from '@hilla/react-components/TextField.js';
 import { TimePicker } from '@hilla/react-components/TimePicker.js';
-import {
-  type ComponentType,
-  type JSX,
-  type ReactElement,
-  type RefObject,
-  useContext,
-  useEffect,
-  useRef,
-  useState,
-} from 'react';
-import { ColumnContext, CustomColumnContext } from './autogrid-column-context.js';
+import { type ReactElement, type RefObject, useContext, useEffect, useRef, useState, Dispatch, SetStateAction } from 'react';
+import { ColumnContext } from './autogrid-column-context.js';
 import { useDatePickerI18n } from './locale.js';
-import type PropertyStringFilter from 'Frontend/generated/dev/hilla/crud/filter/PropertyStringFilter';
-import Matcher from 'Frontend/generated/dev/hilla/crud/filter/PropertyStringFilter/Matcher.js';
+// import type FilterUnion from './types/dev/hilla/crud/filter/FilterUnion.js';
+// import Matcher from './types/dev/hilla/crud/filter/PropertyStringFilter/Matcher.js';
 import { convertToTitleCase } from './util';
 import FilterUnion from 'Frontend/generated/dev/hilla/crud/filter/FilterUnion.js';
-
-type ExtractComponentTypeProps<T extends ComponentType<any>> = T extends ComponentType<infer U> ? U : never;
-
-export type HeaderRendererProps = ExtractComponentTypeProps<
-  NonNullable<Required<GridColumnProps<unknown>>['headerRenderer']>
->;
-
-export type HeaderFilterRendererProps = HeaderRendererProps & {
-  /**
-   * Allows to set custom filters for the column.
-   * This is used by the header filter components.
-   * @param filter - The filter to set in the filter list.
-   */
-  setFilter(filter: FilterUnion): void;
-};
+import Matcher from 'Frontend/generated/dev/hilla/crud/filter/PropertyStringFilter/Matcher.js';
 
 export type HeaderFilterProps = Readonly<{
   /**
@@ -65,11 +41,14 @@ export type HeaderFilterProps = Readonly<{
    * Only applies to string value filters.
    */
   filterMinLength?: number;
-
   /**
-   * Custom renderer for the filter in the header.
+   * set the external value of the filter
    */
-  headerFilterRenderer?: ComponentType<HeaderFilterRendererProps>;
+  externalValue?: string;
+  /**
+   * state the external value of the filter
+   */
+  setExternalValue?: Dispatch<SetStateAction<string>>;
 }>;
 
 function useFilterState(initialMatcher: Matcher) {
@@ -81,13 +60,13 @@ function useFilterState(initialMatcher: Matcher) {
     setFilterValue(newFilterValue);
     setMatcher(newMatcher);
 
-    const filter: PropertyStringFilter = {
+    const filter: FilterUnion = {
+      '@type': 'propertyString',
       propertyId: context.propertyInfo.name,
       filterValue: newFilterValue,
       matcher: newMatcher,
-      '@type': 'propertyString',
     };
-    context.setColumnFilter(filter, context.filterKey);
+    context.setPropertyFilter(filter);
   }
 
   return { matcher, filterValue, updateFilter };
@@ -105,13 +84,12 @@ function useSelectInitWorkaround(selectRef: RefObject<SelectElement>) {
 }
 
 // extracted component (and type) to avoid code duplication
-type ComparationSelectionProps = Readonly<{
+type ComparationSelectionProps = {
   value: Matcher;
   onMatcherChanged(matcher: Matcher): void;
-  isDateTimeType?: boolean;
-}>;
+};
 
-function ComparationSelection({ onMatcherChanged, value, isDateTimeType }: ComparationSelectionProps): ReactElement {
+function ComparationSelection({ onMatcherChanged, value }: ComparationSelectionProps): ReactElement {
   const select = useRef<SelectElement>(null);
 
   useSelectInitWorkaround(select);
@@ -128,10 +106,10 @@ function ComparationSelection({ onMatcherChanged, value, isDateTimeType }: Compa
       renderer={() => (
         <ListBox>
           <Item value={Matcher.GREATER_THAN} {...{ label: '>' }}>
-            {isDateTimeType ? '> After' : '> Greater than'}
+            &gt; Greater than
           </Item>
           <Item value={Matcher.LESS_THAN} {...{ label: '<' }}>
-            {isDateTimeType ? '< Before' : '< Less than'}
+            &lt; Less than
           </Item>
           <Item value={Matcher.EQUALS} {...{ label: '=' }}>
             = Equals
@@ -144,21 +122,26 @@ function ComparationSelection({ onMatcherChanged, value, isDateTimeType }: Compa
 
 export function StringHeaderFilter(): ReactElement {
   const context = useContext(ColumnContext)!;
-  const { filterPlaceholder, filterDebounceTime, filterMinLength } = context.customColumnOptions ?? {};
+  const { filterPlaceholder, filterDebounceTime, filterMinLength, externalValue: externalValue, setExternalValue } = context.customColumnOptions ?? {};
   const { updateFilter } = useFilterState(Matcher.CONTAINS);
   const [inputValue, setInputValue] = useState('');
 
   useEffect(() => {
     if (filterMinLength && inputValue && inputValue.length < filterMinLength) {
       updateFilter(Matcher.CONTAINS, '');
-      return () => {};
+      return () => { };
     }
-
     const delayInputTimeoutId = setTimeout(() => {
       updateFilter(Matcher.CONTAINS, inputValue);
     }, filterDebounceTime ?? 200);
     return () => clearTimeout(delayInputTimeoutId);
   }, [inputValue]);
+
+  useEffect(() => {
+    if (externalValue !== undefined || externalValue !== '') {
+      setInputValue(externalValue ?? '');
+    }
+  }, [externalValue]);
 
   return (
     <div className="auto-grid-string-filter">
@@ -167,9 +150,11 @@ export function StringHeaderFilter(): ReactElement {
         placeholder={filterPlaceholder ?? 'Filter...'}
         onInput={(e: any) => {
           const fieldValue = ((e as InputEvent).target as TextFieldElement).value;
+          // setExternalValue && setExternalValue(fieldValue);
           setInputValue(fieldValue);
         }}
-      ></TextField>
+      >
+      </TextField>
     </div>
   );
 }
@@ -274,11 +259,7 @@ export function DateHeaderFilter(): ReactElement {
 
   return (
     <div className="auto-grid-date-filter">
-      <ComparationSelection
-        value={matcher}
-        onMatcherChanged={(m) => updateFilter(m, filterValue)}
-        isDateTimeType={true}
-      />
+      <ComparationSelection value={matcher} onMatcherChanged={(m) => updateFilter(m, filterValue)} />
       <DatePicker
         theme="small"
         value={filterValue}
@@ -304,11 +285,7 @@ export function TimeHeaderFilter(): ReactElement {
 
   return (
     <div className="auto-grid-time-filter">
-      <ComparationSelection
-        value={matcher}
-        onMatcherChanged={(m) => updateFilter(m, filterValue)}
-        isDateTimeType={true}
-      />
+      <ComparationSelection value={matcher} onMatcherChanged={(m) => updateFilter(m, filterValue)} />
       <TimePicker
         theme="small"
         value={filterValue}
@@ -328,16 +305,4 @@ export function TimeHeaderFilter(): ReactElement {
 
 export function NoHeaderFilter(): ReactElement {
   return <></>;
-}
-
-export function HeaderFilterWrapper({ original }: HeaderRendererProps): JSX.Element | null {
-  const context = useContext(ColumnContext);
-  const customContext = useContext(CustomColumnContext);
-  const { setColumnFilter, headerFilterRenderer: HeaderFilterRenderer, filterKey } = (context ?? customContext)!;
-
-  function setFilter(filter: FilterUnion) {
-    setColumnFilter(filter, filterKey);
-  }
-
-  return <HeaderFilterRenderer original={original} setFilter={setFilter} />;
 }
