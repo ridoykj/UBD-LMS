@@ -85,9 +85,9 @@ function CalenderBoardView() {
     for (let i = 0; i < 7; i++) {
       const day = startDate;
       const formattedDate = format(day, "EEE");
-      const cssColumn = `col-start-[${i + 2}]`;
+      const cssColumn = `col-start-[${i + 2}] ${cssE}`;
       cells.push(
-        <div className={cssColumn + cssE}>{formattedDate}</div>
+        <div className={cssColumn}>{formattedDate}</div>
       );
       startDate = addDays(startDate, 1);
     }
@@ -117,7 +117,7 @@ function CalenderBoardView() {
       <>
         {data.map((item, columnIndex) => (
           <>
-            <div key={columnIndex} className={`row-start-[${rowIndex + 1}] col-start-[${columnIndex + 1}] ${customCss}`}>
+            <div key={columnIndex} className={'row-start-[' + (rowIndex + 1) + '] col-start-[' + (columnIndex + 1) + '] ' + customCss}>
               {item}
             </div>
             {/* <div className={`row-start-[${rowIndex + 1}] col-start-[${columnIndex + 1}] border-slate-100 dark:border-slate-200/5 border-b border-r`}></div> */}
@@ -128,22 +128,29 @@ function CalenderBoardView() {
   }
 
   function createTableRowBorder(rowIndex: number, columnLength: number) {
-    let columns = [];
-    for (let columnIndex = 0; columnIndex < columnLength; columnIndex++) {
-      columns.push(
-        <div key={columnIndex} className={`row-start-[${rowIndex + 1}] col-start-[${columnIndex + 1}] border-slate-100 dark:border-slate-200/5 border-b border-r`}></div>
-      );
+    const columns: string[] = [];
+    for (let columnIndex = 1; columnIndex <= columnLength; columnIndex++) {
+      columns.push('row-start-[' + (rowIndex + 1) + '] col-start-[' + (columnIndex + 1) + '] border-slate-100 dark:border-slate-200/5 border-b border-r');
     }
-    return columns;
+
+    const listItems = columns.map((item, index) => {
+      return (<div key={rowIndex + '_' + index} className={item}></div>)
+    });
+    console.log('list', listItems);
+    return (
+      <>
+        {listItems}
+      </>
+    );
   }
 
   function timeSheet() {
-    const hours = ['5 AM', '6 AM', '7 AM', '8 AM', '9 AM', '10 AM', '11 AM', '12 PM', '1 PM', '2 PM', '3 PM', '4 PM', '5 PM', '6 PM', '7 PM', '8 PM',];
+    const hours = ['5 AM', '6 AM', '7 AM', '8 AM', '9 AM', '10 AM', '11 AM', '12 PM', '1 PM', '2 PM', '3 PM', '4 PM', '5 PM', '6 PM', '7 PM'];
 
     return (
       hours.map((hour, index) => (
         <>
-          {createTableRowBorder(index + 1, 8)}
+          {createTableRowBorder(index, 8)}
           {createTableRow(index + 1, [hour], tdCss)}
         </>
       ))
@@ -166,20 +173,20 @@ function CalenderBoardView() {
       </>
     )
   }
-  const thCss = `sticky top-0 z-10 bg-white dark:bg-gradient-to-b dark:from-slate-600 dark:to-slate-700 border-slate-100 dark:border-black/10 bg-clip-padding text-slate-900 dark:text-slate-200 border-b text-sm font-medium py-2 h-10 text-center`;
-  const tdCss = `border-slate-100 dark:border-slate-200/5 border-b border-r text-xs p-1.5 text-right text-slate-400 uppercase sticky left-0 bg-white dark:bg-slate-800 font-medium`;
+  const thCss = 'sticky top-0 z-10 bg-white dark:bg-gradient-to-b dark:from-slate-600 dark:to-slate-700 border-slate-100 dark:border-black/10 bg-clip-padding text-slate-900 dark:text-slate-200 border-b text-sm font-medium py-2 h-10 text-center';
+  const tdCss = 'border-slate-100 dark:border-slate-200/5 border-b border-r text-xs p-1.5 text-right text-slate-400 uppercase sticky left-0 bg-white dark:bg-slate-800 font-medium';
   return (
     <>
       <VerticalLayout className="h-full w-full items-stretch">
         <div className="overflow-scroll grid grid-cols-[70px,repeat(7,150px)] grid-rows-[auto,repeat(16,50px)] h-full">
 
-          {createTableRowBorder(0, 8)}
+          {/* {createTableRowBorder(0, 8)} */}
           {createTableRow(0, ['', ...daysName()], thCss)}
           {timeSheet()}
 
           <div className="row-start-[17] col-start-[8]"></div>
           {/* Calendar contents  */}
-          {/* <div className="row-start-[2] col-start-3 row-span-4 bg-blue-400/20 dark:bg-sky-600/50 border border-blue-700/10 dark:border-sky-500 rounded-lg m-1 p-1 flex flex-col">
+          <div className="row-start-[2] col-start-3 row-span-4 bg-blue-400/20 dark:bg-sky-600/50 border border-blue-700/10 dark:border-sky-500 rounded-lg m-1 p-1 flex flex-col">
             <span className="text-xs text-blue-600 dark:text-sky-100">5 AM</span>
             <span className="text-xs font-medium text-blue-600 dark:text-sky-100">Flight to vancouver</span>
             <span className="text-xs text-blue-600 dark:text-sky-100">Toronto YYZ</span>
@@ -193,7 +200,7 @@ function CalenderBoardView() {
             <span className="text-xs text-pink-600 dark:text-indigo-100">5 PM</span>
             <span className="text-xs font-medium text-pink-600 dark:text-indigo-100">🎉 Party party 🎉</span>
             <span className="text-xs text-pink-600 dark:text-indigo-100">We like to party!</span>
-          </div> */}
+          </div>
         </div>
       </VerticalLayout>
     </>

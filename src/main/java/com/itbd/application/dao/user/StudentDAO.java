@@ -1,7 +1,7 @@
 package com.itbd.application.dao.user;
 
+import com.itbd.application.dao.AbstractEntity;
 import com.itbd.application.dao.org.edu.BatchDAO;
-import com.itbd.application.dao.org.edu.DepartmentDAO;
 import com.itbd.application.dao.user.person.PersonDAO;
 
 import jakarta.persistence.Column;
@@ -20,7 +20,7 @@ import lombok.Setter;
 @Table(name = "t_org_student")
 @Getter
 @Setter
-public class StudentDAO {
+public class StudentDAO extends AbstractEntity<Long> {
     @Id
     @Column(name = "id_student_key", nullable = false, updatable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)

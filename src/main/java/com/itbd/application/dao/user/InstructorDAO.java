@@ -2,6 +2,7 @@ package com.itbd.application.dao.user;
 
 import java.util.List;
 
+import com.itbd.application.dao.AbstractEntity;
 import com.itbd.application.dao.org.edu.ReservationDAO;
 import com.itbd.application.dao.user.person.PersonDAO;
 
@@ -19,7 +20,7 @@ import lombok.Setter;
 @Entity(name = "t_org_instructor")
 @Getter
 @Setter
-public class InstructorDAO {
+public class InstructorDAO extends AbstractEntity<Long> {
     @Id
     @Column(name = "id_instructor_key", nullable = false, updatable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)

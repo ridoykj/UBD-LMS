@@ -48,9 +48,10 @@ const BatchView = () => {
   const [successNotification, setSuccessNotification] = useState<boolean>(false);
 
   const [selectedBatchItems, setSelectedBatchItems] = useState<BatchDTO[]>([]);
-  const { model, field, value, read, submit, clear, reset, visited, dirty, invalid, submitting } = useForm(BatchDTOModel, {
+  const form = useForm(BatchDTOModel, {
     onSubmit: async (batch) => {
       await BatchDtoCrudService.save(batch).then((result) => {
+        console.log('result', result);
         refreshGrid();
         setSelectedBatchItems(result ? [result] : []);
         setSuccessNotification(true);
@@ -58,6 +59,8 @@ const BatchView = () => {
       });
     }
   });
+
+  const { model, field, value, read, submit, clear, reset, visited, dirty, invalid, submitting } = form
 
   function refreshGrid() {
     autoGridRef.current?.refresh();
@@ -186,38 +189,40 @@ const BatchView = () => {
               ></Upload>
             </FormLayout>
           </Scroller>
-          <footer className="flex flex-row bg-gray-100 w-full">
-            <div className="w-full">
+          <footer className="w-full">
+            <div className="flex flex-row bg-gray-100">
+              <div className="w-full">
+                {
+                  selectedBatchItems[0]?.id === undefined ? null :
+                    <Button
+                      className="text-white bg-red-400 hover:bg-red-500"
+                      onClick={() => {
+                        setDialogOpened(true);
+                        console.log('delete', selectedBatchItems[0]?.id);
+                      }}
+                    >Delete</Button>
+                }
+              </div>
               {
-                selectedBatchItems[0]?.id === undefined ? null :
-                  <Button
-                    className="text-white bg-red-400 hover:bg-red-500"
-                    onClick={() => {
-                      setDialogOpened(true);
-                      console.log('delete', selectedBatchItems[0]?.id);
-                    }}
-                  >Delete</Button>
+                value.name === undefined ? null :
+                  <div className="flex flex-row content-end space-x-4">
+                    <Button
+                      className={discardButtonColors[dirty.toString()]}
+                      disabled={!dirty}
+                      onClick={reset}
+                    >
+                      Discard
+                    </Button>
+                    <Button
+                      className={saveButtonColors[dirty.toString()]}
+                      disabled={invalid || submitting || !dirty}
+                      onClick={submit}
+                    >
+                      {selectedBatchItems[0]?.id !== undefined ? 'Update' : 'Save'}
+                    </Button>
+                  </div>
               }
             </div>
-            {
-              value.name === undefined ? null :
-                <div className="flex flex-row content-end space-x-4">
-                  <Button
-                    className={discardButtonColors[dirty.toString()]}
-                    disabled={!dirty}
-                    onClick={reset}
-                  >
-                    Discard
-                  </Button>
-                  <Button
-                    className={saveButtonColors[dirty.toString()]}
-                    disabled={invalid || submitting || !dirty}
-                    onClick={submit}
-                  >
-                    {selectedBatchItems[0]?.id !== undefined ? 'Update' : 'Save'}
-                  </Button>
-                </div>
-            }
           </footer>
         </VerticalLayout>
       </SplitLayout>

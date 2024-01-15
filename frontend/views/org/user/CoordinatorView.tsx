@@ -4,11 +4,14 @@ import { DateTimePicker } from "@hilla/react-components/DateTimePicker.js";
 import { FormLayout } from "@hilla/react-components/FormLayout.js";
 import { Icon } from "@hilla/react-components/Icon.js";
 import { Scroller } from "@hilla/react-components/Scroller.js";
+import { Select } from "@hilla/react-components/Select.js";
 import { SplitLayout } from "@hilla/react-components/SplitLayout.js";
 import { TextField } from "@hilla/react-components/TextField.js";
 import { VerticalLayout } from "@hilla/react-components/VerticalLayout";
 import { useForm } from "@hilla/react-form";
 import { AutoGrid, AutoGridRef } from "Frontend/components/grid/autogrid";
+import BloodGroupsEnum from "Frontend/generated/com/itbd/application/constants/BloodGroupsEnum";
+import GenderEnum from "Frontend/generated/com/itbd/application/constants/GenderEnum";
 import InstructorDTO from "Frontend/generated/com/itbd/application/dto/user/InstructorDTO";
 import InstructorDTOModel from "Frontend/generated/com/itbd/application/dto/user/InstructorDTOModel";
 import { InstructorDtoCrudService } from "Frontend/generated/endpoints";
@@ -32,6 +35,10 @@ const CoordinatorView = () => {
       });
     }
   });
+
+
+  const genders = Object.values(GenderEnum).map(level => ({ label: level, value: level }));
+  const bloodGroups = Object.values(BloodGroupsEnum).map(level => ({ label: level, value: level }));
 
   function refreshGrid() {
     autoGridRef.current?.refresh();
@@ -85,11 +92,11 @@ const CoordinatorView = () => {
               <TextField label={'Honorific Prefix'}  {...field(model.personKey.honorificPrefix)} />
               <TextField label={'Honorific Suffix'}  {...field(model.personKey.honorificSuffix)} />
               <TextField label={'Nationality'}  {...field(model.personKey.nationality)} />
-              <TextField label={'Blood Group'}  {...field(model.personKey.bloodGroup)} />
+              <Select label={'Blood Group'}  {...field(model.personKey.bloodGroup)} items={bloodGroups} />
               <TextField label={'Father Name'}  {...field(model.personKey.fatherName)} />
               <TextField label={'Mother Name'}  {...field(model.personKey.motherName)} />
-
-              <TextField label={'Gender'}  {...field(model.personKey.medicals.gender)} />
+{/* 
+              <Select label={'Gender'}  {...field(model.personKey.medicals.gender)} items={genders} />
               <TextField label={'Height'}  {...field(model.personKey.medicals.height)} />
               <TextField label={'Weight'}  {...field(model.personKey.medicals.weight)} />
               <TextField label={'Children'}  {...field(model.personKey.medicals.children)} />
@@ -99,7 +106,7 @@ const CoordinatorView = () => {
               <TextField label={'Telephone'}  {...field(model.personKey.contacts.telephone)} />
 
               <TextField label={'Present Address'}  {...field(model.personKey.addresses.presentAddress)} />
-              <TextField label={'Permanent Address'}  {...field(model.personKey.addresses.permanentAddress)} />
+              <TextField label={'Permanent Address'}  {...field(model.personKey.addresses.permanentAddress)} /> */}
 
               <TextField label={'Description'}  {...field(model.description)} />
               <TextField label={'Designation'}  {...field(model.designation)} />
