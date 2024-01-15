@@ -151,7 +151,7 @@ const BatchView = () => {
         <VerticalLayout className="w-1/4 min-w-96">
           <header className="bg-gray-100 w-full">
             <div className="flex flex-row space-x-4">
-              <p className="text-blue-600 text-xl font-bold truncate p-1 m-1 w-full"># {value.name ?? 'Unkown Title'}</p>
+              <p className="text-blue-600 text-xl font-bold truncate p-1 m-1 w-full"># {value.name ?? 'Unknown Title'}</p>
               <Button className="text-white content-end bg-blue-500 hover:bg-blue-600" onClick={clear}>
                 <Icon icon="vaadin:plus" />New
               </Button>
@@ -167,9 +167,10 @@ const BatchView = () => {
               <DateTimePicker label={'Admission Start'}  {...field(model.admissionStartDate)} />
               <DateTimePicker label={'Admission End'}  {...field(model.admissionEndDate)} />
               <TextField label={'Status'}  {...field(model.status)} />
-              <Upload capture="camera" accept="image/*" max-files="1"
+              <Upload capture="camera"
                 method="POST"
-                target="http://localhost:8080/api/v1/org/edu/batch/upload"
+                target="/api/fileupload"
+                headers='{"path": "batch" }'
                 onUploadBefore={async (e: UploadBeforeEvent) => {
                   const file = e.detail.file;
                   // e.preventDefault();

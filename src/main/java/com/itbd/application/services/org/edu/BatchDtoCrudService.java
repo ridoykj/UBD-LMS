@@ -35,16 +35,6 @@ public class BatchDtoCrudService implements CrudService<BatchDTO, Long> {
 
     @Autowired
     private BatchRepo personRepo;
-    @Autowired
-    private AddressRepo addressRepo;
-    @Autowired
-    private ContactRepo contactRepo;
-    @Autowired
-    private DocumentRecordsRepo documentRecordsRepo;
-    @Autowired
-    private MedicalRepo medicalRepo;
-    @Autowired
-    private OccupationRepo occupationRepo;
 
     // public PersonMargeDtoCrudService(BatchRepo personRepo, AddressRepo
     // addressRepo) {

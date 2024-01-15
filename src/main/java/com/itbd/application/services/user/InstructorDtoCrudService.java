@@ -9,6 +9,10 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.itbd.application.dao.user.InstructorDAO;
+import com.itbd.application.dao.user.person.AddressDAO;
+import com.itbd.application.dao.user.person.ContactDAO;
+import com.itbd.application.dao.user.person.MedicalDAO;
+import com.itbd.application.dao.user.person.PersonDAO;
 import com.itbd.application.dto.user.InstructorDTO;
 import com.itbd.application.repos.user.InstructorRepo;
 import com.itbd.application.repos.user.person.AddressRepo;
@@ -60,7 +64,14 @@ public class InstructorDtoCrudService implements CrudService<InstructorDTO, Long
                 ? jpaFilterConverter.toSpec(filter, InstructorDAO.class)
                 : Specification.anyOf();
         Page<InstructorDAO> persons = personRepo.findAll(spec, pageable);
-        return persons.stream().map(InstructorDTO::fromEntity).toList();
+        return persons.stream().map(in -> {
+            PersonDAO person = in.getPersonKey();
+            ContactDAO contact = person.getContacts();
+            AddressDAO address = person.getAddresses();
+            MedicalDAO medical = person.getMedicals();            
+            in.setReservations(null);
+            return in;
+        }).map(InstructorDTO::fromEntity).toList();
     }
 
     @Override

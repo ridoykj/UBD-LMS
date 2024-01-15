@@ -12,14 +12,14 @@ import { useForm } from '@hilla/react-form';
 import { AutoGrid, AutoGridRef } from 'Frontend/components/grid/autogrid';
 import OrganizationDTO from 'Frontend/generated/com/itbd/application/dto/org/academic/OrganizationDTO';
 import OrganizationDTOModel from 'Frontend/generated/com/itbd/application/dto/org/academic/OrganizationDTOModel';
-import { DepartmentDtoCrudService, OrganizationDtoCrudService, ProgrammeDtoCrudService } from "Frontend/generated/endpoints";
+import { OrganizationDtoCrudService } from "Frontend/generated/endpoints";
 import NotificationUtil from 'Frontend/util/NotificationUtil';
 import React, { useState } from 'react';
 
 const OrganizationView = () => {
-  const [orgNameFilter, setOrgNameFilter] = useState('');
   const [dialogOpened, setDialogOpened] = useState<boolean>(false);
   const [successNotification, setSuccessNotification] = useState<boolean>(false);
+  const [errorNotification, setErrorNotification] = useState<boolean>(false);
 
   const autoGridRef = React.useRef<AutoGridRef>(null);
 
@@ -27,10 +27,12 @@ const OrganizationView = () => {
 
   const { model, field, value, read, submit, clear, reset, visited, dirty, invalid, submitting } = useForm(OrganizationDTOModel, {
     onSubmit: async (org) => {
-      await DepartmentDtoCrudService.save(org).then((result) => {
+      await OrganizationDtoCrudService.save(org).then((result) => {
         refreshGrid();
         setSelectedOrgItems(result ? [result] : []);
         setSuccessNotification(true);
+      }).catch((error) => {
+        console.log('error', error);
       });
     }
   });
@@ -66,13 +68,13 @@ const OrganizationView = () => {
               const item = e.detail.value;
               setSelectedOrgItems(item ? [item] : []);
               read(item);
-            }}            
+            }}
           />
         </VerticalLayout>
         <VerticalLayout className="w-1/4 min-w-96">
           <header className="bg-gray-100 w-full">
             <div className="flex flex-row space-x-4">
-              <p className="text-blue-600 text-xl font-bold p-1 m-1 w-full"># {value.name?.substring(0, 15) || 'Unkown Title'}</p>
+              <p className="text-blue-600 text-xl font-bold truncate p-1 m-1 w-full"># {value.name ?? 'Unknown Title'}</p>
               <Button className="text-white content-end bg-blue-500 hover:bg-blue-600" onClick={clear}>
                 <Icon icon="vaadin:plus" />New
               </Button>
@@ -80,7 +82,6 @@ const OrganizationView = () => {
           </header>
           <Scroller scrollDirection="vertical" className="w-full h-full">
             <FormLayout responsiveSteps={responsiveSteps} className="w-fit h-fit p-2">
-              <label slot="label">Profile</label>
               <TextField label={'Name'}  {...field(model.name)} />
               <TextField label={'Alternate Name'}  {...field(model.alternateName)} />
               <DateTimePicker label={'Founding Date'}  {...field(model.foundingDate)} />
@@ -102,7 +103,6 @@ const OrganizationView = () => {
                     className="text-white bg-red-400 hover:bg-red-500"
                     onClick={() => {
                       setDialogOpened(true);
-                      console.log('delete', selectedOrgItems[0]?.id);
                     }}
                   >Delete</Button>
               }
@@ -141,6 +141,18 @@ const OrganizationView = () => {
         }}
         onClick={() => { setSuccessNotification(false) }}
       />
+      <NotificationUtil opened={errorNotification} type="error"
+        message={{
+          title: 'Unable to delete item',
+          description: 'Please check and delete all the child items first',
+        }}
+        onOpenedChanged={(event) => {
+          if (!event.detail.value) {
+            setErrorNotification(event.detail.value);
+          }
+        }}
+        onClick={() => { setErrorNotification(false) }}
+      />
       <ConfirmDialog
         header="Delete Item"
         cancelButtonVisible
@@ -156,10 +168,13 @@ const OrganizationView = () => {
           }
         }}
         onConfirm={() => {
-          ProgrammeDtoCrudService.delete(selectedOrgItems[0]?.id).then((result) => {
+          OrganizationDtoCrudService.delete(selectedOrgItems[0]?.id).then((result) => {
             refreshGrid();
             setSelectedOrgItems([]);
             reset();
+          }).catch((error) => {
+            console.error('error', error);
+            setErrorNotification(true);
           });
         }}>
         {`Do you want to delete?${value.name}`}

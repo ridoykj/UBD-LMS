@@ -25,7 +25,7 @@ export default function MainLayout() {
             {/* <img src="images/logo_uoa.svg" alt="" className='w-30' /> */}
             <img src="images/move-right.png" alt="" className='w-20' />
             {/* <h1 className="text-3xl uppercase text-indigo-500 font-bold">AFG College with the Univerity of Aberdeen</h1> */}
-            {/* <h1 className="text-xl text-indigo-500 font-bold">AFG College with the Univerity of Aberdeen</h1> */}
+            {/* <h1 className="text-xl text-indigo-500 font-bold">AFG College with the University of Aberdeen</h1> */}
           </div>
           <nav>
             <Scroller
@@ -53,7 +53,7 @@ export default function MainLayout() {
                 { name: 'Reservation', icon: <FaCalendarDay />, route: '/edu/reservation' }
               ]} />
               <RNavItemRC name='User' icon={<FaUser />} route='' subItems={[
-                { name: 'Professor', icon: <FaUserTie />, route: '/user/instructors' },
+                { name: 'Coordinator', icon: <FaUserTie />, route: '/user/coordinators' },
                 { name: 'Student', icon: <FaUserGraduate />, route: '/user/students' },
                 { name: 'Authorization', icon: <FaKey />, route: '/user/authorization' }
               ]} />

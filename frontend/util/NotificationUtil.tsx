@@ -53,17 +53,24 @@ export default function NotificationUtil({ type, opened, message, onOpenedChange
       case 'error':
         return (
           <Notification
-            theme="error"
+            // theme="error"
             position="top-center"
             opened={opened}
             onOpenedChanged={onOpenedChanged}
           >
             <HorizontalLayout theme="spacing" style={{ alignItems: 'center' }}>
-              <Icon icon="vaadin:warning" />
-              <div>Failed to generate report</div>
-              <Button style={{ margin: '0 0 0 var(--lumo-space-l)' }} onClick={() => close()}>
-                Retry
-              </Button>
+              <Icon icon="vaadin:warning" style={{ color: 'var(--lumo-error-text-color)' }} />
+              <div>
+                <b style={{ color: 'var(--lumo-error-text-color)' }}>{message.title}</b>
+                <div
+                  style={{
+                    fontSize: 'var(--lumo-font-size-s)',
+                    color: 'var(--lumo-error-text-color)',
+                  }}
+                >
+                  {message.description}
+                </div>
+              </div>
               <Button theme="tertiary-inline" onClick={onClick} aria-label="Close">
                 <Icon icon="lumo:cross" />
               </Button>

@@ -15,7 +15,7 @@ import DepartmentDTO from 'Frontend/generated/com/itbd/application/dto/org/edu/D
 import DepartmentDTOModel from 'Frontend/generated/com/itbd/application/dto/org/edu/DepartmentDTOModel';
 import PropertyStringFilter from 'Frontend/generated/dev/hilla/crud/filter/PropertyStringFilter';
 import Matcher from 'Frontend/generated/dev/hilla/crud/filter/PropertyStringFilter/Matcher';
-import { DepartmentDtoCrudService, OrganizationDtoCrudService, ProgrammeDtoCrudService } from "Frontend/generated/endpoints";
+import { DepartmentDtoCrudService, OrganizationDtoCrudService } from "Frontend/generated/endpoints";
 import NotificationUtil from 'Frontend/util/NotificationUtil';
 import { comboBoxLazyFilter } from 'Frontend/util/comboboxLazyFilterUtil';
 import React, { useMemo, useState } from 'react';
@@ -35,6 +35,8 @@ const DepartmentView = () => {
         refreshGrid();
         setSelectedDepartmentItems(result ? [result] : []);
         setSuccessNotification(true);
+      }).catch((error) => {
+        console.log('error', error);
       });
     }
   });
@@ -115,7 +117,7 @@ const DepartmentView = () => {
         <VerticalLayout className="w-1/4 min-w-96">
           <header className="bg-gray-100 w-full">
             <div className="flex flex-row space-x-4">
-              <p className="text-blue-600 text-xl font-bold p-1 m-1 w-full"># {value.name?.substring(0, 15) || 'Unkown Title'}</p>
+              <p className="text-blue-600 text-xl font-bold truncate p-1 m-1 w-full">#{value.name ?? 'Unknown Title'}</p>
               <Button className="text-white content-end bg-blue-500 hover:bg-blue-600" onClick={clear}>
                 <Icon icon="vaadin:plus" />New
               </Button>
@@ -193,7 +195,7 @@ const DepartmentView = () => {
           }
         }}
         onConfirm={() => {
-          ProgrammeDtoCrudService.delete(selectedDepartmentItems[0]?.id).then((result) => {
+          DepartmentDtoCrudService.delete(selectedDepartmentItems[0]?.id).then((result) => {
             refreshGrid();
             setSelectedDepartmentItems([]);
             reset();

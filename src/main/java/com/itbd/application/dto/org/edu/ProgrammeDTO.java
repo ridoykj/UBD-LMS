@@ -14,6 +14,7 @@ public record ProgrammeDTO(
         Long id,
         @NotNull String name,
         ProgrammeTypeEnum studyLevel,
+        String code,
         String description,
         String status,
         @NotNull DepartmentDAO department,
@@ -25,6 +26,7 @@ public record ProgrammeDTO(
                 programee.getId(),
                 programee.getName(),
                 programee.getStudyLevel(),
+                programee.getCode(),
                 programee.getDescription(),
                 programee.getStatus(),
                 programee.getDepartment(),
@@ -36,6 +38,7 @@ public record ProgrammeDTO(
         programeeDAO.setId(programeeDTO.id());
         programeeDAO.setName(programeeDTO.name());
         programeeDAO.setStudyLevel(programeeDTO.studyLevel());
+        programeeDAO.setCode(programeeDTO.code());
 
         programeeDAO.setStatus(programeeDTO.status());
         programeeDAO.setDescription(programeeDTO.description());

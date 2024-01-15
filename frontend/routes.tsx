@@ -1,6 +1,7 @@
 import MainLayout from 'Frontend/views/MainLayout.js';
 import { lazy } from 'react';
 import { createBrowserRouter, RouteObject } from 'react-router-dom';
+import DefaultView from './views/default/DefaultView';
 import GridView from './views/grid/GridView';
 import AttendanceView from './views/org/academic/AttendanceView';
 import OrganizationView from './views/org/academic/OrganizationView';
@@ -16,14 +17,13 @@ import FloorView from './views/org/place/FloorView';
 import RoomView from './views/org/place/RoomView';
 import SectorView from './views/org/place/SectorView';
 import AuthorizationView from './views/org/user/AuthorizationView';
-import InstructorView from './views/org/user/InstructorView';
+import CoordinatorView from './views/org/user/CoordinatorView';
 import StudentView from './views/org/user/StudentView';
+import CalenderBoardView from './views/profile/dashboard/CalenderBoardView';
 import DashboardView from './views/profile/dashboard/DashboardView';
 import ProfileView from './views/profile/ProfileView';
 import ShopView from './views/shop/ShopView';
 import UserView from './views/users/UserView';
-import DefaultView from './views/default/DefaultView';
-import CalenderBoardView from './views/profile/dashboard/CalenderBoardView';
 
 const AboutView = lazy(async () => import('Frontend/views/about/AboutView.js'));
 
@@ -56,7 +56,7 @@ export const routes: RouteObject[] = [
       { path: '/place/sector', element: <SectorView />, handle: { title: 'Sector' } },
 
       { path: '/user/authorization', element: <AuthorizationView />, handle: { title: 'Authorization' } },
-      { path: '/user/instructors', element: <InstructorView />, handle: { title: 'Instructor' } },
+      { path: '/user/coordinators', element: <CoordinatorView />, handle: { title: 'Coordinator' } },
       { path: '/user/students', element: <StudentView />, handle: { title: 'Student' } },
 
       { path: '/users', element: <UserView />, handle: { title: 'Users' } },

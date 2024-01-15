@@ -107,7 +107,7 @@ const ProgrammeView = () => {
             }}
           />
           <AutoGrid service={ProgrammeDtoCrudService} model={ProgrammeDTOModel} ref={autoGridRef}
-            visibleColumns={['name', 'studyLevel', 'department.name', 'status',]}
+            visibleColumns={['name','code', 'studyLevel', 'department.name', 'status',]}
             selectedItems={selectedProgrameeItems}
             theme="row-stripes"
             onActiveItemChanged={(e) => {
@@ -127,7 +127,7 @@ const ProgrammeView = () => {
         <VerticalLayout className="w-1/4 min-w-96">
           <header className="bg-gray-100 w-full">
             <div className="flex flex-row space-x-4">
-              <p className="text-blue-600 text-xl font-bold p-1 m-1 w-full"># {value.name?.substring(0, 15) || 'Unkown Title'}</p>
+              <p className="text-blue-600 text-xl font-bold truncate p-1 m-1 w-full"># {value.name ?? 'Unknown Title'}</p>
               <Button className="text-white content-end bg-blue-500 hover:bg-blue-600" onClick={clear}>
                 <Icon icon="vaadin:plus" />New
               </Button>
@@ -139,6 +139,7 @@ const ProgrammeView = () => {
               <ComboBox label={'Department'}  {...field(model.department)} dataProvider={departmentDataProvider} itemLabelPath='name' itemValuePath='name' clearButtonVisible />
               <TextField label={'Name'}  {...field(model.name)} />
               <Select label={'Study Level'}  {...field(model.studyLevel)} items={studyLevels} />
+              <TextField label={'Code'}  {...field(model.code)} />
               <TextField label={'Description'}  {...field(model.description)} />
               <TextField label={'Status'}  {...field(model.status)} />
             </FormLayout>

@@ -36,6 +36,10 @@ public class ProgrammeDAO {
     @Enumerated(EnumType.STRING)
     private ProgrammeTypeEnum studyLevel;
 
+    @Column(name = "tx_code")
+    private String code;
+
+
     @Column(name = "tx_status")
     private String status;
 
