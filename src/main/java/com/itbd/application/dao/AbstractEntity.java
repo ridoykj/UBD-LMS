@@ -2,6 +2,7 @@ package com.itbd.application.dao;
 
 import java.time.LocalDateTime;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import org.hibernate.annotations.ColumnDefault;
@@ -36,25 +37,27 @@ public class AbstractEntity <U> {
     @UpdateTimestamp(source = SourceType.DB)
     public LocalDateTime updatedAt;
 
-//    @Column(name = "id_user_gen", nullable = false)
-//    @ColumnDefault("-2147483648")
-//    @CreatedBy
-//    public U createdBy;
-//
-//    @Column(name = "id_user_mod", nullable = false)
-//    @ColumnDefault("-2147483648")
-//    @LastModifiedBy
-//    public U modifiedBy;
-
     @Column(name = "id_user_gen", nullable = false)
     @ColumnDefault("-2147483648")
     @CreatedBy
-    public Long createdBy;
+    @JsonIgnore
+    public U createdBy;
 
     @Column(name = "id_user_mod", nullable = false)
     @ColumnDefault("-2147483648")
     @LastModifiedBy
-    public Long modifiedBy;
+    @JsonIgnore
+    public U modifiedBy;
+
+//    @Column(name = "id_user_gen", nullable = false)
+//    @ColumnDefault("-2147483648")
+//    @CreatedBy
+//    public Long createdBy;
+//
+//    @Column(name = "id_user_mod", nullable = false)
+//    @ColumnDefault("-2147483648")
+//    @LastModifiedBy
+//    public Long modifiedBy;
 
     @Column(name = "is_active", nullable = false, insertable = false)
     @ColumnDefault("1")

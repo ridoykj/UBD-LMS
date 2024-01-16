@@ -4,6 +4,7 @@ import { DateTimePicker } from "@hilla/react-components/DateTimePicker.js";
 import { FormLayout } from "@hilla/react-components/FormLayout.js";
 import { Icon } from "@hilla/react-components/Icon.js";
 import { Scroller } from "@hilla/react-components/Scroller.js";
+import { Select } from "@hilla/react-components/Select.js";
 import { SplitLayout } from "@hilla/react-components/SplitLayout.js";
 import { TextField } from "@hilla/react-components/TextField.js";
 import { VerticalLayout } from "@hilla/react-components/VerticalLayout";
@@ -11,10 +12,9 @@ import { useForm } from "@hilla/react-form";
 import { AutoGrid, AutoGridRef } from "Frontend/components/grid/autogrid";
 import BloodGroupsEnum from "Frontend/generated/com/itbd/application/constants/BloodGroupsEnum";
 import GenderEnum from "Frontend/generated/com/itbd/application/constants/GenderEnum";
-import PersonDAOModel from "Frontend/generated/com/itbd/application/dao/user/person/PersonDAOModel";
-import PersonDTO from "Frontend/generated/com/itbd/application/dto/user/person/PersonDTO";
-import PersonDTOModel from "Frontend/generated/com/itbd/application/dto/user/person/PersonDTOModel";
-import { PersonDtoCrudService } from "Frontend/generated/endpoints";
+import InstructorMargeDTO from "Frontend/generated/com/itbd/application/dto/user/instructor/InstructorMargeDTO";
+import InstructorMargeDTOModel from "Frontend/generated/com/itbd/application/dto/user/instructor/InstructorMargeDTOModel";
+import { InstructorMargeDtoCrudService, PersonDtoCrudService } from "Frontend/generated/endpoints";
 import NotificationUtil from "Frontend/util/NotificationUtil";
 import React, { useState } from "react";
 
@@ -24,12 +24,12 @@ const CoordinatorView = () => {
 
   const autoGridRef = React.useRef<AutoGridRef>(null);
 
-  const [selectedInstructorItems, setSelectedInstructorItems] = useState<PersonDTO[]>([]);
+  const [selectedInstructorItems, setSelectedInstructorItems] = useState<InstructorMargeDTO[]>([]);
 
-  const { model, field, value, read, submit, clear, reset, visited, dirty, invalid, submitting } = useForm(PersonDTOModel, {
+  const { model, field, value, read, submit, clear, reset, visited, dirty, invalid, submitting } = useForm(InstructorMargeDTOModel, {
     onSubmit: async (instructor) => {
       console.log('instructor', instructor);
-      await PersonDtoCrudService.save(instructor).then((result) => {
+      await InstructorMargeDtoCrudService.save(instructor).then((result) => {
         console.log('result', result);
         refreshGrid();
         setSelectedInstructorItems(result ? [result] : []);
@@ -65,8 +65,8 @@ const CoordinatorView = () => {
     <>
       <SplitLayout className="h-full w-full">
         <VerticalLayout className="h-full w-full items-stretch">
-          <AutoGrid service={PersonDtoCrudService} model={PersonDAOModel} ref={autoGridRef}
-            visibleColumns={['instructor.name', 'instructor.email', 'description', 'instructor.designation', 'instructor.qualification',]}
+          <AutoGrid service={InstructorMargeDtoCrudService} model={InstructorMargeDTOModel} ref={autoGridRef}
+            visibleColumns={['instructor.name', 'contact.email', 'description', 'instructor.designation', 'instructor.qualification',]}
             selectedItems={selectedInstructorItems}
             theme="row-stripes"
             onActiveItemChanged={(e) => {
@@ -98,19 +98,19 @@ const CoordinatorView = () => {
               <TextField label={'Honorific Prefix'}  {...field(model.honorificPrefix)} />
               <TextField label={'Honorific Suffix'}  {...field(model.honorificSuffix)} />
               <TextField label={'Nationality'}  {...field(model.nationality)} />
-              {/* <Select label={'Blood Group'}  {...field(model.bloodGroup)} items={bloodGroups} />
+              <Select label={'Blood Group'}  {...field(model.bloodGroup)} items={bloodGroups} />
               <TextField label={'Father Name'}  {...field(model.fatherName)} />
               <TextField label={'Mother Name'}  {...field(model.motherName)} />
 
-              <Select label={'Gender'}  {...field(model.gender)} items={genders} />
-              <TextField label={'Height'}  {...field(model.height)} />
-              <TextField label={'Weight'}  {...field(model.weight)} />
-              <TextField label={'Children'}  {...field(model.children)} />
+              <Select label={'Gender'}  {...field(model.medicals.gender)} items={genders} />
+              <TextField label={'Height'}  {...field(model.medicals.height)} />
+              <TextField label={'Weight'}  {...field(model.medicals.weight)} />
+              <TextField label={'Children'}  {...field(model.medicals.children)} />
 
-              <TextField label={'Email'}  {...field(model.email)} />
-              <TextField label={'Fax Number'}  {...field(model.faxNumber)} />
-              <TextField label={'Telephone'}  {...field(model.telephone)} /> */}
-{/* 
+              <TextField label={'Email'}  {...field(model.contact.email)} />
+              <TextField label={'Fax Number'}  {...field(model.contact.faxNumber)} />
+              <TextField label={'Telephone'}  {...field(model.contact.telephone)} />
+              {/* 
               <TextField label={'Present Address'}  {...field(model.address.presentAddress)} />
               <TextField label={'Permanent Address'}  {...field(model.address.permanentAddress)} /> */}
 

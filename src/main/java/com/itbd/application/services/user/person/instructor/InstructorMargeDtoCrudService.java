@@ -66,33 +66,7 @@ public class InstructorMargeDtoCrudService implements CrudService<InstructorMarg
                 ? jpaFilterConverter.toSpec(filter, PersonDAO.class)
                 : Specification.anyOf();
         Page<PersonDAO> persons = personRepo.findAll(spec, pageable);
-        return persons.stream().map(person -> {
-            AddressDAO address = person.getAddresses();
-            ContactDAO contact = person.getContacts();
-            DocumentRecordsDAO records = person.getRecordses();
-            MedicalDAO medical = person.getMedicals();
-            OccupationDAO occupation = person.getOccupations();
-            InstructorDAO instructor = person.getInstructor();
-
-            person.setAddresses(address);
-            person.setContacts(contact);
-            person.setRecordses(records);
-            person.setMedicals(medical);
-            person.setOccupations(occupation);
-            person.setInstructor(instructor);
-
-            // person.setAddresses(addressRepo.findByPersonKey(person).orElse(new
-            // AddressDAO()));
-            // person.setContacts(contactRepo.findByPersonKey(person).orElse(new
-            // ContactDAO()));
-            // person.setRecordses(documentRecordsRepo.findByPersonKey(person).orElse(new
-            // DocumentRecordsDAO()));
-            // person.setMedicals(medicalRepo.findByPersonKey(person).orElse(new
-            // MedicalDAO()));
-            // person.setOccupations(occupationRepo.findByPersonKey(person).orElse(new
-            // OccupationDAO()));
-            return InstructorMargeDTO.fromEntity(person);
-        }).toList();
+        return persons.stream().map(InstructorMargeDTO::fromEntity).toList();
     }
 
     @Override

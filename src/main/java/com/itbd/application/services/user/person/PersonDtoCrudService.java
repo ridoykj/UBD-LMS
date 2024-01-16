@@ -48,19 +48,29 @@ public class PersonDtoCrudService implements CrudService<PersonDTO, Long> {
             InstructorDAO instructor = p.getInstructor();
             AddressDAO address = p.getAddresses();
 //            address.setPersonKey(null);
-//            instructor.setReservations(null);
+            instructor.setReservations(null);
             p.setInstructor(instructor);
             p.setAddresses(address);
             return p;
         }).map(PersonDTO::fromEntity).toList();
     }
-
     @Override
     public @Nullable PersonDTO save(PersonDTO value) {
         boolean check = value.id() != null && value.id() > 0;
         PersonDAO person = check
                 ? personRepo.getReferenceById(value.id())
                 : new PersonDAO();
+        InstructorDAO instructor = person.getInstructor();
+        AddressDAO address = person.getAddresses();
+        person.setInstructor(instructor);
+        person.setAddresses(address);
+
+        System.out.println("name = " + instructor);
+
+//        PersonDAO person = check
+//                ? personRepo.findById(value.id()).get()
+//                : new PersonDAO();
+
         PersonDTO.fromDTO(value, person);
 
         person.setRecordComment(check ? "UPDATE" : "NEW");

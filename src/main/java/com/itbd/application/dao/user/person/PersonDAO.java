@@ -9,6 +9,7 @@ import com.itbd.application.dao.user.UserDAO;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 import java.time.LocalDateTime;
 
@@ -87,34 +88,42 @@ public class PersonDAO extends AbstractEntity<Long> {
     private String description;
 
     @OneToOne(mappedBy = "personKey", cascade = CascadeType.ALL)
-//    @JsonManagedReference
+    @ToString.Exclude
+    @JsonManagedReference
     private AddressDAO addresses;
 
     @OneToOne(mappedBy = "personKey", cascade = CascadeType.ALL)
+    @ToString.Exclude
     @JsonManagedReference
     private ContactDAO contacts;
 
     @OneToOne(mappedBy = "personKey", cascade = CascadeType.ALL)
+    @ToString.Exclude
     @JsonManagedReference
     private DocumentRecordsDAO recordses;
 
     @OneToOne(mappedBy = "personKey", cascade = CascadeType.ALL)
+    @ToString.Exclude
     @JsonManagedReference
     private MedicalDAO medicals;
 
     @OneToOne(mappedBy = "personKey", cascade = CascadeType.ALL)
+    @ToString.Exclude
     @JsonManagedReference
     private OccupationDAO occupations;
 
     @OneToOne(mappedBy = "personKey", cascade = CascadeType.ALL)
+    @ToString.Exclude
     @JsonManagedReference
     private UserDAO users;
 
     @OneToOne(mappedBy = "personKey", cascade = CascadeType.ALL)
+    @ToString.Exclude
     @JsonManagedReference
     private StudentDAO student;
 
     @OneToOne(mappedBy = "personKey", cascade = CascadeType.ALL)
-//    @JsonManagedReference
+    @ToString.Exclude
+    @JsonManagedReference
     private InstructorDAO instructor;
 }
