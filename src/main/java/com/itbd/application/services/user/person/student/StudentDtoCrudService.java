@@ -1,4 +1,4 @@
-package com.itbd.application.services.user;
+package com.itbd.application.services.user.person.student;
 
 import java.util.List;
 
@@ -9,7 +9,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.itbd.application.dao.user.StudentDAO;
-import com.itbd.application.dto.user.StudentDTO;
+import com.itbd.application.dto.user.student.StudentDTO;
 import com.itbd.application.repos.user.StudentRepo;
 import com.itbd.application.repos.user.person.AddressRepo;
 import com.itbd.application.repos.user.person.ContactRepo;
@@ -53,7 +53,7 @@ public class StudentDtoCrudService implements CrudService<StudentDTO, Long> {
 
     @Override
     @Nonnull
-    public List<@Nonnull StudentDTO> list(Pageable pageable, @Nullable Filter filter) {
+    public List<com.itbd.application.dto.user.student.StudentDTO> list(Pageable pageable, @Nullable Filter filter) {
         // Basic list implementation that only covers pagination,
         // but not sorting or filtering
         Specification<StudentDAO> spec = filter != null

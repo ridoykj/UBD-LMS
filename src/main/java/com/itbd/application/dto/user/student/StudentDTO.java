@@ -1,4 +1,4 @@
-package com.itbd.application.dto.user;
+package com.itbd.application.dto.user.student;
 
 import com.itbd.application.dao.org.edu.BatchDAO;
 import com.itbd.application.dao.user.StudentDAO;

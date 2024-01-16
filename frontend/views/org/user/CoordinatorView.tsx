@@ -4,7 +4,6 @@ import { DateTimePicker } from "@hilla/react-components/DateTimePicker.js";
 import { FormLayout } from "@hilla/react-components/FormLayout.js";
 import { Icon } from "@hilla/react-components/Icon.js";
 import { Scroller } from "@hilla/react-components/Scroller.js";
-import { Select } from "@hilla/react-components/Select.js";
 import { SplitLayout } from "@hilla/react-components/SplitLayout.js";
 import { TextField } from "@hilla/react-components/TextField.js";
 import { VerticalLayout } from "@hilla/react-components/VerticalLayout";
@@ -12,9 +11,10 @@ import { useForm } from "@hilla/react-form";
 import { AutoGrid, AutoGridRef } from "Frontend/components/grid/autogrid";
 import BloodGroupsEnum from "Frontend/generated/com/itbd/application/constants/BloodGroupsEnum";
 import GenderEnum from "Frontend/generated/com/itbd/application/constants/GenderEnum";
-import InstructorDTO from "Frontend/generated/com/itbd/application/dto/user/InstructorDTO";
-import InstructorDTOModel from "Frontend/generated/com/itbd/application/dto/user/InstructorDTOModel";
-import { InstructorDtoCrudService } from "Frontend/generated/endpoints";
+import PersonDAOModel from "Frontend/generated/com/itbd/application/dao/user/person/PersonDAOModel";
+import PersonDTO from "Frontend/generated/com/itbd/application/dto/user/person/PersonDTO";
+import PersonDTOModel from "Frontend/generated/com/itbd/application/dto/user/person/PersonDTOModel";
+import { PersonDtoCrudService } from "Frontend/generated/endpoints";
 import NotificationUtil from "Frontend/util/NotificationUtil";
 import React, { useState } from "react";
 
@@ -24,11 +24,13 @@ const CoordinatorView = () => {
 
   const autoGridRef = React.useRef<AutoGridRef>(null);
 
-  const [selectedInstructorItems, setSelectedInstructorItems] = useState<InstructorDTO[]>([]);
+  const [selectedInstructorItems, setSelectedInstructorItems] = useState<PersonDTO[]>([]);
 
-  const { model, field, value, read, submit, clear, reset, visited, dirty, invalid, submitting } = useForm(InstructorDTOModel, {
-    onSubmit: async (programme) => {
-      await InstructorDtoCrudService.save(programme).then((result) => {
+  const { model, field, value, read, submit, clear, reset, visited, dirty, invalid, submitting } = useForm(PersonDTOModel, {
+    onSubmit: async (instructor) => {
+      console.log('instructor', instructor);
+      await PersonDtoCrudService.save(instructor).then((result) => {
+        console.log('result', result);
         refreshGrid();
         setSelectedInstructorItems(result ? [result] : []);
         setSuccessNotification(true);
@@ -63,12 +65,13 @@ const CoordinatorView = () => {
     <>
       <SplitLayout className="h-full w-full">
         <VerticalLayout className="h-full w-full items-stretch">
-          <AutoGrid service={InstructorDtoCrudService} model={InstructorDTOModel} ref={autoGridRef}
-            visibleColumns={['name', 'email', 'description', 'designation', 'qualification',]}
+          <AutoGrid service={PersonDtoCrudService} model={PersonDAOModel} ref={autoGridRef}
+            visibleColumns={['instructor.name', 'instructor.email', 'description', 'instructor.designation', 'instructor.qualification',]}
             selectedItems={selectedInstructorItems}
             theme="row-stripes"
             onActiveItemChanged={(e) => {
               const item = e.detail.value;
+              console.log('item', item);
               setSelectedInstructorItems(item ? [item] : []);
               read(item);
             }}
@@ -86,31 +89,34 @@ const CoordinatorView = () => {
           <Scroller scrollDirection="vertical" className="w-full h-full">
             <FormLayout responsiveSteps={responsiveSteps} className="w-fit h-fit p-2">
               <label slot="label">Profile</label>
-              <TextField label={'Name'}  {...field(model.name)} />
-              <TextField label={'Alternant name'}  {...field(model.personKey.alternateName)} />
-              <DateTimePicker label={'Birth Date'}  {...field(model.personKey.birthDate)} />
-              <TextField label={'Honorific Prefix'}  {...field(model.personKey.honorificPrefix)} />
-              <TextField label={'Honorific Suffix'}  {...field(model.personKey.honorificSuffix)} />
-              <TextField label={'Nationality'}  {...field(model.personKey.nationality)} />
-              <Select label={'Blood Group'}  {...field(model.personKey.bloodGroup)} items={bloodGroups} />
-              <TextField label={'Father Name'}  {...field(model.personKey.fatherName)} />
-              <TextField label={'Mother Name'}  {...field(model.personKey.motherName)} />
+              <TextField label={'Name'}  {...field(model.instructor.name)} />
+              <TextField label={'Alternant name'}  {...field(model.alternateName)} />
+              <TextField label={'Alternant names'}  {...field(model.additionalName)} />
+              <TextField label={'Alternant namef4'}  {...field(model.givenName)} />
+              <TextField label={'Alternant namef'}  {...field(model.familyName)} />
+              <DateTimePicker label={'Birth Dateq'}  {...field(model.birthDate)} />
+              <TextField label={'Honorific Prefix'}  {...field(model.honorificPrefix)} />
+              <TextField label={'Honorific Suffix'}  {...field(model.honorificSuffix)} />
+              <TextField label={'Nationality'}  {...field(model.nationality)} />
+              {/* <Select label={'Blood Group'}  {...field(model.bloodGroup)} items={bloodGroups} />
+              <TextField label={'Father Name'}  {...field(model.fatherName)} />
+              <TextField label={'Mother Name'}  {...field(model.motherName)} />
+
+              <Select label={'Gender'}  {...field(model.gender)} items={genders} />
+              <TextField label={'Height'}  {...field(model.height)} />
+              <TextField label={'Weight'}  {...field(model.weight)} />
+              <TextField label={'Children'}  {...field(model.children)} />
+
+              <TextField label={'Email'}  {...field(model.email)} />
+              <TextField label={'Fax Number'}  {...field(model.faxNumber)} />
+              <TextField label={'Telephone'}  {...field(model.telephone)} /> */}
 {/* 
-              <Select label={'Gender'}  {...field(model.personKey.medicals.gender)} items={genders} />
-              <TextField label={'Height'}  {...field(model.personKey.medicals.height)} />
-              <TextField label={'Weight'}  {...field(model.personKey.medicals.weight)} />
-              <TextField label={'Children'}  {...field(model.personKey.medicals.children)} />
+              <TextField label={'Present Address'}  {...field(model.address.presentAddress)} />
+              <TextField label={'Permanent Address'}  {...field(model.address.permanentAddress)} /> */}
 
-              <TextField label={'Email'}  {...field(model.personKey.contacts.email)} />
-              <TextField label={'Fax Number'}  {...field(model.personKey.contacts.faxNumber)} />
-              <TextField label={'Telephone'}  {...field(model.personKey.contacts.telephone)} />
-
-              <TextField label={'Present Address'}  {...field(model.personKey.addresses.presentAddress)} />
-              <TextField label={'Permanent Address'}  {...field(model.personKey.addresses.permanentAddress)} /> */}
-
-              <TextField label={'Description'}  {...field(model.description)} />
+              {/* <TextField label={'Description'}  {...field(model.description)} />
               <TextField label={'Designation'}  {...field(model.designation)} />
-              <TextField label={'Qualification'}  {...field(model.qualification)} />
+              <TextField label={'Qualification'}  {...field(model.qualification)}/> */}
             </FormLayout>
           </Scroller>
           <footer className="flex flex-row bg-gray-100 w-full">
@@ -127,7 +133,7 @@ const CoordinatorView = () => {
               }
             </div>
             {
-              value.name === undefined ? null :
+              value.instructor?.name === undefined ? null :
                 <div className="flex flex-row content-end space-x-4">
                   <Button
                     className={discardButtonColors[dirty.toString()]}
@@ -151,7 +157,7 @@ const CoordinatorView = () => {
       <NotificationUtil opened={successNotification} type="update"
         message={{
           title: 'Successfully Updated',
-          description: value.name,
+          description: value.instructor?.name,
         }}
         onOpenedChanged={(event) => {
           if (!event.detail.value) {
@@ -175,13 +181,13 @@ const CoordinatorView = () => {
           }
         }}
         onConfirm={() => {
-          InstructorDtoCrudService.delete(selectedInstructorItems[0]?.id).then((result) => {
+          PersonDtoCrudService.delete(selectedInstructorItems[0]?.id).then((result) => {
             refreshGrid();
             setSelectedInstructorItems([]);
             reset();
           });
         }}>
-        {`Do you want to delete?${value.name}`}
+        {`Do you want to delete?${value.instructor?.name}`}
       </ConfirmDialog >
     </>
   );

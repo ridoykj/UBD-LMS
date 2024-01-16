@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import com.itbd.application.dao.AbstractEntity;
 import com.itbd.application.dao.user.StudentDAO;
 
 import jakarta.persistence.Column;
@@ -20,7 +21,7 @@ import lombok.Setter;
 @Entity(name = "t_edu_batch")
 @Getter
 @Setter
-public class BatchDAO {
+public class BatchDAO  extends AbstractEntity<Long>{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

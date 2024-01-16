@@ -1,5 +1,7 @@
 package com.itbd.application.dao.org.academic;
 
+import com.itbd.application.dao.AbstractEntity;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -13,7 +15,7 @@ import lombok.Setter;
 @Table(name = "t_aca_section")
 @Getter
 @Setter
-public class SectionDAO {
+public class SectionDAO  extends AbstractEntity<Long>{
     @Id
     @Column(name = "id_section_key", nullable = false, updatable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)

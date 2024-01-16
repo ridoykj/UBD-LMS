@@ -2,6 +2,7 @@ package com.itbd.application.dto.user.person;
 
 import java.time.LocalDateTime;
 
+import com.itbd.application.dao.user.InstructorDAO;
 import com.itbd.application.dao.user.person.AddressDAO;
 import com.itbd.application.dao.user.person.PersonDAO;
 
@@ -27,6 +28,7 @@ public record PersonDTO(
             String sponsor,
             String description,
             AddressDAO address,
+            InstructorDAO instructor,
             LocalDateTime createdAt,
             LocalDateTime updatedAt) {
       public static PersonDTO fromEntity(PersonDAO person) {
@@ -48,7 +50,8 @@ public record PersonDTO(
                         person.getNationality(),
                         person.getSponsor(),
                         person.getDescription(),
-                        new AddressDAO(),
+                        person.getAddresses(),
+                        person.getInstructor(),
                         person.getCreatedAt(),
                         person.getUpdatedAt());
       }
@@ -71,6 +74,9 @@ public record PersonDTO(
             personDAO.setNationality(personDTO.nationality());
             personDAO.setSponsor(personDTO.sponsor());
             personDAO.setDescription(personDTO.description());
+
+            personDAO.setAddresses(personDAO.getAddresses());
+            personDAO.setInstructor(personDAO.getInstructor());
 
             personDAO.setCreatedAt(personDTO.createdAt());
             personDAO.setUpdatedAt(personDTO.updatedAt());

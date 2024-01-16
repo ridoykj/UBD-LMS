@@ -3,6 +3,7 @@ package com.itbd.application.dao.org.edu;
 import java.util.List;
 
 import com.itbd.application.constants.ProgrammeTypeEnum;
+import com.itbd.application.dao.AbstractEntity;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -23,7 +24,7 @@ import lombok.Setter;
 @Setter
 @Entity
 @Table(name = "t_edu_programme")
-public class ProgrammeDAO {
+public class ProgrammeDAO  extends AbstractEntity<Long>{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

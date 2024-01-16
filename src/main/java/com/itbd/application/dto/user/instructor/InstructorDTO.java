@@ -1,4 +1,4 @@
-package com.itbd.application.dto.user;
+package com.itbd.application.dto.user.instructor;
 
 import java.util.List;
 

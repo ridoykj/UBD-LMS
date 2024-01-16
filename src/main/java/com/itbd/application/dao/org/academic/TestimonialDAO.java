@@ -3,6 +3,7 @@ package com.itbd.application.dao.org.academic;
 import java.time.LocalDateTime;
 
 import com.itbd.application.constants.TestimonialTypeEnum;
+import com.itbd.application.dao.AbstractEntity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -17,7 +18,7 @@ import lombok.Setter;
 @Entity(name = "t_aca_testimonial")
 @Getter
 @Setter
-public class TestimonialDAO {
+public class TestimonialDAO  extends AbstractEntity<Long>{
 
     @Id
     @Column(name = "id_testimonial_key", nullable = false, updatable = false)

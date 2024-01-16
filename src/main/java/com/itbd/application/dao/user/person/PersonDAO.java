@@ -1,26 +1,16 @@
 package com.itbd.application.dao.user.person;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.itbd.application.constants.BloodGroupsEnum;
 import com.itbd.application.dao.AbstractEntity;
 import com.itbd.application.dao.user.InstructorDAO;
 import com.itbd.application.dao.user.StudentDAO;
 import com.itbd.application.dao.user.UserDAO;
-
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToOne;
-import jakarta.persistence.Version;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.time.LocalDateTime;
 
 @Entity(name = "t_per_person")
 @Getter
@@ -97,27 +87,34 @@ public class PersonDAO extends AbstractEntity<Long> {
     private String description;
 
     @OneToOne(mappedBy = "personKey", cascade = CascadeType.ALL)
+//    @JsonManagedReference
     private AddressDAO addresses;
 
     @OneToOne(mappedBy = "personKey", cascade = CascadeType.ALL)
+    @JsonManagedReference
     private ContactDAO contacts;
 
     @OneToOne(mappedBy = "personKey", cascade = CascadeType.ALL)
+    @JsonManagedReference
     private DocumentRecordsDAO recordses;
 
     @OneToOne(mappedBy = "personKey", cascade = CascadeType.ALL)
+    @JsonManagedReference
     private MedicalDAO medicals;
 
     @OneToOne(mappedBy = "personKey", cascade = CascadeType.ALL)
+    @JsonManagedReference
     private OccupationDAO occupations;
 
     @OneToOne(mappedBy = "personKey", cascade = CascadeType.ALL)
+    @JsonManagedReference
     private UserDAO users;
 
     @OneToOne(mappedBy = "personKey", cascade = CascadeType.ALL)
+    @JsonManagedReference
     private StudentDAO student;
 
     @OneToOne(mappedBy = "personKey", cascade = CascadeType.ALL)
+//    @JsonManagedReference
     private InstructorDAO instructor;
-
 }

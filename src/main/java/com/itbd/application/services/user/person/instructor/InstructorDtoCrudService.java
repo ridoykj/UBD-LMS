@@ -1,4 +1,4 @@
-package com.itbd.application.services.user;
+package com.itbd.application.services.user.person.instructor;
 
 import java.util.List;
 
@@ -13,7 +13,7 @@ import com.itbd.application.dao.user.person.AddressDAO;
 import com.itbd.application.dao.user.person.ContactDAO;
 import com.itbd.application.dao.user.person.MedicalDAO;
 import com.itbd.application.dao.user.person.PersonDAO;
-import com.itbd.application.dto.user.InstructorDTO;
+import com.itbd.application.dto.user.instructor.InstructorDTO;
 import com.itbd.application.repos.user.InstructorRepo;
 import com.itbd.application.repos.user.person.AddressRepo;
 import com.itbd.application.repos.user.person.ContactRepo;
@@ -57,7 +57,7 @@ public class InstructorDtoCrudService implements CrudService<InstructorDTO, Long
 
     @Override
     @Nonnull
-    public List<@Nonnull InstructorDTO> list(Pageable pageable, @Nullable Filter filter) {
+    public List<com.itbd.application.dto.user.instructor.InstructorDTO> list(Pageable pageable, @Nullable Filter filter) {
         // Basic list implementation that only covers pagination,
         // but not sorting or filtering
         Specification<InstructorDAO> spec = filter != null

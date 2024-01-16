@@ -2,6 +2,8 @@ package com.itbd.application.dao.org.academic;
 
 import java.time.LocalDateTime;
 
+import com.itbd.application.dao.AbstractEntity;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -13,7 +15,7 @@ import lombok.Setter;
 @Entity(name = "t_aca_attendance")
 @Getter
 @Setter
-public class AttendanceDAO {
+public class AttendanceDAO  extends AbstractEntity<Long>{
     @Id
     @Column(name = "id_attendance_key", nullable = false, updatable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)

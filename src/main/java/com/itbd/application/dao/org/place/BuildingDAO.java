@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import com.itbd.application.constants.BuildingTypeEnum;
+import com.itbd.application.dao.AbstractEntity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -22,7 +23,7 @@ import lombok.Setter;
 @Entity(name = "t_place_building")
 @Getter
 @Setter
-public class BuildingDAO {
+public class BuildingDAO  extends AbstractEntity<Long>{
     @Id
     @Column(name = "id_building_key", nullable = false, updatable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)

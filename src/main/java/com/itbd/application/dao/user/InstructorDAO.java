@@ -2,18 +2,12 @@ package com.itbd.application.dao.user;
 
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.itbd.application.dao.AbstractEntity;
 import com.itbd.application.dao.org.edu.ReservationDAO;
 import com.itbd.application.dao.user.person.PersonDAO;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -25,6 +19,10 @@ public class InstructorDAO extends AbstractEntity<Long> {
     @Column(name = "id_instructor_key", nullable = false, updatable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(name = "id_instructor_ver", nullable = false)
+    @Version
+    private Long version;
 
     @Column(name = "tx_name")
     private String name;
@@ -46,6 +44,7 @@ public class InstructorDAO extends AbstractEntity<Long> {
 
     @OneToOne
     @JoinColumn(name = "id_person_key")
+//    @JsonBackReference
     private PersonDAO personKey;
 
 }

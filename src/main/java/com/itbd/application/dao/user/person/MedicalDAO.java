@@ -2,18 +2,11 @@ package com.itbd.application.dao.user.person;
 
 import java.math.BigDecimal;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.itbd.application.constants.GenderEnum;
 import com.itbd.application.dao.AbstractEntity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -26,6 +19,10 @@ public class MedicalDAO extends AbstractEntity<Long> {
     @Column(name = "id_medical_key", nullable = false, updatable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(name = "id_medical_ver", nullable = false)
+    @Version
+    private Long version;
 
     @Column(precision = 8, scale = 3, name = "flt_weight")
     private BigDecimal weight;
@@ -47,6 +44,7 @@ public class MedicalDAO extends AbstractEntity<Long> {
     @OneToOne
     // @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "id_person_key")
+    @JsonBackReference
     private PersonDAO personKey;
 
 }

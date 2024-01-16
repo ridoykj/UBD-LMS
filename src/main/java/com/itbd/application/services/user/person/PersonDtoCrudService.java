@@ -2,9 +2,12 @@ package com.itbd.application.services.user.person;
 
 import java.util.List;
 
+import com.itbd.application.dao.user.person.AddressDAO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 
+import com.itbd.application.dao.user.InstructorDAO;
 import com.itbd.application.dao.user.person.PersonDAO;
 import com.itbd.application.dto.user.person.PersonDTO;
 import com.itbd.application.repos.user.person.AddressRepo;
@@ -15,6 +18,7 @@ import dev.hilla.BrowserCallable;
 import dev.hilla.Nonnull;
 import dev.hilla.Nullable;
 import dev.hilla.crud.CrudService;
+import dev.hilla.crud.JpaFilterConverter;
 import dev.hilla.crud.filter.Filter;
 
 @BrowserCallable
@@ -23,10 +27,12 @@ public class PersonDtoCrudService implements CrudService<PersonDTO, Long> {
 
     private final PersonRepo personRepo;
     private final AddressRepo addressRepo;
+    private final JpaFilterConverter jpaFilterConverter;
 
-    public PersonDtoCrudService(PersonRepo personRepo, AddressRepo addressRepo) {
+    public PersonDtoCrudService(PersonRepo personRepo, AddressRepo addressRepo, JpaFilterConverter jpaFilterConverter) {
         this.personRepo = personRepo;
         this.addressRepo = addressRepo;
+        this.jpaFilterConverter = jpaFilterConverter;
     }
 
     @Override
@@ -34,8 +40,17 @@ public class PersonDtoCrudService implements CrudService<PersonDTO, Long> {
     public List<@Nonnull PersonDTO> list(Pageable pageable, @Nullable Filter filter) {
         // Basic list implementation that only covers pagination,
         // but not sorting or filtering
-        Page<PersonDAO> persons = personRepo.findAll(pageable);
-        return persons.stream().map(p -> {            
+        Specification<PersonDAO> spec = filter != null
+                ? jpaFilterConverter.toSpec(filter, PersonDAO.class)
+                : Specification.anyOf();
+        Page<PersonDAO> persons = personRepo.findAll(spec, pageable);
+        return persons.stream().map(p -> {
+            InstructorDAO instructor = p.getInstructor();
+            AddressDAO address = p.getAddresses();
+//            address.setPersonKey(null);
+//            instructor.setReservations(null);
+            p.setInstructor(instructor);
+            p.setAddresses(address);
             return p;
         }).map(PersonDTO::fromEntity).toList();
     }

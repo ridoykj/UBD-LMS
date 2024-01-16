@@ -3,6 +3,8 @@ package com.itbd.application.dao.org.place;
 import java.math.BigDecimal;
 import java.util.List;
 
+import com.itbd.application.dao.AbstractEntity;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -17,7 +19,7 @@ import lombok.Setter;
 @Entity(name = "t_place_floor")
 @Getter
 @Setter
-public class FloorDAO {
+public class FloorDAO  extends AbstractEntity<Long>{
     @Id
     @Column(name = "id_floor_key", nullable = false, updatable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)

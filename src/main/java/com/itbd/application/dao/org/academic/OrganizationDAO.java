@@ -3,6 +3,7 @@ package com.itbd.application.dao.org.academic;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import com.itbd.application.dao.AbstractEntity;
 import com.itbd.application.dao.org.edu.DepartmentDAO;
 
 import jakarta.persistence.Column;
@@ -17,7 +18,7 @@ import lombok.Setter;
 @Entity(name = "t_org_organization")
 @Getter
 @Setter
-public class OrganizationDAO {
+public class OrganizationDAO  extends AbstractEntity<Long>{
     @Id
     @Column(name = "id_organization_key", nullable = false, updatable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)

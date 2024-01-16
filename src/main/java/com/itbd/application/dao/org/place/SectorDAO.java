@@ -2,6 +2,8 @@ package com.itbd.application.dao.org.place;
 
 import java.util.List;
 
+import com.itbd.application.dao.AbstractEntity;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -14,7 +16,7 @@ import lombok.Setter;
 @Entity(name = "t_place_sector")
 @Getter
 @Setter
-public class SectorDAO {
+public class SectorDAO  extends AbstractEntity<Long>{
     @Id
     @Column(name = "id_sector_key", nullable = false, updatable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)

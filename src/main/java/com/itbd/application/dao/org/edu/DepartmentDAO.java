@@ -2,6 +2,7 @@ package com.itbd.application.dao.org.edu;
 
 import java.util.List;
 
+import com.itbd.application.dao.AbstractEntity;
 import com.itbd.application.dao.org.academic.OrganizationDAO;
 
 import jakarta.persistence.CascadeType;
@@ -19,7 +20,7 @@ import lombok.Setter;
 @Entity(name = "t_edu_department")
 @Getter
 @Setter
-public class DepartmentDAO {
+public class DepartmentDAO  extends AbstractEntity<Long>{
     @Id
     @Column(name = "id_department_key", nullable = false, updatable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)

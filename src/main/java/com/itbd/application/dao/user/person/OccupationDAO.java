@@ -1,14 +1,9 @@
 package com.itbd.application.dao.user.person;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.itbd.application.dao.AbstractEntity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -22,6 +17,10 @@ public class OccupationDAO extends AbstractEntity<Long> {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name = "id_occupation_ver", nullable = false)
+    @Version
+    private Long version;
+
     @Column(columnDefinition = "longtext", name = "tx_records")
     private String records;
 
@@ -33,5 +32,6 @@ public class OccupationDAO extends AbstractEntity<Long> {
     @OneToOne
     // @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "id_person_key")
+    @JsonBackReference
     private PersonDAO personKey;
 }

@@ -1,14 +1,9 @@
 package com.itbd.application.dao.user.person;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.itbd.application.dao.AbstractEntity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -16,11 +11,14 @@ import lombok.Setter;
 @Getter
 @Setter
 public class AddressDAO extends AbstractEntity<Long> {
-
     @Id
     @Column(name = "id_address_key", nullable = false, updatable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(name = "id_address_ver", nullable = false)
+    @Version
+    private Long version;
 
     @Column(name = "tx_birth_place")
     private String birthPlace;
@@ -37,11 +35,8 @@ public class AddressDAO extends AbstractEntity<Long> {
     @Column(name = "tx_permanent_address")
     private String permanentAddress;
 
-    // @ManyToOne(fetch = FetchType.LAZY)
-    // @JoinColumn(name = "id_person_key", nullable = false)
     @OneToOne
-    // @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "id_person_key")
+//    @JsonBackReference
     private PersonDAO personKey;
-
 }

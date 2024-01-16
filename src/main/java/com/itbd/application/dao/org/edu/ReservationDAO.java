@@ -2,6 +2,7 @@ package com.itbd.application.dao.org.edu;
 
 import java.time.LocalDate;
 
+import com.itbd.application.dao.AbstractEntity;
 import com.itbd.application.dao.org.place.RoomDAO;
 import com.itbd.application.dao.user.InstructorDAO;
 
@@ -18,7 +19,7 @@ import lombok.Setter;
 @Entity(name = "t_edu_reservation")
 @Getter
 @Setter
-public class ReservationDAO {
+public class ReservationDAO  extends AbstractEntity<Long>{
     @Id
     @Column(name = "id_reservation_key", nullable = false, updatable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)

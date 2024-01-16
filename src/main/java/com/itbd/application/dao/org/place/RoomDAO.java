@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.itbd.application.constants.RoomTypeEnum;
 import com.itbd.application.constants.UnitTypeEnum;
+import com.itbd.application.dao.AbstractEntity;
 import com.itbd.application.dao.org.edu.ReservationDAO;
 
 import jakarta.persistence.Column;
@@ -22,7 +23,7 @@ import lombok.Setter;
 @Entity(name = "t_place_room")
 @Getter
 @Setter
-public class RoomDAO {
+public class RoomDAO  extends AbstractEntity<Long>{
     @Id
     @Column(name = "id_room_key", nullable = false, updatable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
