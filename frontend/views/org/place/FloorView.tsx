@@ -3,6 +3,7 @@ import { ComboBoxDataProviderParams, ComboBoxDataProviderCallback, ComboBox } fr
 import { ConfirmDialog } from "@hilla/react-components/ConfirmDialog.js";
 import { FormLayout } from "@hilla/react-components/FormLayout.js";
 import { Icon } from "@hilla/react-components/Icon.js";
+import { IntegerField } from "@hilla/react-components/IntegerField.js";
 import { Scroller } from "@hilla/react-components/Scroller.js";
 import { Select } from "@hilla/react-components/Select.js";
 import { SplitLayout } from "@hilla/react-components/SplitLayout.js";
@@ -92,7 +93,7 @@ const FloorView = () => {
         <VerticalLayout className="h-full w-full items-stretch">
           <PlaceRC
             visibleFields={
-              { sector: true }
+              { sector: true, building: true, }
             }
           // sector={{
           //   organizationName: orgNameFilter,
@@ -108,7 +109,7 @@ const FloorView = () => {
           // }}
           />
           <AutoGrid service={FloorDtoCrudService} model={FloorDTOModel} ref={autoGridRef}
-            visibleColumns={['name', 'alternateName', 'type', 'block', 'openingTime', 'closingTime', 'contact',]}
+            visibleColumns={['name', 'alternateName', 'floorLevel', 'totalBlocks', 'floorColor',]}
             selectedItems={selectedInstructorItems}
             theme="row-stripes"
             columnOptions={{
@@ -166,10 +167,10 @@ const FloorView = () => {
               <ComboBox label={'Building'}  {...field(model.building)} dataProvider={buildingDataProvider} itemLabelPath='name' itemValuePath='name' clearButtonVisible />
               <TextField label={'Name'}  {...{ colspan: 2 }} {...field(model.name)} />
               {/* <Select label={'Building Type'}  {...{ colspan: 1 }} {...field(model.type)} items={buildingType} /> */}
-              <TextField label={'Block'}  {...{ colspan: 2 }} {...field(model.floorLevel)} />
-              <TextField label={'Block'}  {...{ colspan: 2 }} {...field(model.floorColorCode)} />
-              <TextField label={'Block'}  {...{ colspan: 2 }} {...field(model.floorColor)} />
-              <TextField label={'Block'}  {...{ colspan: 2 }} {...field(model.totalBlocks)} />
+              <IntegerField label={'Floor Level'}  {...{ colspan: 2 }} {...field(model.floorLevel)} />
+              <TextField label={'Floor Color Code'}  {...{ colspan: 2 }} {...field(model.floorColorCode)} />
+              <TextField label={'Floor Color'}  {...{ colspan: 2 }} {...field(model.floorColor)} />
+              <IntegerField label={'totalBlocks'}  {...{ colspan: 2 }} {...field(model.totalBlocks)} />
               <TextField label={'Alternate Name'}  {...{ colspan: 2 }} {...field(model.alternateName)} />
 
               {/* <DateTimePicker label={'Opening Date'}  {...{ colspan: 2 }} {...field(model.openingDate)} />
@@ -192,7 +193,7 @@ const FloorView = () => {
               }
             </div>
             {
-              value.name === undefined ? null :
+              !dirty ? null :
                 <div className="flex flex-row content-end space-x-4">
                   <Button
                     className={discardButtonColors[dirty.toString()]}
