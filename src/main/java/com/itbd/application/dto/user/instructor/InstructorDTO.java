@@ -4,18 +4,70 @@ import java.util.List;
 
 import com.itbd.application.dao.org.edu.ReservationDAO;
 import com.itbd.application.dao.user.InstructorDAO;
-import com.itbd.application.dao.user.person.PersonDAO;
+import com.itbd.application.dao.user.person.*;
+import jakarta.persistence.Id;
 
 public record InstructorDTO(
-        Long id,
+        @Id Long id,
         String name,
         String email,
         String description,
         String designation,
         String qualification,
-        List<ReservationDAO> reservations,
-        PersonDAO personKey) {
+        PersonDAO person) {
+
+    public static void fromDTO(InstructorDTO value, InstructorDAO instructor) {
+        instructor.setId(value.id());
+        instructor.setName(value.name());
+        instructor.setEmail(value.email());
+        instructor.setDescription(value.description());
+        instructor.setDesignation(value.designation());
+        instructor.setQualification(value.qualification());
+//        instructor.setPerson(value.person());
+
+        PersonDAO person = value.person() != null ? value.person() : new PersonDAO();
+        AddressDAO address = person.getAddress() != null ? person.getAddress() : new AddressDAO();
+        ContactDAO contact = person.getContact() != null ? person.getContact() : new ContactDAO();
+        DocumentRecordsDAO documentRecords = person.getRecord() != null ? person.getRecord() : new DocumentRecordsDAO();
+        MedicalDAO medical = person.getMedical() != null ? person.getMedical() : new MedicalDAO();
+        OccupationDAO occupation = person.getOccupation() != null ? person.getOccupation() : new OccupationDAO();
+//        InstructorDAO instructorE = person.getInstructor() != null ? person.getInstructor() : new InstructorDAO();
+
+        address.setPerson(person);
+        contact.setPerson(person);
+        documentRecords.setPerson(person);
+        medical.setPerson(person);
+        occupation.setPerson(person);
+//        instructorE.setPerson(person);
+
+//        person.setInstructor(instructorE);
+        person.setAddress(address);
+        person.setContact(contact);
+        person.setRecord(documentRecords);
+        person.setMedical(medical);
+        person.setOccupation(occupation);
+        person.setInstructor(instructor);
+        instructor.setPerson(person);
+    }
+
     public static InstructorDTO fromEntity(InstructorDAO instructor) {
+        PersonDAO person = instructor.getPerson();
+
+        AddressDAO address = person.getAddress();
+        ContactDAO contact = person.getContact();
+        DocumentRecordsDAO records = person.getRecord();
+        MedicalDAO medical = person.getMedical();
+        OccupationDAO occupation = person.getOccupation();
+
+        person.setAddress(address);
+        person.setContact(contact);
+        person.setRecord(records);
+        person.setMedical(medical);
+        person.setOccupation(occupation);
+        person.setInstructor(null);
+        instructor.setReservations(null);
+        instructor.setPerson(person);
+
         return new InstructorDTO(
                 instructor.getId(),
                 instructor.getName(),
@@ -23,18 +75,6 @@ public record InstructorDTO(
                 instructor.getDescription(),
                 instructor.getDesignation(),
                 instructor.getQualification(),
-                instructor.getReservations(),
-                instructor.getPersonKey());
-    }
-
-    public static void fromDTO(InstructorDTO instructorDTO, InstructorDAO instructorDAO) {
-        instructorDAO.setId(instructorDTO.id());
-        instructorDAO.setName(instructorDTO.name());
-        instructorDAO.setEmail(instructorDTO.email());
-        instructorDAO.setDescription(instructorDTO.description());
-        instructorDAO.setDesignation(instructorDTO.designation());
-        instructorDAO.setQualification(instructorDTO.qualification());
-        instructorDAO.setReservations(instructorDTO.reservations());
-        instructorDAO.setPersonKey(instructorDTO.personKey());
+                instructor.getPerson());
     }
 }

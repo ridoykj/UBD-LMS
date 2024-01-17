@@ -10,5 +10,5 @@ import java.util.Optional;
 
 public interface DocumentRecordsRepo extends JpaRepository<DocumentRecordsDAO, Long> {
 
-    Optional<DocumentRecordsDAO> findByPersonKey(PersonDAO p);
+    Optional<DocumentRecordsDAO> findByPerson(PersonDAO p);
 }

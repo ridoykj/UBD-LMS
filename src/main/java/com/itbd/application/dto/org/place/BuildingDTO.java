@@ -1,12 +1,13 @@
 package com.itbd.application.dto.org.place;
 
-import java.time.LocalDateTime;
-import java.util.List;
-
 import com.itbd.application.constants.BuildingTypeEnum;
 import com.itbd.application.dao.org.place.BuildingDAO;
 import com.itbd.application.dao.org.place.FloorDAO;
 import com.itbd.application.dao.org.place.SectorDAO;
+
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.util.List;
 
 public record BuildingDTO(
         Long id,
@@ -14,8 +15,10 @@ public record BuildingDTO(
         BuildingTypeEnum type,
         String block,
         String alternateName,
-        LocalDateTime openingTime,
-        LocalDateTime closingTime,
+        LocalDateTime openingDate,
+        LocalDateTime closingDate,
+        LocalTime openingTime,
+        LocalTime closingTime,
         String contact,
         String buildingColor,
         String buildingColorCode,
@@ -24,14 +27,24 @@ public record BuildingDTO(
         SectorDAO sector) {
 
     public static BuildingDTO fromEntity(BuildingDAO building) {
+        SectorDAO sector = building.getSector();
+        sector.setBuildings(null);
+        building.setSector(sector);
+
+        building.setFloors(null);
+
         return new BuildingDTO(
                 building.getId(),
                 building.getName(),
                 building.getType(),
                 building.getBlock(),
                 building.getAlternateName(),
+
+                building.getOpeningDate(),
+                building.getClosingDate(),
                 building.getOpeningTime(),
                 building.getClosingTime(),
+
                 building.getContact(),
                 building.getBuildingColor(),
                 building.getBuildingColorCode(),
@@ -46,8 +59,12 @@ public record BuildingDTO(
         buildingDAO.setType(buildingDTO.type());
         buildingDAO.setBlock(buildingDTO.block());
         buildingDAO.setAlternateName(buildingDTO.alternateName());
+
+        buildingDAO.setOpeningDate(buildingDTO.openingDate());
+        buildingDAO.setClosingDate(buildingDTO.closingDate());
         buildingDAO.setOpeningTime(buildingDTO.openingTime());
         buildingDAO.setClosingTime(buildingDTO.closingTime());
+
         buildingDAO.setContact(buildingDTO.contact());
         buildingDAO.setBuildingColor(buildingDTO.buildingColor());
         buildingDAO.setBuildingColorCode(buildingDTO.buildingColorCode());

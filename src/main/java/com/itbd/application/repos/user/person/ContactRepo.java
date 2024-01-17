@@ -10,5 +10,5 @@ import java.util.Optional;
 
 public interface ContactRepo extends JpaRepository<ContactDAO, Long> {
 
-    Optional<ContactDAO> findByPersonKey(PersonDAO p);
+    Optional<ContactDAO> findByPerson(PersonDAO p);
 }

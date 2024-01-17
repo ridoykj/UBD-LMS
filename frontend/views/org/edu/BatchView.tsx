@@ -162,7 +162,6 @@ const BatchView = () => {
           </header>
           <Scroller scrollDirection="vertical" className="w-full h-full">
             <FormLayout responsiveSteps={responsiveSteps} className="w-fit h-fit p-2">
-              <label slot="label">Profile</label>
               <ComboBox label={'Programme'}  {...field(model.programme)} dataProvider={programmeDataProvider} itemLabelPath='name' itemValuePath='name' clearButtonVisible />
               <TextField label={'Name'}  {...field(model.name)} />
               <TextField label={'Description'}  {...field(model.description)} />

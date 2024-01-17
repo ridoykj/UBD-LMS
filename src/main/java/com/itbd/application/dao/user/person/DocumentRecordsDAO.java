@@ -42,6 +42,6 @@ public class DocumentRecordsDAO extends AbstractEntity<Long> {
     // @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "id_person_key")
     @JsonBackReference
-    private PersonDAO personKey;
+    private PersonDAO person;
 
 }

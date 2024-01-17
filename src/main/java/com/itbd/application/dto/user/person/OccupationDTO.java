@@ -15,7 +15,7 @@ public record OccupationDTO(
   public static OccupationDTO fromEntity(OccupationDAO occupation) {
         return new OccupationDTO(
                 occupation.getId(),
-                occupation.getPersonKey().getId(),
+                occupation.getPerson().getId(),
                 occupation.getRecords(),
                 occupation.getHasOccupation(),
                 occupation.getCreatedAt(),

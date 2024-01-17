@@ -10,5 +10,5 @@ import com.itbd.application.dao.user.person.PersonDAO;
 
 public interface OccupationRepo extends JpaRepository<OccupationDAO, Long> {
 
-    Optional<OccupationDAO> findByPersonKey(PersonDAO p);
+    Optional<OccupationDAO> findByPerson(PersonDAO p);
 }

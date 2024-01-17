@@ -28,22 +28,10 @@ import dev.hilla.crud.filter.Filter;
 @BrowserCallable
 @AnonymousAllowed
 public class SectorDtoCrudService implements CrudService<SectorDTO, Long> {
-
     @Autowired
     private JpaFilterConverter jpaFilterConverter;
-
     @Autowired
-    private SectorRepo personRepo;
-    @Autowired
-    private AddressRepo addressRepo;
-    @Autowired
-    private ContactRepo contactRepo;
-    @Autowired
-    private DocumentRecordsRepo documentRecordsRepo;
-    @Autowired
-    private MedicalRepo medicalRepo;
-    @Autowired
-    private OccupationRepo occupationRepo;
+    private SectorRepo sectorRepo;
 
     // public PersonMargeDtoCrudService(SectorRepo personRepo, AddressRepo
     // addressRepo) {
@@ -59,7 +47,7 @@ public class SectorDtoCrudService implements CrudService<SectorDTO, Long> {
         Specification<SectorDAO> spec = filter != null
                 ? jpaFilterConverter.toSpec(filter, SectorDAO.class)
                 : Specification.anyOf();
-        Page<SectorDAO> persons = personRepo.findAll(spec, pageable);
+        Page<SectorDAO> persons = sectorRepo.findAll(spec, pageable);
         return persons.stream().map(SectorDTO::fromEntity).toList();
     }
 
@@ -68,16 +56,15 @@ public class SectorDtoCrudService implements CrudService<SectorDTO, Long> {
     public @Nullable SectorDTO save(SectorDTO value) {
         boolean check = value.id() != null && value.id() > 0;
         SectorDAO person = check
-                ? personRepo.getReferenceById(value.id())
+                ? sectorRepo.getReferenceById(value.id())
                 : new SectorDAO();
 
-        // person.setRecordComment(check ? "UPDATE" : "NEW");
         SectorDTO.fromDTO(value, person);
-        return SectorDTO.fromEntity(personRepo.save(person));
+        return SectorDTO.fromEntity(sectorRepo.save(person));
     }
 
     @Override
     public void delete(Long id) {
-        personRepo.deleteById(id);
+        sectorRepo.deleteById(id);
     }
 }

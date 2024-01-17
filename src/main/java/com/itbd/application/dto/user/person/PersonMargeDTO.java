@@ -80,56 +80,56 @@ public record PersonMargeDTO(
                 person.setSponsor(value.sponsor());
                 person.setDescription(value.description());
 
-                AddressDAO address = Optional.ofNullable(person.getAddresses()).orElse(new AddressDAO());
-                ContactDAO contact = Optional.ofNullable(person.getContacts()).orElse(new ContactDAO());
-                DocumentRecordsDAO documentRecords = Optional.ofNullable(person.getRecordses())
+                AddressDAO address = Optional.ofNullable(person.getAddress()).orElse(new AddressDAO());
+                ContactDAO contact = Optional.ofNullable(person.getContact()).orElse(new ContactDAO());
+                DocumentRecordsDAO documentRecords = Optional.ofNullable(person.getRecord())
                                 .orElse(new DocumentRecordsDAO());
-                MedicalDAO medical = Optional.ofNullable(person.getMedicals()).orElse(new MedicalDAO());
-                OccupationDAO occupation = Optional.ofNullable(person.getOccupations()).orElse(new OccupationDAO());
+                MedicalDAO medical = Optional.ofNullable(person.getMedical()).orElse(new MedicalDAO());
+                OccupationDAO occupation = Optional.ofNullable(person.getOccupation()).orElse(new OccupationDAO());
 
                 address.setBirthPlace(value.birthPlace());
                 address.setDeathPlace(value.deathPlace());
                 address.setHomeLocation(value.homeLocation());
                 address.setPresentAddress(value.presentAddress());
                 address.setPermanentAddress(value.permanentAddress());
-                address.setPersonKey(person);
+                address.setPerson(person);
 
                 contact.setEmail(value.email());
                 contact.setMobile(value.mobile());
                 contact.setTelephone(value.telephone());
                 contact.setFaxNumber(value.faxNumber());
-                contact.setPersonKey(person);
+                contact.setPerson(person);
 
                 documentRecords.setRecords(value.records());
                 documentRecords.setEducationRecords(value.educationRecords());
                 documentRecords.setNationalRecords(value.nationalRecords());
                 documentRecords.setMedicalRecords(value.medicalRecords());
                 documentRecords.setEmploymentRecords(value.rewardRecords());
-                documentRecords.setPersonKey(person);
+                documentRecords.setPerson(person);
 
                 medical.setWeight(value.weight());
                 medical.setHeight(value.height());
                 medical.setChildren(value.children());
                 medical.setGender(value.gender());
-                medical.setPersonKey(person);
+                medical.setPerson(person);
 
                 occupation.setRecords(value.occupationRecords());
-                occupation.setPersonKey(person);
+                occupation.setPerson(person);
 
-                person.setAddresses(address);
-                person.setContacts(contact);
-                person.setRecordses(documentRecords);
-                person.setMedicals(medical);
-                person.setOccupations(occupation);
+                person.setAddress(address);
+                person.setContact(contact);
+                person.setRecord(documentRecords);
+                person.setMedical(medical);
+                person.setOccupation(occupation);
         }
 
         public static PersonMargeDTO fromEntity(PersonDAO person) {
-                AddressDAO address = Optional.ofNullable(person.getAddresses()).orElse(new AddressDAO());
-                ContactDAO contact = Optional.ofNullable(person.getContacts()).orElse(new ContactDAO());
-                DocumentRecordsDAO documentRecords = Optional.ofNullable(person.getRecordses())
+                AddressDAO address = Optional.ofNullable(person.getAddress()).orElse(new AddressDAO());
+                ContactDAO contact = Optional.ofNullable(person.getContact()).orElse(new ContactDAO());
+                DocumentRecordsDAO documentRecords = Optional.ofNullable(person.getRecord())
                                 .orElse(new DocumentRecordsDAO());
-                MedicalDAO medical = Optional.ofNullable(person.getMedicals()).orElse(new MedicalDAO());
-                OccupationDAO occupation = Optional.ofNullable(person.getOccupations()).orElse(new OccupationDAO());
+                MedicalDAO medical = Optional.ofNullable(person.getMedical()).orElse(new MedicalDAO());
+                OccupationDAO occupation = Optional.ofNullable(person.getOccupation()).orElse(new OccupationDAO());
 
                 return new PersonMargeDTO(
                                 person.getId(),

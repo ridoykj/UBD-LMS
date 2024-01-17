@@ -42,9 +42,9 @@ public class InstructorDAO extends AbstractEntity<Long> {
     @OneToMany(mappedBy = "instructor")
     private List<ReservationDAO> reservations;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "id_person_key")
     @JsonBackReference
-    private PersonDAO personKey;
+    private PersonDAO person;
 
 }

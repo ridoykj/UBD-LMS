@@ -1,7 +1,9 @@
 package com.itbd.application.dao.org.place;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 
 import com.itbd.application.constants.BuildingTypeEnum;
@@ -47,11 +49,17 @@ public class BuildingDAO  extends AbstractEntity<Long>{
     @Column(name = "tx_alternate_name")
     private String alternateName;
 
-    @Column(name = "dtt_opening_time")
-    private LocalDateTime openingTime;
+    @Column(name = "dtt_opening_date")
+    private LocalDateTime openingDate;
 
-    @Column(name = "dtt_closing_time")
-    private LocalDateTime closingTime;
+    @Column(name = "dtt_closing_date")
+    private LocalDateTime closingDate;
+
+    @Column(name = "dt_opening_time")
+    private LocalTime openingTime;
+
+    @Column(name = "dt_closing_time")
+    private LocalTime closingTime;
 
     @Column(name = "ct_total_elevators")
     private Integer totalElevators;

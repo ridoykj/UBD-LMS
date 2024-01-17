@@ -87,42 +87,42 @@ public class PersonDAO extends AbstractEntity<Long> {
     @Column(name = "tx_description", columnDefinition = "longtext")
     private String description;
 
-    @OneToOne(mappedBy = "personKey", cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "person", cascade = CascadeType.ALL)
     @ToString.Exclude
     @JsonManagedReference
-    private AddressDAO addresses;
+    private AddressDAO address;
 
-    @OneToOne(mappedBy = "personKey", cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "person", cascade = CascadeType.ALL)
     @ToString.Exclude
     @JsonManagedReference
-    private ContactDAO contacts;
+    private ContactDAO contact;
 
-    @OneToOne(mappedBy = "personKey", cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "person", cascade = CascadeType.ALL)
     @ToString.Exclude
     @JsonManagedReference
-    private DocumentRecordsDAO recordses;
+    private DocumentRecordsDAO record;
 
-    @OneToOne(mappedBy = "personKey", cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "person", cascade = CascadeType.ALL)
     @ToString.Exclude
     @JsonManagedReference
-    private MedicalDAO medicals;
+    private MedicalDAO medical;
 
-    @OneToOne(mappedBy = "personKey", cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "person", cascade = CascadeType.ALL)
     @ToString.Exclude
     @JsonManagedReference
-    private OccupationDAO occupations;
+    private OccupationDAO occupation;
 
-    @OneToOne(mappedBy = "personKey", cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "person", cascade = CascadeType.ALL)
     @ToString.Exclude
     @JsonManagedReference
-    private UserDAO users;
+    private UserDAO user;
 
-    @OneToOne(mappedBy = "personKey", cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "person", cascade = CascadeType.ALL)
     @ToString.Exclude
     @JsonManagedReference
     private StudentDAO student;
 
-    @OneToOne(mappedBy = "personKey", cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "person", cascade = CascadeType.ALL)
     @ToString.Exclude
     @JsonManagedReference
     private InstructorDAO instructor;

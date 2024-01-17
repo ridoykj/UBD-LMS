@@ -51,7 +51,7 @@ public record PersonDTO(
                 person.getNationality(),
                 person.getSponsor(),
                 person.getDescription(),
-                person.getAddresses(),
+                person.getAddress(),
                 person.getInstructor(),
                 person.getCreatedAt(),
                 person.getUpdatedAt());
@@ -84,13 +84,13 @@ public record PersonDTO(
 //        MedicalDAO medical = Optional.ofNullable(person.getMedicals()).orElse(new MedicalDAO());
 //        OccupationDAO occupation = Optional.ofNullable(person.getOccupations()).orElse(new OccupationDAO());
 
-        address.setPersonKey(personDAO);
-        instructor.setPersonKey(personDAO);
+        address.setPerson(personDAO);
+        instructor.setPerson(personDAO);
        
         personDAO.setCreatedAt(personDTO.createdAt());
         personDAO.setUpdatedAt(personDTO.updatedAt());
 
-        personDAO.setAddresses(address);
+        personDAO.setAddress(address);
         personDAO.setInstructor(instructor);
     }
 }

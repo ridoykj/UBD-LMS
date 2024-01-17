@@ -17,7 +17,7 @@ public record DocumentRecordsDTO(
       public static DocumentRecordsDTO fromEntity(DocumentRecordsDAO document) {
             return new DocumentRecordsDTO(
                         document.getId(),
-                        document.getPersonKey().getId(),
+                        document.getPerson().getId(),
                         document.getRecords(),
                         document.getEducationRecords(),
                         document.getNationalRecords(),

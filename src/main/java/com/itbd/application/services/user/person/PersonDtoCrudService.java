@@ -46,11 +46,11 @@ public class PersonDtoCrudService implements CrudService<PersonDTO, Long> {
         Page<PersonDAO> persons = personRepo.findAll(spec, pageable);
         return persons.stream().map(p -> {
             InstructorDAO instructor = p.getInstructor();
-            AddressDAO address = p.getAddresses();
+            AddressDAO address = p.getAddress();
 //            address.setPersonKey(null);
             instructor.setReservations(null);
             p.setInstructor(instructor);
-            p.setAddresses(address);
+            p.setAddress(address);
             return p;
         }).map(PersonDTO::fromEntity).toList();
     }
@@ -61,9 +61,9 @@ public class PersonDtoCrudService implements CrudService<PersonDTO, Long> {
                 ? personRepo.getReferenceById(value.id())
                 : new PersonDAO();
         InstructorDAO instructor = person.getInstructor();
-        AddressDAO address = person.getAddresses();
+        AddressDAO address = person.getAddress();
         person.setInstructor(instructor);
-        person.setAddresses(address);
+        person.setAddress(address);
 
         System.out.println("name = " + instructor);
 

@@ -12,9 +12,9 @@
 // import { AutoGrid, AutoGridRef } from "Frontend/components/grid/autogrid";
 // import BloodGroupsEnum from "Frontend/generated/com/itbd/application/constants/BloodGroupsEnum";
 // import GenderEnum from "Frontend/generated/com/itbd/application/constants/GenderEnum";
-// import InstructorDTO from "Frontend/generated/com/itbd/application/dto/user/instructor/InstructorDTO";
-// import InstructorDTOModel from "Frontend/generated/com/itbd/application/dto/user/instructor/InstructorDTOModel";
-// import { InstructorDtoCrudService } from "Frontend/generated/endpoints";
+// import InstructorMargeDTO from "Frontend/generated/com/itbd/application/dto/user/instructor/InstructorMargeDTO";
+// import InstructorMargeDTOModel from "Frontend/generated/com/itbd/application/dto/user/instructor/InstructorMargeDTOModel";
+// import { InstructorMargeDtoCrudService, PersonDtoCrudService } from "Frontend/generated/endpoints";
 // import NotificationUtil from "Frontend/util/NotificationUtil";
 // import React, { useState } from "react";
 
@@ -24,11 +24,13 @@
 
 //   const autoGridRef = React.useRef<AutoGridRef>(null);
 
-//   const [selectedInstructorItems, setSelectedInstructorItems] = useState<InstructorDTO[]>([]);
+//   const [selectedInstructorItems, setSelectedInstructorItems] = useState<InstructorMargeDTO[]>([]);
 
-//   const { model, field, value, read, submit, clear, reset, visited, dirty, invalid, submitting } = useForm(InstructorDTOModel, {
-//     onSubmit: async (programme) => {
-//       await InstructorDtoCrudService.save(programme).then((result) => {
+//   const { model, field, value, read, submit, clear, reset, visited, dirty, invalid, submitting } = useForm(InstructorMargeDTOModel, {
+//     onSubmit: async (instructor) => {
+//       console.log('instructor', instructor);
+//       await InstructorMargeDtoCrudService.save(instructor).then((result) => {
+//         console.log('result', result);
 //         refreshGrid();
 //         setSelectedInstructorItems(result ? [result] : []);
 //         setSuccessNotification(true);
@@ -63,12 +65,13 @@
 //     <>
 //       <SplitLayout className="h-full w-full">
 //         <VerticalLayout className="h-full w-full items-stretch">
-//           <AutoGrid service={InstructorDtoCrudService} model={InstructorDTOModel} ref={autoGridRef}
-//             visibleColumns={['name', 'email', 'description', 'designation', 'qualification',]}
+//           <AutoGrid service={InstructorMargeDtoCrudService} model={InstructorMargeDTOModel} ref={autoGridRef}
+//             visibleColumns={['instructor.name', 'contact.email', 'description', 'instructor.designation', 'instructor.qualification',]}
 //             selectedItems={selectedInstructorItems}
 //             theme="row-stripes"
 //             onActiveItemChanged={(e) => {
 //               const item = e.detail.value;
+//               console.log('item', item);
 //               setSelectedInstructorItems(item ? [item] : []);
 //               read(item);
 //             }}
@@ -86,31 +89,34 @@
 //           <Scroller scrollDirection="vertical" className="w-full h-full">
 //             <FormLayout responsiveSteps={responsiveSteps} className="w-fit h-fit p-2">
 //               <label slot="label">Profile</label>
-//               <TextField label={'Name'}  {...field(model.name)} />
-//               <TextField label={'Alternant name'}  {...field(model.personKey.alternateName)} />
-//               <DateTimePicker label={'Birth Date'}  {...field(model.personKey.birthDate)} />
-//               <TextField label={'Honorific Prefix'}  {...field(model.personKey.honorificPrefix)} />
-//               <TextField label={'Honorific Suffix'}  {...field(model.personKey.honorificSuffix)} />
-//               <TextField label={'Nationality'}  {...field(model.personKey.nationality)} />
-//               <Select label={'Blood Group'}  {...field(model.personKey.bloodGroup)} items={bloodGroups} />
-//               <TextField label={'Father Name'}  {...field(model.personKey.fatherName)} />
-//               <TextField label={'Mother Name'}  {...field(model.personKey.motherName)} />
-// {/* 
-//               <Select label={'Gender'}  {...field(model.personKey.medicals.gender)} items={genders} />
-//               <TextField label={'Height'}  {...field(model.personKey.medicals.height)} />
-//               <TextField label={'Weight'}  {...field(model.personKey.medicals.weight)} />
-//               <TextField label={'Children'}  {...field(model.personKey.medicals.children)} />
+//               <TextField label={'Name'}  {...field(model.instructor.name)} />
+//               <TextField label={'Alternant name'}  {...field(model.alternateName)} />
+//               <TextField label={'Alternant names'}  {...field(model.additionalName)} />
+//               <TextField label={'Alternant namef4'}  {...field(model.givenName)} />
+//               <TextField label={'Alternant namef'}  {...field(model.familyName)} />
+//               <DateTimePicker label={'Birth Dateq'}  {...field(model.birthDate)} />
+//               <TextField label={'Honorific Prefix'}  {...field(model.honorificPrefix)} />
+//               <TextField label={'Honorific Suffix'}  {...field(model.honorificSuffix)} />
+//               <TextField label={'Nationality'}  {...field(model.nationality)} />
+//               <Select label={'Blood Group'}  {...field(model.bloodGroup)} items={bloodGroups} />
+//               <TextField label={'Father Name'}  {...field(model.fatherName)} />
+//               <TextField label={'Mother Name'}  {...field(model.motherName)} />
 
-//               <TextField label={'Email'}  {...field(model.personKey.contacts.email)} />
-//               <TextField label={'Fax Number'}  {...field(model.personKey.contacts.faxNumber)} />
-//               <TextField label={'Telephone'}  {...field(model.personKey.contacts.telephone)} />
+//               <Select label={'Gender'}  {...field(model.medical.gender)} items={genders} />
+//               <TextField label={'Height'}  {...field(model.medical.height)} />
+//               <TextField label={'Weight'}  {...field(model.medical.weight)} />
+//               <TextField label={'Children'}  {...field(model.medical.children)} />
 
-//               <TextField label={'Present Address'}  {...field(model.personKey.addresses.presentAddress)} />
-//               <TextField label={'Permanent Address'}  {...field(model.personKey.addresses.permanentAddress)} /> */}
+//               <TextField label={'Email'}  {...field(model.contact.email)} />
+//               <TextField label={'Fax Number'}  {...field(model.contact.faxNumber)} />
+//               <TextField label={'Telephone'}  {...field(model.contact.telephone)} />
+//               {/* 
+//               <TextField label={'Present Address'}  {...field(model.address.presentAddress)} />
+//               <TextField label={'Permanent Address'}  {...field(model.address.permanentAddress)} /> */}
 
-//               <TextField label={'Description'}  {...field(model.description)} />
+//               {/* <TextField label={'Description'}  {...field(model.description)} />
 //               <TextField label={'Designation'}  {...field(model.designation)} />
-//               <TextField label={'Qualification'}  {...field(model.qualification)} />
+//               <TextField label={'Qualification'}  {...field(model.qualification)}/> */}
 //             </FormLayout>
 //           </Scroller>
 //           <footer className="flex flex-row bg-gray-100 w-full">
@@ -127,7 +133,7 @@
 //               }
 //             </div>
 //             {
-//               value.name === undefined ? null :
+//               value.instructor?.name === undefined ? null :
 //                 <div className="flex flex-row content-end space-x-4">
 //                   <Button
 //                     className={discardButtonColors[dirty.toString()]}
@@ -151,7 +157,7 @@
 //       <NotificationUtil opened={successNotification} type="update"
 //         message={{
 //           title: 'Successfully Updated',
-//           description: value.name,
+//           description: value.instructor?.name,
 //         }}
 //         onOpenedChanged={(event) => {
 //           if (!event.detail.value) {
@@ -175,13 +181,13 @@
 //           }
 //         }}
 //         onConfirm={() => {
-//           InstructorDtoCrudService.delete(selectedInstructorItems[0]?.id).then((result) => {
+//           PersonDtoCrudService.delete(selectedInstructorItems[0]?.id).then((result) => {
 //             refreshGrid();
 //             setSelectedInstructorItems([]);
 //             reset();
 //           });
 //         }}>
-//         {`Do you want to delete?${value.name}`}
+//         {`Do you want to delete?${value.instructor?.name}`}
 //       </ConfirmDialog >
 //     </>
 //   );

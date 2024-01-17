@@ -34,28 +34,13 @@ import dev.hilla.crud.filter.Filter;
 @BrowserCallable
 @AnonymousAllowed
 public class InstructorMargeDtoCrudService implements CrudService<InstructorMargeDTO, Long> {
+    private final JpaFilterConverter jpaFilterConverter;
+    private final PersonRepo personRepo;
 
-    @Autowired
-    private JpaFilterConverter jpaFilterConverter;
-
-    @Autowired
-    private PersonRepo personRepo;
-    @Autowired
-    private AddressRepo addressRepo;
-    @Autowired
-    private ContactRepo contactRepo;
-    @Autowired
-    private DocumentRecordsRepo documentRecordsRepo;
-    @Autowired
-    private MedicalRepo medicalRepo;
-    @Autowired
-    private OccupationRepo occupationRepo;
-
-    // public InstructorMargeDTOCrudService(PersonRepo personRepo, AddressRepo
-    // addressRepo) {
-    // this.personRepo = personRepo;
-    // this.addressRepo = addressRepo;
-    // }
+    public InstructorMargeDtoCrudService(PersonRepo personRepo, JpaFilterConverter jpaFilterConverter) {
+        this.personRepo = personRepo;
+        this.jpaFilterConverter = jpaFilterConverter;
+    }
 
     @Override
     @Nonnull

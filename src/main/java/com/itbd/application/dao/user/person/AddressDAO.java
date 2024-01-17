@@ -38,5 +38,5 @@ public class AddressDAO extends AbstractEntity<Long> {
     @OneToOne
     @JoinColumn(name = "id_person_key")
     @JsonBackReference
-    private PersonDAO personKey;
+    private PersonDAO person;
 }

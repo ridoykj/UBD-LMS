@@ -9,6 +9,6 @@ import com.itbd.application.dao.user.person.PersonDAO;
 
 public interface AddressRepo extends JpaRepository<AddressDAO, Long> {
 
-    Optional<AddressDAO> findByPersonKey(PersonDAO person);
-    // Set<AddressDAO> findByPersonKey(PersonDAO personKey);
+    Optional<AddressDAO> findByPerson(PersonDAO person);
+    // Set<AddressDAO> findByPersonKey(PersonDAO person);
 }

@@ -10,5 +10,5 @@ import java.util.Optional;
 
 public interface MedicalRepo extends JpaRepository<MedicalDAO, Long> {
 
-    Optional<MedicalDAO> findByPersonKey(PersonDAO p);
+    Optional<MedicalDAO> findByPerson(PersonDAO p);
 }

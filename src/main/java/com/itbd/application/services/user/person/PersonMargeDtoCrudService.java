@@ -66,11 +66,11 @@ public class PersonMargeDtoCrudService implements CrudService<PersonMargeDTO, Lo
                 : Specification.anyOf();
         Page<PersonDAO> persons = personRepo.findAll(spec, pageable);
         return persons.stream().map(person -> {
-            person.setAddresses(addressRepo.findByPersonKey(person).orElse(new AddressDAO()));
-            person.setContacts(contactRepo.findByPersonKey(person).orElse(new ContactDAO()));
-            person.setRecordses(documentRecordsRepo.findByPersonKey(person).orElse(new DocumentRecordsDAO()));
-            person.setMedicals(medicalRepo.findByPersonKey(person).orElse(new MedicalDAO()));
-            person.setOccupations(occupationRepo.findByPersonKey(person).orElse(new OccupationDAO()));
+            person.setAddress(addressRepo.findByPerson(person).orElse(new AddressDAO()));
+            person.setContact(contactRepo.findByPerson(person).orElse(new ContactDAO()));
+            person.setRecord(documentRecordsRepo.findByPerson(person).orElse(new DocumentRecordsDAO()));
+            person.setMedical(medicalRepo.findByPerson(person).orElse(new MedicalDAO()));
+            person.setOccupation(occupationRepo.findByPerson(person).orElse(new OccupationDAO()));
             return PersonMargeDTO.fromEntity(person);
         }).toList();
     }

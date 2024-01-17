@@ -49,7 +49,7 @@ public class UserDAO extends AbstractEntity<Long> {
     @OneToOne
     @JoinColumn(name = "id_person_key")
     @JsonBackReference
-    private PersonDAO personKey;
+    private PersonDAO person;
 
     @ManyToMany
     @JoinTable(name = "map_user_roles", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))

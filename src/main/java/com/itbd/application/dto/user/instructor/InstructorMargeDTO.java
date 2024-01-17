@@ -6,7 +6,6 @@ import com.itbd.application.dao.user.person.*;
 import jakarta.persistence.Id;
 
 import java.time.LocalDateTime;
-import java.util.Optional;
 
 public record InstructorMargeDTO(
         @Id Long id,
@@ -31,9 +30,9 @@ public record InstructorMargeDTO(
         String description,
         AddressDAO address,
         ContactDAO contact,
-        DocumentRecordsDAO records,
-        MedicalDAO medicals,
-        OccupationDAO occupations,
+        DocumentRecordsDAO record,
+        MedicalDAO medical,
+        OccupationDAO occupation,
         InstructorDAO instructor
 //        StudentDAO student
 
@@ -60,42 +59,42 @@ public record InstructorMargeDTO(
         person.setSponsor(value.sponsor());
         person.setDescription(value.description());
 
-        AddressDAO address = Optional.ofNullable(person.getAddresses()).orElse(new AddressDAO());
-        ContactDAO contact = Optional.ofNullable(person.getContacts()).orElse(new ContactDAO());
-        DocumentRecordsDAO documentRecords = Optional.ofNullable(person.getRecordses()).orElse(new DocumentRecordsDAO());
-        MedicalDAO medical = Optional.ofNullable(person.getMedicals()).orElse(new MedicalDAO());
-        OccupationDAO occupation = Optional.ofNullable(person.getOccupations()).orElse(new OccupationDAO());
-        InstructorDAO instructor = Optional.ofNullable(person.getInstructor()).orElse(new InstructorDAO());
+        AddressDAO address = value.address() != null ? value.address() : new AddressDAO();
+        ContactDAO contact = value.contact() != null ? value.contact() : new ContactDAO();
+        DocumentRecordsDAO documentRecords = value.record() != null ? value.record() : new DocumentRecordsDAO();
+        MedicalDAO medical = value.medical() != null ? value.medical() : new MedicalDAO();
+        OccupationDAO occupation = value.occupation() != null ? value.occupation() : new OccupationDAO();
+        InstructorDAO instructor = value.instructor() != null ? value.instructor() : new InstructorDAO();
 
-        address.setPersonKey(person);
-        contact.setPersonKey(person);
-        documentRecords.setPersonKey(person);
-        medical.setPersonKey(person);
-        occupation.setPersonKey(person);
-        instructor.setPersonKey(person);
+        address.setPerson(person);
+        contact.setPerson(person);
+        documentRecords.setPerson(person);
+        medical.setPerson(person);
+        occupation.setPerson(person);
+        instructor.setPerson(person);
 
-        person.setAddresses(address);
-        person.setContacts(contact);
-        person.setRecordses(documentRecords);
-        person.setMedicals(medical);
-        person.setOccupations(occupation);
+        person.setAddress(address);
+        person.setContact(contact);
+        person.setRecord(documentRecords);
+        person.setMedical(medical);
+        person.setOccupation(occupation);
         person.setInstructor(instructor);
     }
 
     public static InstructorMargeDTO fromEntity(PersonDAO person) {
-        AddressDAO address = person.getAddresses();
-        ContactDAO contact = person.getContacts();
-        DocumentRecordsDAO records = person.getRecordses();
-        MedicalDAO medical = person.getMedicals();
-        OccupationDAO occupation = person.getOccupations();
+        AddressDAO address = person.getAddress();
+        ContactDAO contact = person.getContact();
+        DocumentRecordsDAO records = person.getRecord();
+        MedicalDAO medical = person.getMedical();
+        OccupationDAO occupation = person.getOccupation();
         InstructorDAO instructor = person.getInstructor();
         instructor.setReservations(null);
 
-        person.setAddresses(address);
-        person.setContacts(contact);
-        person.setRecordses(records);
-        person.setMedicals(medical);
-        person.setOccupations(occupation);
+        person.setAddress(address);
+        person.setContact(contact);
+        person.setRecord(records);
+        person.setMedical(medical);
+        person.setOccupation(occupation);
         person.setInstructor(instructor);
 
         return new InstructorMargeDTO(
@@ -119,12 +118,12 @@ public record InstructorMargeDTO(
                 person.getSponsor(),
                 person.getDescription(),
 
-                person.getAddresses(),
-                person.getContacts(),
-                person.getRecordses(),
-                person.getMedicals(),
-                person.getOccupations(),
+                person.getAddress(),
+                person.getContact(),
+                person.getRecord(),
+                person.getMedical(),
+                person.getOccupation(),
                 person.getInstructor()
-                );
+        );
     }
 }

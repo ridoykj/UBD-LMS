@@ -25,7 +25,7 @@ public record StudentDTO(
                                 testimonial.getGuardianPhone(),
                                 testimonial.getStatus(),
                                 testimonial.getBatch(),
-                                testimonial.getPersonKey());
+                                testimonial.getPerson());
         }
 
         public static void fromDTO(StudentDTO studentDTO, StudentDAO studentDAO) {
@@ -37,6 +37,6 @@ public record StudentDTO(
                 studentDAO.setGuardianPhone(studentDTO.guardianPhone());
                 studentDAO.setStatus(studentDTO.status());
                 studentDAO.setBatch(studentDTO.batch());
-                studentDAO.setPersonKey(studentDTO.personKey());
+                studentDAO.setPerson(studentDTO.personKey());
         }
 }

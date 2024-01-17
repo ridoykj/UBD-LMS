@@ -1,5 +1,6 @@
 package com.itbd.application.dto.org.place;
 
+import com.itbd.application.dao.org.place.BuildingDAO;
 import com.itbd.application.dao.org.place.FloorDAO;
 
 public record FloorDTO(
@@ -11,7 +12,9 @@ public record FloorDTO(
         Integer floorLevel,
         String floorColor,
         String floorColorCode,
-        Integer totalBlocks) {
+        Integer totalBlocks,
+        BuildingDAO building
+) {
     public static FloorDTO fromEntity(FloorDAO floor) {
         return new FloorDTO(
                 floor.getId(),
@@ -22,18 +25,21 @@ public record FloorDTO(
                 floor.getFloorLevel(),
                 floor.getFloorColor(),
                 floor.getFloorColorCode(),
-                floor.getTotalBlocks());
+                floor.getTotalBlocks(),
+                floor.getBuilding()
+        );
     }
 
-    public static void fromDTO(FloorDTO floorDTO, FloorDAO floorDAO) {
-        floorDAO.setId(floorDTO.id());
-        floorDAO.setName(floorDTO.name());
-        floorDAO.setAlternateName(floorDTO.alternateName());
-        floorDAO.setDescription(floorDTO.description());
-        floorDAO.setContact(floorDTO.contact());
-        floorDAO.setFloorLevel(floorDTO.floorLevel());
-        floorDAO.setFloorColor(floorDTO.floorColor());
-        floorDAO.setFloorColorCode(floorDTO.floorColorCode());
-        floorDAO.setTotalBlocks(floorDTO.totalBlocks());
+    public static void fromDTO(FloorDTO value, FloorDAO floorDAO) {
+        floorDAO.setId(value.id());
+        floorDAO.setName(value.name());
+        floorDAO.setAlternateName(value.alternateName());
+        floorDAO.setDescription(value.description());
+        floorDAO.setContact(value.contact());
+        floorDAO.setFloorLevel(value.floorLevel());
+        floorDAO.setFloorColor(value.floorColor());
+        floorDAO.setFloorColorCode(value.floorColorCode());
+        floorDAO.setTotalBlocks(value.totalBlocks());
+        floorDAO.setBuilding(value.building());
     }
 }
