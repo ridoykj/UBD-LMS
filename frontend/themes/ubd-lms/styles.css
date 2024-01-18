@@ -48,6 +48,13 @@
   --lumo-space-wide-r-l: var(--lumo-space-wide-l);
 }
 
+
+/* vaadin-app-layout::part(navbar) {
+  background-color: rgb(31 41 55);
+  background-clip: padding-box;
+} */
+
+
 @media (max-width: 479px) {
   :root {
     --lumo-space-r-x: 0;

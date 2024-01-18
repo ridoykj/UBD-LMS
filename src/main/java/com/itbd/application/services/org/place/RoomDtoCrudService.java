@@ -11,11 +11,6 @@ import org.springframework.transaction.annotation.Transactional;
 import com.itbd.application.dao.org.place.RoomDAO;
 import com.itbd.application.dto.org.place.RoomDTO;
 import com.itbd.application.repos.org.place.RoomRepo;
-import com.itbd.application.repos.user.person.AddressRepo;
-import com.itbd.application.repos.user.person.ContactRepo;
-import com.itbd.application.repos.user.person.DocumentRecordsRepo;
-import com.itbd.application.repos.user.person.MedicalRepo;
-import com.itbd.application.repos.user.person.OccupationRepo;
 import com.vaadin.flow.server.auth.AnonymousAllowed;
 
 import dev.hilla.BrowserCallable;
@@ -28,28 +23,12 @@ import dev.hilla.crud.filter.Filter;
 @BrowserCallable
 @AnonymousAllowed
 public class RoomDtoCrudService implements CrudService<RoomDTO, Long> {
-
-    @Autowired
-    private JpaFilterConverter jpaFilterConverter;
-
-    @Autowired
-    private RoomRepo personRepo;
-    @Autowired
-    private AddressRepo addressRepo;
-    @Autowired
-    private ContactRepo contactRepo;
-    @Autowired
-    private DocumentRecordsRepo documentRecordsRepo;
-    @Autowired
-    private MedicalRepo medicalRepo;
-    @Autowired
-    private OccupationRepo occupationRepo;
-
-    // public PersonMargeDtoCrudService(RoomRepo personRepo, AddressRepo
-    // addressRepo) {
-    // this.personRepo = personRepo;
-    // this.addressRepo = addressRepo;
-    // }
+    private final JpaFilterConverter jpaFilterConverter;
+    private final RoomRepo roomRepo;
+    public RoomDtoCrudService(RoomRepo roomRepo, JpaFilterConverter jpaFilterConverter) {
+        this.roomRepo = roomRepo;
+        this.jpaFilterConverter = jpaFilterConverter;
+    }
 
     @Override
     @Nonnull
@@ -59,8 +38,8 @@ public class RoomDtoCrudService implements CrudService<RoomDTO, Long> {
         Specification<RoomDAO> spec = filter != null
                 ? jpaFilterConverter.toSpec(filter, RoomDAO.class)
                 : Specification.anyOf();
-        Page<RoomDAO> persons = personRepo.findAll(spec, pageable);
-         return persons.stream().map(RoomDTO::fromEntity).toList();
+        Page<RoomDAO> persons = roomRepo.findAll(spec, pageable);
+        return persons.stream().map(RoomDTO::fromEntity).toList();
     }
 
     @Override
@@ -68,16 +47,16 @@ public class RoomDtoCrudService implements CrudService<RoomDTO, Long> {
     public @Nullable RoomDTO save(RoomDTO value) {
         boolean check = value.id() != null && value.id() > 0;
         RoomDAO person = check
-                ? personRepo.getReferenceById(value.id())
+                ? roomRepo.getReferenceById(value.id())
                 : new RoomDAO();
 
         // person.setRecordComment(check ? "UPDATE" : "NEW");
         RoomDTO.fromDTO(value, person);
-        return RoomDTO.fromEntity(personRepo.save(person));
+        return RoomDTO.fromEntity(roomRepo.save(person));
     }
 
     @Override
     public void delete(Long id) {
-        personRepo.deleteById(id);
+        roomRepo.deleteById(id);
     }
 }

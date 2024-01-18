@@ -82,6 +82,7 @@
   }
 }
 
+
 /* === IE 11 workarounds === */
 @media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
   /* IE 11 can't handle different themes for sub-parts of the application, without the parts having own
@@ -94,6 +95,6 @@
   }
 
   .app-bar__title {
-    color: hsl(214, 100%, 98%);
+    color: hsl(216, 56%, 49%);
   }
 }

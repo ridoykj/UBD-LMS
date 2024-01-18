@@ -12,7 +12,7 @@ import { useForm } from "@hilla/react-form";
 import { AutoGrid } from "Frontend/components/grid/autogrid";
 import SectorDTO from "Frontend/generated/com/itbd/application/dto/org/place/SectorDTO";
 import SectorDTOModel from "Frontend/generated/com/itbd/application/dto/org/place/SectorDTOModel";
-import { BuildingDtoCrudService, SectorDtoCrudService } from "Frontend/generated/endpoints";
+import { SectorDtoCrudService } from "Frontend/generated/endpoints";
 import NotificationUtil from "Frontend/util/NotificationUtil";
 import React, { useState } from "react";
 
@@ -60,7 +60,7 @@ const SectorView = () => {
       <SplitLayout className="h-full w-full">
         <VerticalLayout className="h-full w-full items-stretch">
           <AutoGrid service={SectorDtoCrudService} model={SectorDTOModel} ref={autoGridRef}
-            visibleColumns={['name', 'city', 'state', 'alternateName',  'contact',]}
+            visibleColumns={['name', 'city', 'state', 'alternateName', 'contact',]}
             selectedItems={selectedInstructorItems}
             theme="row-stripes"
             columnOptions={{
@@ -104,7 +104,7 @@ const SectorView = () => {
         <VerticalLayout className="w-1/4 min-w-96">
           <header className="bg-gray-100 w-full">
             <div className="flex flex-row space-x-4">
-              <p className="text-blue-600 text-xl font-bold truncate p-1 m-1 w-full">#{selectedInstructorItems[0]?.id ?? ''} - Building</p>
+              <p className="text-blue-600 text-xl font-bold truncate p-1 m-1 w-full">#{selectedInstructorItems[0]?.id ?? ''} - Sectors</p>
               <Button className="text-white content-end bg-blue-500 hover:bg-blue-600" onClick={() => {
                 clear();
                 setSelectedInstructorItems([]);

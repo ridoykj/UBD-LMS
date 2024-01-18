@@ -86,7 +86,7 @@ export default function DashboardView() {
         headerToolbar={{
           left: 'prev,next today',
           center: 'title',
-          right: 'dayGridMonth,timeGridWeek,timeGridDay'
+          right: 'dayGridMonth,timeGridWeek,timeGridDay',
         }}
         slotLabelFormat={{
           hour: '2-digit',

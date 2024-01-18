@@ -42,7 +42,7 @@ type VisibleFields = {
 };
 
 export default function BranchRC({ visibleFields, sector,  building, floor, room, }: {
-  visibleFields: VisibleFields, // ['organization', 'department', 'programme', 'batch', 'course'];
+  visibleFields: VisibleFields, // ['sector', 'building', 'floor', 'room',];
   sector?: SectorProps
   building?: BuildingProps
   floor?: FloorProps
@@ -77,7 +77,7 @@ export default function BranchRC({ visibleFields, sector,  building, floor, room
         const child: PropertyStringFilter[] = [
           {
             '@type': 'propertyString',
-            propertyId: 'organization.name',
+            propertyId: 'sector.name',
             filterValue: sector?.sectorName || '',
             matcher: Matcher.EQUALS
           }, {
@@ -104,7 +104,7 @@ export default function BranchRC({ visibleFields, sector,  building, floor, room
         const child: PropertyStringFilter[] = [
           {
             '@type': 'propertyString',
-            propertyId: 'department.name',
+            propertyId: 'building.name',
             filterValue: building?.buildingName || '',
             matcher: Matcher.EQUALS
           }, {
@@ -132,7 +132,7 @@ export default function BranchRC({ visibleFields, sector,  building, floor, room
         const child: PropertyStringFilter[] = [
           {
             '@type': 'propertyString',
-            propertyId: 'programme.name',
+            propertyId: 'floor.name',
             filterValue: floor?.floorName || '',
             matcher: Matcher.EQUALS
           }, {
@@ -148,33 +148,6 @@ export default function BranchRC({ visibleFields, sector,  building, floor, room
         });
       },
     [floor?.floorName]
-  );
-
-  const courseDataProvider = useMemo(
-    () =>
-      async (
-        params: ComboBoxDataProviderParams,
-        callback: ComboBoxDataProviderCallback<CourseDTOModel>
-      ) => {
-        const child: PropertyStringFilter[] = [
-          {
-            '@type': 'propertyString',
-            propertyId: 'programme.name',
-            filterValue: room?.roomName || '',
-            matcher: Matcher.EQUALS
-          }, {
-            '@type': 'propertyString',
-            propertyId: 'name',
-            filterValue: params.filter,
-            matcher: Matcher.CONTAINS
-          },];
-
-        const { pagination, filters } = comboBoxLazyFilter(params, 'and', child);
-        CourseDtoCrudService.list(pagination, filters).then((result: any) => {
-          callback(result, result.length);
-        });
-      },
-    [room?.roomName]
   );
 
   const handleSector = (e: any) => {

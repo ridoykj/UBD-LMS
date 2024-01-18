@@ -16,6 +16,10 @@ public record FloorDTO(
         BuildingDAO building
 ) {
     public static FloorDTO fromEntity(FloorDAO floor) {
+        BuildingDAO building = floor.getBuilding();
+        building.setSector(null);
+        building.setFloors(null);
+        floor.setBuilding(building);
         return new FloorDTO(
                 floor.getId(),
                 floor.getName(),

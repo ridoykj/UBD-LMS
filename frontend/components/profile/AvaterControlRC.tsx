@@ -32,7 +32,7 @@ function NavLinkItem({ name, icon, route }: { name: string, icon: any, route: st
 }
 export default function AvatarControlRC() {
   return <>
-    <div slot="navbar" className="absolute inset-y right-10 ml-4 flex items-center md:ml-6">
+    <div className="absolute inset-y right-10 ml-4 flex flex-row items-center md:ml-6">
       <button
         type="button"
         className="relative rounded-full bg-gray-200 p-1 text-gray-400 hover:text-black focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-blue-600"

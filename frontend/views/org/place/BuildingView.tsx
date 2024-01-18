@@ -9,9 +9,9 @@ import { SplitLayout } from "@hilla/react-components/SplitLayout.js";
 import { TextField } from "@hilla/react-components/TextField.js";
 import { TimePicker } from "@hilla/react-components/TimePicker.js";
 import { VerticalLayout } from "@hilla/react-components/VerticalLayout";
-import { AutoGrid, AutoGridRef } from "@hilla/react-crud";
 import { useForm } from "@hilla/react-form";
 import PlaceRC from "Frontend/components/branch/PlaceRC";
+import { AutoGrid, AutoGridRef } from "Frontend/components/grid/autogrid";
 import BuildingTypeEnum from "Frontend/generated/com/itbd/application/constants/BuildingTypeEnum";
 import SectorDAOModel from "Frontend/generated/com/itbd/application/dao/org/place/SectorDAOModel";
 import BuildingDTO from "Frontend/generated/com/itbd/application/dto/org/place/BuildingDTO";
@@ -95,21 +95,13 @@ const BuildingView = () => {
             visibleFields={
               { sector: true }
             }
-          // sector={{
-          //   organizationName: orgNameFilter,
-          //   setOrganizationName: setOrgNameFilter
-          // }}
-          // building={{
-          //   departmentName: departmentNameFilter,
-          //   setDepartmentName: setDepartmentNameFilter
-          // }}
-          // floor={{
-          //   programmeName: programmeNameFilter,
-          //   setProgrammeName: setProgrammeNameFilter
-          // }}
+            sector={{
+              sectorName: sectorNameFilter,
+              setSectorName: setSectorNameFilter
+            }}
           />
           <AutoGrid service={BuildingDtoCrudService} model={BuildingDTOModel} ref={autoGridRef}
-            visibleColumns={['name', 'alternateName', 'type', 'block', 'openingTime', 'closingTime', 'contact',]}
+            visibleColumns={['name', 'alternateName', 'type', 'block', 'openingTime', 'closingTime', 'sector.name',]}
             selectedItems={selectedInstructorItems}
             theme="row-stripes"
             columnOptions={{
@@ -137,9 +129,10 @@ const BuildingView = () => {
                 header: 'Closing Time',
                 resizable: true,
               },
-              'contact': {
-                header: 'Contact',
+              'sector.name': {
+                header: 'Sector',
                 resizable: true,
+                externalValue: sectorNameFilter,
               },
             }}
             onActiveItemChanged={(e) => {

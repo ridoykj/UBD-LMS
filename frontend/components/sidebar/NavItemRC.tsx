@@ -1,14 +1,13 @@
 import { useState } from "react";
+import { FaChevronDown, FaChevronUp } from "react-icons/fa";
 import { NavLink } from "react-router-dom";
-import { FaChevronDown, FaChevronUp, FaRegUser } from "react-icons/fa";
-const navCss = `relative flex flex-row items-center h-11 border-l-4 border-transparent pr-6 text-gray-600 
-focus:outline-none 
-hover:bg-gray-50 hover:text-gray-800 hover:border-indigo-500 hover:text-indigo-500 hover:font-bold hover:no-underline `
+const navCss = `relative flex flex-row items-center h-11 border-transparent pr-6  border-l-4
+hover:text-white focus:outline-none hover:bg-gray-500 hover:border-indigo-500 hover:text-indigo-500 hover:font-bold hover:no-underline `
 
 type subItemType = { name: string, icon: any, route: string }
 
 const navLinkClasses = ({ isActive }: any) => {
-    return `${isActive ? 'bg-gray-100 border-l-green-600 text-green-600 font-bold ' : ''}${navCss}`;
+    return `${isActive ? 'bg-gray-500 border-l-green-600 font-bold ' : ''}${navCss}`;
 };
 
 function NavLinkItem({ name, icon, route }: { name: string, icon: any, route: string, }) {
@@ -19,10 +18,10 @@ function NavLinkItem({ name, icon, route }: { name: string, icon: any, route: st
     return (
         <NavLink className={navLinkClasses} to={route} onClick={handleClick}>
             <div>
-                <span className="inline-flex justify-center items-center ml-4">
+                <span className="inline-flex justify-center text-white items-center ml-4">
                     {icon}
                 </span>
-                <span className="ml-2 text-sm tracking-wide truncate">{name}</span>
+                <span className="ml-2 text-sm text-white tracking-wide truncate">{name}</span>
             </div>
         </NavLink>
     );
@@ -36,12 +35,12 @@ function ChevronIcon({ isOpen }: { isOpen: boolean }) {
 // Dropdown button component
 function DropdownButton({ name, icon, isDropdownOpen, toggleDropdown }: { name: string, icon: any, isDropdownOpen: boolean, toggleDropdown: () => void }) {
     return (
-        <button className={`${navCss} w-full flex justify-between items-center`} onClick={toggleDropdown}>
+        <button className={`${navCss} w-full flex justify-between items-center text-white `} onClick={toggleDropdown}>
             <div className="flex items-center">
-                <span className="inline-flex justify-center items-center ml-4">
+                <span className="inline-flex text-white justify-center items-center ml-4">
                     {icon}
                 </span>
-                <span className="ml-2 text-sm tracking-wide truncate">{name}</span>
+                <span className="ml-2 text-sm text-white tracking-wide truncate">{name}</span>
             </div>
             <ChevronIcon isOpen={isDropdownOpen} />
         </button>
@@ -51,13 +50,19 @@ function DropdownButton({ name, icon, isDropdownOpen, toggleDropdown }: { name: 
 // Component to display the list of sub items
 function SubItemList({ subItems }: { subItems: subItemType[] }) {
     return (
-        <ul className="bg-gray-50 ml-4">
-            {subItems.map((item) => (
-                <li key={item.route}>
-                    <NavLinkItem name={item.name} icon={item.icon} route={item.route} />
-                </li>
-            ))}
-        </ul>
+        <div className="bg-gray-700" style={
+            {
+                borderLeft: '5px solid rgb(72 113 247)',
+            }
+        }>
+            <ul>
+                {subItems.map((item) => (
+                    <li key={item.route}>
+                        <NavLinkItem name={item.name} icon={item.icon} route={item.route} />
+                    </li>
+                ))}
+            </ul>
+        </div>
     );
 }
 

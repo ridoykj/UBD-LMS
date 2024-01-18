@@ -30,7 +30,6 @@ public record BuildingDTO(
         SectorDAO sector = building.getSector();
         sector.setBuildings(null);
         building.setSector(sector);
-
         building.setFloors(null);
 
         return new BuildingDTO(

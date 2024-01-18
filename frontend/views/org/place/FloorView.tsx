@@ -1,16 +1,14 @@
 import { Button } from "@hilla/react-components/Button.js";
-import { ComboBoxDataProviderParams, ComboBoxDataProviderCallback, ComboBox } from "@hilla/react-components/ComboBox.js";
+import { ComboBox, ComboBoxDataProviderCallback, ComboBoxDataProviderParams } from "@hilla/react-components/ComboBox.js";
 import { ConfirmDialog } from "@hilla/react-components/ConfirmDialog.js";
 import { FormLayout } from "@hilla/react-components/FormLayout.js";
 import { Icon } from "@hilla/react-components/Icon.js";
 import { IntegerField } from "@hilla/react-components/IntegerField.js";
 import { Scroller } from "@hilla/react-components/Scroller.js";
-import { Select } from "@hilla/react-components/Select.js";
 import { SplitLayout } from "@hilla/react-components/SplitLayout.js";
 import { TextField } from "@hilla/react-components/TextField.js";
-import { TimePicker } from "@hilla/react-components/TimePicker.js";
 import { VerticalLayout } from "@hilla/react-components/VerticalLayout";
-import { AutoCrud, AutoGridRef } from "@hilla/react-crud";
+import { AutoGridRef } from "@hilla/react-crud";
 import { useForm } from "@hilla/react-form";
 import PlaceRC from "Frontend/components/branch/PlaceRC";
 import { AutoGrid } from "Frontend/components/grid/autogrid";
@@ -21,10 +19,11 @@ import Matcher from "Frontend/generated/dev/hilla/crud/filter/PropertyStringFilt
 import { BuildingDtoCrudService, FloorDtoCrudService } from "Frontend/generated/endpoints";
 import NotificationUtil from "Frontend/util/NotificationUtil";
 import { comboBoxLazyFilter } from "Frontend/util/comboboxLazyFilterUtil";
-import React, { useState, useMemo } from "react";
+import React, { useMemo, useState } from "react";
 
 const FloorView = () => {
   const [sectorNameFilter, setSectorNameFilter] = useState('');
+  const [buildingNameFilter, setBuildingNameFilter] = useState('');
   const [dialogOpened, setDialogOpened] = useState<boolean>(false);
   const [successNotification, setSuccessNotification] = useState<boolean>(false);
 
@@ -55,6 +54,11 @@ const FloorView = () => {
       ) => {
         const child: PropertyStringFilter[] = [
           {
+            '@type': 'propertyString',
+            propertyId: 'sector.name',
+            filterValue: sectorNameFilter,
+            matcher: Matcher.EQUALS
+          }, {
             '@type': 'propertyString',
             propertyId: 'name',
             filterValue: params.filter,
@@ -95,21 +99,17 @@ const FloorView = () => {
             visibleFields={
               { sector: true, building: true, }
             }
-          // sector={{
-          //   organizationName: orgNameFilter,
-          //   setOrganizationName: setOrgNameFilter
-          // }}
-          // building={{
-          //   departmentName: departmentNameFilter,
-          //   setDepartmentName: setDepartmentNameFilter
-          // }}
-          // floor={{
-          //   programmeName: programmeNameFilter,
-          //   setProgrammeName: setProgrammeNameFilter
-          // }}
+            sector={{
+              sectorName: sectorNameFilter,
+              setSectorName: setSectorNameFilter
+            }}
+            building={{
+              buildingName: buildingNameFilter,
+              setBuildingName: setBuildingNameFilter
+            }}
           />
           <AutoGrid service={FloorDtoCrudService} model={FloorDTOModel} ref={autoGridRef}
-            visibleColumns={['name', 'alternateName', 'floorLevel', 'totalBlocks', 'floorColor',]}
+            visibleColumns={['name', 'floorLevel', 'totalBlocks', 'floorColor', 'alternateName', 'building.name',]}
             selectedItems={selectedInstructorItems}
             theme="row-stripes"
             columnOptions={{
@@ -117,29 +117,26 @@ const FloorView = () => {
                 header: 'Name',
                 resizable: true,
               },
-              'additionalName': {
-                header: 'Additional Name',
+              'alternateName': {
+                header: 'Alternate Name',
                 resizable: true,
               },
-              'type': {
-                header: 'Building Type',
+              'floorLevel': {
+                header: 'Floor Level',
                 resizable: true,
               },
-              'block': {
-                header: 'Block',
+              'totalBlocks': {
+                header: 'Total Blocks',
                 resizable: true,
               },
-              'openingTime': {
-                header: 'Opening Time',
+              'floorColor': {
+                header: 'Floor Color',
                 resizable: true,
               },
-              'closingTime': {
-                header: 'Closing Time',
+              'building.name': {
+                header: 'Building',
                 resizable: true,
-              },
-              'contact': {
-                header: 'Contact',
-                resizable: true,
+                externalValue: buildingNameFilter
               },
             }}
             onActiveItemChanged={(e) => {
@@ -153,7 +150,7 @@ const FloorView = () => {
         <VerticalLayout className="w-1/4 min-w-96">
           <header className="bg-gray-100 w-full">
             <div className="flex flex-row space-x-4">
-              <p className="text-blue-600 text-xl font-bold truncate p-1 m-1 w-full">#{selectedInstructorItems[0]?.id ?? ''} - Building</p>
+              <p className="text-blue-600 text-xl font-bold truncate p-1 m-1 w-full">#{selectedInstructorItems[0]?.id ?? ''} - Floor</p>
               <Button className="text-white content-end bg-blue-500 hover:bg-blue-600" onClick={() => {
                 clear();
                 setSelectedInstructorItems([]);
@@ -166,7 +163,6 @@ const FloorView = () => {
             <FormLayout responsiveSteps={responsiveSteps} className="w-fit h-fit p-2">
               <ComboBox label={'Building'}  {...field(model.building)} dataProvider={buildingDataProvider} itemLabelPath='name' itemValuePath='name' clearButtonVisible />
               <TextField label={'Name'}  {...{ colspan: 2 }} {...field(model.name)} />
-              {/* <Select label={'Building Type'}  {...{ colspan: 1 }} {...field(model.type)} items={buildingType} /> */}
               <IntegerField label={'Floor Level'}  {...{ colspan: 2 }} {...field(model.floorLevel)} />
               <TextField label={'Floor Color Code'}  {...{ colspan: 2 }} {...field(model.floorColorCode)} />
               <TextField label={'Floor Color'}  {...{ colspan: 2 }} {...field(model.floorColor)} />

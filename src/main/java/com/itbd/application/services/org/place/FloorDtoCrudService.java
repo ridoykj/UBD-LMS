@@ -11,11 +11,6 @@ import org.springframework.transaction.annotation.Transactional;
 import com.itbd.application.dao.org.place.FloorDAO;
 import com.itbd.application.dto.org.place.FloorDTO;
 import com.itbd.application.repos.org.place.FloorRepo;
-import com.itbd.application.repos.user.person.AddressRepo;
-import com.itbd.application.repos.user.person.ContactRepo;
-import com.itbd.application.repos.user.person.DocumentRecordsRepo;
-import com.itbd.application.repos.user.person.MedicalRepo;
-import com.itbd.application.repos.user.person.OccupationRepo;
 import com.vaadin.flow.server.auth.AnonymousAllowed;
 
 import dev.hilla.BrowserCallable;
@@ -33,17 +28,7 @@ public class FloorDtoCrudService implements CrudService<FloorDTO, Long> {
     private JpaFilterConverter jpaFilterConverter;
 
     @Autowired
-    private FloorRepo personRepo;
-    @Autowired
-    private AddressRepo addressRepo;
-    @Autowired
-    private ContactRepo contactRepo;
-    @Autowired
-    private DocumentRecordsRepo documentRecordsRepo;
-    @Autowired
-    private MedicalRepo medicalRepo;
-    @Autowired
-    private OccupationRepo occupationRepo;
+    private FloorRepo floorRepo;
 
     // public PersonMargeDtoCrudService(FloorRepo personRepo, AddressRepo
     // addressRepo) {
@@ -59,7 +44,7 @@ public class FloorDtoCrudService implements CrudService<FloorDTO, Long> {
         Specification<FloorDAO> spec = filter != null
                 ? jpaFilterConverter.toSpec(filter, FloorDAO.class)
                 : Specification.anyOf();
-        Page<FloorDAO> persons = personRepo.findAll(spec, pageable);
+        Page<FloorDAO> persons = floorRepo.findAll(spec, pageable);
         return persons.stream().map(FloorDTO::fromEntity).toList();
     }
 
@@ -68,16 +53,16 @@ public class FloorDtoCrudService implements CrudService<FloorDTO, Long> {
     public @Nullable FloorDTO save(FloorDTO value) {
         boolean check = value.id() != null && value.id() > 0;
         FloorDAO person = check
-                ? personRepo.getReferenceById(value.id())
+                ? floorRepo.getReferenceById(value.id())
                 : new FloorDAO();
 
         // person.setRecordComment(check ? "UPDATE" : "NEW");
         FloorDTO.fromDTO(value, person);
-        return FloorDTO.fromEntity(personRepo.save(person));
+        return FloorDTO.fromEntity(floorRepo.save(person));
     }
 
     @Override
     public void delete(Long id) {
-        personRepo.deleteById(id);
+        floorRepo.deleteById(id);
     }
 }
