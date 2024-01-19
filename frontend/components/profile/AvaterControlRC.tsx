@@ -2,10 +2,10 @@
 import { Menu, Transition } from '@headlessui/react'
 
 import { Fragment } from 'react';
-import { FaBell, FaRegUser, FaRegUserCircle } from 'react-icons/fa';
-import { FaGear } from "react-icons/fa6";
+import { FaBell, FaRegUserCircle } from 'react-icons/fa';
 import { AiOutlineLogout } from "react-icons/ai";
 import { NavLink } from 'react-router-dom';
+import { FaGear } from 'react-icons/fa6';
 
 const userNavigation = [
   { name: 'Your Profile', icon: <FaRegUserCircle />, href: '#' },
