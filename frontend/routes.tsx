@@ -19,7 +19,7 @@ import SectorView from './views/org/place/SectorView';
 import AuthorizationView from './views/org/user/AuthorizationView';
 import CoordinatorView from './views/org/user/CoordinatorView';
 import StudentView from './views/org/user/StudentView';
-import CalenderBoardView from './views/profile/dashboard/CalenderBoardView';
+import CalenderBoardView from './views/profile/dashboard/calender/CalenderBoardView';
 import DashboardView from './views/profile/dashboard/DashboardView';
 import ProfileView from './views/profile/ProfileView';
 import ShopView from './views/shop/ShopView';

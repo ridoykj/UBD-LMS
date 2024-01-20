@@ -1,25 +1,22 @@
 package com.itbd.application.dao.org.edu;
 
 import java.time.LocalDate;
+import java.util.List;
 
+import com.itbd.application.constants.ClassTypeEnum;
+import com.itbd.application.constants.RoomTypeEnum;
 import com.itbd.application.dao.AbstractEntity;
 import com.itbd.application.dao.org.place.RoomDAO;
 import com.itbd.application.dao.user.InstructorDAO;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
 @Entity(name = "t_edu_reservation")
 @Getter
 @Setter
-public class ReservationDAO  extends AbstractEntity<Long>{
+public class ReservationDAO extends AbstractEntity<Long> {
     @Id
     @Column(name = "id_reservation_key", nullable = false, updatable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -30,6 +27,11 @@ public class ReservationDAO  extends AbstractEntity<Long>{
 
     @Column(name = "tx_code")
     private String code;
+
+    //    @Enumerated(EnumType.STRING)
+    @Column(name = "tx_type")
+    @ElementCollection(targetClass = String.class, fetch = FetchType.EAGER)
+    private List<ClassTypeEnum> type;
 
     @Column(name = "tx_description")
     private String description;

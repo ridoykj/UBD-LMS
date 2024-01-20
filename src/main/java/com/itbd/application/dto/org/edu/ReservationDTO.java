@@ -1,17 +1,20 @@
 package com.itbd.application.dto.org.edu;
 
-import java.time.LocalDate;
-
+import com.itbd.application.constants.ClassTypeEnum;
 import com.itbd.application.dao.org.edu.BatchDAO;
 import com.itbd.application.dao.org.edu.CourseDAO;
 import com.itbd.application.dao.org.edu.ReservationDAO;
 import com.itbd.application.dao.org.place.RoomDAO;
 import com.itbd.application.dao.user.InstructorDAO;
 
+import java.time.LocalDate;
+import java.util.List;
+
 public record ReservationDTO(
         Long id,
         String name,
         String code,
+        List<ClassTypeEnum> type,
         String description,
         String status,
         String group,
@@ -27,10 +30,12 @@ public record ReservationDTO(
         InstructorDAO instructor) {
 
     public static ReservationDTO fromEntity(ReservationDAO reservation) {
+
         return new ReservationDTO(
                 reservation.getId(),
                 reservation.getName(),
                 reservation.getCode(),
+                reservation.getType(),
                 reservation.getDescription(),
                 reservation.getStatus(),
                 reservation.getGroup(),
@@ -50,6 +55,7 @@ public record ReservationDTO(
         reservationDAO.setId(reservationDTO.id());
         reservationDAO.setName(reservationDTO.name());
         reservationDAO.setCode(reservationDTO.code());
+        reservationDAO.setType(reservationDTO.type());
         reservationDAO.setDescription(reservationDTO.description());
         reservationDAO.setStatus(reservationDTO.status());
         reservationDAO.setGroup(reservationDTO.group());

@@ -31,16 +31,12 @@ public record InstructorDTO(
         DocumentRecordsDAO documentRecords = person.getRecord() != null ? person.getRecord() : new DocumentRecordsDAO();
         MedicalDAO medical = person.getMedical() != null ? person.getMedical() : new MedicalDAO();
         OccupationDAO occupation = person.getOccupation() != null ? person.getOccupation() : new OccupationDAO();
-//        InstructorDAO instructorE = person.getInstructor() != null ? person.getInstructor() : new InstructorDAO();
 
         address.setPerson(person);
         contact.setPerson(person);
         documentRecords.setPerson(person);
         medical.setPerson(person);
         occupation.setPerson(person);
-//        instructorE.setPerson(person);
-
-//        person.setInstructor(instructorE);
         person.setAddress(address);
         person.setContact(contact);
         person.setRecord(documentRecords);

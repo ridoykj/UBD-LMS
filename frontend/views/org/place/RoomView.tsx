@@ -6,6 +6,7 @@ import { FormLayout } from "@hilla/react-components/FormLayout.js";
 import { Icon } from "@hilla/react-components/Icon.js";
 import { IntegerField } from "@hilla/react-components/IntegerField.js";
 import { Scroller } from "@hilla/react-components/Scroller.js";
+import { Select } from "@hilla/react-components/Select.js";
 import { SplitLayout } from "@hilla/react-components/SplitLayout.js";
 import { TextField } from "@hilla/react-components/TextField.js";
 import { VerticalLayout } from "@hilla/react-components/VerticalLayout";
@@ -13,6 +14,7 @@ import { AutoGridRef } from "@hilla/react-crud";
 import { useForm } from "@hilla/react-form";
 import PlaceRC from "Frontend/components/branch/PlaceRC";
 import { AutoGrid } from "Frontend/components/grid/autogrid";
+import RoomTypeEnum from "Frontend/generated/com/itbd/application/constants/RoomTypeEnum";
 import FloorDTOModel from "Frontend/generated/com/itbd/application/dto/org/place/FloorDTOModel";
 import RoomDTO from "Frontend/generated/com/itbd/application/dto/org/place/RoomDTO";
 import RoomDTOModel from "Frontend/generated/com/itbd/application/dto/org/place/RoomDTOModel";
@@ -50,6 +52,8 @@ const RoomView = () => {
     autoGridRef.current?.refresh();
   }
 
+  const roomTypes = Object.values(RoomTypeEnum).map(level => ({ label: level, value: level }));
+
   const floorDataProvider = useMemo(
     () =>
       async (
@@ -62,7 +66,7 @@ const RoomView = () => {
             propertyId: 'building.name',
             filterValue: buildingNameFilter,
             matcher: Matcher.EQUALS
-          },{
+          }, {
             '@type': 'propertyString',
             propertyId: 'name',
             filterValue: params.filter,
@@ -170,6 +174,7 @@ const RoomView = () => {
               {/* <Select label={'Building Type'}  {...{ colspan: 1 }} {...field(model.type)} items={buildingType} /> */}
               <Checkbox label={'Public Access'}  {...{ colspan: 2 }} {...field(model.hasPublicAccess)} />
               <TextField label={'Block'}  {...{ colspan: 2 }} {...field(model.block)} />
+              {/* <ComboBox label={'Room type'} items={roomTypes} itemLabelPath='value' itemValuePath='value'  {...field(model.type)} /> */}
               <IntegerField label={'Total Rooms'}  {...{ colspan: 2 }} {...field(model.totalRooms)} />
               <IntegerField label={'Total Beds'}  {...{ colspan: 2 }} {...field(model.totalBeds)} />
               <TextField label={'Alternate Name'}  {...{ colspan: 2 }} {...field(model.alternateName)} />

@@ -1,5 +1,6 @@
 package com.itbd.application.dto.org.place;
 
+import com.itbd.application.constants.RoomTypeEnum;
 import com.itbd.application.dao.org.place.FloorDAO;
 import com.itbd.application.dao.org.place.RoomDAO;
 
@@ -7,6 +8,7 @@ public record RoomDTO(
         Long id,
         String name,
         String alternateName,
+        RoomTypeEnum type,
         String description,
         String contact,
         Boolean hasPublicAccess,
@@ -23,6 +25,7 @@ public record RoomDTO(
                 room.getId(),
                 room.getName(),
                 room.getAlternateName(),
+                room.getType(),
                 room.getDescription(),
                 room.getContact(),
                 room.getHasPublicAccess(),
@@ -36,6 +39,7 @@ public record RoomDTO(
         roomDAO.setId(roomDTO.id());
         roomDAO.setName(roomDTO.name());
         roomDAO.setAlternateName(roomDTO.alternateName());
+        roomDAO.setType(roomDTO.type());
         roomDAO.setDescription(roomDTO.description());
         roomDAO.setContact(roomDTO.contact());
         roomDAO.setHasPublicAccess(roomDTO.hasPublicAccess());

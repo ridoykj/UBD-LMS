@@ -7,18 +7,23 @@ import { NumberField } from "@hilla/react-components/NumberField.js";
 import { Scroller } from "@hilla/react-components/Scroller.js";
 import { SplitLayout } from "@hilla/react-components/SplitLayout.js";
 import { TextField } from "@hilla/react-components/TextField.js";
+import { MultiSelectComboBox } from '@hilla/react-components/MultiSelectComboBox.js';
 import { VerticalLayout } from "@hilla/react-components/VerticalLayout";
 import { useForm } from "@hilla/react-form";
 import { AutoGrid, AutoGridRef } from "Frontend/components/grid/autogrid";
-import OrganizationDTOModel from "Frontend/generated/com/itbd/application/dto/org/academic/OrganizationDTOModel";
+import BatchDTOModel from "Frontend/generated/com/itbd/application/dto/org/edu/BatchDTOModel";
+import CourseDTOModel from "Frontend/generated/com/itbd/application/dto/org/edu/CourseDTOModel";
 import ReservationDTO from "Frontend/generated/com/itbd/application/dto/org/edu/ReservationDTO";
 import ReservationDTOModel from "Frontend/generated/com/itbd/application/dto/org/edu/ReservationDTOModel";
+import RoomDTOModel from "Frontend/generated/com/itbd/application/dto/org/place/RoomDTOModel";
+import InstructorDTOModel from "Frontend/generated/com/itbd/application/dto/user/instructor/InstructorDTOModel";
 import PropertyStringFilter from "Frontend/generated/dev/hilla/crud/filter/PropertyStringFilter";
 import Matcher from "Frontend/generated/dev/hilla/crud/filter/PropertyStringFilter/Matcher";
 import { BatchDtoCrudService, CourseDtoCrudService, InstructorDtoCrudService, ReservationDtoCrudService, RoomDtoCrudService } from "Frontend/generated/endpoints";
 import NotificationUtil from "Frontend/util/NotificationUtil";
 import { comboBoxLazyFilter } from "Frontend/util/comboboxLazyFilterUtil";
 import React, { useMemo, useState } from "react";
+import ClassTypeEnum from "Frontend/generated/com/itbd/application/constants/ClassTypeEnum";
 
 const ReservationView = () => {
 
@@ -32,6 +37,7 @@ const ReservationView = () => {
 
   const { model, field, value, read, submit, clear, reset, visited, dirty, invalid, submitting } = useForm(ReservationDTOModel, {
     onSubmit: async (reservation) => {
+      console.log('reservation', reservation);
       await ReservationDtoCrudService.save(reservation).then((result) => {
         refreshGrid();
         setSelectedReservationItems(result ? [result] : []);
@@ -44,11 +50,14 @@ const ReservationView = () => {
     autoGridRef.current?.refresh();
   }
 
+
+  const classTypes = Object.values(ClassTypeEnum).map(level => ({ label: level, value: level }));
+
   const roomDataProvider = useMemo(
     () =>
       async (
         params: ComboBoxDataProviderParams,
-        callback: ComboBoxDataProviderCallback<OrganizationDTOModel>
+        callback: ComboBoxDataProviderCallback<RoomDTOModel>
       ) => {
         const child: PropertyStringFilter[] = [{
           '@type': 'propertyString',
@@ -69,7 +78,7 @@ const ReservationView = () => {
     () =>
       async (
         params: ComboBoxDataProviderParams,
-        callback: ComboBoxDataProviderCallback<OrganizationDTOModel>
+        callback: ComboBoxDataProviderCallback<BatchDTOModel>
       ) => {
         const child: PropertyStringFilter[] = [{
           '@type': 'propertyString',
@@ -90,7 +99,7 @@ const ReservationView = () => {
     () =>
       async (
         params: ComboBoxDataProviderParams,
-        callback: ComboBoxDataProviderCallback<OrganizationDTOModel>
+        callback: ComboBoxDataProviderCallback<CourseDTOModel>
       ) => {
         const child: PropertyStringFilter[] = [{
           '@type': 'propertyString',
@@ -111,17 +120,18 @@ const ReservationView = () => {
     () =>
       async (
         params: ComboBoxDataProviderParams,
-        callback: ComboBoxDataProviderCallback<OrganizationDTOModel>
+        callback: ComboBoxDataProviderCallback<InstructorDTOModel>
       ) => {
         const child: PropertyStringFilter[] = [{
           '@type': 'propertyString',
-          propertyId: 'name',
+          propertyId: 'person.givenName',
           filterValue: params.filter,
           matcher: Matcher.CONTAINS
         },];
 
         const { pagination, filters } = comboBoxLazyFilter(params, 'or', child);
         InstructorDtoCrudService.list(pagination, filters).then((result: any) => {
+          console.log('instructorDataProvider', result);
           callback(result);
         });
       },
@@ -174,20 +184,26 @@ const ReservationView = () => {
               </Button>
             </div>
           </header>
-          <Scroller scrollDirection="vertical" className="w-full h-full">
-            <FormLayout responsiveSteps={responsiveSteps} className="w-fit h-fit mx-5">
-              <label slot="label">Profile</label>
-              <ComboBox label={'Room'}  {...field(model.room)} dataProvider={roomDataProvider} itemLabelPath='name' itemValuePath='name' clearButtonVisible />
-              <ComboBox label={'Batch'}  {...field(model.batch)} dataProvider={batchDataProvider} itemLabelPath='name' itemValuePath='name' clearButtonVisible />
-              <ComboBox label={'Course'}  {...field(model.course)} dataProvider={courseDataProvider} itemLabelPath='name' itemValuePath='name' clearButtonVisible />
-              <ComboBox label={'Instructor'}  {...field(model.instructor)} dataProvider={instructorDataProvider} itemLabelPath='name' itemValuePath='name' clearButtonVisible />
-              <TextField label={'Name'}  {...field(model.name)} />
-              <TextField label={'Code'}  {...field(model.code)} />
-              <NumberField label={'Duration (min)'}  {...field(model.duration)} />
-              <TextField label={'Description'}  {...field(model.description)} />
-              <TextField label={'Status'}  {...field(model.status)} />
-            </FormLayout>
-          </Scroller>
+          <main>
+            <Scroller scrollDirection="vertical" className="w-full h-full">
+              <FormLayout responsiveSteps={responsiveSteps} className="w-fit h-fit mx-5">
+                <label slot="label">Profile</label>
+                <ComboBox label={'Room'}  {...field(model.room)} dataProvider={roomDataProvider} itemLabelPath='name' itemValuePath='name' clearButtonVisible />
+                <ComboBox label={'Batch'}  {...field(model.batch)} dataProvider={batchDataProvider} itemLabelPath='name' itemValuePath='name' clearButtonVisible />
+                <ComboBox label={'Course'}  {...field(model.course)} dataProvider={courseDataProvider} itemLabelPath='name' itemValuePath='name' clearButtonVisible />
+                <ComboBox label={'Instructor'}  {...field(model.instructor)} dataProvider={instructorDataProvider} itemLabelPath='person.givenName' itemValuePath='person.givenName' clearButtonVisible />
+                <TextField label={'Name'}  {...field(model.name)} />
+                <TextField label={'Code'}  {...field(model.code)} />
+                <MultiSelectComboBox label={'Type'} items={classTypes} {...field(model.type)}
+                  itemLabelPath="value"
+                  itemValuePath='type'
+                  itemIdPath="label" />
+                <NumberField label={'Duration (min)'}  {...field(model.duration)} />
+                <TextField label={'Description'}  {...field(model.description)} />
+                <TextField label={'Status'}  {...field(model.status)} />
+              </FormLayout>
+            </Scroller>
+          </main>
           <footer className="flex flex-row bg-gray-100 w-full">
             <div className="w-full">
               {
@@ -202,7 +218,7 @@ const ReservationView = () => {
               }
             </div>
             {
-              value.name === undefined ? null :
+              !dirty ? null :
                 <div className="flex flex-row content-end space-x-4">
                   <Button
                     className={discardButtonColors[dirty.toString()]}
