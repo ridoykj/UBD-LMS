@@ -6,15 +6,17 @@ import com.itbd.application.dao.org.edu.CourseDAO;
 import com.itbd.application.dao.org.edu.ReservationDAO;
 import com.itbd.application.dao.org.place.RoomDAO;
 import com.itbd.application.dao.user.InstructorDAO;
+import nonapi.io.github.classgraph.json.Id;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Set;
 
 public record ReservationDTO(
-        Long id,
+        @Id Long id,
         String name,
         String code,
-        List<ClassTypeEnum> type,
+        String type,
         String description,
         String status,
         String group,

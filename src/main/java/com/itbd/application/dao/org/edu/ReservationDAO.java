@@ -1,17 +1,16 @@
 package com.itbd.application.dao.org.edu;
 
-import java.time.LocalDate;
-import java.util.List;
-
 import com.itbd.application.constants.ClassTypeEnum;
-import com.itbd.application.constants.RoomTypeEnum;
 import com.itbd.application.dao.AbstractEntity;
 import com.itbd.application.dao.org.place.RoomDAO;
 import com.itbd.application.dao.user.InstructorDAO;
-
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.Type;
+
+import java.time.LocalDate;
+import java.util.Set;
 
 @Entity(name = "t_edu_reservation")
 @Getter
@@ -30,8 +29,9 @@ public class ReservationDAO extends AbstractEntity<Long> {
 
     //    @Enumerated(EnumType.STRING)
     @Column(name = "tx_type")
-    @ElementCollection(targetClass = String.class, fetch = FetchType.EAGER)
-    private List<ClassTypeEnum> type;
+//    @ElementCollection(targetClass = String.class, fetch = FetchType.EAGER)
+//    @Type(value = )
+    private String type;
 
     @Column(name = "tx_description")
     private String description;

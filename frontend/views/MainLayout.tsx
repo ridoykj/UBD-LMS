@@ -8,7 +8,7 @@ import RNavItemRC from 'Frontend/components/sidebar/NavItemRC';
 import { useRouteMetadata } from 'Frontend/util/routing';
 import { Suspense } from 'react';
 import { FaChartArea, FaClipboard, FaDoorOpen, FaHome, FaKey, FaPaintRoller, FaReceipt, FaScroll, FaUserTie } from 'react-icons/fa';
-import { FaBarsStaggered, FaBuildingCircleCheck, FaBuildingFlag, FaCalendarDay, FaCircleDollarToSlot, FaMapLocationDot, FaShop, FaUser, FaUserGear, FaUserGraduate } from 'react-icons/fa6';
+import { FaBarsStaggered, FaBuildingCircleCheck, FaBuildingFlag, FaCalendarDay, FaCircleDollarToSlot, FaGear, FaMapLocationDot, FaShop, FaUser, FaUserGear, FaUserGraduate } from 'react-icons/fa6';
 import { Outlet } from 'react-router-dom';
 
 export default function MainLayout() {
@@ -65,6 +65,11 @@ export default function MainLayout() {
                   { name: 'Room', icon: <FaDoorOpen />, route: '/place/room' }
                 ]} />
                 <RNavItemRC name='Report' icon={<FaClipboard />} route='' subItems={[
+                  { name: 'Schedule', icon: <FaCalendarDay />, route: '/default' },
+                  { name: 'Result', icon: <FaReceipt />, route: '/default' },
+                  { name: 'Revenue', icon: <FaCircleDollarToSlot />, route: '/default' }
+                ]} />
+                <RNavItemRC name='Configuration' icon={<FaGear />} route='' subItems={[
                   { name: 'Schedule', icon: <FaCalendarDay />, route: '/default' },
                   { name: 'Result', icon: <FaReceipt />, route: '/default' },
                   { name: 'Revenue', icon: <FaCircleDollarToSlot />, route: '/default' }

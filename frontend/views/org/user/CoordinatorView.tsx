@@ -32,7 +32,6 @@ const CoordinatorView = () => {
 
     const { model, field, value, read, submit, clear, reset, visited, dirty, invalid, submitting } = useForm(InstructorDTOModel, {
         onSubmit: async (instructor) => {
-            console.log('instructor', instructor);
             await InstructorDtoCrudService.save(instructor).then((result) => {
                 refreshGrid();
                 setSelectedInstructorItems(result ? [result] : []);
@@ -169,7 +168,7 @@ const CoordinatorView = () => {
                             }
                         </div>
                         {
-                            value.person?.alternateName === undefined ? null :
+                            !dirty ? null :
                                 <div className="flex flex-row content-end space-x-4">
                                     <Button
                                         className={discardButtonColors[dirty.toString()]}

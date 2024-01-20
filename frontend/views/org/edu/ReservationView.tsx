@@ -3,11 +3,11 @@ import { ComboBox, ComboBoxDataProviderCallback, ComboBoxDataProviderParams } fr
 import { ConfirmDialog } from "@hilla/react-components/ConfirmDialog.js";
 import { FormLayout } from "@hilla/react-components/FormLayout.js";
 import { Icon } from "@hilla/react-components/Icon.js";
+import { MultiSelectComboBox } from '@hilla/react-components/MultiSelectComboBox.js';
 import { NumberField } from "@hilla/react-components/NumberField.js";
 import { Scroller } from "@hilla/react-components/Scroller.js";
 import { SplitLayout } from "@hilla/react-components/SplitLayout.js";
 import { TextField } from "@hilla/react-components/TextField.js";
-import { MultiSelectComboBox } from '@hilla/react-components/MultiSelectComboBox.js';
 import { VerticalLayout } from "@hilla/react-components/VerticalLayout";
 import { useForm } from "@hilla/react-form";
 import { AutoGrid, AutoGridRef } from "Frontend/components/grid/autogrid";
@@ -22,8 +22,8 @@ import Matcher from "Frontend/generated/dev/hilla/crud/filter/PropertyStringFilt
 import { BatchDtoCrudService, CourseDtoCrudService, InstructorDtoCrudService, ReservationDtoCrudService, RoomDtoCrudService } from "Frontend/generated/endpoints";
 import NotificationUtil from "Frontend/util/NotificationUtil";
 import { comboBoxLazyFilter } from "Frontend/util/comboboxLazyFilterUtil";
-import React, { useMemo, useState } from "react";
 import ClassTypeEnum from "Frontend/generated/com/itbd/application/constants/ClassTypeEnum";
+import React, { useMemo, useState } from "react";
 
 const ReservationView = () => {
 
@@ -50,8 +50,28 @@ const ReservationView = () => {
     autoGridRef.current?.refresh();
   }
 
+  type EnumType = { id: number; item: string; };
 
-  const classTypes = Object.values(ClassTypeEnum).map(level => ({ label: level, value: level }));
+  const classTypeDataProvider = useMemo(
+    () =>
+      async (
+        params: ComboBoxDataProviderParams,
+        callback: ComboBoxDataProviderCallback<EnumType>
+      ) => {
+        // const child: PropertyStringFilter[] = [{
+        //   '@type': 'propertyString',
+        //   propertyId: 'name',
+        //   filterValue: params.filter,
+        //   matcher: Matcher.CONTAINS
+        // },];
+
+        // const { pagination, filters } = comboBoxLazyFilter(params, 'or', child);
+        const data: EnumType[] = Object.values(ClassTypeEnum).map((item, index) => ({ id: index, item: item })).filter(el => el.item === params.filter || params.filter === '');
+        console.log('classTypes', data);
+        callback(data, data.length === 0 ? 1 : data.length);
+      },
+    []
+  );
 
   const roomDataProvider = useMemo(
     () =>
@@ -194,10 +214,12 @@ const ReservationView = () => {
                 <ComboBox label={'Instructor'}  {...field(model.instructor)} dataProvider={instructorDataProvider} itemLabelPath='person.givenName' itemValuePath='person.givenName' clearButtonVisible />
                 <TextField label={'Name'}  {...field(model.name)} />
                 <TextField label={'Code'}  {...field(model.code)} />
-                <MultiSelectComboBox label={'Type'} items={classTypes} {...field(model.type)}
-                  itemLabelPath="value"
+                <MultiSelectComboBox label={'Type'} dataProvider={classTypeDataProvider}
+                  itemLabelPath="item"
                   itemValuePath='type'
-                  itemIdPath="label" />
+                  itemIdPath="id"
+                  selectedItems={value.type?.split(",") ?? []}
+                />
                 <NumberField label={'Duration (min)'}  {...field(model.duration)} />
                 <TextField label={'Description'}  {...field(model.description)} />
                 <TextField label={'Status'}  {...field(model.status)} />
