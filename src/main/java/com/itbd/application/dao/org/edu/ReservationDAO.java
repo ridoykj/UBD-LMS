@@ -1,16 +1,14 @@
 package com.itbd.application.dao.org.edu;
 
-import com.itbd.application.constants.ClassTypeEnum;
 import com.itbd.application.dao.AbstractEntity;
 import com.itbd.application.dao.org.place.RoomDAO;
 import com.itbd.application.dao.user.InstructorDAO;
+import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.annotations.Type;
 
 import java.time.LocalDate;
-import java.util.Set;
 
 @Entity(name = "t_edu_reservation")
 @Getter
@@ -21,16 +19,18 @@ public class ReservationDAO extends AbstractEntity<Long> {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Version
+    @Nullable
+    @Column(name = "id_reservation_ver", nullable = false)
+    private Long version;
+
     @Column(name = "tx_name")
     private String name;
 
     @Column(name = "tx_code")
     private String code;
 
-    //    @Enumerated(EnumType.STRING)
     @Column(name = "tx_type")
-//    @ElementCollection(targetClass = String.class, fetch = FetchType.EAGER)
-//    @Type(value = )
     private String type;
 
     @Column(name = "tx_description")

@@ -1,26 +1,26 @@
 package com.itbd.application.dao.org.place;
 
-import java.util.List;
-
 import com.itbd.application.dao.AbstractEntity;
-
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
+import jakarta.annotation.Nullable;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.util.List;
 
 @Entity(name = "t_place_sector")
 @Getter
 @Setter
-public class SectorDAO  extends AbstractEntity<Long>{
+public class SectorDAO extends AbstractEntity<Long> {
     @Id
     @Column(name = "id_sector_key", nullable = false, updatable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Version
+    @Nullable
+    @Column(name = "id_sector_ver", nullable = false)
+    private Long version;
 
     @Column(name = "tx_name")
     private String name;

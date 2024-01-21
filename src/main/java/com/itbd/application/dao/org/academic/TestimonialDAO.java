@@ -1,29 +1,27 @@
 package com.itbd.application.dao.org.academic;
 
-import java.time.LocalDateTime;
-
 import com.itbd.application.constants.TestimonialTypeEnum;
 import com.itbd.application.dao.AbstractEntity;
-
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.annotation.Nullable;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.time.LocalDateTime;
 
 @Entity(name = "t_aca_testimonial")
 @Getter
 @Setter
-public class TestimonialDAO  extends AbstractEntity<Long>{
-
+public class TestimonialDAO extends AbstractEntity<Long> {
     @Id
     @Column(name = "id_testimonial_key", nullable = false, updatable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Version
+    @Nullable
+    @Column(name = "id_testimonial_ver", nullable = false)
+    private Long version;
 
     @Column
     private String testimonial;

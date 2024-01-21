@@ -3,7 +3,6 @@ import { ComboBox, ComboBoxDataProviderCallback, ComboBoxDataProviderParams } fr
 import { ConfirmDialog } from "@hilla/react-components/ConfirmDialog.js";
 import { FormLayout } from "@hilla/react-components/FormLayout.js";
 import { Icon } from "@hilla/react-components/Icon.js";
-import { Scroller } from "@hilla/react-components/Scroller.js";
 import { Select } from "@hilla/react-components/Select.js";
 import { SplitLayout } from "@hilla/react-components/SplitLayout.js";
 import { TextField } from "@hilla/react-components/TextField.js";
@@ -155,7 +154,7 @@ const BuildingView = () => {
               </Button>
             </div>
           </header>
-          <Scroller scrollDirection="vertical" className="w-full h-full">
+          <main className="overflow-y-scroll w-full h-full">
             <FormLayout responsiveSteps={responsiveSteps} className="w-fit h-fit p-2">
               <ComboBox label={'Sector'}  {...field(model.sector)} dataProvider={sectorDataProvider} itemLabelPath='name' itemValuePath='name' clearButtonVisible />
               <TextField label={'Name'}  {...{ colspan: 2 }} {...field(model.name)} />
@@ -174,7 +173,7 @@ const BuildingView = () => {
               <TextField label={'Building Color Code'}  {...{ colspan: 2 }} {...field(model.buildingColorCode)} />
               <TextField label={'Pin Code'}  {...{ colspan: 2 }} {...field(model.pincode)} />
             </FormLayout>
-          </Scroller>
+          </main>
           <footer className="flex flex-row bg-gray-100 w-full">
             <div className="w-full">
               {

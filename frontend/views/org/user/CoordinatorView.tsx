@@ -6,7 +6,6 @@ import { FormLayout } from "@hilla/react-components/FormLayout.js";
 import { Icon } from "@hilla/react-components/Icon.js";
 import { IntegerField } from '@hilla/react-components/IntegerField';
 import { NumberField } from "@hilla/react-components/NumberField.js";
-import { Scroller } from "@hilla/react-components/Scroller.js";
 import { Select } from "@hilla/react-components/Select.js";
 import { SplitLayout } from "@hilla/react-components/SplitLayout.js";
 import { TextArea } from "@hilla/react-components/TextArea.js";
@@ -91,7 +90,7 @@ const CoordinatorView = () => {
                             'person.contact.mobile': {
                                 header: 'Mobile',
                                 resizable: true,
-                            },                           
+                            },
                             'person.contact.email': {
                                 header: 'Email',
                                 resizable: true,
@@ -117,7 +116,7 @@ const CoordinatorView = () => {
                             </Button>
                         </div>
                     </header>
-                    <Scroller scrollDirection="vertical" className="w-full h-full">
+                    <main className="overflow-y-scroll w-full h-full">
                         <FormLayout responsiveSteps={responsiveSteps} className="w-fit h-fit p-2">
                             <label slot="label">Profile</label>
                             <TextField label={'First Name'}  {...{ colspan: 2 }} {...field(model.person.givenName)} />
@@ -153,7 +152,7 @@ const CoordinatorView = () => {
                             <TextArea label={'Description'} {...{ colspan: 2 }}  {...field(model.description)} />
                             <TextArea label={'Qualification'} {...{ colspan: 2 }}  {...field(model.qualification)} />
                         </FormLayout>
-                    </Scroller>
+                    </main>
                     <footer className="flex flex-row bg-gray-100 w-full">
                         <div className="w-full">
                             {

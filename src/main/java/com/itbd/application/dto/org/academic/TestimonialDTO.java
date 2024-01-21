@@ -1,12 +1,14 @@
 package com.itbd.application.dto.org.academic;
 
-import java.time.LocalDateTime;
-
 import com.itbd.application.constants.TestimonialTypeEnum;
 import com.itbd.application.dao.org.academic.TestimonialDAO;
+import org.springframework.data.annotation.Version;
+
+import java.time.LocalDateTime;
 
 public record TestimonialDTO(
         Long id,
+        @Version Long version,
         String testimonial,
         String testimonialBy,
         LocalDateTime testimonialDate,
@@ -18,6 +20,7 @@ public record TestimonialDTO(
     public static TestimonialDTO fromEntity(TestimonialDAO testimonial) {
         return new TestimonialDTO(
                 testimonial.getId(),
+                testimonial.getVersion(),
                 testimonial.getTestimonial(),
                 testimonial.getTestimonialBy(),
                 testimonial.getTestimonialDate(),
@@ -29,6 +32,7 @@ public record TestimonialDTO(
 
     public static void fromDTO(TestimonialDTO testimonialDTO, TestimonialDAO testimonialDAO) {
         testimonialDAO.setId(testimonialDTO.id());
+        testimonialDAO.setVersion(testimonialDTO.version());
         testimonialDAO.setTestimonial(testimonialDTO.testimonial());
         testimonialDAO.setTestimonialBy(testimonialDTO.testimonialBy());
         testimonialDAO.setTestimonialDate(testimonialDTO.testimonialDate());

@@ -5,11 +5,12 @@ import { DatePicker, DatePickerDate } from '@hilla/react-components/DatePicker.j
 import { DateTimePicker } from '@hilla/react-components/DateTimePicker.js';
 import { FormLayout } from "@hilla/react-components/FormLayout.js";
 import { Icon } from "@hilla/react-components/Icon.js";
-import { Scroller } from "@hilla/react-components/Scroller.js";
 import { SplitLayout } from "@hilla/react-components/SplitLayout.js";
 import { TextField } from "@hilla/react-components/TextField.js";
+import { Upload, UploadSuccessEvent } from "@hilla/react-components/Upload.js";
 import { VerticalLayout } from "@hilla/react-components/VerticalLayout.js";
 import { useForm } from "@hilla/react-form";
+import { UploadBeforeEvent } from "@vaadin/upload";
 import BranchRC from "Frontend/components/branch/BranchRC";
 import { AutoGrid, AutoGridRef } from "Frontend/components/grid/autogrid";
 import BatchDTO from "Frontend/generated/com/itbd/application/dto/org/edu/BatchDTO";
@@ -22,8 +23,6 @@ import NotificationUtil from "Frontend/util/NotificationUtil";
 import { comboBoxLazyFilter } from "Frontend/util/comboboxLazyFilterUtil";
 import { format, parse } from 'date-fns';
 import React, { useMemo, useState } from "react";
-import { Upload, UploadSuccessEvent } from "@hilla/react-components/Upload.js";
-import { UploadBeforeEvent } from "@vaadin/upload";
 
 
 function formatDateIso8601(dateParts: DatePickerDate) {
@@ -160,7 +159,7 @@ const BatchView = () => {
               </Button>
             </div>
           </header>
-          <Scroller scrollDirection="vertical" className="w-full h-full">
+          <main className="overflow-y-scroll  w-full h-full">
             <FormLayout responsiveSteps={responsiveSteps} className="w-fit h-fit p-2">
               <ComboBox label={'Programme'}  {...field(model.programme)} dataProvider={programmeDataProvider} itemLabelPath='name' itemValuePath='name' clearButtonVisible />
               <TextField label={'Name'}  {...field(model.name)} />
@@ -187,7 +186,7 @@ const BatchView = () => {
                 }}
               ></Upload>
             </FormLayout>
-          </Scroller>
+          </main>
           <footer className="w-full">
             <div className="flex flex-row bg-gray-100">
               <div className="w-full">

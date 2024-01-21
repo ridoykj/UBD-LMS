@@ -5,8 +5,8 @@ npx @hilla/cli init --react hello-react
 This project can be used as a starting point to create your own Hilla application with Spring Boot.
 It contains all the necessary configuration and some placeholder files to get you started.
 
-
 ## Initilize package
+
 npm i react
 npm i --save-dev @types/react   
 npm i --save-dev @types/react-dom
@@ -15,7 +15,7 @@ npm i @fullcalendar/core @fullcalendar/react @fullcalendar/daygrid @fullcalendar
 
 npm install -D tailwindcss postcss autoprefixer
 
-npx tailwindcss init 
+npx tailwindcss init
 
 npm install react-icons
 
@@ -65,5 +65,6 @@ source directory, contains the server-side Java views</td></tr>
 ## Useful links
 
 - Read the documentation at [hilla.dev/docs](https://hilla.dev/docs/).
-- Ask questions on [Stack Overflow](https://stackoverflow.com/questions/tagged/hilla) or join our [Discord channel](https://discord.gg/MYFq5RTbBn).
+- Ask questions on [Stack Overflow](https://stackoverflow.com/questions/tagged/hilla) or join
+  our [Discord channel](https://discord.gg/MYFq5RTbBn).
 - Report issues, create pull requests in [GitHub](https://github.com/vaadin/hilla).

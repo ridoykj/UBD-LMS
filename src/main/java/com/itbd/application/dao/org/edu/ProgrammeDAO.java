@@ -1,35 +1,29 @@
 package com.itbd.application.dao.org.edu;
 
-import java.util.List;
-
 import com.itbd.application.constants.ProgrammeTypeEnum;
 import com.itbd.application.dao.AbstractEntity;
-
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
+import jakarta.annotation.Nullable;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.util.List;
 
 @Getter
 @Setter
 @Entity
 @Table(name = "t_edu_programme")
-public class ProgrammeDAO  extends AbstractEntity<Long>{
+public class ProgrammeDAO extends AbstractEntity<Long> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_programme_key", nullable = false, updatable = false)
     private Long id;
+
+    @Version
+    @Nullable
+    @Column(name = "id_programme_ver", nullable = false)
+    private Long version;
 
     @Column(name = "tx_name")
     private String name;

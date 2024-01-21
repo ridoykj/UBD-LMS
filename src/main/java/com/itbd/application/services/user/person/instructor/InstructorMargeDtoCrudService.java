@@ -1,35 +1,21 @@
 package com.itbd.application.services.user.person.instructor;
 
-import java.util.List;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.domain.Specification;
-import org.springframework.transaction.annotation.Transactional;
-
-import com.itbd.application.dao.user.InstructorDAO;
-import com.itbd.application.dao.user.person.AddressDAO;
-import com.itbd.application.dao.user.person.ContactDAO;
-import com.itbd.application.dao.user.person.DocumentRecordsDAO;
-import com.itbd.application.dao.user.person.MedicalDAO;
-import com.itbd.application.dao.user.person.OccupationDAO;
 import com.itbd.application.dao.user.person.PersonDAO;
 import com.itbd.application.dto.user.instructor.InstructorMargeDTO;
-import com.itbd.application.repos.user.person.AddressRepo;
-import com.itbd.application.repos.user.person.ContactRepo;
-import com.itbd.application.repos.user.person.DocumentRecordsRepo;
-import com.itbd.application.repos.user.person.MedicalRepo;
-import com.itbd.application.repos.user.person.OccupationRepo;
 import com.itbd.application.repos.user.person.PersonRepo;
 import com.vaadin.flow.server.auth.AnonymousAllowed;
-
 import dev.hilla.BrowserCallable;
 import dev.hilla.Nonnull;
 import dev.hilla.Nullable;
 import dev.hilla.crud.CrudService;
 import dev.hilla.crud.JpaFilterConverter;
 import dev.hilla.crud.filter.Filter;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @BrowserCallable
 @AnonymousAllowed

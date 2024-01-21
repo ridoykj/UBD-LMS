@@ -1,14 +1,14 @@
 package com.itbd.application.dao.user.person;
 
-import java.math.BigDecimal;
-
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.itbd.application.constants.GenderEnum;
 import com.itbd.application.dao.AbstractEntity;
-
+import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.math.BigDecimal;
 
 @Entity(name = "t_per_medical")
 @Getter
@@ -20,8 +20,9 @@ public class MedicalDAO extends AbstractEntity<Long> {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "id_medical_ver", nullable = false)
     @Version
+    @Nullable
+    @Column(name = "id_medical_ver", nullable = false)
     private Long version;
 
     @Column(precision = 8, scale = 3, name = "flt_weight")

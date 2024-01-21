@@ -1,18 +1,18 @@
 package com.itbd.application.dto.user.person;
 
+import com.itbd.application.dao.user.InstructorDAO;
+import com.itbd.application.dao.user.person.AddressDAO;
+import com.itbd.application.dao.user.person.PersonDAO;
+import jakarta.validation.constraints.NotBlank;
+import nonapi.io.github.classgraph.json.Id;
+import org.springframework.data.annotation.Version;
+
 import java.time.LocalDateTime;
 import java.util.Optional;
 
-import com.itbd.application.dao.user.InstructorDAO;
-import com.itbd.application.dao.user.person.*;
-
-import dev.hilla.Nullable;
-import jakarta.validation.constraints.NotBlank;
-import nonapi.io.github.classgraph.json.Id;
-
 public record PersonDTO(
         @Id Long id,
-        @Nullable Long version,
+        @Version Long version,
         @NotBlank String givenName,
         @NotBlank String additionalName,
         @NotBlank String familyName,
@@ -86,7 +86,7 @@ public record PersonDTO(
 
         address.setPerson(personDAO);
         instructor.setPerson(personDAO);
-       
+
         personDAO.setCreatedAt(personDTO.createdAt());
         personDAO.setUpdatedAt(personDTO.updatedAt());
 

@@ -1,16 +1,18 @@
 package com.itbd.application.dto.org.edu;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.List;
-
 import com.itbd.application.dao.org.edu.BatchDAO;
 import com.itbd.application.dao.org.edu.ProgrammeDAO;
 import com.itbd.application.dao.org.edu.ReservationDAO;
 import com.itbd.application.dao.user.StudentDAO;
+import org.springframework.data.annotation.Version;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.List;
 
 public record BatchDTO(
         Long id,
+        @Version Long version,
         String name,
         String code,
         String description,
@@ -34,6 +36,7 @@ public record BatchDTO(
     public static BatchDTO fromEntity(BatchDAO batch) {
         return new BatchDTO(
                 batch.getId(),
+                batch.getVersion(),
                 batch.getName(),
                 batch.getCode(),
                 batch.getDescription(),
@@ -57,6 +60,7 @@ public record BatchDTO(
 
     public static void fromDTO(BatchDTO batchDTO, BatchDAO batchDAO) {
         batchDAO.setId(batchDTO.id());
+        batchDAO.setVersion(batchDTO.version());
         batchDAO.setName(batchDTO.name());
         batchDAO.setCode(batchDTO.code());
         batchDAO.setDescription(batchDTO.description());

@@ -1,9 +1,11 @@
 package com.itbd.application.dto.org.place;
 
 import com.itbd.application.dao.org.place.SectorDAO;
+import org.springframework.data.annotation.Version;
 
 public record SectorDTO(
         Long id,
+        @Version Long version,
         String name,
         String alternateName,
         String city,
@@ -15,6 +17,7 @@ public record SectorDTO(
         sector.setBuildings(null);
         return new SectorDTO(
                 sector.getId(),
+                sector.getVersion(),
                 sector.getName(),
                 sector.getAlternateName(),
                 sector.getCity(),
@@ -26,6 +29,7 @@ public record SectorDTO(
 
     public static void fromDTO(SectorDTO sectorDTO, SectorDAO sectorDAO) {
         sectorDAO.setId(sectorDTO.id());
+        sectorDAO.setVersion(sectorDTO.version());
         sectorDAO.setName(sectorDTO.name());
         sectorDAO.setAlternateName(sectorDTO.alternateName());
         sectorDAO.setCity(sectorDTO.city());

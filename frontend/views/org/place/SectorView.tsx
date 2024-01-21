@@ -2,7 +2,6 @@ import { Button } from "@hilla/react-components/Button.js";
 import { ConfirmDialog } from "@hilla/react-components/ConfirmDialog.js";
 import { FormLayout } from "@hilla/react-components/FormLayout.js";
 import { Icon } from "@hilla/react-components/Icon.js";
-import { Scroller } from "@hilla/react-components/Scroller.js";
 import { SplitLayout } from "@hilla/react-components/SplitLayout.js";
 import { TextArea } from "@hilla/react-components/TextArea.js";
 import { TextField } from "@hilla/react-components/TextField.js";
@@ -114,7 +113,7 @@ const SectorView = () => {
             </div>
           </header>
           <main className="w-full h-full">
-            <Scroller scrollDirection="vertical">
+            <main className="overflow-y-scroll w-full h-full">
               <FormLayout responsiveSteps={responsiveSteps} className="w-fit h-fit p-2">
                 <label slot="label">Profile</label>
                 <TextField label={'Name'}  {...{ colspan: 2 }} {...field(model.name)} />
@@ -130,7 +129,7 @@ const SectorView = () => {
 
                 <TextArea label={'Description'}  {...{ colspan: 2 }} {...field(model.description)} />
               </FormLayout>
-            </Scroller>
+            </main>
           </main>
           <footer className="flex flex-row bg-gray-100 w-full">
             <div className="w-full">

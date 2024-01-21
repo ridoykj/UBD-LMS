@@ -1,3 +1,4 @@
+import { _parent } from "@hilla/form";
 import { Button } from "@hilla/react-components/Button.js";
 import { ComboBox, ComboBoxDataProviderCallback, ComboBoxDataProviderParams } from "@hilla/react-components/ComboBox.js";
 import { ConfirmDialog } from "@hilla/react-components/ConfirmDialog.js";
@@ -5,13 +6,16 @@ import { FormLayout } from "@hilla/react-components/FormLayout.js";
 import { Icon } from "@hilla/react-components/Icon.js";
 import { MultiSelectComboBox } from '@hilla/react-components/MultiSelectComboBox.js';
 import { NumberField } from "@hilla/react-components/NumberField.js";
-import { Scroller } from "@hilla/react-components/Scroller.js";
 import { SplitLayout } from "@hilla/react-components/SplitLayout.js";
 import { TextField } from "@hilla/react-components/TextField.js";
 import { VerticalLayout } from "@hilla/react-components/VerticalLayout";
 import { useForm } from "@hilla/react-form";
+import BranchRC from "Frontend/components/branch/BranchRC";
+import PlaceRC from "Frontend/components/branch/PlaceRC";
 import { AutoGrid, AutoGridRef } from "Frontend/components/grid/autogrid";
+import { ClassActivity, ItemSelect } from "Frontend/constants/ItemSelect";
 import BatchDTOModel from "Frontend/generated/com/itbd/application/dto/org/edu/BatchDTOModel";
+import CourseDTO from "Frontend/generated/com/itbd/application/dto/org/edu/CourseDTO";
 import CourseDTOModel from "Frontend/generated/com/itbd/application/dto/org/edu/CourseDTOModel";
 import ReservationDTO from "Frontend/generated/com/itbd/application/dto/org/edu/ReservationDTO";
 import ReservationDTOModel from "Frontend/generated/com/itbd/application/dto/org/edu/ReservationDTOModel";
@@ -22,10 +26,15 @@ import Matcher from "Frontend/generated/dev/hilla/crud/filter/PropertyStringFilt
 import { BatchDtoCrudService, CourseDtoCrudService, InstructorDtoCrudService, ReservationDtoCrudService, RoomDtoCrudService } from "Frontend/generated/endpoints";
 import NotificationUtil from "Frontend/util/NotificationUtil";
 import { comboBoxLazyFilter } from "Frontend/util/comboboxLazyFilterUtil";
-import ClassTypeEnum from "Frontend/generated/com/itbd/application/constants/ClassTypeEnum";
 import React, { useMemo, useState } from "react";
 
 const ReservationView = () => {
+  const [departmentNameFilter, setDepartmentNameFilter] = useState('');
+  const [programmeNameFilter, setProgrammeNameFilter] = useState('');
+
+  const [sectorNameFilter, setSectorNameFilter] = useState('');
+  const [buildingNameFilter, setBuildingNameFilter] = useState('');
+  const [floorNameFilter, setFloorNameFilter] = useState('');
 
   const [orgNameFilter, setOrgNameFilter] = useState('');
   const [dialogOpened, setDialogOpened] = useState<boolean>(false);
@@ -35,7 +44,7 @@ const ReservationView = () => {
 
   const [selectedReservationItems, setSelectedReservationItems] = useState<ReservationDTO[]>([]);
 
-  const { model, field, value, read, submit, clear, reset, visited, dirty, invalid, submitting } = useForm(ReservationDTOModel, {
+  const { model, field, value, read, update, submit, clear, reset, visited, dirty, invalid, submitting } = useForm(ReservationDTOModel, {
     onSubmit: async (reservation) => {
       console.log('reservation', reservation);
       await ReservationDtoCrudService.save(reservation).then((result) => {
@@ -50,13 +59,12 @@ const ReservationView = () => {
     autoGridRef.current?.refresh();
   }
 
-  type EnumType = { id: number; item: string; };
 
   const classTypeDataProvider = useMemo(
     () =>
       async (
         params: ComboBoxDataProviderParams,
-        callback: ComboBoxDataProviderCallback<EnumType>
+        callback: ComboBoxDataProviderCallback<ItemSelect>
       ) => {
         // const child: PropertyStringFilter[] = [{
         //   '@type': 'propertyString',
@@ -66,7 +74,7 @@ const ReservationView = () => {
         // },];
 
         // const { pagination, filters } = comboBoxLazyFilter(params, 'or', child);
-        const data: EnumType[] = Object.values(ClassTypeEnum).map((item, index) => ({ id: index, item: item })).filter(el => el.item === params.filter || params.filter === '');
+        const data: ItemSelect[] = ClassActivity.filter(el => el.item === params.filter || params.filter === '');
         console.log('classTypes', data);
         callback(data, data.length === 0 ? 1 : data.length);
       },
@@ -100,19 +108,25 @@ const ReservationView = () => {
         params: ComboBoxDataProviderParams,
         callback: ComboBoxDataProviderCallback<BatchDTOModel>
       ) => {
-        const child: PropertyStringFilter[] = [{
-          '@type': 'propertyString',
-          propertyId: 'name',
-          filterValue: params.filter,
-          matcher: Matcher.CONTAINS
-        },];
+        const child: PropertyStringFilter[] = [
+          {
+            '@type': 'propertyString',
+            propertyId: 'programme.name',
+            filterValue: programmeNameFilter || '',
+            matcher: Matcher.EQUALS
+          }, {
+            '@type': 'propertyString',
+            propertyId: 'name',
+            filterValue: params.filter,
+            matcher: Matcher.CONTAINS
+          },];
 
-        const { pagination, filters } = comboBoxLazyFilter(params, 'or', child);
+        const { pagination, filters } = comboBoxLazyFilter(params, 'and', child);
         BatchDtoCrudService.list(pagination, filters).then((result: any) => {
           callback(result);
         });
       },
-    []
+    [programmeNameFilter]
   );
 
   const courseDataProvider = useMemo(
@@ -121,19 +135,30 @@ const ReservationView = () => {
         params: ComboBoxDataProviderParams,
         callback: ComboBoxDataProviderCallback<CourseDTOModel>
       ) => {
-        const child: PropertyStringFilter[] = [{
-          '@type': 'propertyString',
-          propertyId: 'name',
-          filterValue: params.filter,
-          matcher: Matcher.CONTAINS
-        },];
+        const child: PropertyStringFilter[] = [
+          {
+            '@type': 'propertyString',
+            propertyId: 'programme.name',
+            filterValue: programmeNameFilter || '',
+            matcher: Matcher.EQUALS
+          }, {
+            '@type': 'propertyString',
+            propertyId: 'name',
+            filterValue: params.filter,
+            matcher: Matcher.CONTAINS
+          }, {
+            '@type': 'propertyString',
+            propertyId: 'code',
+            filterValue: params.filter,
+            matcher: Matcher.CONTAINS
+          },];
 
-        const { pagination, filters } = comboBoxLazyFilter(params, 'or', child);
+        const { pagination, filters } = comboBoxLazyFilter(params, 'and', child);
         CourseDtoCrudService.list(pagination, filters).then((result: any) => {
           callback(result);
         });
       },
-    []
+    [programmeNameFilter]
   );
 
   const instructorDataProvider = useMemo(
@@ -158,6 +183,16 @@ const ReservationView = () => {
     []
   );
 
+  const courseCustomItemRenderer = (item: CourseDTOModel<CourseDTO>) => {
+    const course: CourseDTO = item.valueOf();
+    console.log('courseCustomItemRenderer', item.valueOf().name);
+    return (
+      <div className="border-b">
+        <p className="text-sm font-semibold">{`${course.code} - ${course.name}`}</p>
+      </div>
+    );
+  }
+
   const responsiveSteps = [
     { minWidth: '0', columns: 1 },
     { minWidth: '600px', columns: 2 },
@@ -177,25 +212,60 @@ const ReservationView = () => {
     <>
       <SplitLayout className="h-full w-full">
         <VerticalLayout className="h-full w-full items-stretch">
+          <PlaceRC
+            visibleFields={
+              { sector: true, building: true, }
+            }
+            sector={{
+              sectorName: sectorNameFilter,
+              setSectorName: setSectorNameFilter
+            }}
+            building={{
+              buildingName: buildingNameFilter,
+              setBuildingName: setBuildingNameFilter
+            }}
+            floor={{
+              floorName: floorNameFilter,
+              setFloorName: setFloorNameFilter
+            }}
+          />
+          <BranchRC
+            visibleFields={
+              { organization: true, department: true, programme: true, }
+            }
+            organization={{
+              organizationName: orgNameFilter,
+              setOrganizationName: setOrgNameFilter
+            }}
+            department={{
+              departmentName: departmentNameFilter,
+              setDepartmentName: setDepartmentNameFilter
+            }}
+            programme={{
+              programmeName: programmeNameFilter,
+              setProgrammeName: setProgrammeNameFilter
+            }}
+          />
           <AutoGrid service={ReservationDtoCrudService} model={ReservationDTOModel} ref={autoGridRef}
-            // visibleColumns={['name', 'code', 'status', 'organization.name',]}
+            visibleColumns={['name', 'code', 'duration', 'room.name', 'room.block', 'course.programme.name', 'status',]}
             selectedItems={selectedReservationItems}
             theme="row-stripes"
             onActiveItemChanged={(e) => {
               const item = e.detail.value;
+              console.log('item', item);
               setSelectedReservationItems(item ? [item] : []);
               read(item);
             }}
             columnOptions={{
-              'organization.name': {
-                header: 'Organization',
-                externalValue: orgNameFilter,
-                setExternalValue: setOrgNameFilter,
+              'course.programme.name': {
+                header: 'Programme',
+                externalValue: programmeNameFilter,
+                setExternalValue: setProgrammeNameFilter,
               },
             }}
           />
         </VerticalLayout>
-        <VerticalLayout className="w-1/4 min-w-96">
+        <VerticalLayout className="w-1/4 min-w-96 h-full">
           <header className="bg-gray-100 w-full">
             <div className="flex flex-row space-x-4">
               <p className="text-blue-600 text-xl font-bold truncate p-1 m-1 w-full"># {value.name ?? 'Unknown Title'}</p>
@@ -204,27 +274,32 @@ const ReservationView = () => {
               </Button>
             </div>
           </header>
-          <main>
-            <Scroller scrollDirection="vertical" className="w-full h-full">
-              <FormLayout responsiveSteps={responsiveSteps} className="w-fit h-fit mx-5">
-                <label slot="label">Profile</label>
-                <ComboBox label={'Room'}  {...field(model.room)} dataProvider={roomDataProvider} itemLabelPath='name' itemValuePath='name' clearButtonVisible />
-                <ComboBox label={'Batch'}  {...field(model.batch)} dataProvider={batchDataProvider} itemLabelPath='name' itemValuePath='name' clearButtonVisible />
-                <ComboBox label={'Course'}  {...field(model.course)} dataProvider={courseDataProvider} itemLabelPath='name' itemValuePath='name' clearButtonVisible />
-                <ComboBox label={'Instructor'}  {...field(model.instructor)} dataProvider={instructorDataProvider} itemLabelPath='person.givenName' itemValuePath='person.givenName' clearButtonVisible />
-                <TextField label={'Name'}  {...field(model.name)} />
-                <TextField label={'Code'}  {...field(model.code)} />
-                <MultiSelectComboBox label={'Type'} dataProvider={classTypeDataProvider}
-                  itemLabelPath="item"
-                  itemValuePath='type'
-                  itemIdPath="id"
-                  selectedItems={value.type?.split(",") ?? []}
-                />
-                <NumberField label={'Duration (min)'}  {...field(model.duration)} />
-                <TextField label={'Description'}  {...field(model.description)} />
-                <TextField label={'Status'}  {...field(model.status)} />
-              </FormLayout>
-            </Scroller>
+          <main className="overflow-y-scroll w-full h-full">
+            <FormLayout responsiveSteps={responsiveSteps} className="w-fit h-fit mx-5">
+              <ComboBox label={'Room'}  {...field(model.room)} dataProvider={roomDataProvider} itemLabelPath='name' itemValuePath='name' clearButtonVisible />
+              <ComboBox label={'Batch'}  {...field(model.batch)} dataProvider={batchDataProvider} itemLabelPath='name' itemValuePath='name' clearButtonVisible />
+              <ComboBox label={'Course'}  {...field(model.course)} dataProvider={courseDataProvider} itemLabelPath='name' itemValuePath='name' clearButtonVisible
+                renderer={({ item }) => courseCustomItemRenderer(item)}
+                style={{ '--vaadin-combo-box-overlay-width': '350px' } as React.CSSProperties}
+              />
+              <ComboBox label={'Instructor'}  {...field(model.instructor)} dataProvider={instructorDataProvider} itemLabelPath='person.givenName' itemValuePath='person.givenName' clearButtonVisible />
+              <TextField label={'Name'}  {...field(model.name)} />
+              <TextField label={'Code'}  {...field(model.code)} />
+              <MultiSelectComboBox label={'Type'} dataProvider={classTypeDataProvider}
+                itemLabelPath="item"
+                itemValuePath='type'
+                itemIdPath="id"
+                selectedItems={JSON.parse(value.type ?? '[]')}
+                onSelectedItemsChanged={(e) => {
+                  console.log('onSelectedItemsChanged', e.detail.value);
+                  value.type = JSON.stringify(e.detail.value);
+                }}
+                clearButtonVisible
+              />
+              <NumberField label={'Duration (min)'}  {...field(model.duration)} />
+              <TextField label={'Description'}  {...field(model.description)} />
+              <TextField label={'Status'}  {...field(model.status)} />
+            </FormLayout>
           </main>
           <footer className="flex flex-row bg-gray-100 w-full">
             <div className="w-full">

@@ -6,6 +6,7 @@ import com.itbd.application.dao.AbstractEntity;
 import com.itbd.application.dao.user.InstructorDAO;
 import com.itbd.application.dao.user.StudentDAO;
 import com.itbd.application.dao.user.UserDAO;
+import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -23,8 +24,9 @@ public class PersonDAO extends AbstractEntity<Long> {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "id_person_ver", nullable = false)
     @Version
+    @Nullable
+    @Column(name = "id_person_ver", nullable = false)
     private Long version;
 
     @Column(length = 128, name = "tx_given_name")
@@ -124,6 +126,6 @@ public class PersonDAO extends AbstractEntity<Long> {
 
     @OneToOne(mappedBy = "person", cascade = CascadeType.ALL)
     @ToString.Exclude
-    @JsonManagedReference
+//    @JsonManagedReference
     private InstructorDAO instructor;
 }

@@ -1,30 +1,28 @@
 package com.itbd.application.services.org.place;
 
-import java.util.List;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.domain.Specification;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.itbd.application.dao.org.place.RoomDAO;
 import com.itbd.application.dto.org.place.RoomDTO;
 import com.itbd.application.repos.org.place.RoomRepo;
 import com.vaadin.flow.server.auth.AnonymousAllowed;
-
 import dev.hilla.BrowserCallable;
 import dev.hilla.Nonnull;
 import dev.hilla.Nullable;
 import dev.hilla.crud.CrudService;
 import dev.hilla.crud.JpaFilterConverter;
 import dev.hilla.crud.filter.Filter;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @BrowserCallable
 @AnonymousAllowed
 public class RoomDtoCrudService implements CrudService<RoomDTO, Long> {
     private final JpaFilterConverter jpaFilterConverter;
     private final RoomRepo roomRepo;
+
     public RoomDtoCrudService(RoomRepo roomRepo, JpaFilterConverter jpaFilterConverter) {
         this.roomRepo = roomRepo;
         this.jpaFilterConverter = jpaFilterConverter;

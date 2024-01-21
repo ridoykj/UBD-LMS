@@ -1,10 +1,12 @@
 package com.itbd.application.dao;
 
-import java.time.LocalDateTime;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import jakarta.persistence.Column;
+import jakarta.persistence.EntityListeners;
+import jakarta.persistence.MappedSuperclass;
+import jakarta.persistence.PrePersist;
+import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.SourceType;
@@ -14,18 +16,13 @@ import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.EntityListeners;
-import jakarta.persistence.MappedSuperclass;
-import jakarta.persistence.PrePersist;
-import lombok.Getter;
-import lombok.Setter;
+import java.time.LocalDateTime;
 
 @MappedSuperclass
 @Getter
 @Setter
 @EntityListeners(AuditingEntityListener.class)
-public class AbstractEntity <U> {
+public class AbstractEntity<U> {
 
     @Column(name = "dtt_added", nullable = false, updatable = false, columnDefinition = "datetime")
     @ColumnDefault("'19000101'")

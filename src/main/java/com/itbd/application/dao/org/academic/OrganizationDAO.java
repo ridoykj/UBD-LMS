@@ -1,28 +1,28 @@
 package com.itbd.application.dao.org.academic;
 
-import java.time.LocalDateTime;
-import java.util.List;
-
 import com.itbd.application.dao.AbstractEntity;
 import com.itbd.application.dao.org.edu.DepartmentDAO;
-
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
+import jakarta.annotation.Nullable;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity(name = "t_org_organization")
 @Getter
 @Setter
-public class OrganizationDAO  extends AbstractEntity<Long>{
+public class OrganizationDAO extends AbstractEntity<Long> {
     @Id
     @Column(name = "id_organization_key", nullable = false, updatable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Version
+    @Nullable
+    @Column(name = "id_organization_ver", nullable = false)
+    private Long version;
 
     @Column(name = "tx_name")
     private String name;
@@ -371,7 +371,7 @@ public class OrganizationDAO  extends AbstractEntity<Long>{
 
     // @Column(name = "tx_source_organization")
     // private String sourceOrganization;
-    
+
     @OneToMany(mappedBy = "organization")
     private List<DepartmentDAO> departments;
 

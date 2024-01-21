@@ -44,7 +44,7 @@ export default function MainLayout() {
             <RNavItem name='Profiles' icon={<FaRegUser />} route='/profiles' /> */}
 
                 <RNavItemRC name='Dashboard' icon={<FaChartArea />} route='/' />
-                <RNavItemRC name='Calender' icon={<FaChartArea />} route='/cal' />
+                <RNavItemRC name='Time Sheet' icon={<FaCalendarDay />} route='/time_sheet' />
                 <RNavItemRC name='Organization' icon={<FaHome />} route='' subItems={[
                   { name: 'Profile', icon: <FaUserGear />, route: '/academic/organization' },
                   { name: 'Department', icon: <FaShop />, route: '/edu/department' },

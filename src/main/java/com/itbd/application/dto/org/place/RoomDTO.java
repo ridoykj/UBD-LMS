@@ -3,9 +3,11 @@ package com.itbd.application.dto.org.place;
 import com.itbd.application.constants.RoomTypeEnum;
 import com.itbd.application.dao.org.place.FloorDAO;
 import com.itbd.application.dao.org.place.RoomDAO;
+import org.springframework.data.annotation.Version;
 
 public record RoomDTO(
         Long id,
+        @Version Long version,
         String name,
         String alternateName,
         RoomTypeEnum type,
@@ -23,6 +25,7 @@ public record RoomDTO(
         room.setFloor(floor);
         return new RoomDTO(
                 room.getId(),
+                room.getVersion(),
                 room.getName(),
                 room.getAlternateName(),
                 room.getType(),
@@ -37,6 +40,7 @@ public record RoomDTO(
 
     public static void fromDTO(RoomDTO roomDTO, RoomDAO roomDAO) {
         roomDAO.setId(roomDTO.id());
+        roomDAO.setVersion(roomDTO.version());
         roomDAO.setName(roomDTO.name());
         roomDAO.setAlternateName(roomDTO.alternateName());
         roomDAO.setType(roomDTO.type());

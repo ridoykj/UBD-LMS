@@ -1,21 +1,13 @@
 package com.itbd.application.dao.user;
 
-import java.util.HashSet;
-import java.util.Set;
-
 import com.itbd.application.dao.AbstractEntity;
-
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.JoinTable;
-import jakarta.persistence.ManyToMany;
-import jakarta.persistence.Table;
+import jakarta.annotation.Nullable;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "t_roles")
@@ -27,6 +19,11 @@ public class RolesDAO extends AbstractEntity<Long> {
     @Column(name = "id_roles_key", nullable = false, updatable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Version
+    @Nullable
+    @Column(name = "id_roles_ver", nullable = false)
+    private Long version;
 
     @Column(nullable = false, unique = true, name = "tx_name")
     private String name;

@@ -1,35 +1,30 @@
 package com.itbd.application.dao.org.place;
 
+import com.itbd.application.constants.BuildingTypeEnum;
+import com.itbd.application.dao.AbstractEntity;
+import jakarta.annotation.Nullable;
+import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
+
 import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
 
-import com.itbd.application.constants.BuildingTypeEnum;
-import com.itbd.application.dao.AbstractEntity;
-
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
-import lombok.Getter;
-import lombok.Setter;
-
 @Entity(name = "t_place_building")
 @Getter
 @Setter
-public class BuildingDAO  extends AbstractEntity<Long>{
+public class BuildingDAO extends AbstractEntity<Long> {
     @Id
     @Column(name = "id_building_key", nullable = false, updatable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Version
+    @Nullable
+    @Column(name = "id_building_ver", nullable = false)
+    private Long version;
 
     @Column(name = "tx_name")
     private String name;
@@ -154,7 +149,7 @@ public class BuildingDAO  extends AbstractEntity<Long>{
     @OneToMany(mappedBy = "building")
     private List<FloorDAO> floors;
 
-    
+
     @ManyToOne
     @JoinColumn(name = "id_sector_key")
     private SectorDAO sector;

@@ -4,6 +4,7 @@ import com.itbd.application.constants.BuildingTypeEnum;
 import com.itbd.application.dao.org.place.BuildingDAO;
 import com.itbd.application.dao.org.place.FloorDAO;
 import com.itbd.application.dao.org.place.SectorDAO;
+import org.springframework.data.annotation.Version;
 
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -11,6 +12,7 @@ import java.util.List;
 
 public record BuildingDTO(
         Long id,
+        @Version Long version,
         String name,
         BuildingTypeEnum type,
         String block,
@@ -34,6 +36,7 @@ public record BuildingDTO(
 
         return new BuildingDTO(
                 building.getId(),
+                building.getVersion(),
                 building.getName(),
                 building.getType(),
                 building.getBlock(),
@@ -54,6 +57,7 @@ public record BuildingDTO(
 
     public static void fromDTO(BuildingDTO buildingDTO, BuildingDAO buildingDAO) {
         buildingDAO.setId(buildingDTO.id());
+        buildingDAO.setVersion(buildingDTO.version());
         buildingDAO.setName(buildingDTO.name());
         buildingDAO.setType(buildingDTO.type());
         buildingDAO.setBlock(buildingDTO.block());

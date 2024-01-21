@@ -19,7 +19,7 @@ import SectorView from './views/org/place/SectorView';
 import AuthorizationView from './views/org/user/AuthorizationView';
 import CoordinatorView from './views/org/user/CoordinatorView';
 import StudentView from './views/org/user/StudentView';
-import CalenderBoardView from './views/profile/dashboard/calender/CalenderBoardView';
+import CalenderBoardView from './views/profile/dashboard/timetable/TimeTableView';
 import DashboardView from './views/profile/dashboard/DashboardView';
 import ProfileView from './views/profile/ProfileView';
 import ShopView from './views/shop/ShopView';
@@ -33,7 +33,7 @@ export const routes: RouteObject[] = [
     handle: { title: 'Main' },
     children: [
       { path: '/', element: <DashboardView />, handle: { title: 'Dashboard' } },
-      { path: '/cal', element: <CalenderBoardView />, handle: { title: 'Calender Board' } },
+      { path: '/time_sheet', element: <CalenderBoardView />, handle: { title: 'Time Sheet' } },
       { path: '/default', element: <DefaultView />, handle: { title: 'Not Implemented' } },
       { path: '/shop', element: <ShopView />, handle: { title: 'Shop' } },
       { path: '/grid', element: <GridView />, handle: { title: 'Grid' } },

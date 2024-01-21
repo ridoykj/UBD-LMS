@@ -1,14 +1,13 @@
 package com.itbd.application.dto.user.instructor;
 
-import java.util.List;
-
-import com.itbd.application.dao.org.edu.ReservationDAO;
 import com.itbd.application.dao.user.InstructorDAO;
 import com.itbd.application.dao.user.person.*;
 import jakarta.persistence.Id;
+import org.springframework.data.annotation.Version;
 
 public record InstructorDTO(
         @Id Long id,
+        @Version Long version,
         String name,
         String email,
         String description,
@@ -18,6 +17,7 @@ public record InstructorDTO(
 
     public static void fromDTO(InstructorDTO value, InstructorDAO instructor) {
         instructor.setId(value.id());
+        instructor.setVersion(value.version());
         instructor.setName(value.name());
         instructor.setEmail(value.email());
         instructor.setDescription(value.description());
@@ -61,11 +61,12 @@ public record InstructorDTO(
         person.setMedical(medical);
         person.setOccupation(occupation);
         person.setInstructor(null);
-        instructor.setReservations(null);
-        instructor.setPerson(person);
 
+        instructor.setPerson(person);
+        instructor.setReservations(null);
         return new InstructorDTO(
                 instructor.getId(),
+                instructor.getVersion(),
                 instructor.getName(),
                 instructor.getEmail(),
                 instructor.getDescription(),

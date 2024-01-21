@@ -1,55 +1,32 @@
 package com.itbd.application.services.org.edu;
 
-import java.util.List;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.domain.Specification;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.itbd.application.dao.org.edu.ReservationDAO;
 import com.itbd.application.dto.org.edu.ReservationDTO;
 import com.itbd.application.repos.org.edu.ReservationRepo;
-import com.itbd.application.repos.user.person.AddressRepo;
-import com.itbd.application.repos.user.person.ContactRepo;
-import com.itbd.application.repos.user.person.DocumentRecordsRepo;
-import com.itbd.application.repos.user.person.MedicalRepo;
-import com.itbd.application.repos.user.person.OccupationRepo;
 import com.vaadin.flow.server.auth.AnonymousAllowed;
-
 import dev.hilla.BrowserCallable;
 import dev.hilla.Nonnull;
 import dev.hilla.Nullable;
 import dev.hilla.crud.CrudService;
 import dev.hilla.crud.JpaFilterConverter;
 import dev.hilla.crud.filter.Filter;
+import jakarta.transaction.Transactional;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
+
+import java.util.List;
 
 @BrowserCallable
 @AnonymousAllowed
 public class ReservationDtoCrudService implements CrudService<ReservationDTO, Long> {
+    private final JpaFilterConverter jpaFilterConverter;
+    private final ReservationRepo reservationRepo;
 
-    @Autowired
-    private JpaFilterConverter jpaFilterConverter;
-
-    @Autowired
-    private ReservationRepo personRepo;
-    @Autowired
-    private AddressRepo addressRepo;
-    @Autowired
-    private ContactRepo contactRepo;
-    @Autowired
-    private DocumentRecordsRepo documentRecordsRepo;
-    @Autowired
-    private MedicalRepo medicalRepo;
-    @Autowired
-    private OccupationRepo occupationRepo;
-
-    // public PersonMargeDtoCrudService(ReservationRepo personRepo, AddressRepo
-    // addressRepo) {
-    // this.personRepo = personRepo;
-    // this.addressRepo = addressRepo;
-    // }
+    public ReservationDtoCrudService(ReservationRepo reservationRepo, JpaFilterConverter jpaFilterConverter) {
+        this.reservationRepo = reservationRepo;
+        this.jpaFilterConverter = jpaFilterConverter;
+    }
 
     @Override
     @Nonnull
@@ -59,7 +36,7 @@ public class ReservationDtoCrudService implements CrudService<ReservationDTO, Lo
         Specification<ReservationDAO> spec = filter != null
                 ? jpaFilterConverter.toSpec(filter, ReservationDAO.class)
                 : Specification.anyOf();
-        Page<ReservationDAO> persons = personRepo.findAll(spec, pageable);
+        Page<ReservationDAO> persons = reservationRepo.findAll(spec, pageable);
         return persons.stream().map(ReservationDTO::fromEntity).toList();
     }
 
@@ -67,17 +44,16 @@ public class ReservationDtoCrudService implements CrudService<ReservationDTO, Lo
     @Transactional
     public @Nullable ReservationDTO save(ReservationDTO value) {
         boolean check = value.id() != null && value.id() > 0;
-        ReservationDAO person = check
-                ? personRepo.getReferenceById(value.id())
+        ReservationDAO reservation = check
+                ? reservationRepo.getReferenceById(value.id())
                 : new ReservationDAO();
 
-        // person.setRecordComment(check ? "UPDATE" : "NEW");
-        ReservationDTO.fromDTO(value, person);
-        return ReservationDTO.fromEntity(personRepo.save(person));
+        ReservationDTO.fromDTO(value, reservation);
+        return ReservationDTO.fromEntity(reservationRepo.save(reservation));
     }
 
     @Override
     public void delete(Long id) {
-        personRepo.deleteById(id);
+        reservationRepo.deleteById(id);
     }
 }

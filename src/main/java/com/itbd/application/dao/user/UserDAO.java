@@ -1,15 +1,15 @@
 package com.itbd.application.dao.user;
 
-import java.util.HashSet;
-import java.util.Set;
-
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.itbd.application.dao.AbstractEntity;
 import com.itbd.application.dao.user.person.PersonDAO;
-
+import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity(name = "t_user")
 @Getter
@@ -21,8 +21,9 @@ public class UserDAO extends AbstractEntity<Long> {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "id_user_ver", nullable = false)
     @Version
+    @Nullable
+    @Column(name = "id_user_ver", nullable = false)
     private Long version;
 
     @Column(nullable = false, unique = true, name = "tx_username")

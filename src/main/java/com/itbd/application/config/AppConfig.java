@@ -1,15 +1,14 @@
 package com.itbd.application.config;
 
+import jakarta.servlet.MultipartConfigElement;
 import org.springframework.boot.web.servlet.MultipartConfigFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.util.unit.DataSize;
 
-import jakarta.servlet.MultipartConfigElement;
-
 @Configuration
-@PropertySource({ "classpath:application.properties", "classpath:application-${spring.profiles.active}.properties" })
+@PropertySource({"classpath:application.properties", "classpath:application-${spring.profiles.active}.properties"})
 public class AppConfig {
 
     @Bean

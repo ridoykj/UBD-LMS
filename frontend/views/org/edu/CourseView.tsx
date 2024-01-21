@@ -4,7 +4,6 @@ import { ConfirmDialog } from "@hilla/react-components/ConfirmDialog.js";
 import { FormLayout } from "@hilla/react-components/FormLayout.js";
 import { Icon } from "@hilla/react-components/Icon.js";
 import { NumberField } from '@hilla/react-components/NumberField.js';
-import { Scroller } from "@hilla/react-components/Scroller.js";
 import { SplitLayout } from "@hilla/react-components/SplitLayout.js";
 import { TextArea } from "@hilla/react-components/TextArea.js";
 import { TextField } from "@hilla/react-components/TextField.js";
@@ -142,7 +141,7 @@ const CourseView = () => {
               </Button>
             </div>
           </header>
-          <Scroller scrollDirection="vertical" className="w-full h-full">
+          <main className="overflow-y-scroll w-full h-full">
             <FormLayout responsiveSteps={responsiveSteps} className="w-fit h-fit mx-5">
               <label slot="label">Profile</label>
               <ComboBox label={'Programme'}  {...field(model.programme)} dataProvider={programmeDataProvider} itemLabelPath='name' itemValuePath='name' clearButtonVisible />
@@ -153,7 +152,7 @@ const CourseView = () => {
               <TextField label={'Language'}  {...field(model.language)} className="w-fit" />
               <TextArea label={'About'}  {...field(model.about)} className="w-fit" />
             </FormLayout>
-          </Scroller>
+          </main>
           <footer className="flex flex-row bg-gray-100 w-full">
             <div className="w-full">
               {

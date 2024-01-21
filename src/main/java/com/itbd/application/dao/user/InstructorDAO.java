@@ -1,15 +1,15 @@
 package com.itbd.application.dao.user;
 
-import java.util.List;
-
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.itbd.application.dao.AbstractEntity;
 import com.itbd.application.dao.org.edu.ReservationDAO;
 import com.itbd.application.dao.user.person.PersonDAO;
-
+import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.util.List;
 
 @Entity(name = "t_org_instructor")
 @Getter
@@ -20,8 +20,9 @@ public class InstructorDAO extends AbstractEntity<Long> {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "id_instructor_ver", nullable = false)
     @Version
+    @Nullable
+    @Column(name = "id_instructor_ver", nullable = false)
     private Long version;
 
     @Column(name = "tx_name")
@@ -44,7 +45,7 @@ public class InstructorDAO extends AbstractEntity<Long> {
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "id_person_key")
-    @JsonBackReference
+//    @JsonBackReference
     private PersonDAO person;
 
 }

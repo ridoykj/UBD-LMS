@@ -3,7 +3,6 @@ import { ConfirmDialog } from '@hilla/react-components/ConfirmDialog.js';
 import { DateTimePicker } from '@hilla/react-components/DateTimePicker.js';
 import { FormLayout } from '@hilla/react-components/FormLayout.js';
 import { Icon } from '@hilla/react-components/Icon.js';
-import { Scroller } from '@hilla/react-components/Scroller.js';
 import { SplitLayout } from '@hilla/react-components/SplitLayout.js';
 import { TextArea } from '@hilla/react-components/TextArea.js';
 import { TextField } from '@hilla/react-components/TextField.js';
@@ -80,7 +79,7 @@ const OrganizationView = () => {
               </Button>
             </div>
           </header>
-          <Scroller scrollDirection="vertical" className="w-full h-full">
+          <main className="overflow-y-scroll w-full h-full">
             <FormLayout responsiveSteps={responsiveSteps} className="w-fit h-fit p-2">
               <TextField label={'Name'}  {...field(model.name)} />
               <TextField label={'Alternate Name'}  {...field(model.alternateName)} />
@@ -94,8 +93,8 @@ const OrganizationView = () => {
               <TextField label={'Website'}  {...field(model.website)} />
               <TextArea label={'Description'}  {...field(model.description)} />
             </FormLayout>
-          </Scroller>
-          <footer className="flex flex-row bg-gray-100 w-full">
+          </main>
+          <footer className="flex flex-row bg-gray-100 w-full self-end">
             <div className="w-full">
               {
                 selectedOrgItems[0]?.id === undefined ? null :

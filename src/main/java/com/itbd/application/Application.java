@@ -8,10 +8,9 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 /**
  * The entry point of the Spring Boot application.
- *
+ * <p>
  * Use the @PWA annotation make the application installable on phones, tablets
  * and some desktop browsers.
- *
  */
 // https://github.com/hrshadhin/school-management-system
 // https://github.com/ADi7YA26/Student-Dashboard
@@ -20,6 +19,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @PWA(name = "UBD-LMS", shortName = "UBD-LMS", iconPath = "favicon/favicon.png")
 public class Application implements AppShellConfigurator {
     public static void main(String[] args) {
-        SpringApplication.run(Application.class, args);        
+        SpringApplication.run(Application.class, args);
     }
 }

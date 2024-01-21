@@ -2,9 +2,11 @@ package com.itbd.application.dto.org.place;
 
 import com.itbd.application.dao.org.place.BuildingDAO;
 import com.itbd.application.dao.org.place.FloorDAO;
+import org.springframework.data.annotation.Version;
 
 public record FloorDTO(
         Long id,
+        @Version Long version,
         String name,
         String alternateName,
         String description,
@@ -22,6 +24,7 @@ public record FloorDTO(
         floor.setBuilding(building);
         return new FloorDTO(
                 floor.getId(),
+                floor.getVersion(),
                 floor.getName(),
                 floor.getAlternateName(),
                 floor.getDescription(),
@@ -36,6 +39,7 @@ public record FloorDTO(
 
     public static void fromDTO(FloorDTO value, FloorDAO floorDAO) {
         floorDAO.setId(value.id());
+        floorDAO.setVersion(value.version());
         floorDAO.setName(value.name());
         floorDAO.setAlternateName(value.alternateName());
         floorDAO.setDescription(value.description());

@@ -1,29 +1,27 @@
 package com.itbd.application.dao.org.edu;
 
-import java.math.BigDecimal;
-import java.util.List;
-
 import com.itbd.application.dao.AbstractEntity;
-
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
+import jakarta.annotation.Nullable;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.math.BigDecimal;
+import java.util.List;
 
 @Entity(name = "t_edu_course")
 @Getter
 @Setter
-public class CourseDAO  extends AbstractEntity<Long>{
+public class CourseDAO extends AbstractEntity<Long> {
     @Id
     @Column(name = "id_course_key", nullable = false, updatable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Version
+    @Nullable
+    @Column(name = "id_course_ver", nullable = false)
+    private Long version;
 
     @Column(name = "tx_name")
     private String name;

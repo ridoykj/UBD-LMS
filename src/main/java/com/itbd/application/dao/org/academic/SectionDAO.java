@@ -1,13 +1,8 @@
 package com.itbd.application.dao.org.academic;
 
 import com.itbd.application.dao.AbstractEntity;
-
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.annotation.Nullable;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -15,11 +10,16 @@ import lombok.Setter;
 @Table(name = "t_aca_section")
 @Getter
 @Setter
-public class SectionDAO  extends AbstractEntity<Long>{
+public class SectionDAO extends AbstractEntity<Long> {
     @Id
     @Column(name = "id_section_key", nullable = false, updatable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Version
+    @Nullable
+    @Column(name = "id_section_ver", nullable = false)
+    private Long version;
 
     @Column
     private String name;
@@ -81,6 +81,5 @@ public class SectionDAO  extends AbstractEntity<Long>{
     @Column(name = "id_academic_term_key")
     private Long academicTermId;
 
-    
 
 }

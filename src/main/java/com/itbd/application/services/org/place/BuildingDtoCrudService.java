@@ -1,29 +1,23 @@
 package com.itbd.application.services.org.place;
 
-import java.util.List;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.domain.Specification;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.itbd.application.dao.org.place.BuildingDAO;
 import com.itbd.application.dto.org.place.BuildingDTO;
 import com.itbd.application.repos.org.place.BuildingRepo;
-import com.itbd.application.repos.user.person.AddressRepo;
-import com.itbd.application.repos.user.person.ContactRepo;
-import com.itbd.application.repos.user.person.DocumentRecordsRepo;
-import com.itbd.application.repos.user.person.MedicalRepo;
-import com.itbd.application.repos.user.person.OccupationRepo;
+import com.itbd.application.repos.user.person.*;
 import com.vaadin.flow.server.auth.AnonymousAllowed;
-
 import dev.hilla.BrowserCallable;
 import dev.hilla.Nonnull;
 import dev.hilla.Nullable;
 import dev.hilla.crud.CrudService;
 import dev.hilla.crud.JpaFilterConverter;
 import dev.hilla.crud.filter.Filter;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @BrowserCallable
 @AnonymousAllowed

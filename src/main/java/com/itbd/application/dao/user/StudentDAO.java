@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.itbd.application.dao.AbstractEntity;
 import com.itbd.application.dao.org.edu.BatchDAO;
 import com.itbd.application.dao.user.person.PersonDAO;
-
+import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -19,8 +19,9 @@ public class StudentDAO extends AbstractEntity<Long> {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "id_student_ver", nullable = false)
     @Version
+    @Nullable
+    @Column(name = "id_student_ver", nullable = false)
     private Long version;
 
     @Column(name = "tx_name")

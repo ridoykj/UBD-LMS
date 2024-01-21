@@ -1,32 +1,29 @@
 package com.itbd.application.dao.org.edu;
 
+import com.itbd.application.dao.AbstractEntity;
+import com.itbd.application.dao.user.StudentDAO;
+import jakarta.annotation.Nullable;
+import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
+
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import com.itbd.application.dao.AbstractEntity;
-import com.itbd.application.dao.user.StudentDAO;
-
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
-import lombok.Getter;
-import lombok.Setter;
-
 @Entity(name = "t_edu_batch")
 @Getter
 @Setter
-public class BatchDAO  extends AbstractEntity<Long>{
-
+public class BatchDAO extends AbstractEntity<Long> {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_batch_key", nullable = false, updatable = false)
     private Long id;
+
+    @Version
+    @Nullable
+    @Column(name = "id_batch_ver", nullable = false)
+    private Long version;
 
     @Column(name = "tx_name")
     private String name;

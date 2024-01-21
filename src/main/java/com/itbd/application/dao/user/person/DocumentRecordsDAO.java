@@ -2,7 +2,7 @@ package com.itbd.application.dao.user.person;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.itbd.application.dao.AbstractEntity;
-
+import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -17,9 +17,9 @@ public class DocumentRecordsDAO extends AbstractEntity<Long> {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-
-    @Column(name = "id_document_records_ver", nullable = false)
     @Version
+    @Nullable
+    @Column(name = "id_document_records_ver", nullable = false)
     private Long version;
 
     @Column(columnDefinition = "longtext", name = "tx_records")

@@ -1,4 +1,4 @@
-import CalenderBoardComponent, { DayItem, TimeRange } from './CalenderBoardComponent';
+import CalenderBoardComponent, { DayItem, TimeRange } from './TimeTableComponent';
 import './calendarBoardView.css';
 
 // const dd: DayItem[] = [];
