@@ -19,8 +19,7 @@ public record ProgrammeDTO(
         String description,
         String status,
         @NotNull DepartmentDAO department,
-        List<BatchDAO> batches,
-        List<CourseDAO> courses) {
+        List<BatchDAO> batches) {
 
     public static ProgrammeDTO fromEntity(ProgrammeDAO programee) {
         return new ProgrammeDTO(
@@ -32,8 +31,7 @@ public record ProgrammeDTO(
                 programee.getDescription(),
                 programee.getStatus(),
                 programee.getDepartment(),
-                programee.getBatches(),
-                programee.getCourses());
+                programee.getBatches());
     }
 
     public static void fromDTO(ProgrammeDTO programeeDTO, ProgrammeDAO programeeDAO) {
@@ -47,7 +45,6 @@ public record ProgrammeDTO(
         programeeDAO.setDescription(programeeDTO.description());
         programeeDAO.setDepartment(programeeDTO.department());
         programeeDAO.setBatches(programeeDTO.batches());
-        programeeDAO.setCourses(programeeDTO.courses());
     }
 
 }

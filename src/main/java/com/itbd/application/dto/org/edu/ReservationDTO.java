@@ -26,13 +26,11 @@ public record ReservationDTO(
         LocalDate startDate,
         LocalDate endDate,
         Long duration,
-        CourseDAO course,
         BatchDAO batch,
         RoomDAO room,
         InstructorDAO instructor) {
 
     public static ReservationDTO fromEntity(ReservationDAO reservation) {
-        CourseDAO course = reservation.getCourse();
         BatchDAO batch = reservation.getBatch();
         RoomDAO room = reservation.getRoom();
         InstructorDAO instructor = reservation.getInstructor();
@@ -45,8 +43,6 @@ public record ReservationDTO(
         person.setOccupation(null);
         person.setInstructor(null);
 
-        course.setReservations(null);
-        course.setProgramme(null);
         batch.setProgramme(null);
         batch.setReservations(null);
         batch.setStudents(null);
@@ -55,7 +51,6 @@ public record ReservationDTO(
         instructor.setReservations(null);
         instructor.setPerson(person);
 
-        reservation.setCourse(course);
         reservation.setBatch(batch);
         reservation.setRoom(room);
         reservation.setInstructor(instructor);
@@ -75,7 +70,6 @@ public record ReservationDTO(
                 reservation.getStartDate(),
                 reservation.getEndDate(),
                 reservation.getDuration(),
-                reservation.getCourse(),
                 reservation.getBatch(),
                 reservation.getRoom(),
                 reservation.getInstructor());
@@ -97,13 +91,11 @@ public record ReservationDTO(
         reservationDAO.setEndDate(reservationDTO.endDate());
         reservationDAO.setDuration(reservationDTO.duration());
 
-        CourseDAO course = reservationDTO.course() != null ? reservationDTO.course() : new CourseDAO();
         BatchDAO batch = reservationDTO.batch() != null ? reservationDTO.batch() : new BatchDAO();
         RoomDAO room = reservationDTO.room() != null ? reservationDTO.room() : new RoomDAO();
         InstructorDAO instructor = reservationDTO.instructor() != null ? reservationDTO.instructor() : new InstructorDAO();
 //        instructor.setPerson(null);
 
-        reservationDAO.setCourse(course);
         reservationDAO.setBatch(batch);
         reservationDAO.setRoom(room);
         reservationDAO.setInstructor(instructor);

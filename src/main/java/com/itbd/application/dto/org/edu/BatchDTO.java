@@ -1,5 +1,6 @@
 package com.itbd.application.dto.org.edu;
 
+import com.itbd.application.dao.org.allocation.BatchCourseDAO;
 import com.itbd.application.dao.org.edu.BatchDAO;
 import com.itbd.application.dao.org.edu.ProgrammeDAO;
 import com.itbd.application.dao.org.edu.ReservationDAO;
@@ -9,6 +10,7 @@ import org.springframework.data.annotation.Version;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Set;
 
 public record BatchDTO(
         Long id,
@@ -30,10 +32,21 @@ public record BatchDTO(
         Long numberOfCredits,
         Long numberOfSemester,
         ProgrammeDAO programme,
-        List<ReservationDAO> reservations,
-        List<StudentDAO> students) {
+        Set<ReservationDAO> reservations,
+        Set<BatchCourseDAO> batchCourses,
+        Set<StudentDAO> students
+) {
 
     public static BatchDTO fromEntity(BatchDAO batch) {
+        ProgrammeDAO programme = batch.getProgramme();
+        programme.setDepartment(null);
+        programme.setBatches(null);
+
+        batch.setProgramme(programme);
+        batch.setReservations(null);
+        batch.setStudents(null);
+        batch.setBatchCourses(null);
+
         return new BatchDTO(
                 batch.getId(),
                 batch.getVersion(),
@@ -55,6 +68,7 @@ public record BatchDTO(
                 batch.getNumberOfSemester(),
                 batch.getProgramme(),
                 batch.getReservations(),
+                batch.getBatchCourses(),
                 batch.getStudents());
     }
 

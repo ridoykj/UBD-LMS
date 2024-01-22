@@ -1,8 +1,8 @@
-package com.itbd.application.services.org.edu;
+package com.itbd.application.services.org.allocation;
 
-import com.itbd.application.dao.org.edu.CourseDAO;
-import com.itbd.application.dto.org.edu.CourseDTO;
-import com.itbd.application.repos.org.edu.CourseRepo;
+import com.itbd.application.dao.org.allocation.BatchCourseDAO;
+import com.itbd.application.dto.org.allocation.BatchCourseDTO;
+import com.itbd.application.repos.org.allocation.BatchCourseRepo;
 import com.vaadin.flow.server.auth.AnonymousAllowed;
 import dev.hilla.BrowserCallable;
 import dev.hilla.Nonnull;
@@ -20,13 +20,13 @@ import java.util.List;
 
 @BrowserCallable
 @AnonymousAllowed
-public class CourseDtoCrudService implements CrudService<CourseDTO, Long> {
+public class BatchCourseDtoCrudService implements CrudService<BatchCourseDTO, Long> {
 
     @Autowired
     private JpaFilterConverter jpaFilterConverter;
 
     @Autowired
-    private CourseRepo courseRepo;
+    private BatchCourseRepo personRepo;
 
     // public PersonMargeDtoCrudService(CourseRepo personRepo, AddressRepo
     // addressRepo) {
@@ -36,31 +36,31 @@ public class CourseDtoCrudService implements CrudService<CourseDTO, Long> {
 
     @Override
     @Nonnull
-    public List<@Nonnull CourseDTO> list(Pageable pageable, @Nullable Filter filter) {
+    public List<@Nonnull BatchCourseDTO> list(Pageable pageable, @Nullable Filter filter) {
         // Basic list implementation that only covers pagination,
         // but not sorting or filtering
-        Specification<CourseDAO> spec = filter != null
-                ? jpaFilterConverter.toSpec(filter, CourseDAO.class)
+        Specification<BatchCourseDAO> spec = filter != null
+                ? jpaFilterConverter.toSpec(filter, BatchCourseDAO.class)
                 : Specification.anyOf();
-        Page<CourseDAO> persons = courseRepo.findAll(spec, pageable);
-        return persons.stream().map(CourseDTO::fromEntity).toList();
+        Page<BatchCourseDAO> persons = personRepo.findAll(spec, pageable);
+        return persons.stream().map(BatchCourseDTO::fromEntity).toList();
     }
 
     @Override
     @Transactional
-    public @Nullable CourseDTO save(CourseDTO value) {
+    public @Nullable BatchCourseDTO save(BatchCourseDTO value) {
         boolean check = value.id() != null && value.id() > 0;
-        CourseDAO person = check
-                ? courseRepo.getReferenceById(value.id())
-                : new CourseDAO();
+        BatchCourseDAO person = check
+                ? personRepo.getReferenceById(value.id())
+                : new BatchCourseDAO();
 
         // person.setRecordComment(check ? "UPDATE" : "NEW");
-        CourseDTO.fromDTO(value, person);
-        return CourseDTO.fromEntity(courseRepo.save(person));
+        BatchCourseDTO.fromDTO(value, person);
+        return BatchCourseDTO.fromEntity(personRepo.save(person));
     }
 
     @Override
     public void delete(Long id) {
-        courseRepo.deleteById(id);
+        personRepo.deleteById(id);
     }
 }

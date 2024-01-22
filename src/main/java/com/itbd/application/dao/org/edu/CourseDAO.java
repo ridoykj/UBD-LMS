@@ -1,6 +1,7 @@
 package com.itbd.application.dao.org.edu;
 
 import com.itbd.application.dao.AbstractEntity;
+import com.itbd.application.dao.org.allocation.BatchCourseDAO;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -8,6 +9,7 @@ import lombok.Setter;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Set;
 
 @Entity(name = "t_edu_course")
 @Getter
@@ -23,32 +25,20 @@ public class CourseDAO extends AbstractEntity<Long> {
     @Column(name = "id_course_ver", nullable = false)
     private Long version;
 
-    @Column(name = "tx_name")
+    @Column(name = "tx_name", unique = true)
     private String name;
 
-    @Column(name = "tx_code")
+    @Column(name = "tx_code", unique = true)
     private String code;
 
     @Column(name = "tx_prerequisites")
     private String prerequisites;
-
-    @Column(name = "ct_credits")
-    private BigDecimal numberOfCredits;
 
     @Column(name = "tx_headline")
     private String headline;
 
     @Column(name = "tx_about")
     private String about;
-
-    @Column(name = "ct_student_capacity")
-    private BigDecimal numberOfStudents;
-
-    @Column(name = "ct_lecture_capacity")
-    private BigDecimal numberOfLecture;
-
-    @Column(name = "ct_tutorial_capacity")
-    private BigDecimal numberOfTutorial;
 
     @Column(name = "tx_type")
     private String type;
@@ -72,9 +62,13 @@ public class CourseDAO extends AbstractEntity<Long> {
     private String durationUnit;
 
     @OneToMany(mappedBy = "course")
-    private List<ReservationDAO> reservations;
+    public Set<BatchCourseDAO> batchCourses;
 
-    @ManyToOne
-    @JoinColumn(name = "id_programme_key")
-    private ProgrammeDAO programme;
+
+//    @OneToMany(mappedBy = "course")
+//    private List<ReservationDAO> reservations;
+//
+//    @ManyToOne
+//    @JoinColumn(name = "id_programme_key")
+//    private ProgrammeDAO programme;
 }

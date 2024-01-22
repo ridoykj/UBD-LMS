@@ -1,6 +1,7 @@
 package com.itbd.application.dao.org.edu;
 
 import com.itbd.application.dao.AbstractEntity;
+import com.itbd.application.dao.org.allocation.BatchCourseDAO;
 import com.itbd.application.dao.user.StudentDAO;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
@@ -10,6 +11,7 @@ import lombok.Setter;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Set;
 
 @Entity(name = "t_edu_batch")
 @Getter
@@ -25,7 +27,7 @@ public class BatchDAO extends AbstractEntity<Long> {
     @Column(name = "id_batch_ver", nullable = false)
     private Long version;
 
-    @Column(name = "tx_name")
+    @Column(name = "tx_name", unique = true)
     private String name;
 
     @Column(name = "tx_code")
@@ -77,8 +79,12 @@ public class BatchDAO extends AbstractEntity<Long> {
     private ProgrammeDAO programme;
 
     @OneToMany(mappedBy = "batch")
-    private List<ReservationDAO> reservations;
+    private Set<ReservationDAO> reservations;
 
     @OneToMany(mappedBy = "batch")
-    private List<StudentDAO> students;
+    private Set<StudentDAO> students;
+
+    @OneToMany(mappedBy = "batch")
+    public Set<BatchCourseDAO> batchCourses;
+
 }

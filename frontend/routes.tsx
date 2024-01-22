@@ -24,6 +24,7 @@ import DashboardView from './views/profile/dashboard/DashboardView';
 import ProfileView from './views/profile/ProfileView';
 import ShopView from './views/shop/ShopView';
 import UserView from './views/users/UserView';
+import BatchCourseView from './views/org/allocation/BatchCourseView';
 
 const AboutView = lazy(async () => import('Frontend/views/about/AboutView.js'));
 
@@ -54,6 +55,8 @@ export const routes: RouteObject[] = [
       { path: '/place/floor', element: <FloorView />, handle: { title: 'Floor' } },
       { path: '/place/room', element: <RoomView />, handle: { title: 'Room' } },
       { path: '/place/sector', element: <SectorView />, handle: { title: 'Sector' } },
+
+      { path: '/allocation/batch_course', element: <BatchCourseView />, handle: { title: 'Batch-Course' } },
 
       { path: '/user/authorization', element: <AuthorizationView />, handle: { title: 'Authorization' } },
       { path: '/user/coordinators', element: <CoordinatorView />, handle: { title: 'Coordinator' } },

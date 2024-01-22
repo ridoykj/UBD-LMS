@@ -22,7 +22,7 @@ public class SectorDAO extends AbstractEntity<Long> {
     @Column(name = "id_sector_ver", nullable = false)
     private Long version;
 
-    @Column(name = "tx_name")
+    @Column(name = "tx_name", unique = true)
     private String name;
 
     @Column(name = "tx_alternate_name")

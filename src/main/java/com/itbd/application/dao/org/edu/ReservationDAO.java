@@ -60,9 +60,9 @@ public class ReservationDAO extends AbstractEntity<Long> {
     @Column(name = "ct_duration")
     private Long duration;
 
-    @ManyToOne
-    @JoinColumn(name = "id_course_key")
-    private CourseDAO course;
+//    @ManyToOne
+//    @JoinColumn(name = "id_course_key")
+//    private CourseDAO course;
 
     @ManyToOne
     @JoinColumn(name = "id_batch_key")

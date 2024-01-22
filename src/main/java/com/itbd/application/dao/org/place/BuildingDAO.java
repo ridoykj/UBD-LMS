@@ -26,7 +26,7 @@ public class BuildingDAO extends AbstractEntity<Long> {
     @Column(name = "id_building_ver", nullable = false)
     private Long version;
 
-    @Column(name = "tx_name")
+    @Column(name = "tx_name", unique = true)
     private String name;
 
     @Enumerated(EnumType.STRING)

@@ -278,10 +278,10 @@ const ReservationView = () => {
             <FormLayout responsiveSteps={responsiveSteps} className="w-fit h-fit mx-5">
               <ComboBox label={'Room'}  {...field(model.room)} dataProvider={roomDataProvider} itemLabelPath='name' itemValuePath='name' clearButtonVisible />
               <ComboBox label={'Batch'}  {...field(model.batch)} dataProvider={batchDataProvider} itemLabelPath='name' itemValuePath='name' clearButtonVisible />
-              <ComboBox label={'Course'}  {...field(model.course)} dataProvider={courseDataProvider} itemLabelPath='name' itemValuePath='name' clearButtonVisible
+              {/* <ComboBox label={'Course'}  {...field(model.course)} dataProvider={courseDataProvider} itemLabelPath='name' itemValuePath='name' clearButtonVisible
                 renderer={({ item }) => courseCustomItemRenderer(item)}
                 style={{ '--vaadin-combo-box-overlay-width': '350px' } as React.CSSProperties}
-              />
+              /> */}
               <ComboBox label={'Instructor'}  {...field(model.instructor)} dataProvider={instructorDataProvider} itemLabelPath='person.givenName' itemValuePath='person.givenName' clearButtonVisible />
               <TextField label={'Name'}  {...field(model.name)} />
               <TextField label={'Code'}  {...field(model.code)} />

@@ -32,10 +32,10 @@ public class UserDAO extends AbstractEntity<Long> {
     @Column(nullable = false, name = "tx_password")
     private String password;
 
-    @Column(length = 64, name = "tx_primary_phone")
+    @Column(length = 64, name = "tx_primary_phone", unique = true)
     private String primaryPhone;
 
-    @Column(length = 128, name = "tx_primary_email")
+    @Column(length = 128, name = "tx_primary_email", unique = true)
     private String primaryEmail;
 
     @Column(columnDefinition = "longtext", name = "tx_permissions")

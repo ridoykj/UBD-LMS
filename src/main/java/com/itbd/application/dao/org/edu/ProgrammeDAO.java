@@ -25,7 +25,7 @@ public class ProgrammeDAO extends AbstractEntity<Long> {
     @Column(name = "id_programme_ver", nullable = false)
     private Long version;
 
-    @Column(name = "tx_name")
+    @Column(name = "tx_name", unique = true)
     private String name;
 
     @Enumerated(EnumType.STRING)
@@ -48,6 +48,6 @@ public class ProgrammeDAO extends AbstractEntity<Long> {
     @OneToMany(mappedBy = "programme", cascade = CascadeType.ALL)
     private List<BatchDAO> batches;
 
-    @OneToMany(mappedBy = "programme", cascade = CascadeType.ALL)
-    private List<CourseDAO> courses;
+//    @OneToMany(mappedBy = "programme", cascade = CascadeType.ALL)
+//    private List<CourseDAO> courses;
 }

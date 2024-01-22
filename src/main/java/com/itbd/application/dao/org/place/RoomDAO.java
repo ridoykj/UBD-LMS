@@ -25,7 +25,7 @@ public class RoomDAO extends AbstractEntity<Long> {
     @Column(name = "id_room_ver", nullable = false)
     private Long version;
 
-    @Column(name = "tx_name")
+    @Column(name = "tx_name", unique = true)
     private String name;
 
     @Column(name = "tx_alternate_name")

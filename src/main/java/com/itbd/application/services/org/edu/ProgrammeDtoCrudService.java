@@ -46,7 +46,6 @@ public class ProgrammeDtoCrudService implements CrudService<ProgrammeDTO, Long> 
             department.setOrganization(null);
             p.setDepartment(department);
             p.setBatches(null);
-            p.setCourses(null);
             return p;
         }).map(ProgrammeDTO::fromEntity).toList();
     }
