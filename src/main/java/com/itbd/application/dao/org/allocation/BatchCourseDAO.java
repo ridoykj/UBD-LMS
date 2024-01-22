@@ -60,13 +60,13 @@ public class BatchCourseDAO {
     @Column(name = "tx_about")
     private String about;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(name = "id_course_key")
-    public CourseDAO course;
+    private CourseDAO course;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(name = "id_batch_key")
-    public BatchDAO batch;
+    private BatchDAO batch;
 
 
     //    @OneToMany(mappedBy = "course")

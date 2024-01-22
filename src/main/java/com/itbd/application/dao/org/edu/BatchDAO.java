@@ -38,6 +38,7 @@ public class BatchDAO extends AbstractEntity<Long> {
 
     @Column(name = "tx_status")
     private String status;
+
     @Column(name = "tx_session")
     private String session;
 

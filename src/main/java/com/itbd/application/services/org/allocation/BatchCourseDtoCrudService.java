@@ -26,7 +26,7 @@ public class BatchCourseDtoCrudService implements CrudService<BatchCourseDTO, Lo
     private JpaFilterConverter jpaFilterConverter;
 
     @Autowired
-    private BatchCourseRepo personRepo;
+    private BatchCourseRepo batchCourseRepo;
 
     // public PersonMargeDtoCrudService(CourseRepo personRepo, AddressRepo
     // addressRepo) {
@@ -42,7 +42,7 @@ public class BatchCourseDtoCrudService implements CrudService<BatchCourseDTO, Lo
         Specification<BatchCourseDAO> spec = filter != null
                 ? jpaFilterConverter.toSpec(filter, BatchCourseDAO.class)
                 : Specification.anyOf();
-        Page<BatchCourseDAO> persons = personRepo.findAll(spec, pageable);
+        Page<BatchCourseDAO> persons = batchCourseRepo.findAll(spec, pageable);
         return persons.stream().map(BatchCourseDTO::fromEntity).toList();
     }
 
@@ -50,17 +50,17 @@ public class BatchCourseDtoCrudService implements CrudService<BatchCourseDTO, Lo
     @Transactional
     public @Nullable BatchCourseDTO save(BatchCourseDTO value) {
         boolean check = value.id() != null && value.id() > 0;
-        BatchCourseDAO person = check
-                ? personRepo.getReferenceById(value.id())
+        BatchCourseDAO batchCourse = check
+                ? batchCourseRepo.getReferenceById(value.id())
                 : new BatchCourseDAO();
 
         // person.setRecordComment(check ? "UPDATE" : "NEW");
-        BatchCourseDTO.fromDTO(value, person);
-        return BatchCourseDTO.fromEntity(personRepo.save(person));
+        BatchCourseDTO.fromDTO(value, batchCourse);
+        return BatchCourseDTO.fromEntity(batchCourseRepo.save(batchCourse));
     }
 
     @Override
     public void delete(Long id) {
-        personRepo.deleteById(id);
+        batchCourseRepo.deleteById(id);
     }
 }

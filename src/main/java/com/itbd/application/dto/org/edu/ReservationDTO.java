@@ -94,7 +94,6 @@ public record ReservationDTO(
         BatchDAO batch = reservationDTO.batch() != null ? reservationDTO.batch() : new BatchDAO();
         RoomDAO room = reservationDTO.room() != null ? reservationDTO.room() : new RoomDAO();
         InstructorDAO instructor = reservationDTO.instructor() != null ? reservationDTO.instructor() : new InstructorDAO();
-//        instructor.setPerson(null);
 
         reservationDAO.setBatch(batch);
         reservationDAO.setRoom(room);

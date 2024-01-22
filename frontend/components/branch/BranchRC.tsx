@@ -214,46 +214,43 @@ export default function BranchRC({ visibleFields, organization, department, prog
   };
   return (
     <>
-      <div className='overflow-x-scroll w-full'>
-        <HorizontalLayout className="flex flex-row w-full items-center">
-          {
-            visibleFields['organization'] &&
-            <>
-              <div className='text-sm font-medium ml-5 mr-2 text-gray-400'>Profile</div>
-              <ComboBox dataProvider={organizationDataProvider} itemLabelPath='name' itemValuePath='name' clearButtonVisible onValueChanged={handleOrganization} style={{ '--vaadin-combo-box-overlay-width': '350px' } as React.CSSProperties} />
-            </>
-          }
-          {
-            visibleFields['department'] &&
-            <>
-              <div className='text-sm font-medium ml-5 mr-2 text-gray-400'>Department</div>
-              <ComboBox dataProvider={departmentDataProvider} itemLabelPath='name' itemValuePath='name' clearButtonVisible value={department?.departmentName} onValueChanged={handleDepartment} style={{ '--vaadin-combo-box-overlay-width': '350px' } as React.CSSProperties} />
-            </>
-          }
-          {
-            visibleFields['programme'] &&
-            <>
-              <div className='text-sm font-medium ml-5 mr-2 text-gray-400'>Programme</div>
-              <ComboBox dataProvider={programmeDataProvider} itemLabelPath='name' itemValuePath='name' clearButtonVisible value={programme?.programmeName} onValueChanged={handleProgramme} style={{ '--vaadin-combo-box-overlay-width': '350px' } as React.CSSProperties} />
-            </>
-          }
-          {
-            visibleFields['batch'] &&
-            <>
-              <div className='text-sm font-medium ml-5 mr-2 text-gray-400'>Batch</div>
-              <ComboBox dataProvider={batchDataProvider} itemLabelPath='name' itemValuePath='name' clearButtonVisible value={batch?.batchName} onValueChanged={handleBatch} style={{ '--vaadin-combo-box-overlay-width': '350px' } as React.CSSProperties} />
-            </>
-          }
-          {
-            visibleFields['course'] &&
-            <>
-              <div className='text-sm font-medium ml-5 mr-2 text-gray-400'>Batch</div>
-              <ComboBox dataProvider={courseDataProvider} itemLabelPath='name' itemValuePath='name' clearButtonVisible value={course?.courseName} onValueChanged={handleCourse} style={{ '--vaadin-combo-box-overlay-width': '350px' } as React.CSSProperties} />
-            </>
-          }
-        </HorizontalLayout>
+      <div className='flex flex-row overflow-x-auto w-full items-center rounded-xl border-4'>
+        {
+          visibleFields['organization'] &&
+          <>
+            <div className='text-sm font-medium ml-5 mr-2 text-gray-400'>Profile</div>
+            <ComboBox dataProvider={organizationDataProvider} itemLabelPath='name' itemValuePath='name' clearButtonVisible onValueChanged={handleOrganization} style={{ '--vaadin-combo-box-overlay-width': '350px' } as React.CSSProperties} />
+          </>
+        }
+        {
+          visibleFields['department'] &&
+          <>
+            <div className='text-sm font-medium ml-5 mr-2 text-gray-400'>Department</div>
+            <ComboBox dataProvider={departmentDataProvider} itemLabelPath='name' itemValuePath='name' clearButtonVisible value={department?.departmentName} onValueChanged={handleDepartment} style={{ '--vaadin-combo-box-overlay-width': '350px' } as React.CSSProperties} />
+          </>
+        }
+        {
+          visibleFields['programme'] &&
+          <>
+            <div className='text-sm font-medium ml-5 mr-2 text-gray-400'>Programme</div>
+            <ComboBox dataProvider={programmeDataProvider} itemLabelPath='name' itemValuePath='name' clearButtonVisible value={programme?.programmeName} onValueChanged={handleProgramme} style={{ '--vaadin-combo-box-overlay-width': '350px' } as React.CSSProperties} />
+          </>
+        }
+        {
+          visibleFields['batch'] &&
+          <>
+            <div className='text-sm font-medium ml-5 mr-2 text-gray-400'>Batch</div>
+            <ComboBox dataProvider={batchDataProvider} itemLabelPath='name' itemValuePath='name' clearButtonVisible value={batch?.batchName} onValueChanged={handleBatch} style={{ '--vaadin-combo-box-overlay-width': '350px' } as React.CSSProperties} />
+          </>
+        }
+        {
+          visibleFields['course'] &&
+          <>
+            <div className='text-sm font-medium ml-5 mr-2 text-gray-400'>Batch</div>
+            <ComboBox dataProvider={courseDataProvider} itemLabelPath='name' itemValuePath='name' clearButtonVisible value={course?.courseName} onValueChanged={handleCourse} style={{ '--vaadin-combo-box-overlay-width': '350px' } as React.CSSProperties} />
+          </>
+        }
       </div>
-      <hr className="h-px bg-gray-200 border-0 dark:bg-gray-700" />
     </>
   );
 }

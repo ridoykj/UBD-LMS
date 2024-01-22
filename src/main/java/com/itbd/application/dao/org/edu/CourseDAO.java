@@ -62,7 +62,7 @@ public class CourseDAO extends AbstractEntity<Long> {
     private String durationUnit;
 
     @OneToMany(mappedBy = "course")
-    public Set<BatchCourseDAO> batchCourses;
+    private Set<BatchCourseDAO> batchCourses;
 
 
 //    @OneToMany(mappedBy = "course")

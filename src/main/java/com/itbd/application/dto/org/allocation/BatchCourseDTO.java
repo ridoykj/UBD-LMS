@@ -3,12 +3,10 @@ package com.itbd.application.dto.org.allocation;
 import com.itbd.application.dao.org.allocation.BatchCourseDAO;
 import com.itbd.application.dao.org.edu.BatchDAO;
 import com.itbd.application.dao.org.edu.CourseDAO;
-import com.itbd.application.dao.org.place.RoomDAO;
-import com.itbd.application.dao.user.InstructorDAO;
-import com.itbd.application.dto.org.edu.CourseDTO;
 import org.springframework.data.annotation.Version;
 
 import java.math.BigDecimal;
+import java.util.HashSet;
 
 public record BatchCourseDTO(
         Long id,
@@ -31,7 +29,18 @@ public record BatchCourseDTO(
 
 
     public static BatchCourseDTO fromEntity(BatchCourseDAO batchCourse) {
+        BatchDAO batch = batchCourse.getBatch();
+        CourseDAO course = batchCourse.getCourse();
 
+        batch.setProgramme(null);
+        batch.setReservations(null);
+        batch.setStudents(null);
+
+        batch.setBatchCourses(null);
+        course.setBatchCourses(null);
+
+        batchCourse.setBatch(batch);
+        batchCourse.setCourse(course);
         return new BatchCourseDTO(
                 batchCourse.getId(),
                 batchCourse.getVersion(),
@@ -52,27 +61,34 @@ public record BatchCourseDTO(
         );
     }
 
-    public static void fromDTO(BatchCourseDTO courseDTO, BatchCourseDAO courseDAO) {
-        courseDAO.setId(courseDTO.id());
-        courseDAO.setVersion(courseDTO.version());
-        courseDAO.setName(courseDTO.name());
-        courseDAO.setCode(courseDTO.code());
-        courseDAO.setPrerequisites(courseDTO.prerequisites());
-        courseDAO.setHeadline(courseDTO.headline());
-        courseDAO.setSemester(courseDTO.semester());
-        courseDAO.setAbout(courseDTO.about());
-        courseDAO.setNumberOfCredits(courseDTO.numberOfCredits());
-        courseDAO.setNumberOfLecture(courseDTO.numberOfLecture());
-        courseDAO.setNumberOfTutorial(courseDTO.numberOfTutorial());
-        courseDAO.setType(courseDTO.type());
-        courseDAO.setDuration(courseDTO.duration());
-        courseDAO.setDurationUnit(courseDTO.durationUnit());
+    public static void fromDTO(BatchCourseDTO value, BatchCourseDAO batchCourse) {
+        batchCourse.setId(value.id());
+        batchCourse.setVersion(value.version());
+        batchCourse.setName(value.name());
+        batchCourse.setCode(value.code());
+        batchCourse.setPrerequisites(value.prerequisites());
+        batchCourse.setHeadline(value.headline());
+        batchCourse.setSemester(value.semester());
+        batchCourse.setAbout(value.about());
+        batchCourse.setNumberOfCredits(value.numberOfCredits());
+        batchCourse.setNumberOfLecture(value.numberOfLecture());
+        batchCourse.setNumberOfTutorial(value.numberOfTutorial());
+        batchCourse.setType(value.type());
+        batchCourse.setDuration(value.duration());
+        batchCourse.setDurationUnit(value.durationUnit());
 
-        BatchDAO batch = courseDTO.batch() != null ? courseDTO.batch() : new BatchDAO();
-        CourseDAO course = courseDTO.course() != null ? courseDTO.course() : new CourseDAO();
+        BatchDAO batch = value.batch() != null ? value.batch() : new BatchDAO();
+        CourseDAO course = value.course() != null ? value.course() : new CourseDAO();
 
-        courseDAO.setBatch(batch);
-        courseDAO.setCourse(course);
+        batch.setBatchCourses(batch.getBatchCourses() != null ? batch.getBatchCourses() : new HashSet<>());
+        course.setBatchCourses(course.getBatchCourses() != null ? course.getBatchCourses() : new HashSet<>());
+
+        batch.getBatchCourses().add(batchCourse);
+        course.getBatchCourses().add(batchCourse);
+
+
+        batchCourse.setBatch(batch);
+        batchCourse.setCourse(course);
     }
 
 }

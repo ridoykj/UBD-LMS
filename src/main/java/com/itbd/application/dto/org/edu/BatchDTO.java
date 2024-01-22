@@ -94,6 +94,7 @@ public record BatchDTO(
         batchDAO.setProgramme(batchDTO.programme());
         batchDAO.setReservations(batchDTO.reservations());
         batchDAO.setStudents(batchDTO.students());
+        batchDAO.setBatchCourses(batchDTO.batchCourses());
     }
 
 }

@@ -34,13 +34,13 @@ export const routes: RouteObject[] = [
     handle: { title: 'Main' },
     children: [
       { path: '/', element: <DashboardView />, handle: { title: 'Dashboard' } },
-      { path: '/time_sheet', element: <CalenderBoardView />, handle: { title: 'Time Sheet' } },
+
       { path: '/default', element: <DefaultView />, handle: { title: 'Not Implemented' } },
       { path: '/shop', element: <ShopView />, handle: { title: 'Shop' } },
       { path: '/grid', element: <GridView />, handle: { title: 'Grid' } },
       { path: '/about', element: <AboutView />, handle: { title: 'About' } },
 
-      { path: '/academic/organization', element: <OrganizationView />, handle: { title: 'Organization' } },
+      { path: '/academic/organization', element: <OrganizationView />, handle: { title: 'Profile' } },
       { path: '/academic/attendance', element: <AttendanceView />, handle: { title: 'Attendance' } },
       { path: '/academic/section', element: <SectionView />, handle: { title: 'Section' } },
       { path: '/academic/testimonial', element: <TestimonialView />, handle: { title: 'Testimonial' } },
@@ -57,6 +57,8 @@ export const routes: RouteObject[] = [
       { path: '/place/sector', element: <SectorView />, handle: { title: 'Sector' } },
 
       { path: '/allocation/batch_course', element: <BatchCourseView />, handle: { title: 'Batch-Course' } },
+      
+      { path: '/time_sheet/class', element: <CalenderBoardView />, handle: { title: 'Time Sheet' } },
 
       { path: '/user/authorization', element: <AuthorizationView />, handle: { title: 'Authorization' } },
       { path: '/user/coordinators', element: <CoordinatorView />, handle: { title: 'Coordinator' } },
