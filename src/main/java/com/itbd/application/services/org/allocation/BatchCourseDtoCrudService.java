@@ -1,7 +1,11 @@
 package com.itbd.application.services.org.allocation;
 
+import com.itbd.application.dao.org.allocation.BatchCoordinatorDAO;
 import com.itbd.application.dao.org.allocation.BatchCourseDAO;
+import com.itbd.application.dao.user.InstructorDAO;
+import com.itbd.application.dao.user.person.PersonDAO;
 import com.itbd.application.dto.org.allocation.BatchCourseDTO;
+import com.itbd.application.repos.org.allocation.BatchCoordinatorRepo;
 import com.itbd.application.repos.org.allocation.BatchCourseRepo;
 import com.vaadin.flow.server.auth.AnonymousAllowed;
 import dev.hilla.BrowserCallable;
@@ -16,7 +20,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @BrowserCallable
 @AnonymousAllowed
@@ -27,6 +33,9 @@ public class BatchCourseDtoCrudService implements CrudService<BatchCourseDTO, Lo
 
     @Autowired
     private BatchCourseRepo batchCourseRepo;
+
+    @Autowired
+    private BatchCoordinatorRepo batchCoordinatorRepo;
 
     // public PersonMargeDtoCrudService(CourseRepo personRepo, AddressRepo
     // addressRepo) {
@@ -43,7 +52,34 @@ public class BatchCourseDtoCrudService implements CrudService<BatchCourseDTO, Lo
                 ? jpaFilterConverter.toSpec(filter, BatchCourseDAO.class)
                 : Specification.anyOf();
         Page<BatchCourseDAO> persons = batchCourseRepo.findAll(spec, pageable);
-        return persons.stream().map(BatchCourseDTO::fromEntity).toList();
+        return persons.stream().map(item -> {
+            Set<BatchCoordinatorDAO> coordinatorDAOSet = batchCoordinatorRepo.findByBatchCourse(item).stream().map(batchCoordinator -> {
+                BatchCourseDAO bc = new BatchCourseDAO();
+                bc.setId(item.getId());
+                bc.setVersion(item.getVersion());
+
+                InstructorDAO instructor = batchCoordinator.getInstructor();
+                PersonDAO person = instructor.getPerson();
+                person.setInstructor(null);
+                person.setAddress(null);
+                person.setContact(null);
+                person.setMedical(null);
+                person.setOccupation(null);
+                person.setRecord(null);
+
+                instructor.setBatchCoordinators(null);
+                instructor.setReservations(null);
+                instructor.setPerson(person);
+
+                batchCoordinator.setBatchCourse(bc);
+                batchCoordinator.setInstructor(instructor);
+                return batchCoordinator;
+            }).collect(HashSet::new, HashSet::add, HashSet::addAll);
+
+            item.setBatchCoordinators(coordinatorDAOSet);
+
+            return item;
+        }).map(BatchCourseDTO::fromEntity).toList();
     }
 
     @Override

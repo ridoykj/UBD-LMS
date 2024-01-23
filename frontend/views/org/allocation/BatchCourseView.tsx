@@ -24,11 +24,11 @@ import CourseDTOModel from "Frontend/generated/com/itbd/application/dto/org/edu/
 import InstructorDTOModel from "Frontend/generated/com/itbd/application/dto/user/instructor/InstructorDTOModel";
 import PropertyStringFilter from "Frontend/generated/dev/hilla/crud/filter/PropertyStringFilter";
 import Matcher from "Frontend/generated/dev/hilla/crud/filter/PropertyStringFilter/Matcher";
-import { BatchCourseDtoCrudService, BatchDtoCrudService, CourseDtoCrudService, InstructorDtoCrudService } from "Frontend/generated/endpoints";
+import { BatchCoordinatorDtoCrudService, BatchCourseDtoCrudService, BatchDtoCrudService, CourseDtoCrudService, InstructorDtoCrudService } from "Frontend/generated/endpoints";
 import NotificationUtil from "Frontend/util/NotificationUtil";
 import { comboBoxLazyFilter } from "Frontend/util/comboboxLazyFilterUtil";
 import React, { useMemo, useState } from "react";
-import { FaTrash } from "react-icons/fa";
+import { FaTrash, FaUserPlus } from "react-icons/fa";
 
 const BatchCourseView = () => {
 
@@ -47,7 +47,7 @@ const BatchCourseView = () => {
 
   const [selectedCourseItems, setSelectedCourseItems] = useState<BatchCourseDTO[]>([]);
 
-  const { model, field, value, read, submit, clear, reset, visited, dirty, invalid, submitting } = useForm(BatchCourseDTOModel, {
+  const { model, field, value, read, submit, clear, reset, visited, dirty, invalid, submitting, setValue, update, validate } = useForm(BatchCourseDTOModel, {
     onSubmit: async (batch) => {
       await BatchCourseDtoCrudService.save(batch).then((result) => {
         refreshGrid();
@@ -160,17 +160,25 @@ const BatchCourseView = () => {
   function renderInvitedPeopleTable() {
     return (
       <>
-        <Grid items={value.batchCoordinators} allRowsVisible className="w-fit">
+        <Grid items={value.batchCoordinators} allRowsVisible className="w-full">
           <GridColumn header="Name" path='instructor.person.givenName' autoWidth resizable />
           <GridColumn path="type" autoWidth resizable />
           <GridColumn header="">
-            {({ item: person }) => (
-              <Button
-                theme="error tertiary icon"
+            {({ item: coordinator }) => (
+              <Button className="text-red-500 hover:text-red-600 bg-transparent border"
                 onClick={() => {
-                  console.log('person', person);
-
-                  // setInvitedPeople(invitedPeople.filter((p) => p.id !== person.id));
+                  if (coordinator.id != null) {
+                    BatchCoordinatorDtoCrudService.delete(coordinator.id).then((result) => {
+                      refreshGrid();
+                      clear();
+                    })
+                  }
+                  else {
+                    console.log('batchCoordinators', value.batchCoordinators);
+                    console.log('coordinator', coordinator);
+                    value.batchCoordinators = value.batchCoordinators?.filter((p) => p?.instructor?.id !== coordinator.instructor.id);
+                    update();
+                  };
                 }}
               >
                 <FaTrash />
@@ -267,6 +275,33 @@ const BatchCourseView = () => {
                 renderer={({ item }) => courseCustomItemRenderer(item)}
                 style={{ '--vaadin-combo-box-overlay-width': '350px' } as React.CSSProperties}
               />
+              <div className="flex flex-col w-fit border-2 drop-shadow-sm">
+                <ComboBox label={'Coordinator'} dataProvider={instructorDataProvider} itemLabelPath="person.givenName" itemValuePath="id"
+                  onSelectedItemChanged={(event) => {
+                    event.detail.value ? setItems({ instructor: event.detail.value.valueOf(), batchCourse: { id: value.id, version: value.version } }) : null;
+                  }}
+                />
+                <div>
+                  <ComboBox label={'Activity'} items={coordinatorType} itemLabelPath="label" itemValuePath="label"
+                    onSelectedItemChanged={(event) => {
+                      if (items) {
+                        setItems({ ...items, type: event.detail.value?.value });
+                      }
+                    }}
+                  />
+                  <Button className="text-white hover:bg-blue-600 bg-blue-500 drop-shadow-sm w-fit"
+                    onClick={() => {
+                      if (!value.batchCoordinators?.some(coordinator => coordinator?.instructor?.id === items?.instructor?.id)) {
+                        value.batchCoordinators = [...value.batchCoordinators ?? [], items ?? {}];
+                        update();
+                      }
+                    }}
+                  >
+                    <FaUserPlus />
+                  </Button>
+                </div>
+                {value.batchCoordinators?.length ?? 0 > 0 ? renderInvitedPeopleTable() : null}
+              </div>
               <TextField label={'Headline'}  {...field(model.headline)} className="w-fit" />
               <TextField label={'Type'}  {...field(model.type)} className="w-fit" />
               <IntegerField label={'Semester'}  {...field(model.semester)} className="w-fit" />
@@ -275,29 +310,6 @@ const BatchCourseView = () => {
               <NumberField label={'Tutorials'}  {...field(model.numberOfTutorial)} className="w-fit" />
               <NumberField label={'Duration (min)'}  {...field(model.duration)} className="w-fit" />
               <TextArea label={'About'}  {...field(model.about)} className="w-fit" />
-              <ComboBox label={'Coordinator'} dataProvider={instructorDataProvider} itemLabelPath="person.givenName"
-                itemValuePath="id" placeholder="Select Coordinator"
-                onSelectedItemChanged={(event) => {
-                  event.detail.value ? setItems({ instructor: event.detail.value.valueOf(), batchCourse: { id: value.id, version: value.version } }) : null;
-                }}
-              />
-              <ComboBox label={'Activity'} items={coordinatorType}
-                itemLabelPath="label" itemValuePath="label"
-                onSelectedItemChanged={(event) => {
-                  if (items) {
-                    setItems({ ...items, type: event.detail.value?.value });
-                  }
-                }}
-              />
-              <Button className="w-fit"
-                theme="primary"
-                onClick={() => {
-                  value.batchCoordinators = [...value.batchCoordinators ?? [], items ?? {}];
-                }}
-              >
-                <Icon icon="vaadin:plus" />Add
-              </Button>
-              {renderInvitedPeopleTable()}
             </FormLayout>
           </main>
           <footer className="flex flex-row bg-gray-100 w-full">

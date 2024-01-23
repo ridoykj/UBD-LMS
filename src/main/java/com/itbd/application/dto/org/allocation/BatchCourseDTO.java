@@ -36,7 +36,7 @@ public record BatchCourseDTO(
     public static BatchCourseDTO fromEntity(BatchCourseDAO batchCourse) {
         BatchDAO batch = batchCourse.getBatch();
         CourseDAO course = batchCourse.getCourse();
-        Set<BatchCoordinatorDAO> batchCoordinators = batchCourse.getBatchCoordinators();
+//        Set<BatchCoordinatorDAO> batchCoordinators = batchCourse.getBatchCoordinators();
 
         batch.setProgramme(null);
         batch.setReservations(null);
@@ -47,28 +47,28 @@ public record BatchCourseDTO(
 
         batchCourse.setBatch(batch);
         batchCourse.setCourse(course);
-        batchCourse.setBatchCoordinators(batchCoordinators.stream().map(batchCoordinator -> {
-            BatchCourseDAO bc = new BatchCourseDAO();
-            bc.setId(batchCourse.getId());
-            bc.setVersion(batchCourse.getVersion());
-
-            InstructorDAO instructor = batchCoordinator.getInstructor();
-            PersonDAO person = instructor.getPerson();
-            person.setInstructor(null);
-            person.setAddress(null);
-            person.setContact(null);
-            person.setMedical(null);
-            person.setOccupation(null);
-            person.setRecord(null);
-
-            instructor.setBatchCoordinators(null);
-            instructor.setReservations(null);
-            instructor.setPerson(person);
-
-            batchCoordinator.setBatchCourse(bc);
-            batchCoordinator.setInstructor(instructor);
-            return batchCoordinator;
-        }).collect(HashSet::new, HashSet::add, HashSet::addAll));
+//        batchCourse.setBatchCoordinators(batchCoordinators.stream().map(batchCoordinator -> {
+//            BatchCourseDAO bc = new BatchCourseDAO();
+//            bc.setId(batchCourse.getId());
+//            bc.setVersion(batchCourse.getVersion());
+//
+//            InstructorDAO instructor = batchCoordinator.getInstructor();
+//            PersonDAO person = instructor.getPerson();
+//            person.setInstructor(null);
+//            person.setAddress(null);
+//            person.setContact(null);
+//            person.setMedical(null);
+//            person.setOccupation(null);
+//            person.setRecord(null);
+//
+//            instructor.setBatchCoordinators(null);
+//            instructor.setReservations(null);
+//            instructor.setPerson(person);
+//
+//            batchCoordinator.setBatchCourse(bc);
+//            batchCoordinator.setInstructor(instructor);
+//            return batchCoordinator;
+//        }).collect(HashSet::new, HashSet::add, HashSet::addAll));
         return new BatchCourseDTO(
                 batchCourse.getId(),
                 batchCourse.getVersion(),
