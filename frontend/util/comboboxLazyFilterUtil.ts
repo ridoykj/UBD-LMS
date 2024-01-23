@@ -20,3 +20,20 @@ export function comboBoxLazyFilter(comboBoxDataProviderParams: ComboBoxDataProvi
 
   return { pagination, filters };
 }
+
+export function filterById(type: string, property: PropertyStringFilter[]) {
+  const pagination: Pageable = {
+    pageNumber: 0,
+    pageSize: 1,
+    sort: {
+      orders: []
+    },
+  };
+
+  const filters: Filter = {
+    '@type': type,
+    children: property
+  };
+
+  return { pagination, filters };
+}

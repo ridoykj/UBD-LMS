@@ -68,6 +68,9 @@ public class BatchCourseDAO {
     @JoinColumn(name = "id_batch_key")
     private BatchDAO batch;
 
+    @OneToMany(mappedBy = "batchCourse", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private Set<BatchCoordinatorDAO> batchCoordinators;
+
 
     //    @OneToMany(mappedBy = "course")
 //    private List<ReservationDAO> reservations;

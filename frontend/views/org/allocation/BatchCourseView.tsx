@@ -2,6 +2,8 @@ import { Button } from "@hilla/react-components/Button.js";
 import { ComboBox, ComboBoxDataProviderCallback, ComboBoxDataProviderParams } from "@hilla/react-components/ComboBox.js";
 import { ConfirmDialog } from "@hilla/react-components/ConfirmDialog.js";
 import { FormLayout } from "@hilla/react-components/FormLayout.js";
+import { Grid } from "@hilla/react-components/Grid.js";
+import { GridColumn } from "@hilla/react-components/GridColumn.js";
 import { Icon } from "@hilla/react-components/Icon.js";
 import { IntegerField } from "@hilla/react-components/IntegerField.js";
 import { NumberField } from "@hilla/react-components/NumberField.js";
@@ -12,24 +14,31 @@ import { VerticalLayout } from "@hilla/react-components/VerticalLayout";
 import { useForm } from "@hilla/react-form";
 import BranchRC from "Frontend/components/branch/BranchRC";
 import { AutoGrid, AutoGridRef } from "Frontend/components/grid/autogrid";
+import CoordinatorTypeEnum from "Frontend/generated/com/itbd/application/constants/CoordinatorTypeEnum";
+import BatchCoordinatorDAO from "Frontend/generated/com/itbd/application/dao/org/allocation/BatchCoordinatorDAO";
 import BatchCourseDTO from "Frontend/generated/com/itbd/application/dto/org/allocation/BatchCourseDTO";
 import BatchCourseDTOModel from "Frontend/generated/com/itbd/application/dto/org/allocation/BatchCourseDTOModel";
 import BatchDTOModel from "Frontend/generated/com/itbd/application/dto/org/edu/BatchDTOModel";
 import CourseDTO from "Frontend/generated/com/itbd/application/dto/org/edu/CourseDTO";
 import CourseDTOModel from "Frontend/generated/com/itbd/application/dto/org/edu/CourseDTOModel";
-import ProgrammeDTOModel from "Frontend/generated/com/itbd/application/dto/org/edu/ProgrammeDTOModel";
+import InstructorDTOModel from "Frontend/generated/com/itbd/application/dto/user/instructor/InstructorDTOModel";
 import PropertyStringFilter from "Frontend/generated/dev/hilla/crud/filter/PropertyStringFilter";
 import Matcher from "Frontend/generated/dev/hilla/crud/filter/PropertyStringFilter/Matcher";
-import { BatchCourseDtoCrudService, BatchDtoCrudService, CourseDtoCrudService, ProgrammeDtoCrudService } from "Frontend/generated/endpoints";
+import { BatchCourseDtoCrudService, BatchDtoCrudService, CourseDtoCrudService, InstructorDtoCrudService } from "Frontend/generated/endpoints";
 import NotificationUtil from "Frontend/util/NotificationUtil";
 import { comboBoxLazyFilter } from "Frontend/util/comboboxLazyFilterUtil";
 import React, { useMemo, useState } from "react";
+import { FaTrash } from "react-icons/fa";
 
 const BatchCourseView = () => {
 
   const [orgNameFilter, setOrgNameFilter] = useState('');
   const [departmentNameFilter, setDepartmentNameFilter] = useState('');
   const [programmeNameFilter, setProgrammeNameFilter] = useState('');
+
+  const [items, setItems] = useState<BatchCoordinatorDAO>();
+  // const [invitedPeople, setInvitedPeople] = useState<BatchCoordinatorDAO[]>([]);
+  // const [selectedValue, setSelectedValue] = useState<string>('');
 
   const autoGridRef = React.useRef<AutoGridRef>(null);
 
@@ -53,32 +62,29 @@ const BatchCourseView = () => {
   }
 
 
-  const programmeDataProvider = useMemo(
+  const coordinatorType = Object.values(CoordinatorTypeEnum).map(level => ({ label: level, value: level }));
+
+  const instructorDataProvider = useMemo(
     () =>
       async (
         params: ComboBoxDataProviderParams,
-        callback: ComboBoxDataProviderCallback<ProgrammeDTOModel>
+        callback: ComboBoxDataProviderCallback<InstructorDTOModel>
       ) => {
-        const child: PropertyStringFilter[] = [
+        const childName: PropertyStringFilter[] = [
           {
             '@type': 'propertyString',
-            propertyId: 'department.name',
-            filterValue: departmentNameFilter || '',
-            matcher: Matcher.EQUALS
-          }, {
-            '@type': 'propertyString',
-            propertyId: 'name',
+            propertyId: 'person.givenName',
             filterValue: params.filter,
-            matcher: Matcher.CONTAINS
+            matcher: Matcher.CONTAINS,
           },];
 
-        const { pagination, filters } = comboBoxLazyFilter(params, 'and', child);
-        ProgrammeDtoCrudService.list(pagination, filters).then((result: any) => {
-          callback(result, result.length);
+        const { pagination, filters } = comboBoxLazyFilter(params, 'or', childName);
+        InstructorDtoCrudService.list(pagination, filters).then((result: any) => {
+          console.log('instructorDataProvider', result);
+          callback(result);
         });
-
       },
-    [departmentNameFilter]
+    []
   );
 
   const batchDataProvider = useMemo(
@@ -151,6 +157,31 @@ const BatchCourseView = () => {
     );
   }
 
+  function renderInvitedPeopleTable() {
+    return (
+      <>
+        <Grid items={value.batchCoordinators} allRowsVisible className="w-fit">
+          <GridColumn header="Name" path='instructor.person.givenName' autoWidth resizable />
+          <GridColumn path="type" autoWidth resizable />
+          <GridColumn header="">
+            {({ item: person }) => (
+              <Button
+                theme="error tertiary icon"
+                onClick={() => {
+                  console.log('person', person);
+
+                  // setInvitedPeople(invitedPeople.filter((p) => p.id !== person.id));
+                }}
+              >
+                <FaTrash />
+              </Button>
+            )}
+          </GridColumn>
+        </Grid>
+      </>
+    );
+  }
+
   const responsiveSteps = [
     { minWidth: '0', columns: 1 },
     { minWidth: '600px', columns: 2 },
@@ -189,12 +220,13 @@ const BatchCourseView = () => {
           />
 
           <AutoGrid service={BatchCourseDtoCrudService} model={BatchCourseDTOModel} ref={autoGridRef}
-            visibleColumns={['batch.name', 'semester', 'course.code', 'course.name', 'numberOfCredits',]}
+            visibleColumns={['batch.name', 'course.code', 'course.name', 'semester', 'numberOfCredits',]}
             selectedItems={selectedCourseItems}
             theme="row-stripes"
             onActiveItemChanged={(e) => {
               const item = e.detail.value;
               setSelectedCourseItems(item ? [item] : []);
+              console.log('onActiveItemChanged', item);
               read(item);
             }}
             columnOptions={{
@@ -230,35 +262,48 @@ const BatchCourseView = () => {
           </header>
           <main className="overflow-y-scroll w-full h-full">
             <FormLayout responsiveSteps={responsiveSteps} className="w-fit h-fit mx-5">
-              <label slot="label">Profile</label>
               <ComboBox label={'Batch'}  {...field(model.batch)} dataProvider={batchDataProvider} itemLabelPath='name' itemValuePath='name' clearButtonVisible />
-
               <ComboBox label={'Course'}  {...field(model.course)} dataProvider={courseDataProvider} itemLabelPath='name' itemValuePath='name' clearButtonVisible
                 renderer={({ item }) => courseCustomItemRenderer(item)}
                 style={{ '--vaadin-combo-box-overlay-width': '350px' } as React.CSSProperties}
               />
-
-              {/* <ComboBox label={'Course'}  {...field(model.course)} dataProvider={programmeDataProvider} itemLabelPath='name' itemValuePath='name' clearButtonVisible /> */}
-              {/* <TextField label={'Name'}  {...field(model.name)} className="w-fit" /> */}
               <TextField label={'Headline'}  {...field(model.headline)} className="w-fit" />
-              {/* <TextField label={'code'}  {...field(model.code)} className="w-fit" /> */}
               <TextField label={'Type'}  {...field(model.type)} className="w-fit" />
               <IntegerField label={'Semester'}  {...field(model.semester)} className="w-fit" />
               <NumberField label={'Credits'}  {...field(model.numberOfCredits)} className="w-fit" />
               <NumberField label={'Lectures'}  {...field(model.numberOfLecture)} className="w-fit" />
               <NumberField label={'Tutorials'}  {...field(model.numberOfTutorial)} className="w-fit" />
               <NumberField label={'Duration (min)'}  {...field(model.duration)} className="w-fit" />
-              {/* <TextField label={'durationUnit'}  {...field(model.durationUnit)} className="w-fit" /> */}
               <TextArea label={'About'}  {...field(model.about)} className="w-fit" />
-              {/* <NumberField label={'Credit Points'}  {...field(model.numberOfCredits)} className="w-fit" step={0.5} defaultValue={0} stepButtonsVisible /> */}
-              {/* <TextField label={'Language'}  {...field(model.language)} className="w-fit" /> */}
-              {/* <TextArea label={'About'}  {...field(model.about)} className="w-fit" /> */}
+              <ComboBox label={'Coordinator'} dataProvider={instructorDataProvider} itemLabelPath="person.givenName"
+                itemValuePath="id" placeholder="Select Coordinator"
+                onSelectedItemChanged={(event) => {
+                  event.detail.value ? setItems({ instructor: event.detail.value.valueOf(), batchCourse: { id: value.id, version: value.version } }) : null;
+                }}
+              />
+              <ComboBox label={'Activity'} items={coordinatorType}
+                itemLabelPath="label" itemValuePath="label"
+                onSelectedItemChanged={(event) => {
+                  if (items) {
+                    setItems({ ...items, type: event.detail.value?.value });
+                  }
+                }}
+              />
+              <Button className="w-fit"
+                theme="primary"
+                onClick={() => {
+                  value.batchCoordinators = [...value.batchCoordinators ?? [], items ?? {}];
+                }}
+              >
+                <Icon icon="vaadin:plus" />Add
+              </Button>
+              {renderInvitedPeopleTable()}
             </FormLayout>
           </main>
           <footer className="flex flex-row bg-gray-100 w-full">
             <div className="w-full">
               {
-                selectedCourseItems[0]?.id === undefined ? null :
+                value?.id === undefined ? null :
                   <Button
                     className="text-white bg-red-400 hover:bg-red-500"
                     onClick={() => {
@@ -283,7 +328,7 @@ const BatchCourseView = () => {
                     disabled={invalid || submitting || !dirty}
                     onClick={submit}
                   >
-                    {selectedCourseItems[0]?.id !== undefined ? 'Update' : 'Save'}
+                    {value?.id !== undefined ? 'Update' : 'Save'}
                   </Button>
                 </div>
             }

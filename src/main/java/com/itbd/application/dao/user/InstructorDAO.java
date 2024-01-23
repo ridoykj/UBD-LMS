@@ -2,6 +2,8 @@ package com.itbd.application.dao.user;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.itbd.application.dao.AbstractEntity;
+import com.itbd.application.dao.org.allocation.BatchCoordinatorDAO;
+import com.itbd.application.dao.org.allocation.BatchCourseDAO;
 import com.itbd.application.dao.org.edu.ReservationDAO;
 import com.itbd.application.dao.user.person.PersonDAO;
 import jakarta.annotation.Nullable;
@@ -10,6 +12,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.util.List;
+import java.util.Set;
 
 @Entity(name = "t_org_instructor")
 @Getter
@@ -40,12 +43,14 @@ public class InstructorDAO extends AbstractEntity<Long> {
     @Column(name = "tx_qualification")
     private String qualification;
 
-    @OneToMany(mappedBy = "instructor")
-    private List<ReservationDAO> reservations;
-
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "id_person_key")
 //    @JsonBackReference
     private PersonDAO person;
 
+    @OneToMany(mappedBy = "instructor")
+    private Set<ReservationDAO> reservations;
+
+    @OneToMany(mappedBy = "instructor")
+    private Set<BatchCoordinatorDAO> batchCoordinators;
 }
