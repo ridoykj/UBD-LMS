@@ -13,8 +13,8 @@ import java.time.OffsetDateTime;
 import java.util.Optional;
 
 @Configuration
-@EntityScan("com.itbd.application.dao")
-@EnableJpaRepositories("com.itbd.application.repos")
+@EntityScan(basePackages = {"com.itbd.application.dao"})
+@EnableJpaRepositories(basePackages = {"com.itbd.application.repos"})
 @EnableTransactionManagement
 // @EnableJpaAuditing(dateTimeProviderRef = "auditingDateTimeProvider")
 @EnableJpaAuditing(dateTimeProviderRef = "auditingDateTimeProvider", auditorAwareRef = "auditorAware")

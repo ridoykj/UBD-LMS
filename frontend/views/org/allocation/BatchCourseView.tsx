@@ -53,6 +53,9 @@ const BatchCourseView = () => {
         refreshGrid();
         setSelectedCourseItems(result ? [result] : []);
         setSuccessNotification(true);
+      }).catch((error) => {
+        console.log('error', error);
+
       });
     }
   });
@@ -60,7 +63,6 @@ const BatchCourseView = () => {
   function refreshGrid() {
     autoGridRef.current?.refresh();
   }
-
 
   const coordinatorType = Object.values(CoordinatorTypeEnum).map(level => ({ label: level, value: level }));
 

@@ -4,16 +4,16 @@ import com.itbd.application.dao.org.allocation.BatchCoordinatorDAO;
 import com.itbd.application.dao.org.allocation.BatchCourseDAO;
 import com.itbd.application.dao.org.edu.BatchDAO;
 import com.itbd.application.dao.org.edu.CourseDAO;
-import com.itbd.application.dao.user.InstructorDAO;
-import com.itbd.application.dao.user.person.PersonDAO;
-import org.springframework.data.annotation.Version;
+import jakarta.persistence.Id;
+import jakarta.persistence.Version;
 
 import java.math.BigDecimal;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 public record BatchCourseDTO(
-        Long id,
+        @Id Long id,
         @Version Long version,
         String name,
         String code,
@@ -31,12 +31,9 @@ public record BatchCourseDTO(
         BatchDAO batch,
         Set<BatchCoordinatorDAO> batchCoordinators
 ) {
-
-
     public static BatchCourseDTO fromEntity(BatchCourseDAO batchCourse) {
         BatchDAO batch = batchCourse.getBatch();
         CourseDAO course = batchCourse.getCourse();
-//        Set<BatchCoordinatorDAO> batchCoordinators = batchCourse.getBatchCoordinators();
 
         batch.setProgramme(null);
         batch.setReservations(null);
@@ -47,28 +44,6 @@ public record BatchCourseDTO(
 
         batchCourse.setBatch(batch);
         batchCourse.setCourse(course);
-//        batchCourse.setBatchCoordinators(batchCoordinators.stream().map(batchCoordinator -> {
-//            BatchCourseDAO bc = new BatchCourseDAO();
-//            bc.setId(batchCourse.getId());
-//            bc.setVersion(batchCourse.getVersion());
-//
-//            InstructorDAO instructor = batchCoordinator.getInstructor();
-//            PersonDAO person = instructor.getPerson();
-//            person.setInstructor(null);
-//            person.setAddress(null);
-//            person.setContact(null);
-//            person.setMedical(null);
-//            person.setOccupation(null);
-//            person.setRecord(null);
-//
-//            instructor.setBatchCoordinators(null);
-//            instructor.setReservations(null);
-//            instructor.setPerson(person);
-//
-//            batchCoordinator.setBatchCourse(bc);
-//            batchCoordinator.setInstructor(instructor);
-//            return batchCoordinator;
-//        }).collect(HashSet::new, HashSet::add, HashSet::addAll));
         return new BatchCourseDTO(
                 batchCourse.getId(),
                 batchCourse.getVersion(),
@@ -108,16 +83,20 @@ public record BatchCourseDTO(
 
         BatchDAO batch = value.batch() != null ? value.batch() : new BatchDAO();
         CourseDAO course = value.course() != null ? value.course() : new CourseDAO();
+        Set<BatchCoordinatorDAO> batchCoordinators = value.batchCoordinators() != null ? value.batchCoordinators() : new HashSet<>();
 
         batch.setBatchCourses(batch.getBatchCourses() != null ? batch.getBatchCourses() : new HashSet<>());
         course.setBatchCourses(course.getBatchCourses() != null ? course.getBatchCourses() : new HashSet<>());
 
-        batchCourse.setBatchCoordinators(value.batchCoordinators() != null ? value.batchCoordinators() : new HashSet<>());
+        batchCourse.setBatchCoordinators(batchCoordinators.stream().map(batchCoordinator -> {
+            batchCoordinator.setBatchCourse(batchCourse);
+            return batchCoordinator;
+        }).collect(Collectors.toSet()));
+
         batch.getBatchCourses().add(batchCourse);
         course.getBatchCourses().add(batchCourse);
 
         batchCourse.setBatch(batch);
         batchCourse.setCourse(course);
     }
-
 }

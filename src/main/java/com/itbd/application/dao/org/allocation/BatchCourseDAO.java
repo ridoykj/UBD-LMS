@@ -1,5 +1,6 @@
 package com.itbd.application.dao.org.allocation;
 
+import com.itbd.application.dao.AbstractEntity;
 import com.itbd.application.dao.org.edu.BatchDAO;
 import com.itbd.application.dao.org.edu.CourseDAO;
 import jakarta.annotation.Nullable;
@@ -13,7 +14,7 @@ import java.util.Set;
 @Entity(name = "t_map_batch_course")
 @Getter
 @Setter
-public class BatchCourseDAO {
+public class BatchCourseDAO extends AbstractEntity<Long> {
     @Id
     @Column(name = "id_batch_course_key", nullable = false, updatable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)

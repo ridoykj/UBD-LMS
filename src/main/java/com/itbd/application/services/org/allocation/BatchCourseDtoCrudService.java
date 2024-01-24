@@ -14,7 +14,7 @@ import dev.hilla.Nullable;
 import dev.hilla.crud.CrudService;
 import dev.hilla.crud.JpaFilterConverter;
 import dev.hilla.crud.filter.Filter;
-import org.springframework.beans.factory.annotation.Autowired;
+import dev.hilla.exception.EndpointException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
@@ -27,21 +27,15 @@ import java.util.Set;
 @BrowserCallable
 @AnonymousAllowed
 public class BatchCourseDtoCrudService implements CrudService<BatchCourseDTO, Long> {
+    private final JpaFilterConverter jpaFilterConverter;
+    private final BatchCourseRepo batchCourseRepo;
+    private final BatchCoordinatorRepo batchCoordinatorRepo;
 
-    @Autowired
-    private JpaFilterConverter jpaFilterConverter;
-
-    @Autowired
-    private BatchCourseRepo batchCourseRepo;
-
-    @Autowired
-    private BatchCoordinatorRepo batchCoordinatorRepo;
-
-    // public PersonMargeDtoCrudService(CourseRepo personRepo, AddressRepo
-    // addressRepo) {
-    // this.personRepo = personRepo;
-    // this.addressRepo = addressRepo;
-    // }
+    public BatchCourseDtoCrudService(BatchCourseRepo batchCourseRepo, BatchCoordinatorRepo batchCoordinatorRepo, JpaFilterConverter jpaFilterConverter) {
+        this.batchCourseRepo = batchCourseRepo;
+        this.batchCoordinatorRepo = batchCoordinatorRepo;
+        this.jpaFilterConverter = jpaFilterConverter;
+    }
 
     @Override
     @Nonnull
@@ -52,51 +46,54 @@ public class BatchCourseDtoCrudService implements CrudService<BatchCourseDTO, Lo
                 ? jpaFilterConverter.toSpec(filter, BatchCourseDAO.class)
                 : Specification.anyOf();
         Page<BatchCourseDAO> persons = batchCourseRepo.findAll(spec, pageable);
-        return persons.stream().map(item -> {
-            Set<BatchCoordinatorDAO> coordinatorDAOSet = batchCoordinatorRepo.findByBatchCourse(item).stream().map(batchCoordinator -> {
-                BatchCourseDAO bc = new BatchCourseDAO();
-                bc.setId(item.getId());
-                bc.setVersion(item.getVersion());
-
-                InstructorDAO instructor = batchCoordinator.getInstructor();
-                PersonDAO person = instructor.getPerson();
-                person.setInstructor(null);
-                person.setAddress(null);
-                person.setContact(null);
-                person.setMedical(null);
-                person.setOccupation(null);
-                person.setRecord(null);
-
-                instructor.setBatchCoordinators(null);
-                instructor.setReservations(null);
-                instructor.setPerson(person);
-
-                batchCoordinator.setBatchCourse(bc);
-                batchCoordinator.setInstructor(instructor);
-                return batchCoordinator;
-            }).collect(HashSet::new, HashSet::add, HashSet::addAll);
-
-            item.setBatchCoordinators(coordinatorDAOSet);
-
-            return item;
-        }).map(BatchCourseDTO::fromEntity).toList();
+        return persons.stream().map(this::populate).map(BatchCourseDTO::fromEntity).toList();
     }
 
     @Override
     @Transactional
-    public @Nullable BatchCourseDTO save(BatchCourseDTO value) {
+    public @Nullable BatchCourseDTO save(BatchCourseDTO value) throws EndpointException {
         boolean check = value.id() != null && value.id() > 0;
         BatchCourseDAO batchCourse = check
                 ? batchCourseRepo.getReferenceById(value.id())
                 : new BatchCourseDAO();
-
+        if (!check && batchCourseRepo.existsBatchCourseDAOByBatchIdAndCourseId(value.batch().getId(), value.course().getId())) {
+            throw new EndpointException("Batch-Course already exists");
+        }
         // person.setRecordComment(check ? "UPDATE" : "NEW");
         BatchCourseDTO.fromDTO(value, batchCourse);
-        return BatchCourseDTO.fromEntity(batchCourseRepo.save(batchCourse));
+        return BatchCourseDTO.fromEntity(populate(batchCourseRepo.save(batchCourse)));
     }
 
     @Override
     public void delete(Long id) {
         batchCourseRepo.deleteById(id);
+    }
+
+    private BatchCourseDAO populate(BatchCourseDAO batchCourse) {
+        Set<BatchCoordinatorDAO> coordinatorDAOSet = batchCoordinatorRepo.findByBatchCourse(batchCourse).stream().map(batchCoordinator -> {
+            BatchCourseDAO bc = new BatchCourseDAO();
+            bc.setId(batchCourse.getId());
+            bc.setVersion(batchCourse.getVersion());
+
+            InstructorDAO instructor = batchCoordinator.getInstructor();
+            PersonDAO person = instructor.getPerson();
+            person.setInstructor(null);
+            person.setAddress(null);
+            person.setContact(null);
+            person.setMedical(null);
+            person.setOccupation(null);
+            person.setRecord(null);
+
+            instructor.setBatchCoordinators(null);
+            instructor.setReservations(null);
+            instructor.setPerson(person);
+
+            batchCoordinator.setBatchCourse(bc);
+            batchCoordinator.setInstructor(instructor);
+            return batchCoordinator;
+        }).collect(HashSet::new, HashSet::add, HashSet::addAll);
+
+        batchCourse.setBatchCoordinators(coordinatorDAOSet);
+        return batchCourse;
     }
 }

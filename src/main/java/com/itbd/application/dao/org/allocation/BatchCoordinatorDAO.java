@@ -1,6 +1,7 @@
 package com.itbd.application.dao.org.allocation;
 
 import com.itbd.application.constants.CoordinatorTypeEnum;
+import com.itbd.application.dao.AbstractEntity;
 import com.itbd.application.dao.user.InstructorDAO;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
@@ -10,7 +11,7 @@ import lombok.Setter;
 @Entity(name = "t_map_batch_coordinator")
 @Getter
 @Setter
-public class BatchCoordinatorDAO {
+public class BatchCoordinatorDAO extends AbstractEntity<Long> {
     @Id
     @Column(name = "id_batch_coordinator_key", nullable = false, updatable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
