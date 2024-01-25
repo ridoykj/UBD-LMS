@@ -1,5 +1,7 @@
+import BranchRC from 'Frontend/components/branch/BranchRC';
 import CalenderBoardComponent, { DayItem, TimeRange } from './TimeTableComponent';
 import './calendarBoardView.css';
+import { useState } from 'react';
 
 // const dd: DayItem[] = [];
 const dd: DayItem[] = [
@@ -17,8 +19,35 @@ const timeRange: TimeRange = { open: '09:00', close: '21:00', interval: 30 };
 
 function CalenderBoardView() {
 
+  const [orgNameFilter, setOrgNameFilter] = useState('');
+  const [departmentNameFilter, setDepartmentNameFilter] = useState('');
+  const [programmeNameFilter, setProgrammeNameFilter] = useState('');
+  const [batchNameFilter, setBatchNameFilter] = useState('');
+
   return (
     <>
+      <BranchRC
+        visibleFields={
+          { organization: true, department: true, programme: true, batch: true }
+        }
+        organization={{
+          organizationName: orgNameFilter,
+          setOrganizationName: setOrgNameFilter
+        }}
+        department={{
+          departmentName: departmentNameFilter,
+          setDepartmentName: setDepartmentNameFilter
+        }}
+        programme={{
+          programmeName: programmeNameFilter,
+          setProgrammeName: setProgrammeNameFilter
+        }}
+        batch={{
+          batchName: batchNameFilter,
+          setBatchName: setBatchNameFilter
+        }}
+      />
+
       <CalenderBoardComponent
         dayNames={dayNames}
         timeRange={timeRange} dayItems={dd} />

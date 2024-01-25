@@ -1,3 +1,6 @@
+import { Dialog, Transition } from "@headlessui/react";
+import { Dispatch, Fragment, SetStateAction, useState } from "react";
+
 const headC = 'sticky top-0 left-0 bg-white dark:bg-gradient-to-b dark:from-slate-600 dark:to-slate-700 border-slate-100 dark:border-black/10 bg-clip-padding text-slate-900 dark:text-slate-200 border-b text-sm font-medium py-2 text-center';
 const sideC = 'sticky top-0 left-0 border-slate-100 dark:border-slate-200/5 border-4 text-xs p-1 text-right text-slate-500 uppercase bg-white dark:bg-slate-800 font-medium';
 const cellC = 'bg-blue-400/20 dark:bg-sky-600/50 border border-blue-700/10 dark:border-sky-500 rounded-lg';
@@ -32,6 +35,70 @@ type EventItem = {
   start: number;
   end: number;
 };
+
+function dialogModel({ isOpen, setIsOpen }: {
+  isOpen: boolean,
+  setIsOpen: Dispatch<SetStateAction<boolean>>
+}) {
+  return (
+    <>
+      <Transition appear show={isOpen} as={Fragment}>
+        <Dialog as="div" className="relative z-10" onClose={() => { setIsOpen(true) }}>
+          <Transition.Child
+            as={Fragment}
+            enter="ease-out duration-300"
+            enterFrom="opacity-0"
+            enterTo="opacity-100"
+            leave="ease-in duration-200"
+            leaveFrom="opacity-100"
+            leaveTo="opacity-0"
+          >
+            <div className="fixed inset-0 bg-black/25" />
+          </Transition.Child>
+
+          <div className="fixed inset-0 overflow-y-auto">
+            <div className="flex min-h-full items-center justify-center p-4 text-center">
+              <Transition.Child
+                as={Fragment}
+                enter="ease-out duration-300"
+                enterFrom="opacity-0 scale-95"
+                enterTo="opacity-100 scale-100"
+                leave="ease-in duration-200"
+                leaveFrom="opacity-100 scale-100"
+                leaveTo="opacity-0 scale-95"
+              >
+                <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
+                  <Dialog.Title
+                    as="h3"
+                    className="text-lg font-medium leading-6 text-gray-900"
+                  >
+                    Payment successful
+                  </Dialog.Title>
+                  <div className="mt-2">
+                    <p className="text-sm text-gray-500">
+                      Your payment has been successfully submitted. We’ve sent
+                      you an email with all of the details of your order.
+                    </p>
+                  </div>
+
+                  <div className="mt-4">
+                    <button
+                      type="button"
+                      className="inline-flex justify-center rounded-md border border-transparent bg-blue-100 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
+                      onClick={() => { setIsOpen(false) }}
+                    >
+                      Got it, thanks!
+                    </button>
+                  </div>
+                </Dialog.Panel>
+              </Transition.Child>
+            </div>
+          </div>
+        </Dialog>
+      </Transition>
+    </>
+  )
+}
 
 function maxSlot(timeRange: TimeRange): number {
   return getTimeToSlot(timeRange.close, timeRange.interval) - getTimeToSlot(timeRange.open, timeRange.interval)
@@ -81,7 +148,7 @@ function groupTime(timeRange: TimeRange, events: EventCapture[]): EventGroup[] {
 }
 
 function CalenderBoardView({ timeRange, dayNames, dayItems }: { timeRange: TimeRange, dayNames?: string[], dayItems: DayItem[] }) {
-
+  let [isOpen, setIsOpen] = useState(true)
   function timeManager() {
     const divItem = [
       <th scope="col" key={'head_day_time'} className={headC}>Day/Time</th>,
@@ -114,6 +181,7 @@ function CalenderBoardView({ timeRange, dayNames, dayItems }: { timeRange: TimeR
             column += event.end - event.start;
             cells.push(
               <td key={`day_data_${dayName}_${row}_${column}`} draggable="true" colSpan={event.end - event.start + 1} className={blankCellC}
+                onDoubleClick={() => { console.log('double click', day, row, column); }}
                 onClick={() => { console.log('click', day, row, column); }}>
                 <div className={cellC}>
                   <div className='font-bold text-sm'>{`[${dayName}] ${getSlotToTime(event.start, timeRange)} - ${getSlotToTime(event.end, timeRange)}`}</div>
@@ -150,6 +218,7 @@ function CalenderBoardView({ timeRange, dayNames, dayItems }: { timeRange: TimeR
           </tbody>
         </table>
       </div>
+      {dialogModel({ isOpen: isOpen, setIsOpen: setIsOpen })}
     </>
   );
 }

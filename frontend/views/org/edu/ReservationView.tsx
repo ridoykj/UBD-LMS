@@ -29,6 +29,8 @@ import { comboBoxLazyFilter } from "Frontend/util/comboboxLazyFilterUtil";
 import React, { useMemo, useState } from "react";
 
 const ReservationView = () => {
+  
+  const [orgNameFilter, setOrgNameFilter] = useState('');
   const [departmentNameFilter, setDepartmentNameFilter] = useState('');
   const [programmeNameFilter, setProgrammeNameFilter] = useState('');
 
@@ -36,7 +38,6 @@ const ReservationView = () => {
   const [buildingNameFilter, setBuildingNameFilter] = useState('');
   const [floorNameFilter, setFloorNameFilter] = useState('');
 
-  const [orgNameFilter, setOrgNameFilter] = useState('');
   const [dialogOpened, setDialogOpened] = useState<boolean>(false);
   const [successNotification, setSuccessNotification] = useState<boolean>(false);
 
