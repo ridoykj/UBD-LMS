@@ -1,5 +1,18 @@
-import { Dialog, Transition } from "@headlessui/react";
-import { Dispatch, Fragment, SetStateAction, useState } from "react";
+import { Button } from "@hilla/react-components/Button.js";
+import { ComboBox } from "@hilla/react-components/ComboBox.js";
+import { DatePicker } from "@hilla/react-components/DatePicker.js";
+import { Dialog } from '@hilla/react-components/Dialog.js';
+import { FormLayout } from "@hilla/react-components/FormLayout.js";
+import { TextArea } from "@hilla/react-components/TextArea.js";
+import { TextField } from "@hilla/react-components/TextField.js";
+import { TimePicker } from "@hilla/react-components/TimePicker.js";
+import { VerticalLayout } from "@hilla/react-components/VerticalLayout.js";
+import { useForm } from "@hilla/react-form";
+import DayTypeEnum from "Frontend/generated/com/itbd/application/constants/DayTypeEnum";
+import BatchRoomDTOModel from "Frontend/generated/com/itbd/application/dto/org/allocation/BatchRoomDTOModel";
+import { BatchRoomDtoCrudService } from "Frontend/generated/endpoints";
+import { useState } from "react";
+import { FaX } from "react-icons/fa6";
 
 const headC = 'sticky top-0 left-0 bg-white dark:bg-gradient-to-b dark:from-slate-600 dark:to-slate-700 border-slate-100 dark:border-black/10 bg-clip-padding text-slate-900 dark:text-slate-200 border-b text-sm font-medium py-2 text-center';
 const sideC = 'sticky top-0 left-0 border-slate-100 dark:border-slate-200/5 border-4 text-xs p-1 text-right text-slate-500 uppercase bg-white dark:bg-slate-800 font-medium';
@@ -35,70 +48,6 @@ type EventItem = {
   start: number;
   end: number;
 };
-
-function dialogModel({ isOpen, setIsOpen }: {
-  isOpen: boolean,
-  setIsOpen: Dispatch<SetStateAction<boolean>>
-}) {
-  return (
-    <>
-      <Transition appear show={isOpen} as={Fragment}>
-        <Dialog as="div" className="relative z-10" onClose={() => { setIsOpen(true) }}>
-          <Transition.Child
-            as={Fragment}
-            enter="ease-out duration-300"
-            enterFrom="opacity-0"
-            enterTo="opacity-100"
-            leave="ease-in duration-200"
-            leaveFrom="opacity-100"
-            leaveTo="opacity-0"
-          >
-            <div className="fixed inset-0 bg-black/25" />
-          </Transition.Child>
-
-          <div className="fixed inset-0 overflow-y-auto">
-            <div className="flex min-h-full items-center justify-center p-4 text-center">
-              <Transition.Child
-                as={Fragment}
-                enter="ease-out duration-300"
-                enterFrom="opacity-0 scale-95"
-                enterTo="opacity-100 scale-100"
-                leave="ease-in duration-200"
-                leaveFrom="opacity-100 scale-100"
-                leaveTo="opacity-0 scale-95"
-              >
-                <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
-                  <Dialog.Title
-                    as="h3"
-                    className="text-lg font-medium leading-6 text-gray-900"
-                  >
-                    Payment successful
-                  </Dialog.Title>
-                  <div className="mt-2">
-                    <p className="text-sm text-gray-500">
-                      Your payment has been successfully submitted. We’ve sent
-                      you an email with all of the details of your order.
-                    </p>
-                  </div>
-
-                  <div className="mt-4">
-                    <button
-                      type="button"
-                      className="inline-flex justify-center rounded-md border border-transparent bg-blue-100 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
-                      onClick={() => { setIsOpen(false) }}
-                    >
-                      Got it, thanks!
-                    </button>
-                  </div>
-                </Dialog.Panel>
-              </Transition.Child>
-            </div>
-          </div>
-        </Dialog>
-      </Transition>
-    </>
-  )
-}
 
 function maxSlot(timeRange: TimeRange): number {
   return getTimeToSlot(timeRange.close, timeRange.interval) - getTimeToSlot(timeRange.open, timeRange.interval)
@@ -146,9 +95,23 @@ function groupTime(timeRange: TimeRange, events: EventCapture[]): EventGroup[] {
   // console.log('logE', slots);
   return slots;
 }
+const responsiveSteps = [
+  { minWidth: '0', columns: 1 },
+  { minWidth: '320px', columns: 2 },
+];
+function TimeTableComponent({ timeRange, dayNames, dayItems }: { timeRange: TimeRange, dayNames?: string[], dayItems: DayItem[] }) {
+  const [isOpen, setIsOpen] = useState(true);
+  const { model, field, value, read, submit, clear, reset, visited, dirty, invalid, submitting } = useForm(BatchRoomDTOModel, {
+    onSubmit: async (instructor) => {
+      console.log('instructor', instructor);
+      await BatchRoomDtoCrudService.save(instructor).then((result) => {
+        // refreshGrid();
+        // setSelectedInstructorItems(result ? [result] : []);
+        // setSuccessNotification(true);
+      });
+    }
+  });
 
-function CalenderBoardView({ timeRange, dayNames, dayItems }: { timeRange: TimeRange, dayNames?: string[], dayItems: DayItem[] }) {
-  let [isOpen, setIsOpen] = useState(true)
   function timeManager() {
     const divItem = [
       <th scope="col" key={'head_day_time'} className={headC}>Day/Time</th>,
@@ -166,12 +129,17 @@ function CalenderBoardView({ timeRange, dayNames, dayItems }: { timeRange: TimeR
     return <tr>{divItem}</tr>;
   }
 
+
+  const days = Object.values(DayTypeEnum).map(level => ({ label: level, value: level }));
+  // const dialogButton: ButtonRCProps[] = [
+  //   { type: 'primary', name: 'Save', onClick: () => { console.log('save'); } },
+  // ];
+
   function dayNameManager() {
     const divItem = (dayNames ?? defaultDayNames).map((dayName, day) => {
       const eventGroups = groupTime(timeRange, dayItems.find(item => item.dayName.toUpperCase() === dayName.toUpperCase())?.event || []);
       const maxEventLength = Math.max(...eventGroups.map(event => event.events.length));
       const rows = [];
-      console.log('eventGroups', eventGroups);
       for (let row = 0; row < maxEventLength; row++) {
         const cells = []
         for (let column = 0; column < eventGroups.length; column++) {
@@ -206,6 +174,8 @@ function CalenderBoardView({ timeRange, dayNames, dayItems }: { timeRange: TimeR
     return <>{divItem}</>;
   }
 
+  const tableContent = dayNameManager();
+
   return (
     <>
       <div className="overflow-x-auto h-full">
@@ -214,13 +184,57 @@ function CalenderBoardView({ timeRange, dayNames, dayItems }: { timeRange: TimeR
             {timeManager()}
           </thead>
           <tbody>
-            {dayNameManager()}
+            {tableContent}
           </tbody>
         </table>
       </div>
-      {dialogModel({ isOpen: isOpen, setIsOpen: setIsOpen })}
+      <Dialog aria-label="Reserve Schedule" draggable modeless opened={isOpen} className="w-1/4"
+        onOpenedChanged={(event) => {
+          setIsOpen(event.detail.value);
+        }}
+        headerRenderer={() => (
+          <>
+            <h2 className="draggable flex-1 cursor-move margin-0 font-bold text-2xl padding-m-0">
+              Reserve Schedule
+            </h2>
+            <button type="button" className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" onClick={() => setIsOpen(false)}>
+              <FaX /> <span className="sr-only">Close</span>
+            </button>
+          </>
+        )}
+        footerRenderer={() => (
+          <>
+            <Button onClick={close}>Cancel</Button>
+            <Button className="bg-blue-500 hover:bg-blue-700 text-white" onClick={close}>
+              Add note
+            </Button>
+          </>
+        )}
+      >
+        <div className="w-96">
+          <FormLayout responsiveSteps={responsiveSteps} className="p-2 w-full">
+            <ComboBox label={'Batch-Course'}  {...{ colspan: 2 }} {...field(model.batchCourse)} />
+            <ComboBox label={'Room'}  {...{ colspan: 2 }} {...field(model.room)} />
+            <ComboBox label={'Day'}  {...{ colspan: 2 }} {...field(model.dayName)} items={days} itemLabelPath="label"  />
+            <DatePicker label={'Start Date'}  {...{ colspan: 1 }} {...field(model.startDate)} />
+            <DatePicker label={'End Date'}  {...{ colspan: 1 }} {...field(model.endDate)} />
+            <TimePicker label={'Start Time'}  {...{ colspan: 1 }} {...field(model.startTime)} />
+            <TimePicker label={'End Time'}  {...{ colspan: 1 }} {...field(model.endTime)} />
+            {/* <TextField label={'Contact'}  {...{ colspan: 2 }} {...field(model.contact)} /> */}
+            <TextArea label={'Description'}  {...{ colspan: 2 }} {...field(model.description)} />
+          </FormLayout>
+        </div>
+      </Dialog>
+      {/* <DialogRC show={{ isOpen: isOpen, setIsOpen: setIsOpen }}
+        icon={<><FaCircleExclamation className="h-6 w-6 text-red-600" aria-hidden="true" /></>}
+        title="hello"
+        body={<p className="text-sm text-gray-500">
+          আমার সোনার বাংলা আমি তোমায় ভালবাসি চির দিন তোমার আকাশ তমার বাতাস
+        </p>}
+        buttons={dialogButton}
+      /> */}
     </>
   );
 }
 
-export default CalenderBoardView;
+export default TimeTableComponent;

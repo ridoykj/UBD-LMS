@@ -1,7 +1,5 @@
 
 import { ComboBox, ComboBoxDataProviderCallback, ComboBoxDataProviderParams } from '@hilla/react-components/ComboBox.js';
-import { HorizontalLayout } from '@hilla/react-components/HorizontalLayout.js';
-import { Scroller } from '@hilla/react-components/Scroller.js';
 import '@vaadin/icons';
 import OrganizationDTOModel from 'Frontend/generated/com/itbd/application/dto/org/academic/OrganizationDTOModel';
 import BatchDTOModel from 'Frontend/generated/com/itbd/application/dto/org/edu/BatchDTOModel';

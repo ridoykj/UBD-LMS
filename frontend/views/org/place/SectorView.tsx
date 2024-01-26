@@ -115,18 +115,12 @@ const SectorView = () => {
           <main className="w-full h-full">
             <main className="overflow-y-scroll w-full h-full">
               <FormLayout responsiveSteps={responsiveSteps} className="w-fit h-fit p-2">
-                <label slot="label">Profile</label>
                 <TextField label={'Name'}  {...{ colspan: 2 }} {...field(model.name)} />
                 <TextField label={'City'}  {...{ colspan: 1 }} {...field(model.city)} />
                 <TextField label={'Block'}  {...{ colspan: 2 }} {...field(model.state)} />
                 <TextField label={'Alternate Name'}  {...{ colspan: 2 }} {...field(model.alternateName)} />
-
-                {/* <DateTimePicker label={'Opening Date'}  {...{ colspan: 2 }} {...field(model.openingDate)} />
-              <DateTimePicker label={'Closing Date'}  {...{ colspan: 2 }} {...field(model.closingDate)} /> */}
-
                 <TextField label={'Country'}  {...{ colspan: 2 }} {...field(model.country)} />
                 <TextField label={'Contact'}  {...{ colspan: 2 }} {...field(model.contact)} />
-
                 <TextArea label={'Description'}  {...{ colspan: 2 }} {...field(model.description)} />
               </FormLayout>
             </main>

@@ -3,14 +3,13 @@ import { ComboBox, ComboBoxDataProviderCallback, ComboBoxDataProviderParams } fr
 import { HorizontalLayout } from '@hilla/react-components/HorizontalLayout.js';
 import { Scroller } from '@hilla/react-components/Scroller.js';
 import '@vaadin/icons';
-import CourseDTOModel from 'Frontend/generated/com/itbd/application/dto/org/edu/CourseDTOModel';
 import BuildingDTOModel from 'Frontend/generated/com/itbd/application/dto/org/place/BuildingDTOModel';
 import FloorDTOModel from 'Frontend/generated/com/itbd/application/dto/org/place/FloorDTOModel';
 import RoomDTOModel from 'Frontend/generated/com/itbd/application/dto/org/place/RoomDTOModel';
 import SectorDTOModel from 'Frontend/generated/com/itbd/application/dto/org/place/SectorDTOModel';
 import PropertyStringFilter from 'Frontend/generated/dev/hilla/crud/filter/PropertyStringFilter';
 import Matcher from 'Frontend/generated/dev/hilla/crud/filter/PropertyStringFilter/Matcher';
-import { BuildingDtoCrudService, CourseDtoCrudService, FloorDtoCrudService, RoomDtoCrudService, SectionDtoCrudService, SectorDtoCrudService } from 'Frontend/generated/endpoints';
+import { BuildingDtoCrudService, FloorDtoCrudService, RoomDtoCrudService, SectorDtoCrudService } from 'Frontend/generated/endpoints';
 import { comboBoxLazyFilter } from 'Frontend/util/comboboxLazyFilterUtil';
 import { Dispatch, SetStateAction, useMemo } from 'react';
 
