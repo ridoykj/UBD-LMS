@@ -14,7 +14,7 @@ import { BatchRoomDtoCrudService } from "Frontend/generated/endpoints";
 import { useState } from "react";
 import { FaX } from "react-icons/fa6";
 
-const headC = 'sticky top-0 left-0 bg-white dark:bg-gradient-to-b dark:from-slate-600 dark:to-slate-700 border-slate-100 dark:border-black/10 bg-clip-padding text-slate-900 dark:text-slate-200 border-b text-sm font-medium py-2 text-center';
+const headC = 'sticky top-0 left-0 z-50 bg-white dark:bg-gradient-to-b dark:from-slate-600 dark:to-slate-700 border-slate-100 dark:border-black/10 bg-clip-padding text-slate-900 dark:text-slate-200 border-b text-sm font-medium py-2 text-center';
 const sideC = 'sticky top-0 left-0 border-slate-100 dark:border-slate-200/5 border-4 text-xs p-1 text-right text-slate-500 uppercase bg-white dark:bg-slate-800 font-medium';
 const cellC = 'bg-blue-400/20 dark:bg-sky-600/50 border border-blue-700/10 dark:border-sky-500 rounded-lg';
 const blankCellC = 'border-slate-100 dark:border-slate-200/5 border-2 min-w-16 p-1 m-1 align-top';
@@ -179,7 +179,7 @@ function TimeTableComponent({ timeRange, dayNames, dayItems }: { timeRange: Time
   return (
     <>
       <div className="overflow-x-auto h-full">
-        <table className="min-w-full divide-y divide-gray-200 h-full">
+        <table className="min-w-full divide-y divide-gray-200">
           <thead className="sm:min-w-16 lg:max-w-64">
             {timeManager()}
           </thead>
@@ -215,7 +215,7 @@ function TimeTableComponent({ timeRange, dayNames, dayItems }: { timeRange: Time
           <FormLayout responsiveSteps={responsiveSteps} className="p-2 w-full">
             <ComboBox label={'Batch-Course'}  {...{ colspan: 2 }} {...field(model.batchCourse)} />
             <ComboBox label={'Room'}  {...{ colspan: 2 }} {...field(model.room)} />
-            <ComboBox label={'Day'}  {...{ colspan: 2 }} {...field(model.dayName)} items={days} itemLabelPath="label"  />
+            <ComboBox label={'Day'}  {...{ colspan: 2 }} {...field(model.dayName)} items={days} itemLabelPath="label" />
             <DatePicker label={'Start Date'}  {...{ colspan: 1 }} {...field(model.startDate)} />
             <DatePicker label={'End Date'}  {...{ colspan: 1 }} {...field(model.endDate)} />
             <TimePicker label={'Start Time'}  {...{ colspan: 1 }} {...field(model.startTime)} />
@@ -225,14 +225,6 @@ function TimeTableComponent({ timeRange, dayNames, dayItems }: { timeRange: Time
           </FormLayout>
         </div>
       </Dialog>
-      {/* <DialogRC show={{ isOpen: isOpen, setIsOpen: setIsOpen }}
-        icon={<><FaCircleExclamation className="h-6 w-6 text-red-600" aria-hidden="true" /></>}
-        title="hello"
-        body={<p className="text-sm text-gray-500">
-          আমার সোনার বাংলা আমি তোমায় ভালবাসি চির দিন তোমার আকাশ তমার বাতাস
-        </p>}
-        buttons={dialogButton}
-      /> */}
     </>
   );
 }
