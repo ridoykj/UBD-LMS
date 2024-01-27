@@ -31,48 +31,52 @@ function CalenderBoardView() {
 
   return (
     <>
-      <div className='h-full'>
-        <PlaceRC
-          visibleFields={
-            { sector: true, building: true, floor: true, room: true }
-          }
-          sector={{
-            sectorName: sectorNameFilter,
-            setSectorName: setSectorNameFilter
-          }}
-          building={{
-            buildingName: buildingNameFilter,
-            setBuildingName: setBuildingNameFilter
-          }}
-          floor={{
-            floorName: floorNameFilter,
-            setFloorName: setFloorNameFilter
-          }}
-        />
-        <BranchRC
-          visibleFields={
-            { organization: true, department: true, programme: true, batch: true }
-          }
-          organization={{
-            organizationName: orgNameFilter,
-            setOrganizationName: setOrgNameFilter
-          }}
-          department={{
-            departmentName: departmentNameFilter,
-            setDepartmentName: setDepartmentNameFilter
-          }}
-          programme={{
-            programmeName: programmeNameFilter,
-            setProgrammeName: setProgrammeNameFilter
-          }}
-          batch={{
-            batchName: batchNameFilter,
-            setBatchName: setBatchNameFilter
-          }}
-        />
-        <CalenderBoardComponent
-          dayNames={dayNames}
-          timeRange={timeRange} dayItems={dd} />
+      <div className='flex flex-col h-full'>
+        <div className='flex-none'>
+          <PlaceRC
+            visibleFields={
+              { sector: true, building: true, floor: true, room: true }
+            }
+            sector={{
+              sectorName: sectorNameFilter,
+              setSectorName: setSectorNameFilter
+            }}
+            building={{
+              buildingName: buildingNameFilter,
+              setBuildingName: setBuildingNameFilter
+            }}
+            floor={{
+              floorName: floorNameFilter,
+              setFloorName: setFloorNameFilter
+            }}
+          />
+          <BranchRC
+            visibleFields={
+              { organization: true, department: true, programme: true, batch: true }
+            }
+            organization={{
+              organizationName: orgNameFilter,
+              setOrganizationName: setOrgNameFilter
+            }}
+            department={{
+              departmentName: departmentNameFilter,
+              setDepartmentName: setDepartmentNameFilter
+            }}
+            programme={{
+              programmeName: programmeNameFilter,
+              setProgrammeName: setProgrammeNameFilter
+            }}
+            batch={{
+              batchName: batchNameFilter,
+              setBatchName: setBatchNameFilter
+            }}
+          />
+        </div>
+        <div className='grow overflow-x-auto'>
+          <CalenderBoardComponent
+            dayNames={dayNames}
+            timeRange={timeRange} dayItems={dd} />
+        </div>
       </div>
       <div>
         <div>

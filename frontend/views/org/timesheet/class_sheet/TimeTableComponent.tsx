@@ -102,9 +102,9 @@ const responsiveSteps = [
 function TimeTableComponent({ timeRange, dayNames, dayItems }: { timeRange: TimeRange, dayNames?: string[], dayItems: DayItem[] }) {
   const [isOpen, setIsOpen] = useState(true);
   const { model, field, value, read, submit, clear, reset, visited, dirty, invalid, submitting } = useForm(BatchRoomDTOModel, {
-    onSubmit: async (instructor) => {
-      console.log('instructor', instructor);
-      await BatchRoomDtoCrudService.save(instructor).then((result) => {
+    onSubmit: async (batchRoom) => {
+      console.log('instructor', batchRoom);
+      await BatchRoomDtoCrudService.save(batchRoom).then((result) => {
         // refreshGrid();
         // setSelectedInstructorItems(result ? [result] : []);
         // setSuccessNotification(true);
@@ -178,16 +178,14 @@ function TimeTableComponent({ timeRange, dayNames, dayItems }: { timeRange: Time
 
   return (
     <>
-      <div className="overflow-x-auto h-full">
-        <table className="min-w-full divide-y divide-gray-200">
-          <thead className="sm:min-w-16 lg:max-w-64">
-            {timeManager()}
-          </thead>
-          <tbody>
-            {tableContent}
-          </tbody>
-        </table>
-      </div>
+      <table className="min-w-full divide-y divide-gray-200">
+        <thead className="sm:min-w-16 lg:max-w-64">
+          {timeManager()}
+        </thead>
+        <tbody>
+          {tableContent}
+        </tbody>
+      </table>
       <Dialog aria-label="Reserve Schedule" draggable modeless opened={isOpen} className="w-1/4"
         onOpenedChanged={(event) => {
           setIsOpen(event.detail.value);
@@ -204,9 +202,12 @@ function TimeTableComponent({ timeRange, dayNames, dayItems }: { timeRange: Time
         )}
         footerRenderer={() => (
           <>
-            <Button onClick={close}>Cancel</Button>
+            <Button className="border-2 border-gray-500 text-gray-500 hover:bg-gray-500 hover:text-white" onClick={close}>Cancel</Button>
+            <Button className="border-2 border-red-500 text-red-500 hover:bg-red-500 hover:text-white" onClick={close}>
+              Delete
+            </Button>
             <Button className="bg-blue-500 hover:bg-blue-700 text-white" onClick={close}>
-              Add note
+              Reserve
             </Button>
           </>
         )}
