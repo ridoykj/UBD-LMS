@@ -34,7 +34,8 @@
     "date-fns": "^3.2.0",
     "lit": "3.1.0",
     "react": "^18.2.0",
-    "react-icons": "^4.12.0"
+    "react-icons": "^4.12.0",
+    "react-tooltip": "^5.26.0"
   },
   "devDependencies": {
     "@rollup/plugin-replace": "5.0.4",
@@ -99,7 +100,7 @@
       "workbox-core": "7.0.0",
       "workbox-precaching": "7.0.0"
     },
-    "hash": "407aaf4643e10ef9b96ba778c6ec1db163d740d500aa1e827c760c75520bd6eb"
+    "hash": "ad96e4e44e62b80bd0a32f32f9deccdfe0e3e5d5800c56f73eef46ffe6d7dd6f"
   },
   "overrides": {
     "@vaadin/bundles": "$@vaadin/bundles",
@@ -133,6 +134,7 @@
     "@fullcalendar/interaction": "$@fullcalendar/interaction",
     "@fullcalendar/react": "$@fullcalendar/react",
     "@fullcalendar/timegrid": "$@fullcalendar/timegrid",
-    "date-fns": "$date-fns"
+    "date-fns": "$date-fns",
+    "react-tooltip": "$react-tooltip"
   }
 }

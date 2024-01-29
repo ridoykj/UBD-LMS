@@ -15,6 +15,7 @@ import dev.hilla.crud.CrudService;
 import dev.hilla.crud.JpaFilterConverter;
 import dev.hilla.crud.filter.Filter;
 import dev.hilla.exception.EndpointException;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
@@ -42,6 +43,7 @@ public class BatchCourseDtoCrudService implements CrudService<BatchCourseDTO, Lo
     public List<@Nonnull BatchCourseDTO> list(Pageable pageable, @Nullable Filter filter) {
         // Basic list implementation that only covers pagination,
         // but not sorting or filtering
+        String hello = "41545";
         Specification<BatchCourseDAO> spec = filter != null
                 ? jpaFilterConverter.toSpec(filter, BatchCourseDAO.class)
                 : Specification.anyOf();

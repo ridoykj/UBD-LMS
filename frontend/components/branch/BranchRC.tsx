@@ -2,14 +2,16 @@
 import { ComboBox, ComboBoxDataProviderCallback, ComboBoxDataProviderParams } from '@hilla/react-components/ComboBox.js';
 import '@vaadin/icons';
 import OrganizationDTOModel from 'Frontend/generated/com/itbd/application/dto/org/academic/OrganizationDTOModel';
+import BatchCourseDTOModel from 'Frontend/generated/com/itbd/application/dto/org/allocation/BatchCourseDTOModel';
 import BatchDTOModel from 'Frontend/generated/com/itbd/application/dto/org/edu/BatchDTOModel';
 import CourseDTOModel from 'Frontend/generated/com/itbd/application/dto/org/edu/CourseDTOModel';
 import DepartmentDTOModel from 'Frontend/generated/com/itbd/application/dto/org/edu/DepartmentDTOModel';
 import ProgrammeDTOModel from 'Frontend/generated/com/itbd/application/dto/org/edu/ProgrammeDTOModel';
 import PropertyStringFilter from 'Frontend/generated/dev/hilla/crud/filter/PropertyStringFilter';
 import Matcher from 'Frontend/generated/dev/hilla/crud/filter/PropertyStringFilter/Matcher';
-import { BatchDtoCrudService, CourseDtoCrudService, DepartmentDtoCrudService, OrganizationDtoCrudService, ProgrammeDtoCrudService } from 'Frontend/generated/endpoints';
+import { BatchCourseDtoCrudService, BatchDtoCrudService, CourseDtoCrudService, DepartmentDtoCrudService, OrganizationDtoCrudService, ProgrammeDtoCrudService } from 'Frontend/generated/endpoints';
 import { comboBoxLazyFilter } from 'Frontend/util/comboboxLazyFilterUtil';
+import { setMinutes } from 'date-fns';
 import { Dispatch, SetStateAction, useMemo } from 'react';
 
 type OrganizationProps = {
@@ -31,6 +33,10 @@ type BatchProps = {
   batchName: string,
   setBatchName: Dispatch<SetStateAction<string>>
 }
+type SemesterProps = {
+  semesterName: string,
+  setSemesterName: Dispatch<SetStateAction<string>>
+}
 
 type CourseProps = {
   courseName: string,
@@ -42,15 +48,17 @@ type VisibleFields = {
   department?: boolean,
   programme?: boolean,
   batch?: boolean,
+  semester?: boolean,
   course?: boolean,
 };
 
-export default function BranchRC({ visibleFields, organization, department, programme, batch, course, }: {
+export default function BranchRC({ visibleFields, organization, department, programme, batch, semester, course, }: {
   visibleFields: VisibleFields, // ['organization', 'department', 'programme', 'batch', 'course'];
   organization?: OrganizationProps
   department?: DepartmentProps
   programme?: ProgrammeProps
   batch?: BatchProps
+  semester?: SemesterProps
   course?: CourseProps
 }) {
   const organizationDataProvider = useMemo(
@@ -128,6 +136,7 @@ export default function BranchRC({ visibleFields, organization, department, prog
     [department?.departmentName]
   );
 
+
   const batchDataProvider = useMemo(
     () =>
       async (
@@ -153,6 +162,38 @@ export default function BranchRC({ visibleFields, organization, department, prog
         });
       },
     [programme?.programmeName]
+  );
+
+  const semesterDataProvider = useMemo(
+    () =>
+      async (
+        params: ComboBoxDataProviderParams,
+        callback: ComboBoxDataProviderCallback<BatchCourseDTOModel>
+      ) => {
+        const child: PropertyStringFilter[] = [
+          {
+            '@type': 'propertyString',
+            propertyId: 'batch.name',
+            filterValue: batch?.batchName || '',
+            matcher: Matcher.EQUALS
+          },];
+
+        if (params.filter !== undefined && params.filter !== null && params.filter !== ''  ) {
+          child.push({
+            '@type': 'propertyString',
+            propertyId: 'semester',
+            filterValue: params.filter,
+            matcher: Matcher.EQUALS
+          });
+        }
+
+        const { pagination, filters } = comboBoxLazyFilter(params, 'and', child);
+        BatchCourseDtoCrudService.list(pagination, filters).then((result: any) => {
+          console.log('semesterDataProvider', result);
+          callback(result, result.length);
+        });
+      },
+    [batch?.batchName]
   );
 
   const courseDataProvider = useMemo(
@@ -203,7 +244,13 @@ export default function BranchRC({ visibleFields, organization, department, prog
 
   const handleBatch = (e: any) => {
     const searchTerm = (e.detail.value || '').trim();
+    semester?.setSemesterName((d) => ''); // Reset department combobox
     batch?.setBatchName((d) => searchTerm);
+  };
+
+  const handleSemester = (e: any) => {
+    const searchTerm = (e.detail.value || '');
+    semester?.setSemesterName((d) => searchTerm);
   };
 
   const handleCourse = (e: any) => {
@@ -239,6 +286,13 @@ export default function BranchRC({ visibleFields, organization, department, prog
           <>
             <div className='text-sm font-medium ml-5 mr-2 text-gray-400'>Batch</div>
             <ComboBox dataProvider={batchDataProvider} itemLabelPath='name' itemValuePath='name' clearButtonVisible value={batch?.batchName} onValueChanged={handleBatch} style={{ '--vaadin-combo-box-overlay-width': '350px' } as React.CSSProperties} />
+          </>
+        }
+        {
+          visibleFields['semester'] &&
+          <>
+            <div className='text-sm font-medium ml-5 mr-2 text-gray-400'>Semester</div>
+            <ComboBox dataProvider={semesterDataProvider} itemLabelPath='semester' itemValuePath='semester' clearButtonVisible value={semester?.semesterName} onValueChanged={handleSemester} style={{ '--vaadin-combo-box-overlay-width': '350px' } as React.CSSProperties} />
           </>
         }
         {

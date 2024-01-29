@@ -1,18 +1,4 @@
-import { Button } from "@hilla/react-components/Button.js";
-import { ComboBox } from "@hilla/react-components/ComboBox.js";
-import { DatePicker } from "@hilla/react-components/DatePicker.js";
-import { Dialog } from '@hilla/react-components/Dialog.js';
-import { FormLayout } from "@hilla/react-components/FormLayout.js";
-import { TextArea } from "@hilla/react-components/TextArea.js";
-import { TextField } from "@hilla/react-components/TextField.js";
-import { TimePicker } from "@hilla/react-components/TimePicker.js";
-import { VerticalLayout } from "@hilla/react-components/VerticalLayout.js";
-import { useForm } from "@hilla/react-form";
 import DayTypeEnum from "Frontend/generated/com/itbd/application/constants/DayTypeEnum";
-import BatchRoomDTOModel from "Frontend/generated/com/itbd/application/dto/org/allocation/BatchRoomDTOModel";
-import { BatchRoomDtoCrudService } from "Frontend/generated/endpoints";
-import { useState } from "react";
-import { FaX } from "react-icons/fa6";
 
 const headC = 'sticky top-0 left-0 z-50 bg-white dark:bg-gradient-to-b dark:from-slate-600 dark:to-slate-700 border-slate-100 dark:border-black/10 bg-clip-padding text-slate-900 dark:text-slate-200 border-b text-sm font-medium py-2 text-center';
 const sideC = 'sticky top-0 left-0 border-slate-100 dark:border-slate-200/5 border-4 text-xs p-1 text-right text-slate-500 uppercase bg-white dark:bg-slate-800 font-medium';
@@ -95,22 +81,8 @@ function groupTime(timeRange: TimeRange, events: EventCapture[]): EventGroup[] {
   // console.log('logE', slots);
   return slots;
 }
-const responsiveSteps = [
-  { minWidth: '0', columns: 1 },
-  { minWidth: '320px', columns: 2 },
-];
+
 function TimeTableComponent({ timeRange, dayNames, dayItems }: { timeRange: TimeRange, dayNames?: string[], dayItems: DayItem[] }) {
-  const [isOpen, setIsOpen] = useState(true);
-  const { model, field, value, read, submit, clear, reset, visited, dirty, invalid, submitting } = useForm(BatchRoomDTOModel, {
-    onSubmit: async (batchRoom) => {
-      console.log('instructor', batchRoom);
-      await BatchRoomDtoCrudService.save(batchRoom).then((result) => {
-        // refreshGrid();
-        // setSelectedInstructorItems(result ? [result] : []);
-        // setSuccessNotification(true);
-      });
-    }
-  });
 
   function timeManager() {
     const divItem = [
@@ -130,13 +102,8 @@ function TimeTableComponent({ timeRange, dayNames, dayItems }: { timeRange: Time
   }
 
 
-  const days = Object.values(DayTypeEnum).map(level => ({ label: level, value: level }));
-  // const dialogButton: ButtonRCProps[] = [
-  //   { type: 'primary', name: 'Save', onClick: () => { console.log('save'); } },
-  // ];
-
   function dayNameManager() {
-    const divItem = (dayNames ?? defaultDayNames).map((dayName, day) => {
+    const divItem = (dayNames ?? defaultDayNames).map((dayName, dayIndex) => {
       const eventGroups = groupTime(timeRange, dayItems.find(item => item.dayName.toUpperCase() === dayName.toUpperCase())?.event || []);
       const maxEventLength = Math.max(...eventGroups.map(event => event.events.length));
       const rows = [];
@@ -149,8 +116,8 @@ function TimeTableComponent({ timeRange, dayNames, dayItems }: { timeRange: Time
             column += event.end - event.start;
             cells.push(
               <td key={`day_data_${dayName}_${row}_${column}`} draggable="true" colSpan={event.end - event.start + 1} className={blankCellC}
-                onDoubleClick={() => { console.log('double click', day, row, column); }}
-                onClick={() => { console.log('click', day, row, column); }}>
+                onDoubleClick={() => { console.log('double click', dayIndex, row, column); }}
+                onClick={() => { console.log('click', dayIndex, row, column); }}>
                 <div className={cellC}>
                   <div className='font-bold text-sm'>{`[${dayName}] ${getSlotToTime(event.start, timeRange)} - ${getSlotToTime(event.end, timeRange)}`}</div>
                   {event.content}
@@ -175,7 +142,6 @@ function TimeTableComponent({ timeRange, dayNames, dayItems }: { timeRange: Time
   }
 
   const tableContent = dayNameManager();
-
   return (
     <>
       <table className="min-w-full divide-y divide-gray-200">
@@ -185,47 +151,7 @@ function TimeTableComponent({ timeRange, dayNames, dayItems }: { timeRange: Time
         <tbody>
           {tableContent}
         </tbody>
-      </table>
-      <Dialog aria-label="Reserve Schedule" draggable modeless opened={isOpen} className="w-1/4"
-        onOpenedChanged={(event) => {
-          setIsOpen(event.detail.value);
-        }}
-        headerRenderer={() => (
-          <>
-            <h2 className="draggable flex-1 cursor-move margin-0 font-bold text-2xl padding-m-0">
-              Reserve Schedule
-            </h2>
-            <button type="button" className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" onClick={() => setIsOpen(false)}>
-              <FaX /> <span className="sr-only">Close</span>
-            </button>
-          </>
-        )}
-        footerRenderer={() => (
-          <>
-            <Button className="border-2 border-gray-500 text-gray-500 hover:bg-gray-500 hover:text-white" onClick={close}>Cancel</Button>
-            <Button className="border-2 border-red-500 text-red-500 hover:bg-red-500 hover:text-white" onClick={close}>
-              Delete
-            </Button>
-            <Button className="bg-blue-500 hover:bg-blue-700 text-white" onClick={close}>
-              Reserve
-            </Button>
-          </>
-        )}
-      >
-        <div className="w-96">
-          <FormLayout responsiveSteps={responsiveSteps} className="p-2 w-full">
-            <ComboBox label={'Batch-Course'}  {...{ colspan: 2 }} {...field(model.batchCourse)} />
-            <ComboBox label={'Room'}  {...{ colspan: 2 }} {...field(model.room)} />
-            <ComboBox label={'Day'}  {...{ colspan: 2 }} {...field(model.dayName)} items={days} itemLabelPath="label" />
-            <DatePicker label={'Start Date'}  {...{ colspan: 1 }} {...field(model.startDate)} />
-            <DatePicker label={'End Date'}  {...{ colspan: 1 }} {...field(model.endDate)} />
-            <TimePicker label={'Start Time'}  {...{ colspan: 1 }} {...field(model.startTime)} />
-            <TimePicker label={'End Time'}  {...{ colspan: 1 }} {...field(model.endTime)} />
-            {/* <TextField label={'Contact'}  {...{ colspan: 2 }} {...field(model.contact)} /> */}
-            <TextArea label={'Description'}  {...{ colspan: 2 }} {...field(model.description)} />
-          </FormLayout>
-        </div>
-      </Dialog>
+      </table>      
     </>
   );
 }

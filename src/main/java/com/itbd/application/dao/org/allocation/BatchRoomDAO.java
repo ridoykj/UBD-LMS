@@ -1,10 +1,8 @@
 package com.itbd.application.dao.org.allocation;
 
-import com.itbd.application.constants.CoordinatorTypeEnum;
 import com.itbd.application.constants.DayTypeEnum;
 import com.itbd.application.dao.AbstractEntity;
 import com.itbd.application.dao.org.place.RoomDAO;
-import com.itbd.application.dao.user.InstructorDAO;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import lombok.Getter;
