@@ -1,6 +1,7 @@
 package com.itbd.application.dao.org.allocation;
 
 import com.itbd.application.constants.DayTypeEnum;
+import com.itbd.application.constants.EventTypeEnum;
 import com.itbd.application.dao.AbstractEntity;
 import com.itbd.application.dao.org.place.RoomDAO;
 import jakarta.annotation.Nullable;
@@ -29,6 +30,10 @@ public class BatchRoomDAO extends AbstractEntity<Long> {
     @Column(name = "tx_day_name")
     @Enumerated(EnumType.STRING)
     private DayTypeEnum dayName;
+
+    @Column(name = "tx_event_type")
+    @Enumerated(EnumType.STRING)
+    private EventTypeEnum eventType;
 
     @Column(name = "dt_start")
     private LocalDate startDate;
