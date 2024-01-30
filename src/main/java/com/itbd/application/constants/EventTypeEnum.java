@@ -1,5 +1,5 @@
 package com.itbd.application.constants;
 
-public enum ClassTypeEnum {
+public enum EventTypeEnum {
     LECTURE, LAB, TUTORIAL, SEMINAR, WORKSHOP, EXAM, OTHER
 }
