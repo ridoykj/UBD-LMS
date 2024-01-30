@@ -3,6 +3,9 @@ import { ComboBox, ComboBoxDataProviderCallback, ComboBoxDataProviderParams } fr
 import { DatePicker } from '@hilla/react-components/DatePicker.js';
 import { Dialog } from '@hilla/react-components/Dialog.js';
 import { FormLayout } from '@hilla/react-components/FormLayout.js';
+import { Tab } from '@hilla/react-components/Tab.js';
+import { TabSheet } from '@hilla/react-components/TabSheet.js';
+import { Tabs } from '@hilla/react-components/Tabs.js';
 import { TextArea } from '@hilla/react-components/TextArea.js';
 import { TimePicker } from '@hilla/react-components/TimePicker.js';
 import { useForm } from '@hilla/react-form';
@@ -10,30 +13,36 @@ import BranchRC from 'Frontend/components/branch/BranchRC';
 import PlaceRC from 'Frontend/components/branch/PlaceRC';
 import SpeedDialRC from 'Frontend/components/speeddial/SpeedDialRC';
 import DayTypeEnum from 'Frontend/generated/com/itbd/application/constants/DayTypeEnum';
+import BatchCourseDTO from 'Frontend/generated/com/itbd/application/dto/org/allocation/BatchCourseDTO';
 import BatchCourseDTOModel from 'Frontend/generated/com/itbd/application/dto/org/allocation/BatchCourseDTOModel';
 import BatchRoomDTOModel from 'Frontend/generated/com/itbd/application/dto/org/allocation/BatchRoomDTOModel';
+import RoomDTOModel from 'Frontend/generated/com/itbd/application/dto/org/place/RoomDTOModel';
+import Filter from 'Frontend/generated/dev/hilla/crud/filter/Filter';
 import PropertyStringFilter from 'Frontend/generated/dev/hilla/crud/filter/PropertyStringFilter';
 import Matcher from 'Frontend/generated/dev/hilla/crud/filter/PropertyStringFilter/Matcher';
-import { BatchCourseDtoCrudService, BatchRoomDtoCrudService } from 'Frontend/generated/endpoints';
+import Pageable from 'Frontend/generated/dev/hilla/mappedtypes/Pageable';
+import { BatchCourseDtoCrudService, BatchRoomDtoCrudService, RoomDtoCrudService } from 'Frontend/generated/endpoints';
+import NotificationUtil from 'Frontend/util/NotificationUtil';
 import { comboBoxLazyFilter } from 'Frontend/util/comboboxLazyFilterUtil';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { FaCopy, FaDownload, FaPrint, FaRegCalendarPlus, FaShareAlt } from 'react-icons/fa';
 import { FaX } from 'react-icons/fa6';
 import TimeTableComponent, { DayItem, TimeRange } from './TimeTableComponent';
 import './calendarBoardView.css';
-import BatchCourseDTO from 'Frontend/generated/com/itbd/application/dto/org/allocation/BatchCourseDTO';
+import BatchRoomDTO from 'Frontend/generated/com/itbd/application/dto/org/allocation/BatchRoomDTO';
+import EventTypeEnum from 'Frontend/generated/com/itbd/application/constants/EventTypeEnum';
+
 
 // const dd: DayItem[] = [];
-const dd: DayItem[] = [
-  { dayName: 'Mon', event: [{ start: '13:45', end: '18:45', content: 'hello sdfasdfsdf\n asdfa\nsdfsdf sdfjkasdfjk asdfjhasdjkfh kjashdfjkaslhdfkashdlf', },] },
-  // { name: 'Tue', event: [{ name: 'how are', start: '9:45', end: '18:45' }, { name: 'how are', start: '17:45', end: '18:45' }, { name: 'how are', start: '9:45', end: '18:45' },] },
-  { dayName: 'Tue', event: [{ start: '10:30', end: '12:30', content: 'event 1', }, { start: '09:00', end: '10:30', content: 'event 111', }, { start: '09:00', end: '10:30', content: 'event 111', }, { start: '09:00', end: '10:30', content: 'event 111', }, { start: '09:00', end: '10:30', content: 'event 111', }, { start: '09:00', end: '10:30', content: 'event 111', }, { start: '09:00', end: '10:30', content: 'event 111', }, { start: '09:00', end: '10:30', content: 'event 111', }, { start: '09:00', end: '10:30', content: 'event 111', }, { start: '09:00', end: '10:30', content: 'event 111', }] },
-  { dayName: 'Wed', event: [{ start: '10:30', end: '12:30', content: 'event 1', }, { start: '09:00', end: '10:30', content: 'event 111', }, { start: '09:00', end: '10:30', content: 'event 111', }, { start: '09:00', end: '10:30', content: 'event 111', }, { start: '09:00', end: '10:30', content: 'event 111', }, { start: '09:00', end: '10:30', content: 'event 111', }, { start: '09:00', end: '10:30', content: 'event 111', }, { start: '09:00', end: '10:30', content: 'event 111', }, { start: '09:00', end: '10:30', content: 'event 111', }, { start: '09:00', end: '10:30', content: 'event 111', }] },
-  { dayName: 'Thu', event: [{ start: '12:45', end: '15:31', content: <><b>event 2</b></>, },] },
-  { dayName: 'Fri', event: [{ start: '11:25', end: '16:45', content: 'event 3', },] },
-  { dayName: 'Sat', event: [{ start: '12:15', end: '17:45', content: 'event 4', },] },
-  { dayName: 'Sun', event: [{ start: '11:45', end: '14:45', content: 'event 5', },] },
-];
+// const dd: DayItem[] = [
+//   { dayName: 'Mon', event: [{ start: '13:45', end: '18:45', content: 'hello sdfasdfsdf\n asdfa\nsdfsdf sdfjkasdfjk asdfjhasdjkfh kjashdfjkaslhdfkashdlf', },] },
+//   { dayName: 'Tue', event: [{ start: '10:30', end: '12:30', content: 'event 1', }, { start: '09:00', end: '10:30', content: 'event 111', }, { start: '09:00', end: '10:30', content: 'event 111', }, { start: '09:00', end: '10:30', content: 'event 111', }, { start: '09:00', end: '10:30', content: 'event 111', }, { start: '09:00', end: '10:30', content: 'event 111', }, { start: '09:00', end: '10:30', content: 'event 111', }, { start: '09:00', end: '10:30', content: 'event 111', }, { start: '09:00', end: '10:30', content: 'event 111', }, { start: '09:00', end: '10:30', content: 'event 111', }] },
+//   { dayName: 'Wed', event: [{ start: '10:30', end: '12:30', content: 'event 1', }, { start: '09:00', end: '10:30', content: 'event 111', }, { start: '09:00', end: '10:30', content: 'event 111', }, { start: '09:00', end: '10:30', content: 'event 111', }, { start: '09:00', end: '10:30', content: 'event 111', }, { start: '09:00', end: '10:30', content: 'event 111', }, { start: '09:00', end: '10:30', content: 'event 111', }, { start: '09:00', end: '10:30', content: 'event 111', }, { start: '09:00', end: '10:30', content: 'event 111', }, { start: '09:00', end: '10:30', content: 'event 111', }] },
+//   { dayName: 'Thu', event: [{ start: '12:45', end: '15:31', content: <><b>event 2</b></>, },] },
+//   { dayName: 'Fri', event: [{ start: '11:25', end: '16:45', content: 'event 3', },] },
+//   { dayName: 'Sat', event: [{ start: '12:15', end: '17:45', content: 'event 4', },] },
+//   { dayName: 'Sun', event: [{ start: '11:45', end: '14:45', content: 'event 5', },] },
+// ];
 
 const dayNames = ['MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT', 'SUN',];
 const timeRange: TimeRange = { open: '09:00', close: '21:00', interval: 30 };
@@ -44,6 +53,7 @@ const responsiveSteps = [
 ];
 
 const days = Object.values(DayTypeEnum).map(level => ({ label: level, value: level }));
+const eventTypes = Object.values(EventTypeEnum).map(level => ({ label: level, value: level }));
 
 const courseCustomItemRenderer = (item: BatchCourseDTOModel<BatchCourseDTO>) => {
   const batch: BatchCourseDTO = item.valueOf();
@@ -57,6 +67,10 @@ const courseCustomItemRenderer = (item: BatchCourseDTOModel<BatchCourseDTO>) => 
 
 
 function CalenderBoardView() {
+
+  const [successNotification, setSuccessNotification] = useState<boolean>(false);
+  const [failureNotification, setFailureNotification] = useState<boolean>(false);
+
   const [isOpen, setIsOpen] = useState(false);
 
   const [sectorNameFilter, setSectorNameFilter] = useState('');
@@ -69,17 +83,54 @@ function CalenderBoardView() {
   const [batchNameFilter, setBatchNameFilter] = useState('');
   const [semesterNameFilter, setSemesterNameFilter] = useState('');
 
-  const { model, field, value, read, submit, clear, reset, visited, dirty, invalid, submitting } = useForm(BatchRoomDTOModel, {
+  const [dayEvents, setDayEvents] = useState<DayItem[]>();
+  const [eventRef, setEventRef] = useState<boolean>(false);
+  const [eventCatch, setEventCatch] = useState<number>(0);
+
+  const { model, field, value, read, submit, clear, reset, visited, dirty, invalid, submitting, validate, } = useForm(BatchRoomDTOModel, {
     onSubmit: async (batchRoom) => {
       console.log('instructor', batchRoom);
       await BatchRoomDtoCrudService.save(batchRoom).then((result) => {
+        clear();
+        setSuccessNotification(true);
+        setIsOpen(false);
+        setEventRef(!eventRef);
         // refreshGrid();
         // setSelectedInstructorItems(result ? [result] : []);
         // setSuccessNotification(true);
-      });
+      }).catch((error) => {
+        setFailureNotification(true);
+      })
     }
   });
 
+  const roomDataProvider = useMemo(
+    () =>
+      async (
+        params: ComboBoxDataProviderParams,
+        callback: ComboBoxDataProviderCallback<RoomDTOModel>
+      ) => {
+        const child: PropertyStringFilter[] = [
+          {
+            '@type': 'propertyString',
+            propertyId: 'floor.name',
+            filterValue: floorNameFilter || '',
+            matcher: Matcher.EQUALS
+          },
+          {
+            '@type': 'propertyString',
+            propertyId: 'name',
+            filterValue: params.filter,
+            matcher: Matcher.CONTAINS
+          },];
+
+        const { pagination, filters } = comboBoxLazyFilter(params, 'and', child);
+        RoomDtoCrudService.list(pagination, filters).then((result: any) => {
+          callback(result, result.length);
+        });
+      },
+    [floorNameFilter]
+  );
 
   const batchCourseDataProvider = useMemo(
     () =>
@@ -88,35 +139,87 @@ function CalenderBoardView() {
         callback: ComboBoxDataProviderCallback<BatchCourseDTOModel>
       ) => {
         const child: PropertyStringFilter[] = [
-          // {
-          //   '@type': 'propertyString',
-          //   propertyId: 'programme.name',
-          //   filterValue: programmeNameFilter || '',
-          //   matcher: Matcher.EQUALS
-          // }, 
-          // {
-          //   '@type': 'propertyString',
-          //   propertyId: 'name',
-          //   filterValue: params.filter,
-          //   matcher: Matcher.CONTAINS
-          // }, {
-          //   '@type': 'propertyString',
-          //   propertyId: 'code',
-          //   filterValue: params.filter,
-          //   matcher: Matcher.CONTAINS
-          // },
-        ];
+          {
+            '@type': 'propertyString',
+            propertyId: 'batch.name',
+            filterValue: batchNameFilter || '',
+            matcher: Matcher.EQUALS
+          }, {
+            '@type': 'propertyString',
+            propertyId: 'course.code',
+            filterValue: params.filter,
+            matcher: Matcher.CONTAINS
+          },];
+
+        if (params.filter !== undefined && params.filter !== null && params.filter !== '') {
+          child.push({
+            '@type': 'propertyString',
+            propertyId: 'semester',
+            filterValue: semesterNameFilter || '',
+            matcher: Matcher.EQUALS
+          });
+        }
 
         const { pagination, filters } = comboBoxLazyFilter(params, 'and', child);
         BatchCourseDtoCrudService.list(pagination, filters).then((result: any) => {
           callback(result);
         });
       },
-    []
+    [batchNameFilter, semesterNameFilter,]
   );
+
+  const batchRoomDataProvider = useEffect(
+    () => {
+      const child: PropertyStringFilter[] = [
+      ];
+      const pagination: Pageable = {
+        pageNumber: 0,
+        pageSize: 1,
+        sort: {
+          orders: []
+        },
+      };
+      const filters: Filter = {
+        '@type': 'or',
+        children: child
+      };
+      BatchRoomDtoCrudService.list(pagination, filters).then((result: BatchRoomDTO[]) => {
+        const dayEvents: DayItem[] = [];
+        result.map((batchRoom, index) => {
+          const events = dayEvents.find((item) => item.dayName === batchRoom.dayName?.substring(0, 3));
+          events?.event.push({
+            id: batchRoom.id ?? 0,
+            start: batchRoom.startTime ?? '',
+            end: batchRoom.endTime ?? '',
+            content: `${batchRoom.batchCourse?.course?.code} , ${batchRoom.eventType}`,
+          });
+          if (!events) {
+            const dayItem: DayItem = {
+              dayName: batchRoom.dayName?.substring(0, 3) ?? '',
+              event: [{
+                id: batchRoom.id ?? 0,
+                start: batchRoom.startTime ?? '',
+                end: batchRoom.endTime ?? '',
+                content: `${batchRoom.batchCourse?.course?.code} , ${batchRoom.eventType}`,
+              },]
+            };
+            dayEvents.push(dayItem);
+          }
+        });
+        console.log('batchRoomDataProvider', dayEvents);
+        setDayEvents(dayEvents);
+      });
+    },
+    [semesterNameFilter, eventRef]
+  );
+
+  const updateEvent = useEffect(() => {
+    setEventRef(!eventRef);
+  }, [eventCatch]);
 
   return (
     <>
+      {batchRoomDataProvider}
       <div className='flex flex-col h-full'>
         <div className='flex-none'>
           <PlaceRC
@@ -162,13 +265,58 @@ function CalenderBoardView() {
             }}
           />
         </div>
-        <div className='grow overflow-x-auto'>
-          <TimeTableComponent
-            dayNames={dayNames}
-            timeRange={timeRange} dayItems={dd} />
-        </div>
-      </div>
+        <TabSheet className='grow overflow-x-auto'>
+          <Tabs slot="tabs">
+            <Tab id="week-tab">Week</Tab>
+            <Tab id="month-tab">Month</Tab>
+            <Tab id="day-tab">Day</Tab>
+          </Tabs>
+
+          <div {...{ tab: 'week-tab' }}>
+            <TimeTableComponent
+              dayNames={dayNames}
+              timeRange={timeRange} dayItems={dayEvents || []}
+              evCatch={{
+                eventCatch: eventCatch,
+                setEventCatch: setEventCatch
+              }} />
+          </div>
+          <div {...{ tab: 'month-tab' }} className="flex flex-col h-full items-center justify-center p-l text-center box-border">
+            <img style={{ width: '200px' }} src="images/empty-plant.png" />
+            <h2>This place intentionally left empty</h2>
+            <p>It’s a place where you can grow your own UI 🤗</p></div>
+          <div {...{ tab: 'day-tab' }} className="flex flex-col h-full items-center justify-center p-l text-center box-border">
+            <img style={{ width: '200px' }} src="images/empty-plant.png" />
+            <h2>This place intentionally left empty</h2>
+            <p>It’s a place where you can grow your own UI 🤗</p>
+          </div>
+        </TabSheet >
+      </div >
       <div>
+        <NotificationUtil opened={successNotification} type="update"
+          message={{
+            title: 'Successfully Updated',
+            description: value.batchCourse?.code,
+          }}
+          onOpenedChanged={(event) => {
+            if (!event.detail.value) {
+              setSuccessNotification(event.detail.value);
+            }
+          }}
+          onClick={() => { setSuccessNotification(false) }}
+        />
+        <NotificationUtil opened={failureNotification} type="error"
+          message={{
+            title: 'Unable to Updated',
+            description: 'Please set required fields and try again.',
+          }}
+          onOpenedChanged={(event) => {
+            if (!event.detail.value) {
+              setFailureNotification(event.detail.value);
+            }
+          }}
+          onClick={() => { setSuccessNotification(false) }}
+        />
         <Dialog aria-label="Reserve Schedule" draggable modeless opened={isOpen} className="w-1/4"
           onOpenedChanged={(event) => {
             setIsOpen(event.detail.value);
@@ -187,18 +335,25 @@ function CalenderBoardView() {
             <>
               <Button className="border-2 border-gray-500 text-gray-500 hover:bg-gray-500 hover:text-white" onClick={() => setIsOpen(false)}>Cancel</Button>
               <Button className="border-2 border-red-500 text-red-500 hover:bg-red-500 hover:text-white" onClick={close}>Delete</Button>
-              <Button className="bg-blue-500 hover:bg-blue-700 text-white" onClick={close}>Reserve</Button>
+              <Button className="bg-blue-500 hover:bg-blue-700 text-white" onClick={() => {
+                validate();
+                submit();
+                // if (invalid) {
+                //   submit();
+                //   setIsOpen(false);
+                // }
+              }}>Reserve</Button>
             </>
           )}
         >
           <div className="w-96">
             <FormLayout responsiveSteps={responsiveSteps} className="p-2 w-full">
-              <ComboBox label={'Batch-Course'}  {...{ colspan: 2 }} {...field(model.batchCourse)} dataProvider={batchCourseDataProvider} itemLabelPath='course.code' itemValuePath='course.code' clearButtonVisible
+              <ComboBox label={'Course Code'} dataProvider={batchCourseDataProvider}  {...{ colspan: 2 }} {...field(model.batchCourse)} itemLabelPath='course.code' itemValuePath='batchCourse' clearButtonVisible required
                 renderer={({ item }) => courseCustomItemRenderer(item)}
                 style={{ '--vaadin-combo-box-overlay-width': '350px' } as React.CSSProperties} />
-
-              <ComboBox label={'Room'}  {...{ colspan: 2 }} {...field(model.room)} />
+              <ComboBox label={'Room'} dataProvider={roomDataProvider} {...{ colspan: 2 }} {...field(model.room)} itemLabelPath='name' itemValuePath='room' clearButtonVisible required />
               <ComboBox label={'Day'}  {...{ colspan: 2 }} {...field(model.dayName)} items={days} itemLabelPath="label" />
+              <ComboBox label={'Event Activity'}  {...{ colspan: 2 }} {...field(model.eventType)} items={eventTypes} itemLabelPath="label" />
               <DatePicker label={'Start Date'}  {...{ colspan: 1 }} {...field(model.startDate)} />
               <DatePicker label={'End Date'}  {...{ colspan: 1 }} {...field(model.endDate)} />
               <TimePicker label={'Start Time'}  {...{ colspan: 1 }} {...field(model.startTime)} />
