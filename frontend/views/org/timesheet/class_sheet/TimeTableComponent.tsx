@@ -1,4 +1,4 @@
-import DayTypeEnum from "Frontend/generated/com/itbd/application/constants/DayTypeEnum";
+import { Dispatch, SetStateAction } from "react";
 
 const headC = 'sticky top-0 left-0 z-50 bg-white dark:bg-gradient-to-b dark:from-slate-600 dark:to-slate-700 border-slate-100 dark:border-black/10 bg-clip-padding text-slate-900 dark:text-slate-200 border-b text-sm font-medium py-2 text-center';
 const sideC = 'sticky top-0 left-0 border-slate-100 dark:border-slate-200/5 border-4 text-xs p-1 text-right text-slate-500 uppercase bg-white dark:bg-slate-800 font-medium';
@@ -17,10 +17,16 @@ export type DayItem = {
   event: EventCapture[];
 };
 
+type EventCatchProps = {
+  eventCatch: number,
+  setEventCatch: Dispatch<SetStateAction<number>>
+}
+
 type EventCapture = {
-  content?: any;
+  id: number
   start: string;
   end: string;
+  content?: any;
 };
 
 type EventGroup = {
@@ -30,9 +36,10 @@ type EventGroup = {
 };
 
 type EventItem = {
-  content?: any;
+  id: number
   start: number;
   end: number;
+  content?: any;
 };
 
 function maxSlot(timeRange: TimeRange): number {
@@ -40,7 +47,8 @@ function maxSlot(timeRange: TimeRange): number {
 }
 
 function getTimeToSlot(time: string, interval: number): number {
-  const [hours, minutes] = time.split(":").map(Number);
+  const [hours, minutes, second] = time.split(":").map(Number);
+  // console.log('hour:', hours, minutes, second);
   const totalMinutes = hours * 60 + minutes;
   const slotIndex = Math.floor(totalMinutes / interval);
   return slotIndex;
@@ -82,7 +90,7 @@ function groupTime(timeRange: TimeRange, events: EventCapture[]): EventGroup[] {
   return slots;
 }
 
-function TimeTableComponent({ timeRange, dayNames, dayItems }: { timeRange: TimeRange, dayNames?: string[], dayItems: DayItem[] }) {
+function TimeTableComponent({ timeRange, dayNames, dayItems, evCatch }: { timeRange: TimeRange, dayNames?: string[], dayItems: DayItem[], evCatch: EventCatchProps}) {
 
   function timeManager() {
     const divItem = [
@@ -116,7 +124,7 @@ function TimeTableComponent({ timeRange, dayNames, dayItems }: { timeRange: Time
             column += event.end - event.start;
             cells.push(
               <td key={`day_data_${dayName}_${row}_${column}`} draggable="true" colSpan={event.end - event.start + 1} className={blankCellC}
-                onDoubleClick={() => { console.log('double click', dayIndex, row, column); }}
+                onDoubleClick={() => { console.log('double click', dayIndex, row, column, event); }}
                 onClick={() => { console.log('click', dayIndex, row, column); }}>
                 <div className={cellC}>
                   <div className='font-bold text-sm'>{`[${dayName}] ${getSlotToTime(event.start, timeRange)} - ${getSlotToTime(event.end, timeRange)}`}</div>
@@ -151,7 +159,7 @@ function TimeTableComponent({ timeRange, dayNames, dayItems }: { timeRange: Time
         <tbody>
           {tableContent}
         </tbody>
-      </table>      
+      </table>
     </>
   );
 }
