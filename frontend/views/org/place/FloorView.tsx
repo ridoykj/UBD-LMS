@@ -37,6 +37,7 @@ const FloorView = () => {
         refreshGrid();
         setSelectedInstructorItems(result ? [result] : []);
         setSuccessNotification(true);
+        clear();
       });
     }
   });
@@ -162,7 +163,7 @@ const FloorView = () => {
             <FormLayout responsiveSteps={responsiveSteps} className="w-fit h-fit p-2">
               <ComboBox label={'Building'}  {...field(model.building)} dataProvider={buildingDataProvider} itemLabelPath='name' itemValuePath='name' clearButtonVisible />
               <TextField label={'Name'}  {...{ colspan: 2 }} {...field(model.name)} />
-              <IntegerField label={'Floor Level'}  {...{ colspan: 2 }} {...field(model.floorLevel)} />
+              <IntegerField label={'Floor Level'}  {...{ colspan: 2 }} {...field(model.floorLevel)} helperText={'For Basement floor (-) ex: -2,-1'} />
               <TextField label={'Floor Color Code'}  {...{ colspan: 2 }} {...field(model.floorColorCode)} />
               <TextField label={'Floor Color'}  {...{ colspan: 2 }} {...field(model.floorColor)} />
               <IntegerField label={'totalBlocks'}  {...{ colspan: 2 }} {...field(model.totalBlocks)} />
@@ -202,7 +203,7 @@ const FloorView = () => {
                     disabled={invalid || submitting || !dirty}
                     onClick={submit}
                   >
-                    {selectedInstructorItems[0]?.id !== undefined ? 'Update' : 'Save'}
+                    {value.id !== undefined ? 'Update' : 'Save'}
                   </Button>
                 </div>
             }

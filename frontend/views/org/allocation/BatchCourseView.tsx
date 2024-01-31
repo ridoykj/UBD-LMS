@@ -53,6 +53,7 @@ const BatchCourseView = () => {
         refreshGrid();
         setSelectedCourseItems(result ? [result] : []);
         setSuccessNotification(true);
+        clear();
       }).catch((error) => {
         console.log('error', error);
 
@@ -82,7 +83,7 @@ const BatchCourseView = () => {
 
         const { pagination, filters } = comboBoxLazyFilter(params, 'or', childName);
         InstructorDtoCrudService.list(pagination, filters).then((result: any) => {
-          console.log('instructorDataProvider', result);
+          // console.log('instructorDataProvider', result);
           callback(result);
         });
       },
@@ -151,7 +152,7 @@ const BatchCourseView = () => {
 
   const courseCustomItemRenderer = (item: CourseDTOModel<CourseDTO>) => {
     const course: CourseDTO = item.valueOf();
-    console.log('courseCustomItemRenderer', item.valueOf().name);
+    // console.log('courseCustomItemRenderer', item.valueOf().name);
     return (
       <div className="border-b">
         <p className="text-sm font-semibold">{`${course.code} - ${course.name}`}</p>
@@ -176,8 +177,8 @@ const BatchCourseView = () => {
                     })
                   }
                   else {
-                    console.log('batchCoordinators', value.batchCoordinators);
-                    console.log('coordinator', coordinator);
+                    // console.log('batchCoordinators', value.batchCoordinators);
+                    // console.log('coordinator', coordinator);
                     value.batchCoordinators = value.batchCoordinators?.filter((p) => p?.instructor?.id !== coordinator.instructor.id);
                     update();
                   };
@@ -236,7 +237,7 @@ const BatchCourseView = () => {
             onActiveItemChanged={(e) => {
               const item = e.detail.value;
               setSelectedCourseItems(item ? [item] : []);
-              console.log('onActiveItemChanged', item);
+              // console.log('onActiveItemChanged', item);
               read(item);
             }}
             columnOptions={{
@@ -322,7 +323,7 @@ const BatchCourseView = () => {
                     className="text-white bg-red-400 hover:bg-red-500"
                     onClick={() => {
                       setDialogOpened(true);
-                      console.log('delete', selectedCourseItems[0]?.id);
+                      // console.log('delete', selectedCourseItems[0]?.id);
                     }}
                   >Delete</Button>
               }

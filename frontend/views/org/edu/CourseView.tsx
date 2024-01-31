@@ -40,6 +40,7 @@ const CourseView = () => {
         refreshGrid();
         setSelectedCourseItems(result ? [result] : []);
         setSuccessNotification(true);
+        clear();
       });
     }
   });

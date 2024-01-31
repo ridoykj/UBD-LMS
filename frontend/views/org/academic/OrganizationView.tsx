@@ -30,6 +30,7 @@ const OrganizationView = () => {
         refreshGrid();
         setSelectedOrgItems(result ? [result] : []);
         setSuccessNotification(true);
+        clear();
       }).catch((error) => {
         console.log('error', error);
       });

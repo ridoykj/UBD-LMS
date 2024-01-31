@@ -16,8 +16,8 @@ import java.util.stream.Collectors;
 public record BatchCourseDTO(
         @Id Long id,
         @Version Long version,
-        @NotNull String name,
-        @NotNull String code,
+        String name,
+        String code,
         String prerequisites,
         String headline,
         Long semester,

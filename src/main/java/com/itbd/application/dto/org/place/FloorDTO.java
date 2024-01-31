@@ -2,6 +2,8 @@ package com.itbd.application.dto.org.place;
 
 import com.itbd.application.dao.org.place.BuildingDAO;
 import com.itbd.application.dao.org.place.FloorDAO;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.data.annotation.Version;
@@ -13,7 +15,7 @@ public record FloorDTO(
         String alternateName,
         String description,
         String contact,
-        @NotNull @NotEmpty Integer floorLevel,
+        @NotNull(message = "You can't leave this field")  Integer floorLevel,
         String floorColor,
         String floorColorCode,
         Integer totalBlocks,

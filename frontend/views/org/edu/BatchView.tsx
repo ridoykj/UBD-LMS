@@ -54,6 +54,7 @@ const BatchView = () => {
         refreshGrid();
         setSelectedBatchItems(result ? [result] : []);
         setSuccessNotification(true);
+        clear();
         // setProgrammeNameFilter(result?.programme?.name ?? '');
       });
     }

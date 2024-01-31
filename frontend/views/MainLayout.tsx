@@ -43,16 +43,16 @@ export default function MainLayout() {
                 { name: 'Course', icon: <FaBarsStaggered />, route: '/edu/course' },
                 // { name: 'Reservation', icon: <FaCalendarDay />, route: '/edu/reservation' }
               ]} />
-              <RNavItemRC name='User' icon={<FaUser />} route='' subItems={[
-                { name: 'Coordinator', icon: <FaUserTie />, route: '/user/coordinators' },
-                { name: 'Student', icon: <FaUserGraduate />, route: '/user/students' },
-                { name: 'Authorization', icon: <FaKey />, route: '/user/authorization' }
-              ]} />
               <RNavItemRC name='Place' icon={<FaMapLocationDot />} route='' subItems={[
                 { name: 'Sector', icon: <FaBuildingFlag />, route: '/place/sector' },
                 { name: 'Building', icon: <FaBuildingCircleCheck />, route: '/place/building' },
                 { name: 'Floor', icon: <FaBarsStaggered />, route: '/place/floor' },
                 { name: 'Room', icon: <FaDoorOpen />, route: '/place/room' }
+              ]} />
+              <RNavItemRC name='User' icon={<FaUser />} route='' subItems={[
+                { name: 'Coordinator', icon: <FaUserTie />, route: '/user/coordinators' },
+                { name: 'Student', icon: <FaUserGraduate />, route: '/user/students' },
+                { name: 'Authorization', icon: <FaKey />, route: '/user/authorization' }
               ]} />
               <RNavItemRC name='Allocation' icon={<FaBezierCurve />} route='' subItems={[
                 { name: 'Batch-Course', icon: <FaCodeCompare />, route: '/allocation/batch_course' },

@@ -52,6 +52,7 @@ const ReservationView = () => {
         refreshGrid();
         setSelectedReservationItems(result ? [result] : []);
         setSuccessNotification(true);
+        clear();
       });
     }
   });

@@ -34,6 +34,7 @@ const DepartmentView = () => {
         refreshGrid();
         setSelectedDepartmentItems(result ? [result] : []);
         setSuccessNotification(true);
+        clear();
       }).catch((error) => {
         console.log('error', error);
       });

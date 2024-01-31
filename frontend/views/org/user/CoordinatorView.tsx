@@ -35,6 +35,7 @@ const CoordinatorView = () => {
                 refreshGrid();
                 setSelectedInstructorItems(result ? [result] : []);
                 setSuccessNotification(true);
+                clear();
             });
         }
     });

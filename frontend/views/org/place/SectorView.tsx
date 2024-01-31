@@ -31,6 +31,7 @@ const SectorView = () => {
         refreshGrid();
         setSelectedInstructorItems(result ? [result] : []);
         setSuccessNotification(true);
+        clear();
       });
     }
   });

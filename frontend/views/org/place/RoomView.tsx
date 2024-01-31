@@ -42,6 +42,7 @@ const RoomView = () => {
         refreshGrid();
         setSelectedInstructorItems(result ? [result] : []);
         setSuccessNotification(true);
+        clear();
       });
     }
   });

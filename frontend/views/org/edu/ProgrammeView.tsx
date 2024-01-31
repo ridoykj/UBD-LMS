@@ -37,6 +37,7 @@ const ProgrammeView = () => {
         refreshGrid();
         setSelectedProgrameeItems(result ? [result] : []);
         setSuccessNotification(true);
+        clear();
       });
     }
   });
