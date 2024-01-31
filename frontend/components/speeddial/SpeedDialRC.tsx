@@ -3,7 +3,7 @@ import { FaPlus } from 'react-icons/fa6';
 import { Tooltip as ReactTooltip } from "react-tooltip";
 
 const buttonCss = 'relative w-[52px] h-[52px] text-gray-500 bg-white rounded-full border border-gray-200 hover:text-gray-900 dark:border-gray-600 shadow-sm dark:hover:text-white dark:text-gray-400 hover:bg-gray-50 dark:bg-gray-700 dark:hover:bg-gray-600 focus:ring-4 focus:ring-gray-300 focus:outline-none dark:focus:ring-gray-400';
-const mainButtonCss = 'flex items-center justify-center text-white bg-blue-700 rounded-full w-14 h-14 hover:bg-blue-800 dark:bg-blue-600 dark:hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 focus:outline-none dark:focus:ring-blue-800 ';
+const mainButtonCss = 'flex items-center justify-center text-white bg-pink-600 rounded-full w-14 h-14 hover:bg-pink-800 dark:bg-pink-600 dark:hover:bg-pink-700 focus:ring-4 focus:ring-pink-300 focus:outline-none dark:focus:ring-pink-800 ';
 type ChildrenProps = {
     name: string;
     icon: ReactElement<any, any>;

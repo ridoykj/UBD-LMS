@@ -1,3 +1,4 @@
+import { NotNull } from '@hilla/form';
 import { Button } from '@hilla/react-components/Button.js';
 import { ComboBox, ComboBoxDataProviderCallback, ComboBoxDataProviderParams } from '@hilla/react-components/ComboBox.js';
 import { DatePicker } from '@hilla/react-components/DatePicker.js';
@@ -8,13 +9,15 @@ import { TabSheet } from '@hilla/react-components/TabSheet.js';
 import { Tabs } from '@hilla/react-components/Tabs.js';
 import { TextArea } from '@hilla/react-components/TextArea.js';
 import { TimePicker } from '@hilla/react-components/TimePicker.js';
-import { useForm } from '@hilla/react-form';
+import { useForm, useFormPart } from '@hilla/react-form';
 import BranchRC from 'Frontend/components/branch/BranchRC';
 import PlaceRC from 'Frontend/components/branch/PlaceRC';
 import SpeedDialRC from 'Frontend/components/speeddial/SpeedDialRC';
 import DayTypeEnum from 'Frontend/generated/com/itbd/application/constants/DayTypeEnum';
+import EventTypeEnum from 'Frontend/generated/com/itbd/application/constants/EventTypeEnum';
 import BatchCourseDTO from 'Frontend/generated/com/itbd/application/dto/org/allocation/BatchCourseDTO';
 import BatchCourseDTOModel from 'Frontend/generated/com/itbd/application/dto/org/allocation/BatchCourseDTOModel';
+import BatchRoomDTO from 'Frontend/generated/com/itbd/application/dto/org/allocation/BatchRoomDTO';
 import BatchRoomDTOModel from 'Frontend/generated/com/itbd/application/dto/org/allocation/BatchRoomDTOModel';
 import RoomDTOModel from 'Frontend/generated/com/itbd/application/dto/org/place/RoomDTOModel';
 import Filter from 'Frontend/generated/dev/hilla/crud/filter/Filter';
@@ -28,23 +31,8 @@ import { useEffect, useMemo, useState } from 'react';
 import { FaCopy, FaDownload, FaPrint, FaRegCalendarPlus, FaShareAlt } from 'react-icons/fa';
 import { FaX } from 'react-icons/fa6';
 import TimeTableComponent, { DayItem, TimeRange } from './TimeTableComponent';
-import './calendarBoardView.css';
-import BatchRoomDTO from 'Frontend/generated/com/itbd/application/dto/org/allocation/BatchRoomDTO';
-import EventTypeEnum from 'Frontend/generated/com/itbd/application/constants/EventTypeEnum';
 
-
-// const dd: DayItem[] = [];
-// const dd: DayItem[] = [
-//   { dayName: 'Mon', event: [{ start: '13:45', end: '18:45', content: 'hello sdfasdfsdf\n asdfa\nsdfsdf sdfjkasdfjk asdfjhasdjkfh kjashdfjkaslhdfkashdlf', },] },
-//   { dayName: 'Tue', event: [{ start: '10:30', end: '12:30', content: 'event 1', }, { start: '09:00', end: '10:30', content: 'event 111', }, { start: '09:00', end: '10:30', content: 'event 111', }, { start: '09:00', end: '10:30', content: 'event 111', }, { start: '09:00', end: '10:30', content: 'event 111', }, { start: '09:00', end: '10:30', content: 'event 111', }, { start: '09:00', end: '10:30', content: 'event 111', }, { start: '09:00', end: '10:30', content: 'event 111', }, { start: '09:00', end: '10:30', content: 'event 111', }, { start: '09:00', end: '10:30', content: 'event 111', }] },
-//   { dayName: 'Wed', event: [{ start: '10:30', end: '12:30', content: 'event 1', }, { start: '09:00', end: '10:30', content: 'event 111', }, { start: '09:00', end: '10:30', content: 'event 111', }, { start: '09:00', end: '10:30', content: 'event 111', }, { start: '09:00', end: '10:30', content: 'event 111', }, { start: '09:00', end: '10:30', content: 'event 111', }, { start: '09:00', end: '10:30', content: 'event 111', }, { start: '09:00', end: '10:30', content: 'event 111', }, { start: '09:00', end: '10:30', content: 'event 111', }, { start: '09:00', end: '10:30', content: 'event 111', }] },
-//   { dayName: 'Thu', event: [{ start: '12:45', end: '15:31', content: <><b>event 2</b></>, },] },
-//   { dayName: 'Fri', event: [{ start: '11:25', end: '16:45', content: 'event 3', },] },
-//   { dayName: 'Sat', event: [{ start: '12:15', end: '17:45', content: 'event 4', },] },
-//   { dayName: 'Sun', event: [{ start: '11:45', end: '14:45', content: 'event 5', },] },
-// ];
-
-const dayNames = ['MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT', 'SUN',];
+const dayNames = ['FRI', 'SAT', 'SUN', 'MON', 'TUE', 'WED', 'THU',];
 const timeRange: TimeRange = { open: '09:00', close: '21:00', interval: 30 };
 
 const responsiveSteps = [
@@ -57,7 +45,7 @@ const eventTypes = Object.values(EventTypeEnum).map(level => ({ label: level, va
 
 const courseCustomItemRenderer = (item: BatchCourseDTOModel<BatchCourseDTO>) => {
   const batch: BatchCourseDTO = item.valueOf();
-  console.log('courseCustomItemRenderer', item.valueOf().name);
+  // console.log('courseCustomItemRenderer', item.valueOf().name);
   return (
     <div className="border-b">
       <p className="text-sm font-semibold">{`${batch.course?.code} - ${batch.course?.name} - [${batch.semester}]`}</p>
@@ -65,8 +53,13 @@ const courseCustomItemRenderer = (item: BatchCourseDTOModel<BatchCourseDTO>) => 
   );
 };
 
+function TimeTableView() {
 
-function CalenderBoardView() {
+  const [startDate, setStartDate] = useState('');
+  const [closeDate, setCloseDate] = useState('');
+
+  const [startTime, setStartTime] = useState('');
+  const [closeTime, setCloseTime] = useState('');
 
   const [successNotification, setSuccessNotification] = useState<boolean>(false);
   const [failureNotification, setFailureNotification] = useState<boolean>(false);
@@ -84,8 +77,8 @@ function CalenderBoardView() {
   const [semesterNameFilter, setSemesterNameFilter] = useState('');
 
   const [dayEvents, setDayEvents] = useState<DayItem[]>();
-  const [eventRef, setEventRef] = useState<boolean>(false);
-  const [eventCatch, setEventCatch] = useState<number>(0);
+  const [eventRefresh, setEventRefresh] = useState<boolean>(false);
+  const [eventItem, setEventItem] = useState<BatchRoomDTOModel>();
 
   const { model, field, value, read, submit, clear, reset, visited, dirty, invalid, submitting, validate, } = useForm(BatchRoomDTOModel, {
     onSubmit: async (batchRoom) => {
@@ -94,15 +87,27 @@ function CalenderBoardView() {
         clear();
         setSuccessNotification(true);
         setIsOpen(false);
-        setEventRef(!eventRef);
-        // refreshGrid();
-        // setSelectedInstructorItems(result ? [result] : []);
-        // setSuccessNotification(true);
+        setEventRefresh(!eventRefresh);
       }).catch((error) => {
         setFailureNotification(true);
       })
     }
   });
+  const batchCourseField = useFormPart(model.batchCourse);
+  const roomField = useFormPart(model.room);
+
+  useEffect(() => {
+    batchCourseField.addValidator(
+      new NotNull({
+        message: 'Please select a Course'
+      }));
+
+    roomField.addValidator(
+      new NotNull({
+        message: 'Please select a Room'
+      }));
+
+  }, []);
 
   const roomDataProvider = useMemo(
     () =>
@@ -189,6 +194,7 @@ function CalenderBoardView() {
           const events = dayEvents.find((item) => item.dayName === batchRoom.dayName?.substring(0, 3));
           events?.event.push({
             id: batchRoom.id ?? 0,
+            item: batchRoom,
             start: batchRoom.startTime ?? '',
             end: batchRoom.endTime ?? '',
             content: `${batchRoom.batchCourse?.course?.code} , ${batchRoom.eventType}`,
@@ -198,9 +204,10 @@ function CalenderBoardView() {
               dayName: batchRoom.dayName?.substring(0, 3) ?? '',
               event: [{
                 id: batchRoom.id ?? 0,
+                item: batchRoom,
                 start: batchRoom.startTime ?? '',
                 end: batchRoom.endTime ?? '',
-                content: `${batchRoom.batchCourse?.course?.code} , ${batchRoom.eventType}`,
+                content: `${batchRoom.batchCourse?.course?.code} , ${batchRoom.eventType} - ${batchRoom.description ?? ''}`,
               },]
             };
             dayEvents.push(dayItem);
@@ -210,12 +217,16 @@ function CalenderBoardView() {
         setDayEvents(dayEvents);
       });
     },
-    [semesterNameFilter, eventRef]
+    [semesterNameFilter, eventRefresh]
   );
 
-  const updateEvent = useEffect(() => {
-    setEventRef(!eventRef);
-  }, [eventCatch]);
+  useEffect(() => {
+    if (eventItem) {
+      read(eventItem.valueOf());
+      setIsOpen(true);
+      setEventRefresh(!eventRefresh);
+    }
+  }, [eventItem]);
 
   return (
     <>
@@ -265,20 +276,20 @@ function CalenderBoardView() {
             }}
           />
         </div>
-        <TabSheet className='grow overflow-x-auto'>
+        <TabSheet className='grow overflow-x-auto p-0 m-0'>
           <Tabs slot="tabs">
             <Tab id="week-tab">Week</Tab>
             <Tab id="month-tab">Month</Tab>
             <Tab id="day-tab">Day</Tab>
           </Tabs>
 
-          <div {...{ tab: 'week-tab' }}>
+          <div {...{ tab: 'week-tab' }} className='p-0 m-0'>
             <TimeTableComponent
               dayNames={dayNames}
               timeRange={timeRange} dayItems={dayEvents || []}
-              evCatch={{
-                eventCatch: eventCatch,
-                setEventCatch: setEventCatch
+              itemSelect={{
+                eventItem: eventItem,
+                setEventItem: setEventItem
               }} />
           </div>
           <div {...{ tab: 'month-tab' }} className="flex flex-col h-full items-center justify-center p-l text-center box-border">
@@ -326,38 +337,59 @@ function CalenderBoardView() {
               <h2 className="draggable flex-1 cursor-move margin-0 font-bold text-2xl padding-m-0">
                 Reserve Schedule
               </h2>
-              <button type="button" className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" onClick={() => setIsOpen(false)}>
+              <button type="button" className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
+                onClick={() => {
+                  setIsOpen(false);
+                  clear();
+                }}>
                 <FaX /> <span className="sr-only">Close</span>
               </button>
             </>
           )}
           footerRenderer={() => (
             <>
-              <Button className="border-2 border-gray-500 text-gray-500 hover:bg-gray-500 hover:text-white" onClick={() => setIsOpen(false)}>Cancel</Button>
-              <Button className="border-2 border-red-500 text-red-500 hover:bg-red-500 hover:text-white" onClick={close}>Delete</Button>
-              <Button className="bg-blue-500 hover:bg-blue-700 text-white" onClick={() => {
-                validate();
-                submit();
-                // if (invalid) {
-                //   submit();
-                //   setIsOpen(false);
-                // }
-              }}>Reserve</Button>
+              <Button className="border-2 border-gray-500 text-gray-500 hover:bg-gray-500 hover:text-white" onClick={() => {
+                setIsOpen(false);
+                clear();
+              }}>Cancel</Button>
+              {value.id && <Button className="border-2 border-red-500 text-red-500 hover:bg-red-500 hover:text-white"
+                onClick={() => {
+                  BatchRoomDtoCrudService.delete(value.id).then((result) => {
+                    setEventRefresh(!eventRefresh);
+                    setIsOpen(false);
+                    clear();
+                  })
+                }}>Delete</Button>
+              }
+              <Button className={`text-white disabled:opacity-75 ${dirty?'bg-blue-500 hover:bg-blue-700':'bg-gray-300'}`} disabled={!dirty} onClick={(e) => submit()}>
+                {value.id != null ? 'Update' : 'Add'}</Button>
             </>
           )}
         >
           <div className="w-96">
             <FormLayout responsiveSteps={responsiveSteps} className="p-2 w-full">
-              <ComboBox label={'Course Code'} dataProvider={batchCourseDataProvider}  {...{ colspan: 2 }} {...field(model.batchCourse)} itemLabelPath='course.code' itemValuePath='batchCourse' clearButtonVisible required
+              <ComboBox label={'Course Code'} dataProvider={batchCourseDataProvider}  {...{ colspan: 2 }} {...field(model.batchCourse)} itemLabelPath='course.code' itemValuePath='batchCourse' clearButtonVisible
                 renderer={({ item }) => courseCustomItemRenderer(item)}
                 style={{ '--vaadin-combo-box-overlay-width': '350px' } as React.CSSProperties} />
-              <ComboBox label={'Room'} dataProvider={roomDataProvider} {...{ colspan: 2 }} {...field(model.room)} itemLabelPath='name' itemValuePath='room' clearButtonVisible required />
+              <ComboBox label={'Room'} dataProvider={roomDataProvider} {...{ colspan: 2 }} {...field(model.room)} itemLabelPath='name' itemValuePath='room' clearButtonVisible />
               <ComboBox label={'Day'}  {...{ colspan: 2 }} {...field(model.dayName)} items={days} itemLabelPath="label" />
               <ComboBox label={'Event Activity'}  {...{ colspan: 2 }} {...field(model.eventType)} items={eventTypes} itemLabelPath="label" />
-              <DatePicker label={'Start Date'}  {...{ colspan: 1 }} {...field(model.startDate)} />
-              <DatePicker label={'End Date'}  {...{ colspan: 1 }} {...field(model.endDate)} />
-              <TimePicker label={'Start Time'}  {...{ colspan: 1 }} {...field(model.startTime)} />
-              <TimePicker label={'End Time'}  {...{ colspan: 1 }} {...field(model.endTime)} />
+              <DatePicker label={'Start Date'} max={closeDate} {...{ colspan: 1 }} {...field(model.startDate)}
+                onValueChanged={(event) => {
+                  setStartDate(event.detail.value);
+                }} />
+              <DatePicker label={'End Date'} min={startDate} {...{ colspan: 1 }} {...field(model.endDate)}
+                onValueChanged={(event) => {
+                  setCloseDate(event.detail.value);
+                }} />
+              <TimePicker label={'Start Time'} max={closeTime} {...{ colspan: 1 }} {...field(model.startTime)}
+                onValueChanged={(event) => {
+                  setStartTime(event.detail.value);
+                }} />
+              <TimePicker label={'End Time'} min={startTime} {...{ colspan: 1 }} {...field(model.endTime)}
+                onValueChanged={(event) => {
+                  setCloseTime(event.detail.value);
+                }} />
               {/* <TextField label={'Contact'}  {...{ colspan: 2 }} {...field(model.contact)} /> */}
               <TextArea label={'Description'}  {...{ colspan: 2 }} {...field(model.description)} />
             </FormLayout>
@@ -374,4 +406,4 @@ function CalenderBoardView() {
     </>
   );
 }
-export default CalenderBoardView;
+export default TimeTableView;

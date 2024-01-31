@@ -2,16 +2,18 @@ package com.itbd.application.dto.org.place;
 
 import com.itbd.application.dao.org.place.BuildingDAO;
 import com.itbd.application.dao.org.place.FloorDAO;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import org.springframework.data.annotation.Version;
 
 public record FloorDTO(
         Long id,
         @Version Long version,
-        String name,
+        @NotNull @NotEmpty String name,
         String alternateName,
         String description,
         String contact,
-        Integer floorLevel,
+        @NotNull @NotEmpty Integer floorLevel,
         String floorColor,
         String floorColorCode,
         Integer totalBlocks,

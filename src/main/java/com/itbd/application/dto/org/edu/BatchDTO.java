@@ -5,6 +5,8 @@ import com.itbd.application.dao.org.edu.BatchDAO;
 import com.itbd.application.dao.org.edu.ProgrammeDAO;
 import com.itbd.application.dao.org.edu.ReservationDAO;
 import com.itbd.application.dao.user.StudentDAO;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import org.springframework.data.annotation.Version;
 
 import java.time.LocalDate;
@@ -15,7 +17,7 @@ import java.util.Set;
 public record BatchDTO(
         Long id,
         @Version Long version,
-        String name,
+        @NotNull @NotEmpty String name,
         String code,
         String description,
         String status,

@@ -5,6 +5,7 @@ import com.itbd.application.dao.org.edu.BatchDAO;
 import com.itbd.application.dao.org.edu.CourseDAO;
 import com.itbd.application.dao.org.edu.DepartmentDAO;
 import com.itbd.application.dao.org.edu.ProgrammeDAO;
+import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.data.annotation.Version;
 
@@ -13,7 +14,7 @@ import java.util.List;
 public record ProgrammeDTO(
         Long id,
         @Version Long version,
-        @NotNull String name,
+        @NotNull @NotEmpty String name,
         ProgrammeTypeEnum studyLevel,
         String code,
         String description,

@@ -3,12 +3,14 @@ package com.itbd.application.dto.org.place;
 import com.itbd.application.constants.RoomTypeEnum;
 import com.itbd.application.dao.org.place.FloorDAO;
 import com.itbd.application.dao.org.place.RoomDAO;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import org.springframework.data.annotation.Version;
 
 public record RoomDTO(
         Long id,
         @Version Long version,
-        String name,
+        @NotNull @NotEmpty String name,
         String alternateName,
         RoomTypeEnum type,
         String description,

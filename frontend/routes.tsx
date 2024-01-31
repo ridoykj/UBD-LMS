@@ -19,7 +19,7 @@ import SectorView from './views/org/place/SectorView';
 import AuthorizationView from './views/org/user/AuthorizationView';
 import CoordinatorView from './views/org/user/CoordinatorView';
 import StudentView from './views/org/user/StudentView';
-import CalenderBoardView from './views/org/timesheet/class_sheet/TimeTableView';
+import TimeTableView from './views/org/timesheet/class_sheet/TimeTableView';
 import DashboardView from './views/profile/dashboard/DashboardView';
 import ProfileView from './views/profile/ProfileView';
 import ShopView from './views/shop/ShopView';
@@ -58,7 +58,7 @@ export const routes: RouteObject[] = [
 
       { path: '/allocation/batch_course', element: <BatchCourseView />, handle: { title: 'Batch-Course' } },
       
-      { path: '/time_sheet/class', element: <CalenderBoardView />, handle: { title: 'Time Sheet' } },
+      { path: '/time_sheet/class', element: <TimeTableView />, handle: { title: 'Time Sheet' } },
 
       { path: '/user/authorization', element: <AuthorizationView />, handle: { title: 'Authorization' } },
       { path: '/user/coordinators', element: <CoordinatorView />, handle: { title: 'Coordinator' } },

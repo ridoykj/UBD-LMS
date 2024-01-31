@@ -17,13 +17,14 @@ export type DayItem = {
   event: EventCapture[];
 };
 
-type EventCatchProps = {
-  eventCatch: number,
-  setEventCatch: Dispatch<SetStateAction<number>>
+type EventItemProps = {
+  eventItem: any,
+  setEventItem: Dispatch<SetStateAction<any>>
 }
 
 type EventCapture = {
   id: number
+  item: any
   start: string;
   end: string;
   content?: any;
@@ -36,7 +37,8 @@ type EventGroup = {
 };
 
 type EventItem = {
-  id: number
+  id: number  
+  item: any
   start: number;
   end: number;
   content?: any;
@@ -90,7 +92,7 @@ function groupTime(timeRange: TimeRange, events: EventCapture[]): EventGroup[] {
   return slots;
 }
 
-function TimeTableComponent({ timeRange, dayNames, dayItems, evCatch }: { timeRange: TimeRange, dayNames?: string[], dayItems: DayItem[], evCatch: EventCatchProps}) {
+function TimeTableComponent({ timeRange, dayNames, dayItems, itemSelect }: { timeRange: TimeRange, dayNames?: string[], dayItems: DayItem[], itemSelect: EventItemProps}) {
 
   function timeManager() {
     const divItem = [
@@ -124,7 +126,10 @@ function TimeTableComponent({ timeRange, dayNames, dayItems, evCatch }: { timeRa
             column += event.end - event.start;
             cells.push(
               <td key={`day_data_${dayName}_${row}_${column}`} draggable="true" colSpan={event.end - event.start + 1} className={blankCellC}
-                onDoubleClick={() => { console.log('double click', dayIndex, row, column, event); }}
+                onDoubleClick={() => { 
+                  console.log('double click', dayIndex, row, column, event, );
+                  itemSelect.setEventItem(event.item);
+               }}
                 onClick={() => { console.log('click', dayIndex, row, column); }}>
                 <div className={cellC}>
                   <div className='font-bold text-sm'>{`[${dayName}] ${getSlotToTime(event.start, timeRange)} - ${getSlotToTime(event.end, timeRange)}`}</div>

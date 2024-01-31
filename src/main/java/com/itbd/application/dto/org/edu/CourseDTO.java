@@ -4,6 +4,8 @@ import com.itbd.application.dao.org.allocation.BatchCourseDAO;
 import com.itbd.application.dao.org.edu.CourseDAO;
 import com.itbd.application.dao.org.edu.ProgrammeDAO;
 import com.itbd.application.dao.org.edu.ReservationDAO;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import org.springframework.data.annotation.Version;
 
 import java.math.BigDecimal;
@@ -13,8 +15,8 @@ import java.util.Set;
 public record CourseDTO(
         Long id,
         @Version Long version,
-        String name,
-        String code,
+        @NotNull @NotEmpty String name,
+        @NotNull @NotEmpty String code,
         String prerequisites,
         String headline,
         String about,

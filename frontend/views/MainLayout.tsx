@@ -41,7 +41,7 @@ export default function MainLayout() {
                 { name: 'Programme', icon: <FaPaintRoller />, route: '/edu/programme' },
                 { name: 'Batch', icon: <FaScroll />, route: '/edu/batch' },
                 { name: 'Course', icon: <FaBarsStaggered />, route: '/edu/course' },
-                { name: 'Reservation', icon: <FaCalendarDay />, route: '/edu/reservation' }
+                // { name: 'Reservation', icon: <FaCalendarDay />, route: '/edu/reservation' }
               ]} />
               <RNavItemRC name='User' icon={<FaUser />} route='' subItems={[
                 { name: 'Coordinator', icon: <FaUserTie />, route: '/user/coordinators' },
@@ -56,14 +56,14 @@ export default function MainLayout() {
               ]} />
               <RNavItemRC name='Allocation' icon={<FaBezierCurve />} route='' subItems={[
                 { name: 'Batch-Course', icon: <FaCodeCompare />, route: '/allocation/batch_course' },
-                { name: 'Course-Coordinator', icon: <FaCodeCompare />, route: '/default' },
+                // { name: 'Course-Coordinator', icon: <FaCodeCompare />, route: '/default' },
               ]} />
               <RNavItemRC name='Time Sheet' icon={<FaCalendarDay />} route='' subItems={[
                 { name: 'Class', icon: <FaCalendarDay />, route: '/time_sheet/class' },
                 { name: 'Examination', icon: <FaCalendarDay />, route: '/default' },
                 { name: 'Attendance', icon: <FaCalendarDay />, route: '/default' },
               ]} />
-              <RNavItemRC name='Report' icon={<FaClipboard />} route='' subItems={[
+              {/* <RNavItemRC name='Report' icon={<FaClipboard />} route='' subItems={[
                 { name: 'Result', icon: <FaReceipt />, route: '/default' },
                 { name: 'Revenue', icon: <FaCircleDollarToSlot />, route: '/default' }
               ]} />
@@ -71,7 +71,7 @@ export default function MainLayout() {
                 { name: 'Schedule', icon: <FaCalendarDay />, route: '/default' },
                 { name: 'Result', icon: <FaReceipt />, route: '/default' },
                 { name: 'Revenue', icon: <FaCircleDollarToSlot />, route: '/default' }
-              ]} />
+              ]} /> */}
               {/* <RNavItem name='Users' icon={<FaRegUser />} route='/users' />
             <RNavItem name='Profiles' icon={<FaRegUser />} route='/profiles' /> */}
             </nav>

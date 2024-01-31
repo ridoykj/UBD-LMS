@@ -181,21 +181,21 @@ export default function BranchRC({ visibleFields, sector, building, floor, room,
           </>
         }
         {
-          visibleFields['building'] &&
+          visibleFields['building'] && sector?.sectorName &&
           <>
             <div className='text-sm font-medium ml-5 mr-2 text-gray-400'>Building</div>
             <ComboBox dataProvider={buildingDataProvider} itemLabelPath='name' itemValuePath='name' clearButtonVisible value={building?.buildingName} onValueChanged={handleBuilding} />
           </>
         }
         {
-          visibleFields['floor'] &&
+          visibleFields['floor'] && building?.buildingName &&
           <>
             <div className='text-sm font-medium ml-5 mr-2 text-gray-400'>Floor</div>
             <ComboBox dataProvider={floorDataProvider} itemLabelPath='name' itemValuePath='name' clearButtonVisible value={floor?.floorName} onValueChanged={handleFloor} />
           </>
         }
         {
-          visibleFields['room'] &&
+          visibleFields['room'] && floor?.floorName &&
           <>
             <div className='text-sm font-medium ml-5 mr-2 text-gray-400'>Room</div>
             <ComboBox dataProvider={roomDataProvider} itemLabelPath='name' itemValuePath='name' clearButtonVisible value={room?.roomName} onValueChanged={handleRoom} />

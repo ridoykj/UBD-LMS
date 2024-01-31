@@ -4,6 +4,8 @@ import com.itbd.application.dao.user.InstructorDAO;
 import com.itbd.application.dao.user.person.AddressDAO;
 import com.itbd.application.dao.user.person.PersonDAO;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import nonapi.io.github.classgraph.json.Id;
 import org.springframework.data.annotation.Version;
 
@@ -13,9 +15,9 @@ import java.util.Optional;
 public record PersonDTO(
         @Id Long id,
         @Version Long version,
-        @NotBlank String givenName,
-        @NotBlank String additionalName,
-        @NotBlank String familyName,
+        @NotNull @NotEmpty String givenName,
+        @NotNull @NotEmpty String additionalName,
+        @NotNull @NotEmpty String familyName,
         String alternateName,
         LocalDateTime birthDate,
         LocalDateTime deathDate,

@@ -6,6 +6,7 @@ import com.itbd.application.dao.org.edu.BatchDAO;
 import com.itbd.application.dao.org.edu.CourseDAO;
 import jakarta.persistence.Id;
 import jakarta.persistence.Version;
+import jakarta.validation.constraints.NotNull;
 
 import java.math.BigDecimal;
 import java.util.HashSet;
@@ -15,8 +16,8 @@ import java.util.stream.Collectors;
 public record BatchCourseDTO(
         @Id Long id,
         @Version Long version,
-        String name,
-        String code,
+        @NotNull String name,
+        @NotNull String code,
         String prerequisites,
         String headline,
         Long semester,

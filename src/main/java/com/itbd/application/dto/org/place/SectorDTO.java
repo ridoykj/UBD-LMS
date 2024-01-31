@@ -1,12 +1,14 @@
 package com.itbd.application.dto.org.place;
 
 import com.itbd.application.dao.org.place.SectorDAO;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import org.springframework.data.annotation.Version;
 
 public record SectorDTO(
         Long id,
         @Version Long version,
-        String name,
+        @NotNull @NotEmpty String name,
         String alternateName,
         String city,
         String state,

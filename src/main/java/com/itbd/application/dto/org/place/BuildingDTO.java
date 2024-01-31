@@ -4,6 +4,8 @@ import com.itbd.application.constants.BuildingTypeEnum;
 import com.itbd.application.dao.org.place.BuildingDAO;
 import com.itbd.application.dao.org.place.FloorDAO;
 import com.itbd.application.dao.org.place.SectorDAO;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import org.springframework.data.annotation.Version;
 
 import java.time.LocalDateTime;
@@ -13,7 +15,7 @@ import java.util.List;
 public record BuildingDTO(
         Long id,
         @Version Long version,
-        String name,
+        @NotNull @NotEmpty String name,
         BuildingTypeEnum type,
         String block,
         String alternateName,

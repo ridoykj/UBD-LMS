@@ -3,15 +3,12 @@ package com.itbd.application.dto.org.allocation;
 import com.itbd.application.constants.CoordinatorTypeEnum;
 import com.itbd.application.dao.org.allocation.BatchCoordinatorDAO;
 import com.itbd.application.dao.org.allocation.BatchCourseDAO;
-import com.itbd.application.dao.org.edu.BatchDAO;
-import com.itbd.application.dao.org.edu.CourseDAO;
 import com.itbd.application.dao.user.InstructorDAO;
+import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.Version;
 
-import java.util.HashSet;
-
 public record BatchCoordinatorDTO(
-        Long id,
+       @Id Long id,
         @Version Long version,
         CoordinatorTypeEnum type,
         BatchCourseDAO batchCourse,
