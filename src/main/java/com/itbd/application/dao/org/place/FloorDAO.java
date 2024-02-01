@@ -9,9 +9,10 @@ import lombok.Setter;
 import java.math.BigDecimal;
 import java.util.List;
 
-@Entity(name = "t_place_floor")
+@Entity
 @Getter
 @Setter
+@Table(name = "t_place_floor", uniqueConstraints = {@UniqueConstraint(name = "ctx_floor_unique", columnNames = {"name", "floorLevel", "building"})})
 public class FloorDAO extends AbstractEntity<Long> {
     @Id
     @Column(name = "id_floor_key", nullable = false, updatable = false)
@@ -23,7 +24,7 @@ public class FloorDAO extends AbstractEntity<Long> {
     @Column(name = "id_floor_ver", nullable = false)
     private Long version;
 
-    @Column(name = "tx_name", unique = true)
+    @Column(name = "tx_name")
     private String name;
 
     @Column(name = "tx_alternate_name")
@@ -35,8 +36,9 @@ public class FloorDAO extends AbstractEntity<Long> {
     @Column(name = "tx_contact")
     private String contact;
 
-    @Column(name = "tx_block")
+    @Column(name = "ct_floor_level")
     private Integer floorLevel;
+
 
     @Column(name = "flt_height")
     private BigDecimal floorHeight;
@@ -64,7 +66,6 @@ public class FloorDAO extends AbstractEntity<Long> {
 
     @Column(name = "ct_total_exits")
     private Integer totalExits;
-
 
     @OneToMany(mappedBy = "floor")
     private List<RoomDAO> rooms;

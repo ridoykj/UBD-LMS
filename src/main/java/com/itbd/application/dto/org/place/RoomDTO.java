@@ -1,6 +1,7 @@
 package com.itbd.application.dto.org.place;
 
 import com.itbd.application.constants.RoomTypeEnum;
+import com.itbd.application.dao.org.place.BuildingDAO;
 import com.itbd.application.dao.org.place.FloorDAO;
 import com.itbd.application.dao.org.place.RoomDAO;
 import jakarta.validation.constraints.NotEmpty;
@@ -22,8 +23,12 @@ public record RoomDTO(
         FloorDAO floor) {
     public static RoomDTO fromEntity(RoomDAO room) {
         FloorDAO floor = room.getFloor();
+        BuildingDAO building = floor.getBuilding();
+        building.setFloors(null);
+        building.setSector(null);
+
+        floor.setBuilding(building);
         floor.setRooms(null);
-        floor.setBuilding(null);
         room.setFloor(floor);
         return new RoomDTO(
                 room.getId(),

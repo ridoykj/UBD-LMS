@@ -32,7 +32,7 @@ import { FaCopy, FaDownload, FaPrint, FaRegCalendarPlus, FaShareAlt } from 'reac
 import { FaX } from 'react-icons/fa6';
 import TimeTableComponent, { DayItem, TimeRange } from './TimeTableComponent';
 
-const dayNames = ['FRI', 'SAT', 'SUN', 'MON', 'TUE', 'WED', 'THU',];
+const dayNames = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT',];
 const timeRange: TimeRange = { open: '09:00', close: '21:00', interval: 30 };
 
 const responsiveSteps = [
@@ -192,12 +192,13 @@ function TimeTableView() {
         const dayEvents: DayItem[] = [];
         result.map((batchRoom, index) => {
           const events = dayEvents.find((item) => item.dayName === batchRoom.dayName?.substring(0, 3));
+          const contentBuild = `${batchRoom.batchCourse?.course?.code}, ${batchRoom.eventType}, [${batchRoom.batchCourse?.batchCoordinators?.map(el => el?.instructor?.person?.givenName).join(', ')}], ${batchRoom.room?.name ?? ''}, ${batchRoom.room?.floor?.name ?? ''}, ${batchRoom.room?.floor?.building?.name ?? ''}, ${batchRoom.description ?? ''}`;
           events?.event.push({
             id: batchRoom.id ?? 0,
             item: batchRoom,
             start: batchRoom.startTime ?? '',
             end: batchRoom.endTime ?? '',
-            content: `${batchRoom.batchCourse?.course?.code} , ${batchRoom.eventType}`,
+            content: contentBuild,
           });
           if (!events) {
             const dayItem: DayItem = {
@@ -207,7 +208,7 @@ function TimeTableView() {
                 item: batchRoom,
                 start: batchRoom.startTime ?? '',
                 end: batchRoom.endTime ?? '',
-                content: `${batchRoom.batchCourse?.course?.code} , ${batchRoom.eventType} - ${batchRoom.description ?? ''}`,
+                content: contentBuild,
               },]
             };
             dayEvents.push(dayItem);
@@ -361,7 +362,7 @@ function TimeTableView() {
                   })
                 }}>Delete</Button>
               }
-              <Button className={`text-white disabled:opacity-75 ${dirty?'bg-blue-500 hover:bg-blue-700':'bg-gray-300'}`} disabled={!dirty} onClick={(e) => submit()}>
+              <Button className={`text-white disabled:opacity-75 ${dirty ? 'bg-blue-500 hover:bg-blue-700' : 'bg-gray-300'}`} disabled={!dirty} onClick={(e) => submit()}>
                 {value.id != null ? 'Update' : 'Add'}</Button>
             </>
           )}
@@ -382,11 +383,11 @@ function TimeTableView() {
                 onValueChanged={(event) => {
                   setCloseDate(event.detail.value);
                 }} />
-              <TimePicker label={'Start Time'} max={closeTime} {...{ colspan: 1 }} {...field(model.startTime)}
+              <TimePicker label={'Start Time'} min='09:00' max={closeTime} {...{ colspan: 1 }} {...field(model.startTime)}
                 onValueChanged={(event) => {
                   setStartTime(event.detail.value);
                 }} />
-              <TimePicker label={'End Time'} min={startTime} {...{ colspan: 1 }} {...field(model.endTime)}
+              <TimePicker label={'End Time'} min={startTime} max='20:00' {...{ colspan: 1 }} {...field(model.endTime)}
                 onValueChanged={(event) => {
                   setCloseTime(event.detail.value);
                 }} />

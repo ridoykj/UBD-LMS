@@ -120,7 +120,7 @@ const RoomView = () => {
             }}
           />
           <AutoGrid service={RoomDtoCrudService} model={RoomDTOModel} ref={autoGridRef}
-            visibleColumns={['name', 'hasPublicAccess', 'block', 'totalRooms', 'floor.name',]}
+            visibleColumns={['name', 'hasPublicAccess', 'block', 'totalRooms', 'floor.name', 'floor.building.name',]}
             selectedItems={selectedInstructorItems}
             theme="row-stripes"
             columnOptions={{
@@ -142,6 +142,11 @@ const RoomView = () => {
               },
               'floor.name': {
                 header: 'Floor',
+                resizable: true,
+                externalValue: floorNameFilter
+              },
+              'floor.building.name': {
+                header: 'Building',
                 resizable: true,
                 externalValue: floorNameFilter
               },

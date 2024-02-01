@@ -21,6 +21,10 @@ npm install react-icons
 
 npm install @headlessui/react
 
+npm i date-fns
+
+npm i react-tooltip
+
 ## Running the application
 
 The project is a standard Maven project. To run it from the command line,
