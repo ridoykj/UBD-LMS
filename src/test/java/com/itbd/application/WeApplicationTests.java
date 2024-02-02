@@ -3,7 +3,7 @@ package com.itbd.application;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class DemoApplicationTests {
+class WeApplicationTests {
 
     // @Test
     // void contextLoads() {

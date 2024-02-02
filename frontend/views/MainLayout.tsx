@@ -6,13 +6,12 @@ import AvatarControlRC from 'Frontend/components/profile/AvaterControlRC';
 import RNavItemRC from 'Frontend/components/sidebar/NavItemRC';
 import { useRouteMetadata } from 'Frontend/util/routing';
 import { Suspense } from 'react';
-import { FaChartArea, FaClipboard, FaDoorOpen, FaHome, FaKey, FaPaintRoller, FaReceipt, FaScroll, FaUserTie } from 'react-icons/fa';
-import { FaBarsStaggered, FaBezierCurve, FaBuildingCircleCheck, FaBuildingFlag, FaCalendarDay, FaCircleDollarToSlot, FaCodeCompare, FaGear, FaMapLocationDot, FaShop, FaUser, FaUserGear, FaUserGraduate } from 'react-icons/fa6';
+import { FaChartArea, FaDoorOpen, FaHome, FaKey, FaPaintRoller, FaScroll, FaUserTie } from 'react-icons/fa';
+import { FaBarsStaggered, FaBezierCurve, FaBuildingCircleCheck, FaBuildingFlag, FaCalendarDay, FaCodeCompare, FaMapLocationDot, FaShop, FaUser, FaUserGear, FaUserGraduate } from 'react-icons/fa6';
 import { Outlet } from 'react-router-dom';
 
 export default function MainLayout() {
 
-  const items = [{ text: 'Ridoy Kumar Joy' }, { text: 'Profile' }, { text: 'Setting' }, { text: 'Logout' }];
   const currentTitle = useRouteMetadata()?.title ?? 'My App';
   return (
     <>
@@ -28,40 +27,35 @@ export default function MainLayout() {
               {/* <h1 className="text-xl text-indigo-500 font-bold">AFG College with the University of Aberdeen</h1> */}
             </div>
             <nav className='overflow-y-auto h-full'>
-              {/* <RNavItem name='Home' icon={<FaHome />} route='/' />
-            <RNavItem name='Shop' icon={<FaShoppingCart />} route='/shop' />
-            <RNavItem name='Group' icon={<FaIoxhost />} route='' subItems={[{ name: 'Grid', icon: <FaTable />, route: '/grid' }, { name: 'About', icon: <FaQuestionCircle />, route: '/About' }]} />
-            <RNavItem name='Users' icon={<FaRegUser />} route='/users' />
-            <RNavItem name='Profiles' icon={<FaRegUser />} route='/profiles' /> */}
 
-              <RNavItemRC name='Dashboard' icon={<FaChartArea />} route='/' />
+              <RNavItemRC name='Dashboard' icon={<FaChartArea />} route='' />
               <RNavItemRC name='Organization' icon={<FaHome />} route='' subItems={[
-                { name: 'Profile', icon: <FaUserGear />, route: '/academic/organization' },
-                { name: 'Department', icon: <FaShop />, route: '/edu/department' },
-                { name: 'Programme', icon: <FaPaintRoller />, route: '/edu/programme' },
-                { name: 'Batch', icon: <FaScroll />, route: '/edu/batch' },
-                { name: 'Course', icon: <FaBarsStaggered />, route: '/edu/course' },
+                { name: 'Profile', icon: <FaUserGear />, route: 'academic/organization' },
+                { name: 'Department', icon: <FaShop />, route: 'edu/department' },
+                { name: 'Programme', icon: <FaPaintRoller />, route: 'edu/programme' },
+                { name: 'Batch', icon: <FaScroll />, route: 'edu/batch' },
+                { name: 'Course', icon: <FaBarsStaggered />, route: 'edu/course' },
                 // { name: 'Reservation', icon: <FaCalendarDay />, route: '/edu/reservation' }
               ]} />
               <RNavItemRC name='Place' icon={<FaMapLocationDot />} route='' subItems={[
-                { name: 'Sector', icon: <FaBuildingFlag />, route: '/place/sector' },
-                { name: 'Building', icon: <FaBuildingCircleCheck />, route: '/place/building' },
-                { name: 'Floor', icon: <FaBarsStaggered />, route: '/place/floor' },
-                { name: 'Room', icon: <FaDoorOpen />, route: '/place/room' }
+                { name: 'Sector', icon: <FaBuildingFlag />, route: 'place/sector' },
+                { name: 'Building', icon: <FaBuildingCircleCheck />, route: 'place/building' },
+                { name: 'Floor', icon: <FaBarsStaggered />, route: 'place/floor' },
+                { name: 'Room', icon: <FaDoorOpen />, route: 'place/room' }
               ]} />
               <RNavItemRC name='User' icon={<FaUser />} route='' subItems={[
-                { name: 'Coordinator', icon: <FaUserTie />, route: '/user/coordinators' },
-                { name: 'Student', icon: <FaUserGraduate />, route: '/user/students' },
-                { name: 'Authorization', icon: <FaKey />, route: '/user/authorization' }
+                { name: 'Coordinator', icon: <FaUserTie />, route: 'user/coordinators' },
+                { name: 'Student', icon: <FaUserGraduate />, route: 'user/students' },
+                { name: 'Authorization', icon: <FaKey />, route: 'user/authorization' }
               ]} />
               <RNavItemRC name='Allocation' icon={<FaBezierCurve />} route='' subItems={[
-                { name: 'Batch-Course', icon: <FaCodeCompare />, route: '/allocation/batch_course' },
+                { name: 'Batch-Course', icon: <FaCodeCompare />, route: 'allocation/batch_course' },
                 // { name: 'Course-Coordinator', icon: <FaCodeCompare />, route: '/default' },
               ]} />
               <RNavItemRC name='Time Sheet' icon={<FaCalendarDay />} route='' subItems={[
-                { name: 'Class', icon: <FaCalendarDay />, route: '/time_sheet/class' },
-                { name: 'Examination', icon: <FaCalendarDay />, route: '/default' },
-                { name: 'Attendance', icon: <FaCalendarDay />, route: '/default' },
+                { name: 'Class', icon: <FaCalendarDay />, route: 'time_sheet/class' },
+                { name: 'Examination', icon: <FaCalendarDay />, route: 'default' },
+                { name: 'Attendance', icon: <FaCalendarDay />, route: 'default' },
               ]} />
               {/* <RNavItemRC name='Report' icon={<FaClipboard />} route='' subItems={[
                 { name: 'Result', icon: <FaReceipt />, route: '/default' },

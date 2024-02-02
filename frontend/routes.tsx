@@ -20,52 +20,55 @@ import AuthorizationView from './views/org/user/AuthorizationView';
 import CoordinatorView from './views/org/user/CoordinatorView';
 import StudentView from './views/org/user/StudentView';
 import TimeTableView from './views/org/timesheet/class_sheet/TimeTableView';
-import DashboardView from './views/profile/dashboard/DashboardView';
 import ProfileView from './views/profile/ProfileView';
 import ShopView from './views/shop/ShopView';
 import UserView from './views/users/UserView';
 import BatchCourseView from './views/org/allocation/BatchCourseView';
+import HomeView from './views/home/HomeView';
 
 const AboutView = lazy(async () => import('Frontend/views/about/AboutView.js'));
 
+const rootPath = 'ubd-lms';
+
 export const routes: RouteObject[] = [
   {
+    // path: rootPath,
     element: <MainLayout />,
     handle: { title: 'Main' },
     children: [
-      { path: '/', element: <DashboardView />, handle: { title: 'Dashboard' } },
+      { path: '', element: <HomeView />, handle: { title: 'Dashboard' } },
 
-      { path: '/default', element: <DefaultView />, handle: { title: 'Not Implemented' } },
-      { path: '/shop', element: <ShopView />, handle: { title: 'Shop' } },
-      { path: '/grid', element: <GridView />, handle: { title: 'Grid' } },
-      { path: '/about', element: <AboutView />, handle: { title: 'About' } },
+      { path: 'default', element: <DefaultView />, handle: { title: 'Not Implemented' } },
+      { path: 'shop', element: <ShopView />, handle: { title: 'Shop' } },
+      { path: 'grid', element: <GridView />, handle: { title: 'Grid' } },
+      { path: 'about', element: <AboutView />, handle: { title: 'About' } },
 
-      { path: '/academic/organization', element: <OrganizationView />, handle: { title: 'Profile' } },
-      { path: '/academic/attendance', element: <AttendanceView />, handle: { title: 'Attendance' } },
-      { path: '/academic/section', element: <SectionView />, handle: { title: 'Section' } },
-      { path: '/academic/testimonial', element: <TestimonialView />, handle: { title: 'Testimonial' } },
+      { path: 'academic/organization', element: <OrganizationView />, handle: { title: 'Profile' } },
+      { path: 'academic/attendance', element: <AttendanceView />, handle: { title: 'Attendance' } },
+      { path: 'academic/section', element: <SectionView />, handle: { title: 'Section' } },
+      { path: 'academic/testimonial', element: <TestimonialView />, handle: { title: 'Testimonial' } },
 
-      { path: '/edu/batch', element: <BatchView />, handle: { title: 'Batch' } },
-      { path: '/edu/course', element: <CourseView />, handle: { title: 'Course' } },
-      { path: '/edu/department', element: <DepartmentView />, handle: { title: 'Department' } },
-      { path: '/edu/programme', element: <ProgrammeView />, handle: { title: 'Programme' } },
-      { path: '/edu/reservation', element: <ReservationView />, handle: { title: 'Reservation' } },
+      { path: 'edu/batch', element: <BatchView />, handle: { title: 'Batch' } },
+      { path: 'edu/course', element: <CourseView />, handle: { title: 'Course' } },
+      { path: 'edu/department', element: <DepartmentView />, handle: { title: 'Department' } },
+      { path: 'edu/programme', element: <ProgrammeView />, handle: { title: 'Programme' } },
+      { path: 'edu/reservation', element: <ReservationView />, handle: { title: 'Reservation' } },
 
-      { path: '/place/building', element: <BuildingView />, handle: { title: 'Building' } },
-      { path: '/place/floor', element: <FloorView />, handle: { title: 'Floor' } },
-      { path: '/place/room', element: <RoomView />, handle: { title: 'Room' } },
-      { path: '/place/sector', element: <SectorView />, handle: { title: 'Sector' } },
+      { path: 'place/building', element: <BuildingView />, handle: { title: 'Building' } },
+      { path: 'place/floor', element: <FloorView />, handle: { title: 'Floor' } },
+      { path: 'place/room', element: <RoomView />, handle: { title: 'Room' } },
+      { path: 'place/sector', element: <SectorView />, handle: { title: 'Sector' } },
 
-      { path: '/allocation/batch_course', element: <BatchCourseView />, handle: { title: 'Batch-Course' } },
-      
-      { path: '/time_sheet/class', element: <TimeTableView />, handle: { title: 'Time Sheet' } },
+      { path: 'allocation/batch_course', element: <BatchCourseView />, handle: { title: 'Batch-Course' } },
 
-      { path: '/user/authorization', element: <AuthorizationView />, handle: { title: 'Authorization' } },
-      { path: '/user/coordinators', element: <CoordinatorView />, handle: { title: 'Coordinator' } },
-      { path: '/user/students', element: <StudentView />, handle: { title: 'Student' } },
+      { path: 'time_sheet/class', element: <TimeTableView />, handle: { title: 'Time Sheet' } },
 
-      { path: '/users', element: <UserView />, handle: { title: 'Users' } },
-      { path: '/profiles', element: <ProfileView />, handle: { title: 'profiles' } },
+      { path: 'user/authorization', element: <AuthorizationView />, handle: { title: 'Authorization' } },
+      { path: 'user/coordinators', element: <CoordinatorView />, handle: { title: 'Coordinator' } },
+      { path: 'user/students', element: <StudentView />, handle: { title: 'Student' } },
+
+      { path: 'users', element: <UserView />, handle: { title: 'Users' } },
+      { path: 'profiles', element: <ProfileView />, handle: { title: 'profiles' } },
     ],
   },
 ];
