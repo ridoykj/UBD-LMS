@@ -1,4 +1,3 @@
-import { _parent } from "@hilla/form";
 import { Button } from "@hilla/react-components/Button.js";
 import { ComboBox, ComboBoxDataProviderCallback, ComboBoxDataProviderParams } from "@hilla/react-components/ComboBox.js";
 import { ConfirmDialog } from "@hilla/react-components/ConfirmDialog.js";
@@ -14,6 +13,12 @@ import BranchRC from "Frontend/components/branch/BranchRC";
 import PlaceRC from "Frontend/components/branch/PlaceRC";
 import { AutoGrid, AutoGridRef } from "Frontend/components/grid/autogrid";
 import { ClassActivity, ItemSelect } from "Frontend/constants/ItemSelect";
+import OrganizationDAO from "Frontend/generated/com/itbd/application/dao/org/academic/OrganizationDAO";
+import DepartmentDAO from "Frontend/generated/com/itbd/application/dao/org/edu/DepartmentDAO";
+import ProgrammeDAO from "Frontend/generated/com/itbd/application/dao/org/edu/ProgrammeDAO";
+import BuildingDAO from "Frontend/generated/com/itbd/application/dao/org/place/BuildingDAO";
+import FloorDAO from "Frontend/generated/com/itbd/application/dao/org/place/FloorDAO";
+import SectorDAO from "Frontend/generated/com/itbd/application/dao/org/place/SectorDAO";
 import BatchDTOModel from "Frontend/generated/com/itbd/application/dto/org/edu/BatchDTOModel";
 import CourseDTO from "Frontend/generated/com/itbd/application/dto/org/edu/CourseDTO";
 import CourseDTOModel from "Frontend/generated/com/itbd/application/dto/org/edu/CourseDTOModel";
@@ -29,14 +34,14 @@ import { comboBoxLazyFilter } from "Frontend/util/comboboxLazyFilterUtil";
 import React, { useMemo, useState } from "react";
 
 const ReservationView = () => {
-  
-  const [orgNameFilter, setOrgNameFilter] = useState('');
-  const [departmentNameFilter, setDepartmentNameFilter] = useState('');
-  const [programmeNameFilter, setProgrammeNameFilter] = useState('');
 
-  const [sectorNameFilter, setSectorNameFilter] = useState('');
-  const [buildingNameFilter, setBuildingNameFilter] = useState('');
-  const [floorNameFilter, setFloorNameFilter] = useState('');
+  const [orgFilter, setOrgFilter] = useState<OrganizationDAO>({} as OrganizationDAO);
+  const [departmentFilter, setDepartmentFilter] = useState<DepartmentDAO>({} as DepartmentDAO);
+  const [programmeFilter, setProgrammeFilter] = useState<ProgrammeDAO>({} as ProgrammeDAO);
+
+  const [sectorFilter, setSectorFilter] = useState<SectorDAO>({} as SectorDAO);
+  const [buildingFilter, setBuildingFilter] = useState<BuildingDAO>({} as BuildingDAO);
+  const [floorFilter, setFloorFilter] = useState<FloorDAO>({} as FloorDAO);
 
   const [dialogOpened, setDialogOpened] = useState<boolean>(false);
   const [successNotification, setSuccessNotification] = useState<boolean>(false);
@@ -113,8 +118,8 @@ const ReservationView = () => {
         const child: PropertyStringFilter[] = [
           {
             '@type': 'propertyString',
-            propertyId: 'programme.name',
-            filterValue: programmeNameFilter || '',
+            propertyId: 'programme.id',
+            filterValue: programmeFilter.id?.toString() || '',
             matcher: Matcher.EQUALS
           }, {
             '@type': 'propertyString',
@@ -128,7 +133,7 @@ const ReservationView = () => {
           callback(result);
         });
       },
-    [programmeNameFilter]
+    [programmeFilter]
   );
 
   const courseDataProvider = useMemo(
@@ -140,8 +145,8 @@ const ReservationView = () => {
         const child: PropertyStringFilter[] = [
           {
             '@type': 'propertyString',
-            propertyId: 'programme.name',
-            filterValue: programmeNameFilter || '',
+            propertyId: 'programme.id',
+            filterValue: programmeFilter.id?.toString() || '',
             matcher: Matcher.EQUALS
           }, {
             '@type': 'propertyString',
@@ -160,7 +165,7 @@ const ReservationView = () => {
           callback(result);
         });
       },
-    [programmeNameFilter]
+    [programmeFilter]
   );
 
   const instructorDataProvider = useMemo(
@@ -219,16 +224,16 @@ const ReservationView = () => {
               { sector: true, building: true, }
             }
             sector={{
-              sectorName: sectorNameFilter,
-              setSectorName: setSectorNameFilter
+              sectorFilter: sectorFilter,
+              setSectorFilter: setSectorFilter
             }}
             building={{
-              buildingName: buildingNameFilter,
-              setBuildingName: setBuildingNameFilter
+              buildingFilter: buildingFilter,
+              setBuildingFilter: setBuildingFilter
             }}
             floor={{
-              floorName: floorNameFilter,
-              setFloorName: setFloorNameFilter
+              floorFilter: floorFilter,
+              setFloorFilter: setFloorFilter
             }}
           />
           <BranchRC
@@ -236,16 +241,16 @@ const ReservationView = () => {
               { organization: true, department: true, programme: true, }
             }
             organization={{
-              organizationName: orgNameFilter,
-              setOrganizationName: setOrgNameFilter
+              organizationFilter: orgFilter,
+              setOrganizationFilter: setOrgFilter
             }}
             department={{
-              departmentName: departmentNameFilter,
-              setDepartmentName: setDepartmentNameFilter
+              departmentFilter: departmentFilter,
+              setDepartmentFilter: setDepartmentFilter
             }}
             programme={{
-              programmeName: programmeNameFilter,
-              setProgrammeName: setProgrammeNameFilter
+              programmeFilter: programmeFilter,
+              setProgrammeFilter: setProgrammeFilter
             }}
           />
           <AutoGrid service={ReservationDtoCrudService} model={ReservationDTOModel} ref={autoGridRef}
@@ -261,8 +266,8 @@ const ReservationView = () => {
             columnOptions={{
               'course.programme.name': {
                 header: 'Programme',
-                externalValue: programmeNameFilter,
-                setExternalValue: setProgrammeNameFilter,
+                externalValue: programmeFilter != null ? programmeFilter.name : '',
+                // setExternalValue: setProgrammeFilter,
               },
             }}
           />

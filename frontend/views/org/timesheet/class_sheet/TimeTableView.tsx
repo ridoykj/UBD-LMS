@@ -31,6 +31,16 @@ import { useEffect, useMemo, useState } from 'react';
 import { FaCopy, FaDownload, FaPrint, FaRegCalendarPlus, FaShareAlt } from 'react-icons/fa';
 import { FaX } from 'react-icons/fa6';
 import TimeTableComponent, { DayItem, TimeRange } from './TimeTableComponent';
+import BuildingDTOModel from 'Frontend/generated/com/itbd/application/dto/org/place/BuildingDTOModel';
+import FloorDTOModel from 'Frontend/generated/com/itbd/application/dto/org/place/FloorDTOModel';
+import SectorDTOModel from 'Frontend/generated/com/itbd/application/dto/org/place/SectorDTOModel';
+import SectorDAO from 'Frontend/generated/com/itbd/application/dao/org/place/SectorDAO';
+import BuildingDAO from 'Frontend/generated/com/itbd/application/dao/org/place/BuildingDAO';
+import FloorDAO from 'Frontend/generated/com/itbd/application/dao/org/place/FloorDAO';
+import BatchCourseDAO from 'Frontend/generated/com/itbd/application/dao/org/allocation/BatchCourseDAO';
+import OrganizationDAO from 'Frontend/generated/com/itbd/application/dao/org/academic/OrganizationDAO';
+import DepartmentDAO from 'Frontend/generated/com/itbd/application/dao/org/edu/DepartmentDAO';
+import ProgrammeDAO from 'Frontend/generated/com/itbd/application/dao/org/edu/ProgrammeDAO';
 
 const dayNames = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT',];
 const timeRange: TimeRange = { open: '09:00', close: '21:00', interval: 30 };
@@ -66,15 +76,16 @@ function TimeTableView() {
 
   const [isOpen, setIsOpen] = useState(false);
 
-  const [sectorNameFilter, setSectorNameFilter] = useState('');
-  const [buildingNameFilter, setBuildingNameFilter] = useState('');
-  const [floorNameFilter, setFloorNameFilter] = useState('');
+  const [sectorFilter, setSectorFilter] = useState<SectorDAO>({} as SectorDAO);
+  const [buildingFilter, setBuildingFilter] = useState<BuildingDAO>({} as BuildingDAO);
+  const [floorFilter, setFloorFilter] = useState<FloorDAO>({} as FloorDAO);
 
-  const [orgNameFilter, setOrgNameFilter] = useState('');
-  const [departmentNameFilter, setDepartmentNameFilter] = useState('');
-  const [programmeNameFilter, setProgrammeNameFilter] = useState('');
-  const [batchNameFilter, setBatchNameFilter] = useState('');
-  const [semesterNameFilter, setSemesterNameFilter] = useState('');
+  const [orgFilter, setOrgFilter] = useState<OrganizationDAO>({} as OrganizationDAO);
+  const [departmentFilter, setDepartmentFilter] = useState<DepartmentDAO>({} as DepartmentDAO);
+  const [programmeFilter, setProgrammeFilter] = useState<ProgrammeDAO>({} as ProgrammeDAO);
+
+  const [batchFilter, setBatchFilter] = useState<BatchCourseDAO>({} as BatchCourseDAO);
+  const [semesterFilter, setSemesterFilter] = useState<BatchCourseDAO>({} as BatchCourseDAO);
 
   const [dayEvents, setDayEvents] = useState<DayItem[]>();
   const [eventRefresh, setEventRefresh] = useState<boolean>(false);
@@ -118,8 +129,8 @@ function TimeTableView() {
         const child: PropertyStringFilter[] = [
           {
             '@type': 'propertyString',
-            propertyId: 'floor.name',
-            filterValue: floorNameFilter || '',
+            propertyId: 'floor.id',
+            filterValue: floorFilter.id?.toString() || '0',
             matcher: Matcher.EQUALS
           },
           {
@@ -134,7 +145,7 @@ function TimeTableView() {
           callback(result, result.length);
         });
       },
-    [floorNameFilter]
+    [floorFilter]
   );
 
   const batchCourseDataProvider = useMemo(
@@ -143,12 +154,12 @@ function TimeTableView() {
         params: ComboBoxDataProviderParams,
         callback: ComboBoxDataProviderCallback<BatchCourseDTOModel>
       ) => {
-        console.log('semesterNameFilter', semesterNameFilter);
+        console.log('semesterNameFilter', semesterFilter);
         const child: PropertyStringFilter[] = [
           {
             '@type': 'propertyString',
-            propertyId: 'batch.name',
-            filterValue: batchNameFilter || '',
+            propertyId: 'batch.id',
+            filterValue: batchFilter.id?.toString() || '0',
             matcher: Matcher.EQUALS
           }, {
             '@type': 'propertyString',
@@ -158,7 +169,7 @@ function TimeTableView() {
           }, {
             '@type': 'propertyString',
             propertyId: 'semester',
-            filterValue: semesterNameFilter || '0',
+            filterValue: semesterFilter.semester?.toString() || '0',
             matcher: Matcher.EQUALS
           },];
 
@@ -176,7 +187,7 @@ function TimeTableView() {
           callback(result);
         });
       },
-    [batchNameFilter, semesterNameFilter,]
+    [batchFilter, semesterFilter,]
   );
 
   const batchRoomDataProvider = useEffect(
@@ -185,7 +196,7 @@ function TimeTableView() {
         {
           '@type': 'propertyString',
           propertyId: 'batchCourse.semester',
-          filterValue: semesterNameFilter || '0',
+          filterValue: semesterFilter.semester?.toString() || '0',
           matcher: Matcher.EQUALS
         },
       ];
@@ -231,7 +242,7 @@ function TimeTableView() {
         setDayEvents(dayEvents);
       });
     },
-    [semesterNameFilter, eventRefresh]
+    [semesterFilter, eventRefresh]
   );
 
   useEffect(() => {
@@ -252,16 +263,16 @@ function TimeTableView() {
               { sector: true, building: true, floor: true, room: true }
             }
             sector={{
-              sectorName: sectorNameFilter,
-              setSectorName: setSectorNameFilter
+              sectorFilter: sectorFilter,
+              setSectorFilter: setSectorFilter
             }}
             building={{
-              buildingName: buildingNameFilter,
-              setBuildingName: setBuildingNameFilter
+              buildingFilter: buildingFilter,
+              setBuildingFilter: setBuildingFilter
             }}
             floor={{
-              floorName: floorNameFilter,
-              setFloorName: setFloorNameFilter
+              floorFilter: floorFilter,
+              setFloorFilter: setFloorFilter
             }}
           />
           <BranchRC
@@ -269,24 +280,24 @@ function TimeTableView() {
               { organization: true, department: true, programme: true, batch: true, semester: true }
             }
             organization={{
-              organizationName: orgNameFilter,
-              setOrganizationName: setOrgNameFilter
+              organizationFilter: orgFilter,
+              setOrganizationFilter: setOrgFilter
             }}
             department={{
-              departmentName: departmentNameFilter,
-              setDepartmentName: setDepartmentNameFilter
+              departmentFilter: departmentFilter,
+              setDepartmentFilter: setDepartmentFilter
             }}
             programme={{
-              programmeName: programmeNameFilter,
-              setProgrammeName: setProgrammeNameFilter
+              programmeFilter: programmeFilter,
+              setProgrammeFilter: setProgrammeFilter
             }}
             batch={{
-              batchName: batchNameFilter,
-              setBatchName: setBatchNameFilter
+              batchFilter: batchFilter,
+              setBatchFilter: setBatchFilter
             }}
             semester={{
-              semesterName: semesterNameFilter,
-              setSemesterName: setSemesterNameFilter
+              semesterFilter: semesterFilter,
+              setSemesterFilter: setSemesterFilter
             }}
           />
         </div>

@@ -92,8 +92,8 @@ const DepartmentView = () => {
               { organization: true }
             }
             organization={{
-              organizationName: orgNameFilter,
-              setOrganizationName: setOrgNameFilter
+              organizationFilter: orgNameFilter,
+              setOrganizationFilter: setOrgNameFilter
             }}
           />
           <AutoGrid service={DepartmentDtoCrudService} model={DepartmentDTOModel} ref={autoGridRef}

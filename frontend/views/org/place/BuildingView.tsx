@@ -12,6 +12,7 @@ import { useForm } from "@hilla/react-form";
 import PlaceRC from "Frontend/components/branch/PlaceRC";
 import { AutoGrid, AutoGridRef } from "Frontend/components/grid/autogrid";
 import BuildingTypeEnum from "Frontend/generated/com/itbd/application/constants/BuildingTypeEnum";
+import SectorDAO from "Frontend/generated/com/itbd/application/dao/org/place/SectorDAO";
 import SectorDAOModel from "Frontend/generated/com/itbd/application/dao/org/place/SectorDAOModel";
 import BuildingDTO from "Frontend/generated/com/itbd/application/dto/org/place/BuildingDTO";
 import BuildingDTOModel from "Frontend/generated/com/itbd/application/dto/org/place/BuildingDTOModel";
@@ -23,7 +24,7 @@ import { comboBoxLazyFilter } from "Frontend/util/comboboxLazyFilterUtil";
 import React, { useMemo, useState } from "react";
 
 const BuildingView = () => {
-  const [sectorNameFilter, setSectorNameFilter] = useState('');
+  const [sectorFilter, setSectorFilter] = useState<SectorDAO>({} as SectorDAO);
   const [dialogOpened, setDialogOpened] = useState<boolean>(false);
   const [successNotification, setSuccessNotification] = useState<boolean>(false);
 
@@ -68,7 +69,7 @@ const BuildingView = () => {
         });
 
       },
-    [sectorNameFilter]
+    [sectorFilter]
   );
 
   const buildingType = Object.values(BuildingTypeEnum).map(level => ({ label: level, value: level }));
@@ -96,8 +97,8 @@ const BuildingView = () => {
               { sector: true }
             }
             sector={{
-              sectorName: sectorNameFilter,
-              setSectorName: setSectorNameFilter
+              sectorFilter: sectorFilter,
+              setSectorFilter: setSectorFilter
             }}
           />
           <AutoGrid service={BuildingDtoCrudService} model={BuildingDTOModel} ref={autoGridRef}
@@ -132,7 +133,7 @@ const BuildingView = () => {
               'sector.name': {
                 header: 'Sector',
                 resizable: true,
-                externalValue: sectorNameFilter,
+                externalValue: sectorFilter.name?.toString() || '', // This is for filtering
               },
             }}
             onActiveItemChanged={(e) => {
@@ -157,7 +158,7 @@ const BuildingView = () => {
           </header>
           <main className="overflow-y-scroll w-full h-full">
             <FormLayout responsiveSteps={responsiveSteps} className="w-fit h-fit p-2">
-              <ComboBox label={'Sector'}  {...field(model.sector)} dataProvider={sectorDataProvider} itemLabelPath='name' itemValuePath='name' clearButtonVisible />
+              <ComboBox label={'Sector'}  {...field(model.sector)} dataProvider={sectorDataProvider} itemLabelPath='name' itemValuePath='id' clearButtonVisible />
               <TextField label={'Name'}  {...{ colspan: 2 }} {...field(model.name)} />
               <Select label={'Building Type'}  {...{ colspan: 1 }} {...field(model.type)} items={buildingType} />
               <TextField label={'Block'}  {...{ colspan: 2 }} {...field(model.block)} />

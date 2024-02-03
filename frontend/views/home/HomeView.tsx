@@ -4,34 +4,34 @@ export default function HomeView() {
 
   const items = [
     {
-      title: 'Total Profit',
+      title: 'Sector',
       content:
         <>
-          <h5 className="mb-0 font-bold text-xl">$95,595</h5>
+          <h5 className="mb-0 font-bold text-xl">2</h5>
           <p className="mb-0 ml-3 text-green-600 font-bold">+3.55%</p>
         </>
     },
     {
-      title: 'Total Profit',
+      title: 'Building',
       content:
         <>
-          <h5 className="mb-0 font-bold text-xl">$95,595</h5>
+          <h5 className="mb-0 font-bold text-xl">6</h5>
           <p className="mb-0 ml-3 text-green-600 font-bold">+3.55%</p>
         </>
     },
     {
-      title: 'Total Profit',
+      title: 'Floor',
       content:
         <>
-          <h5 className="mb-0 font-bold text-xl">$95,595</h5>
+          <h5 className="mb-0 font-bold text-xl">50</h5>
           <p className="mb-0 ml-3 text-green-600 font-bold">+3.55%</p>
         </>
     },
     {
-      title: 'Total Profit',
+      title: 'Room',
       content:
         <>
-          <h5 className="mb-0 font-bold text-xl">$95,595</h5>
+          <h5 className="mb-0 font-bold text-xl">36</h5>
           <p className="mb-0 ml-3 text-green-600 font-bold">+3.55%</p>
         </>
     },

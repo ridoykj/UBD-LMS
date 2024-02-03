@@ -98,12 +98,12 @@ const ProgrammeView = () => {
               { organization: true, department: true }
             }
             organization={{
-              organizationName: orgNameFilter,
-              setOrganizationName: setOrgNameFilter
+              organizationFilter: orgNameFilter,
+              setOrganizationFilter: setOrgNameFilter
             }}
             department={{
-              departmentName: departmentNameFilter,
-              setDepartmentName: setDepartmentNameFilter
+              departmentFilter: departmentNameFilter,
+              setDepartmentFilter: setDepartmentNameFilter
             }}
           />
           <AutoGrid service={ProgrammeDtoCrudService} model={ProgrammeDTOModel} ref={autoGridRef}

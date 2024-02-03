@@ -11,6 +11,8 @@ import { AutoGridRef } from "@hilla/react-crud";
 import { useForm } from "@hilla/react-form";
 import PlaceRC from "Frontend/components/branch/PlaceRC";
 import { AutoGrid } from "Frontend/components/grid/autogrid";
+import BuildingDAO from "Frontend/generated/com/itbd/application/dao/org/place/BuildingDAO";
+import SectorDAO from "Frontend/generated/com/itbd/application/dao/org/place/SectorDAO";
 import FloorDTO from "Frontend/generated/com/itbd/application/dto/org/place/FloorDTO";
 import FloorDTOModel from "Frontend/generated/com/itbd/application/dto/org/place/FloorDTOModel";
 import PropertyStringFilter from "Frontend/generated/dev/hilla/crud/filter/PropertyStringFilter";
@@ -21,8 +23,9 @@ import { comboBoxLazyFilter } from "Frontend/util/comboboxLazyFilterUtil";
 import React, { useMemo, useState } from "react";
 
 const FloorView = () => {
-  const [sectorNameFilter, setSectorNameFilter] = useState('');
-  const [buildingNameFilter, setBuildingNameFilter] = useState('');
+  const [sectorFilter, setSectorFilter] = useState<SectorDAO>({} as SectorDAO);
+  const [buildingFilter, setBuildingFilter] = useState<BuildingDAO>({} as BuildingDAO);
+
   const [dialogOpened, setDialogOpened] = useState<boolean>(false);
   const [successNotification, setSuccessNotification] = useState<boolean>(false);
 
@@ -55,8 +58,8 @@ const FloorView = () => {
         const child: PropertyStringFilter[] = [
           {
             '@type': 'propertyString',
-            propertyId: 'sector.name',
-            filterValue: sectorNameFilter,
+            propertyId: 'sector.id',
+            filterValue: sectorFilter.id?.toString() || '0',
             matcher: Matcher.EQUALS
           }, {
             '@type': 'propertyString',
@@ -72,7 +75,7 @@ const FloorView = () => {
         });
 
       },
-    [sectorNameFilter]
+    [sectorFilter]
   );
 
   // const buildingType = Object.values(BuildingTypeEnum).map(level => ({ label: level, value: level }));
@@ -100,12 +103,12 @@ const FloorView = () => {
               { sector: true, building: true, }
             }
             sector={{
-              sectorName: sectorNameFilter,
-              setSectorName: setSectorNameFilter
+              sectorFilter: sectorFilter,
+              setSectorFilter: setSectorFilter
             }}
             building={{
-              buildingName: buildingNameFilter,
-              setBuildingName: setBuildingNameFilter
+              buildingFilter: buildingFilter,
+              setBuildingFilter: setBuildingFilter
             }}
           />
           <AutoGrid service={FloorDtoCrudService} model={FloorDTOModel} ref={autoGridRef}
@@ -136,7 +139,7 @@ const FloorView = () => {
               'building.name': {
                 header: 'Building',
                 resizable: true,
-                externalValue: buildingNameFilter
+                externalValue: buildingFilter != null ? buildingFilter.name : '',
               },
             }}
             onActiveItemChanged={(e) => {
@@ -161,7 +164,7 @@ const FloorView = () => {
           </header>
           <main className="overflow-y-scroll w-full h-full">
             <FormLayout responsiveSteps={responsiveSteps} className="w-fit h-fit p-2">
-              <ComboBox label={'Building'}  {...field(model.building)} dataProvider={buildingDataProvider} itemLabelPath='name' itemValuePath='name' clearButtonVisible />
+              <ComboBox label={'Building'}  {...field(model.building)} dataProvider={buildingDataProvider} itemLabelPath='name' itemValuePath='id' clearButtonVisible />
               <TextField label={'Name'}  {...{ colspan: 2 }} {...field(model.name)} />
               <IntegerField label={'Floor Level'}  {...{ colspan: 2 }} {...field(model.floorLevel)} helperText={'For Basement floor (-) ex: -2,-1'} />
               <TextField label={'Floor Color Code'}  {...{ colspan: 2 }} {...field(model.floorColorCode)} />

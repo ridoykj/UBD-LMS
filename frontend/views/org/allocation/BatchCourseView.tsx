@@ -15,7 +15,10 @@ import { useForm } from "@hilla/react-form";
 import BranchRC from "Frontend/components/branch/BranchRC";
 import { AutoGrid, AutoGridRef } from "Frontend/components/grid/autogrid";
 import CoordinatorTypeEnum from "Frontend/generated/com/itbd/application/constants/CoordinatorTypeEnum";
+import OrganizationDAO from "Frontend/generated/com/itbd/application/dao/org/academic/OrganizationDAO";
 import BatchCoordinatorDAO from "Frontend/generated/com/itbd/application/dao/org/allocation/BatchCoordinatorDAO";
+import DepartmentDAO from "Frontend/generated/com/itbd/application/dao/org/edu/DepartmentDAO";
+import ProgrammeDAO from "Frontend/generated/com/itbd/application/dao/org/edu/ProgrammeDAO";
 import BatchCourseDTO from "Frontend/generated/com/itbd/application/dto/org/allocation/BatchCourseDTO";
 import BatchCourseDTOModel from "Frontend/generated/com/itbd/application/dto/org/allocation/BatchCourseDTOModel";
 import BatchDTOModel from "Frontend/generated/com/itbd/application/dto/org/edu/BatchDTOModel";
@@ -32,9 +35,9 @@ import { FaTrash, FaUserPlus } from "react-icons/fa";
 
 const BatchCourseView = () => {
 
-  const [orgNameFilter, setOrgNameFilter] = useState('');
-  const [departmentNameFilter, setDepartmentNameFilter] = useState('');
-  const [programmeNameFilter, setProgrammeNameFilter] = useState('');
+  const [orgFilter, setOrgFilter] = useState<OrganizationDAO>({} as OrganizationDAO);
+  const [departmentFilter, setDepartmentFilter] = useState<DepartmentDAO>({} as DepartmentDAO);
+  const [programmeFilter, setProgrammeFilter] = useState<ProgrammeDAO>({} as ProgrammeDAO);
 
   const [items, setItems] = useState<BatchCoordinatorDAO>();
   // const [invitedPeople, setInvitedPeople] = useState<BatchCoordinatorDAO[]>([]);
@@ -99,8 +102,8 @@ const BatchCourseView = () => {
         const child: PropertyStringFilter[] = [
           {
             '@type': 'propertyString',
-            propertyId: 'programme.name',
-            filterValue: programmeNameFilter || '',
+            propertyId: 'programme.id',
+            filterValue: programmeFilter.id?.toString() || '0',
             matcher: Matcher.EQUALS
           }, {
             '@type': 'propertyString',
@@ -114,7 +117,7 @@ const BatchCourseView = () => {
           callback(result);
         });
       },
-    [programmeNameFilter]
+    [programmeFilter]
   );
 
   const courseDataProvider = useMemo(
@@ -147,7 +150,7 @@ const BatchCourseView = () => {
           callback(result);
         });
       },
-    [programmeNameFilter]
+    [programmeFilter]
   );
 
   const courseCustomItemRenderer = (item: CourseDTOModel<CourseDTO>) => {
@@ -217,16 +220,16 @@ const BatchCourseView = () => {
               { organization: true, department: true, programme: true, batch: true }
             }
             organization={{
-              organizationName: orgNameFilter,
-              setOrganizationName: setOrgNameFilter
+              organizationFilter: orgFilter,
+              setOrganizationFilter: setOrgFilter
             }}
             department={{
-              departmentName: departmentNameFilter,
-              setDepartmentName: setDepartmentNameFilter
+              departmentFilter: departmentFilter,
+              setDepartmentFilter: setDepartmentFilter
             }}
             programme={{
-              programmeName: programmeNameFilter,
-              setProgrammeName: setProgrammeNameFilter
+              programmeFilter: programmeFilter,
+              setProgrammeFilter: setProgrammeFilter
             }}
           />
 
@@ -243,8 +246,8 @@ const BatchCourseView = () => {
             columnOptions={{
               'organization.name': {
                 header: 'Organization',
-                externalValue: orgNameFilter,
-                setExternalValue: setOrgNameFilter,
+                externalValue: orgFilter != null ? orgFilter.name : '',
+                // setExternalValue: setOrgFilter,
               },
               'batch.name': {
                 header: 'Batch',

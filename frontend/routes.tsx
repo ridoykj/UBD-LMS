@@ -32,7 +32,7 @@ const rootPath = 'ubd-lms';
 
 export const routes: RouteObject[] = [
   {
-    path: rootPath,
+    // path: rootPath,
     element: <MainLayout />,
     handle: { title: 'Main' },
     children: [

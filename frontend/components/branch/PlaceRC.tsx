@@ -1,8 +1,15 @@
 
 import { ComboBox, ComboBoxDataProviderCallback, ComboBoxDataProviderParams } from '@hilla/react-components/ComboBox.js';
 import '@vaadin/icons';
+import BuildingDAO from 'Frontend/generated/com/itbd/application/dao/org/place/BuildingDAO';
+import FloorDAO from 'Frontend/generated/com/itbd/application/dao/org/place/FloorDAO';
+import RoomDAO from 'Frontend/generated/com/itbd/application/dao/org/place/RoomDAO';
+import SectorDAO from 'Frontend/generated/com/itbd/application/dao/org/place/SectorDAO';
+import BuildingDTO from 'Frontend/generated/com/itbd/application/dto/org/place/BuildingDTO';
 import BuildingDTOModel from 'Frontend/generated/com/itbd/application/dto/org/place/BuildingDTOModel';
+import FloorDTO from 'Frontend/generated/com/itbd/application/dto/org/place/FloorDTO';
 import FloorDTOModel from 'Frontend/generated/com/itbd/application/dto/org/place/FloorDTOModel';
+import RoomDTO from 'Frontend/generated/com/itbd/application/dto/org/place/RoomDTO';
 import RoomDTOModel from 'Frontend/generated/com/itbd/application/dto/org/place/RoomDTOModel';
 import SectorDTOModel from 'Frontend/generated/com/itbd/application/dto/org/place/SectorDTOModel';
 import PropertyStringFilter from 'Frontend/generated/dev/hilla/crud/filter/PropertyStringFilter';
@@ -12,23 +19,23 @@ import { comboBoxLazyFilter } from 'Frontend/util/comboboxLazyFilterUtil';
 import { Dispatch, SetStateAction, useMemo } from 'react';
 
 type SectorProps = {
-  sectorName: string,
-  setSectorName: Dispatch<SetStateAction<string>>
+  sectorFilter: SectorDAO,
+  setSectorFilter: Dispatch<SetStateAction<SectorDAO>>
 }
 
 type BuildingProps = {
-  buildingName: string,
-  setBuildingName: Dispatch<SetStateAction<string>>
+  buildingFilter: BuildingDAO,
+  setBuildingFilter: Dispatch<SetStateAction<BuildingDAO>>
 }
 
 type FloorProps = {
-  floorName: string,
-  setFloorName: Dispatch<SetStateAction<string>>
+  floorFilter: FloorDAO,
+  setFloorFilter: Dispatch<SetStateAction<FloorDAO>>
 }
 
 type RoomProps = {
-  roomName: string,
-  setRoomName: Dispatch<SetStateAction<string>>
+  roomFilter: RoomDAO,
+  setRoomFilter: Dispatch<SetStateAction<RoomDAO>>
 }
 
 type VisibleFields = {
@@ -74,8 +81,8 @@ export default function BranchRC({ visibleFields, sector, building, floor, room,
         const child: PropertyStringFilter[] = [
           {
             '@type': 'propertyString',
-            propertyId: 'sector.name',
-            filterValue: sector?.sectorName || '',
+            propertyId: 'sector.id',
+            filterValue: sector?.sectorFilter.id?.toString() || '0',
             matcher: Matcher.EQUALS
           }, {
             '@type': 'propertyString',
@@ -84,12 +91,13 @@ export default function BranchRC({ visibleFields, sector, building, floor, room,
             matcher: Matcher.CONTAINS
           },];
 
+        // console.log('buildingDataProvider', sector?.sectorFilter);
         const { pagination, filters } = comboBoxLazyFilter(params, 'and', child);
         BuildingDtoCrudService.list(pagination, filters).then((result: any) => {
           callback(result, result.length);
         });
       },
-    [sector?.sectorName]
+    [sector?.sectorFilter]
   );
 
   const floorDataProvider = useMemo(
@@ -101,8 +109,8 @@ export default function BranchRC({ visibleFields, sector, building, floor, room,
         const child: PropertyStringFilter[] = [
           {
             '@type': 'propertyString',
-            propertyId: 'building.name',
-            filterValue: building?.buildingName || '',
+            propertyId: 'building.id',
+            filterValue: building?.buildingFilter.id?.toString() || '0',
             matcher: Matcher.EQUALS
           }, {
             '@type': 'propertyString',
@@ -117,7 +125,7 @@ export default function BranchRC({ visibleFields, sector, building, floor, room,
         });
 
       },
-    [building?.buildingName]
+    [building?.buildingFilter]
   );
 
   const roomDataProvider = useMemo(
@@ -129,8 +137,8 @@ export default function BranchRC({ visibleFields, sector, building, floor, room,
         const child: PropertyStringFilter[] = [
           {
             '@type': 'propertyString',
-            propertyId: 'floor.name',
-            filterValue: floor?.floorName || '',
+            propertyId: 'floor.id',
+            filterValue: floor?.floorFilter.id?.toString() || '0',
             matcher: Matcher.EQUALS
           }, {
             '@type': 'propertyString',
@@ -144,30 +152,30 @@ export default function BranchRC({ visibleFields, sector, building, floor, room,
           callback(result, result.length);
         });
       },
-    [floor?.floorName]
+    [floor?.floorFilter]
   );
 
   const handleSector = (e: any) => {
-    const searchTerm = (e.detail.value || '').trim();
-    building?.setBuildingName((dr) => ''); // Reset department combobox
-    sector?.setSectorName((o) => searchTerm);
+    const selectedItem = e.detail.value;
+    building?.setBuildingFilter((dr) => ({} as BuildingDTO)); // Reset department combobox
+    sector?.setSectorFilter((o) => selectedItem);
   };
 
   const handleBuilding = (e: any) => {
-    const searchTerm = (e.detail.value || '').trim();
-    floor?.setFloorName((d) => ''); // Reset department combobox
-    building?.setBuildingName((d) => searchTerm);
+    const selectedItem = e.detail.value;
+    floor?.setFloorFilter((d) => ({} as FloorDTO)); // Reset department combobox
+    building?.setBuildingFilter((d) => selectedItem);
   };
 
   const handleFloor = (e: any) => {
-    const searchTerm = (e.detail.value || '').trim();
-    room?.setRoomName((d) => ''); // Reset department combobox
-    floor?.setFloorName((d) => searchTerm);
+    const selectedItem = e.detail.value;
+    room?.setRoomFilter((d) => ({} as RoomDTO)); // Reset department combobox
+    floor?.setFloorFilter((d) => selectedItem);
   };
 
   const handleRoom = (e: any) => {
-    const searchTerm = (e.detail.value || '').trim();
-    room?.setRoomName((d) => searchTerm);
+    const selectedItem = e.detail.value;
+    room?.setRoomFilter((d) => selectedItem);
   };
 
   return (
@@ -178,28 +186,28 @@ export default function BranchRC({ visibleFields, sector, building, floor, room,
             visibleFields['sector'] &&
             <>
               <div className='text-sm font-medium ml-5 mr-2 text-gray-400'>Sector</div>
-              <ComboBox dataProvider={sectorDataProvider} itemLabelPath='name' itemValuePath='name' clearButtonVisible onValueChanged={handleSector} />
+              <ComboBox dataProvider={sectorDataProvider} itemLabelPath='name' itemValuePath='id' onSelectedItemChanged={handleSector} clearButtonVisible />
             </>
           }
           {
-            visibleFields['building'] && sector?.sectorName &&
+            visibleFields['building'] && sector?.sectorFilter?.id != null &&
             <>
               <div className='text-sm font-medium ml-5 mr-2 text-gray-400'>Building</div>
-              <ComboBox dataProvider={buildingDataProvider} itemLabelPath='name' itemValuePath='name' clearButtonVisible value={building?.buildingName} onValueChanged={handleBuilding} />
+              <ComboBox dataProvider={buildingDataProvider} itemLabelPath='name' itemValuePath='id' onSelectedItemChanged={handleBuilding} clearButtonVisible />
             </>
           }
           {
-            visibleFields['floor'] && building?.buildingName &&
+            visibleFields['floor'] && building?.buildingFilter?.id != null &&
             <>
               <div className='text-sm font-medium ml-5 mr-2 text-gray-400'>Floor</div>
-              <ComboBox dataProvider={floorDataProvider} itemLabelPath='name' itemValuePath='name' clearButtonVisible value={floor?.floorName} onValueChanged={handleFloor} />
+              <ComboBox dataProvider={floorDataProvider} itemLabelPath='name' itemValuePath='id' onSelectedItemChanged={handleFloor} clearButtonVisible />
             </>
           }
           {
-            visibleFields['room'] && floor?.floorName &&
+            visibleFields['room'] && floor?.floorFilter?.id != null &&
             <>
               <div className='text-sm font-medium ml-5 mr-2 text-gray-400'>Room</div>
-              <ComboBox dataProvider={roomDataProvider} itemLabelPath='name' itemValuePath='name' clearButtonVisible value={room?.roomName} onValueChanged={handleRoom} />
+              <ComboBox dataProvider={roomDataProvider} itemLabelPath='name' itemValuePath='id' onSelectedItemChanged={handleRoom} clearButtonVisible />
             </>
           }
         </div>

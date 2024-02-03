@@ -13,6 +13,9 @@ import { useForm } from "@hilla/react-form";
 import PlaceRC from "Frontend/components/branch/PlaceRC";
 import { AutoGrid } from "Frontend/components/grid/autogrid";
 import RoomTypeEnum from "Frontend/generated/com/itbd/application/constants/RoomTypeEnum";
+import BuildingDAO from "Frontend/generated/com/itbd/application/dao/org/place/BuildingDAO";
+import FloorDAO from "Frontend/generated/com/itbd/application/dao/org/place/FloorDAO";
+import SectorDAO from "Frontend/generated/com/itbd/application/dao/org/place/SectorDAO";
 import FloorDTOModel from "Frontend/generated/com/itbd/application/dto/org/place/FloorDTOModel";
 import RoomDTO from "Frontend/generated/com/itbd/application/dto/org/place/RoomDTO";
 import RoomDTOModel from "Frontend/generated/com/itbd/application/dto/org/place/RoomDTOModel";
@@ -25,9 +28,10 @@ import React, { useMemo, useState } from "react";
 
 const RoomView = () => {
 
-  const [sectorNameFilter, setSectorNameFilter] = useState('');
-  const [buildingNameFilter, setBuildingNameFilter] = useState('');
-  const [floorNameFilter, setFloorNameFilter] = useState('');
+  const [sectorFilter, setSectorFilter] = useState<SectorDAO>({} as SectorDAO);
+  const [buildingFilter, setBuildingFilter] = useState<BuildingDAO>({} as BuildingDAO);
+  const [floorFilter, setFloorFilter] = useState<FloorDAO>({} as FloorDAO);
+
   const [dialogOpened, setDialogOpened] = useState<boolean>(false);
   const [successNotification, setSuccessNotification] = useState<boolean>(false);
 
@@ -59,11 +63,14 @@ const RoomView = () => {
         params: ComboBoxDataProviderParams,
         callback: ComboBoxDataProviderCallback<FloorDTOModel>
       ) => {
+
+        console.log('floorDataProvider1', buildingFilter.id?.toString());
+        console.log('floorDataProvider2', params.filter);
         const child: PropertyStringFilter[] = [
           {
             '@type': 'propertyString',
-            propertyId: 'building.name',
-            filterValue: buildingNameFilter,
+            propertyId: 'building.id',
+            filterValue: buildingFilter.id?.toString() ?? '0',
             matcher: Matcher.EQUALS
           }, {
             '@type': 'propertyString',
@@ -79,7 +86,7 @@ const RoomView = () => {
         });
 
       },
-    [floorNameFilter]
+    [floorFilter]
   );
 
   // const buildingType = Object.values(BuildingTypeEnum).map(level => ({ label: level, value: level }));
@@ -107,16 +114,16 @@ const RoomView = () => {
               { sector: true, building: true, floor: true }
             }
             sector={{
-              sectorName: sectorNameFilter,
-              setSectorName: setSectorNameFilter
+              sectorFilter: sectorFilter,
+              setSectorFilter: setSectorFilter
             }}
             building={{
-              buildingName: buildingNameFilter,
-              setBuildingName: setBuildingNameFilter
+              buildingFilter: buildingFilter,
+              setBuildingFilter: setBuildingFilter
             }}
             floor={{
-              floorName: floorNameFilter,
-              setFloorName: setFloorNameFilter
+              floorFilter: floorFilter,
+              setFloorFilter: setFloorFilter
             }}
           />
           <AutoGrid service={RoomDtoCrudService} model={RoomDTOModel} ref={autoGridRef}
@@ -143,12 +150,12 @@ const RoomView = () => {
               'floor.name': {
                 header: 'Floor',
                 resizable: true,
-                externalValue: floorNameFilter
+                externalValue: floorFilter != null ? floorFilter.name : ''
               },
               'floor.building.name': {
                 header: 'Building',
                 resizable: true,
-                externalValue: floorNameFilter
+                externalValue: buildingFilter != null ? buildingFilter.name : ''
               },
             }}
             onActiveItemChanged={(e) => {
@@ -173,7 +180,7 @@ const RoomView = () => {
           </header>
           <main className="overflow-y-scroll w-full h-full">
             <FormLayout responsiveSteps={responsiveSteps} className="w-fit h-fit p-2">
-              <ComboBox label={'Floor'}  {...field(model.floor)} dataProvider={floorDataProvider} itemLabelPath='name' itemValuePath='name' clearButtonVisible />
+              <ComboBox label={'Floor'}  {...field(model.floor)} dataProvider={floorDataProvider} itemLabelPath='name' itemValuePath='id' clearButtonVisible />
               <TextField label={'Name'}  {...{ colspan: 2 }} {...field(model.name)} />
               {/* <Select label={'Building Type'}  {...{ colspan: 1 }} {...field(model.type)} items={buildingType} /> */}
               <Checkbox label={'Public Access'}  {...{ colspan: 2 }} {...field(model.hasPublicAccess)} />

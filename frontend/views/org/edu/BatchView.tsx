@@ -119,16 +119,16 @@ const BatchView = () => {
               { organization: true, department: true, programme: true }
             }
             organization={{
-              organizationName: orgNameFilter,
-              setOrganizationName: setOrgNameFilter
+              organizationFilter: orgNameFilter,
+              setOrganizationFilter: setOrgNameFilter
             }}
             department={{
-              departmentName: departmentNameFilter,
-              setDepartmentName: setDepartmentNameFilter
+              departmentFilter: departmentNameFilter,
+              setDepartmentFilter: setDepartmentNameFilter
             }}
             programme={{
-              programmeName: programmeNameFilter,
-              setProgrammeName: setProgrammeNameFilter
+              programmeFilter: programmeNameFilter,
+              setProgrammeFilter: setProgrammeNameFilter
             }}
           />
           <AutoGrid service={BatchDtoCrudService} model={BatchDTOModel} ref={autoGridRef}

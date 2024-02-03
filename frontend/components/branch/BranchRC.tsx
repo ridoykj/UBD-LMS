@@ -1,6 +1,12 @@
 
 import { ComboBox, ComboBoxDataProviderCallback, ComboBoxDataProviderParams } from '@hilla/react-components/ComboBox.js';
 import '@vaadin/icons';
+import OrganizationDAO from 'Frontend/generated/com/itbd/application/dao/org/academic/OrganizationDAO';
+import BatchCourseDAO from 'Frontend/generated/com/itbd/application/dao/org/allocation/BatchCourseDAO';
+import BatchDAO from 'Frontend/generated/com/itbd/application/dao/org/edu/BatchDAO';
+import CourseDAO from 'Frontend/generated/com/itbd/application/dao/org/edu/CourseDAO';
+import DepartmentDAO from 'Frontend/generated/com/itbd/application/dao/org/edu/DepartmentDAO';
+import ProgrammeDAO from 'Frontend/generated/com/itbd/application/dao/org/edu/ProgrammeDAO';
 import OrganizationDTOModel from 'Frontend/generated/com/itbd/application/dto/org/academic/OrganizationDTOModel';
 import BatchCourseDTOModel from 'Frontend/generated/com/itbd/application/dto/org/allocation/BatchCourseDTOModel';
 import BatchDTOModel from 'Frontend/generated/com/itbd/application/dto/org/edu/BatchDTOModel';
@@ -11,36 +17,35 @@ import PropertyStringFilter from 'Frontend/generated/dev/hilla/crud/filter/Prope
 import Matcher from 'Frontend/generated/dev/hilla/crud/filter/PropertyStringFilter/Matcher';
 import { BatchCourseDtoCrudService, BatchDtoCrudService, CourseDtoCrudService, DepartmentDtoCrudService, OrganizationDtoCrudService, ProgrammeDtoCrudService } from 'Frontend/generated/endpoints';
 import { comboBoxLazyFilter } from 'Frontend/util/comboboxLazyFilterUtil';
-import { setMinutes } from 'date-fns';
 import { Dispatch, SetStateAction, useMemo } from 'react';
 
 type OrganizationProps = {
-  organizationName: string,
-  setOrganizationName: Dispatch<SetStateAction<string>>
+  organizationFilter: OrganizationDAO,
+  setOrganizationFilter: Dispatch<SetStateAction<OrganizationDAO>>
 }
 
 type DepartmentProps = {
-  departmentName: string,
-  setDepartmentName: Dispatch<SetStateAction<string>>
+  departmentFilter: DepartmentDAO,
+  setDepartmentFilter: Dispatch<SetStateAction<DepartmentDAO>>
 }
 
 type ProgrammeProps = {
-  programmeName: string,
-  setProgrammeName: Dispatch<SetStateAction<string>>
+  programmeFilter: ProgrammeDAO,
+  setProgrammeFilter: Dispatch<SetStateAction<ProgrammeDAO>>
 }
 
 type BatchProps = {
-  batchName: string,
-  setBatchName: Dispatch<SetStateAction<string>>
+  batchFilter: BatchDAO,
+  setBatchFilter: Dispatch<SetStateAction<BatchDAO>>
 }
 type SemesterProps = {
-  semesterName: string,
-  setSemesterName: Dispatch<SetStateAction<string>>
+  semesterFilter: BatchCourseDAO,
+  setSemesterFilter: Dispatch<SetStateAction<BatchCourseDAO>>
 }
 
 type CourseProps = {
-  courseName: string,
-  setCourseName: Dispatch<SetStateAction<string>>
+  courseFilter: CourseDAO,
+  setCourseFilter: Dispatch<SetStateAction<CourseDAO>>
 }
 
 type VisibleFields = {
@@ -90,8 +95,8 @@ export default function BranchRC({ visibleFields, organization, department, prog
         const child: PropertyStringFilter[] = [
           {
             '@type': 'propertyString',
-            propertyId: 'organization.name',
-            filterValue: organization?.organizationName || '',
+            propertyId: 'organization.id',
+            filterValue: organization?.organizationFilter.id?.toString() || '0',
             matcher: Matcher.EQUALS
           }, {
             '@type': 'propertyString',
@@ -105,7 +110,7 @@ export default function BranchRC({ visibleFields, organization, department, prog
           callback(result, result.length);
         });
       },
-    [organization?.organizationName]
+    [organization?.organizationFilter]
   );
 
   const programmeDataProvider = useMemo(
@@ -117,8 +122,8 @@ export default function BranchRC({ visibleFields, organization, department, prog
         const child: PropertyStringFilter[] = [
           {
             '@type': 'propertyString',
-            propertyId: 'department.name',
-            filterValue: department?.departmentName || '',
+            propertyId: 'department.id',
+            filterValue: department?.departmentFilter.id?.toString() || '',
             matcher: Matcher.EQUALS
           }, {
             '@type': 'propertyString',
@@ -133,7 +138,7 @@ export default function BranchRC({ visibleFields, organization, department, prog
         });
 
       },
-    [department?.departmentName]
+    [department?.departmentFilter]
   );
 
 
@@ -146,8 +151,8 @@ export default function BranchRC({ visibleFields, organization, department, prog
         const child: PropertyStringFilter[] = [
           {
             '@type': 'propertyString',
-            propertyId: 'programme.name',
-            filterValue: programme?.programmeName || '',
+            propertyId: 'programme.id',
+            filterValue: programme?.programmeFilter.id?.toString() || '',
             matcher: Matcher.EQUALS
           }, {
             '@type': 'propertyString',
@@ -161,7 +166,7 @@ export default function BranchRC({ visibleFields, organization, department, prog
           callback(result, result.length);
         });
       },
-    [programme?.programmeName]
+    [programme?.programmeFilter]
   );
 
   const semesterDataProvider = useMemo(
@@ -173,8 +178,8 @@ export default function BranchRC({ visibleFields, organization, department, prog
         const child: PropertyStringFilter[] = [
           {
             '@type': 'propertyString',
-            propertyId: 'batch.name',
-            filterValue: batch?.batchName || '',
+            propertyId: 'batch.id',
+            filterValue: batch?.batchFilter.id?.toString() || '',
             matcher: Matcher.EQUALS
           },];
 
@@ -200,7 +205,7 @@ export default function BranchRC({ visibleFields, organization, department, prog
           callback(uniqueSemester, uniqueSemester.length);
         });
       },
-    [batch?.batchName]
+    [batch?.batchFilter]
   );
 
   const courseDataProvider = useMemo(
@@ -212,8 +217,8 @@ export default function BranchRC({ visibleFields, organization, department, prog
         const child: PropertyStringFilter[] = [
           {
             '@type': 'propertyString',
-            propertyId: 'programme.name',
-            filterValue: programme?.programmeName || '',
+            propertyId: 'programme.id',
+            filterValue: programme?.programmeFilter.id?.toString() || '',
             matcher: Matcher.EQUALS
           }, {
             '@type': 'propertyString',
@@ -227,42 +232,42 @@ export default function BranchRC({ visibleFields, organization, department, prog
           callback(result, result.length);
         });
       },
-    [programme?.programmeName]
+    [programme?.programmeFilter]
   );
 
   const handleOrganization = (e: any) => {
-    const searchTerm = (e.detail.value || '').trim();
-    department?.setDepartmentName((dr) => ''); // Reset department combobox
-    organization?.setOrganizationName((o) => searchTerm);
+    const selectedItem = e.detail.value;
+    department?.setDepartmentFilter((dr) => ({} as DepartmentDAO)); // Reset department combobox
+    organization?.setOrganizationFilter((o) => selectedItem);
   };
 
   const handleDepartment = (e: any) => {
-    const searchTerm = (e.detail.value || '').trim();
-    programme?.setProgrammeName((d) => ''); // Reset department combobox
-    department?.setDepartmentName((d) => searchTerm);
+    const selectedItem = e.detail.value;
+    programme?.setProgrammeFilter((d) => ({} as ProgrammeDAO));  // Reset department combobox
+    department?.setDepartmentFilter((d) => selectedItem);
   };
 
   const handleProgramme = (e: any) => {
-    const searchTerm = (e.detail.value || '').trim();
-    batch?.setBatchName((d) => ''); // Reset department combobox    
-    course?.setCourseName((d) => ''); // Reset department combobox
-    programme?.setProgrammeName((d) => searchTerm);
+    const selectedItem = e.detail.value;
+    batch?.setBatchFilter((d) => ({} as BatchDAO));  // Reset department combobox    
+    course?.setCourseFilter((d) => ({} as CourseDAO));  // Reset department combobox
+    programme?.setProgrammeFilter((d) => selectedItem);
   };
 
   const handleBatch = (e: any) => {
-    const searchTerm = (e.detail.value || '').trim();
-    semester?.setSemesterName((d) => ''); // Reset department combobox
-    batch?.setBatchName((d) => searchTerm);
+    const selectedItem = e.detail.value;
+    semester?.setSemesterFilter((d) => ({} as BatchCourseDAO));  // Reset department combobox
+    batch?.setBatchFilter((d) => selectedItem);
   };
 
   const handleSemester = (e: any) => {
-    const searchTerm = (e.detail.value || '');
-    semester?.setSemesterName((d) => searchTerm);
+    const selectedItem = e.detail.value;
+    semester?.setSemesterFilter((d) => selectedItem);
   };
 
   const handleCourse = (e: any) => {
-    const searchTerm = (e.detail.value || '').trim();
-    batch?.setBatchName((d) => searchTerm);
+    const selectedItem = e.detail.value;
+    batch?.setBatchFilter((d) => selectedItem);
   };
   return (
     <>
@@ -272,42 +277,42 @@ export default function BranchRC({ visibleFields, organization, department, prog
             visibleFields['organization'] &&
             <>
               <div className='text-sm font-medium ml-5 mr-2 text-gray-400'>Profile</div>
-              <ComboBox dataProvider={organizationDataProvider} itemLabelPath='name' itemValuePath='name' clearButtonVisible onValueChanged={handleOrganization} style={{ '--vaadin-combo-box-overlay-width': '350px' } as React.CSSProperties} />
+              <ComboBox dataProvider={organizationDataProvider} itemLabelPath='name' itemValuePath='name' clearButtonVisible onSelectedItemChanged={handleOrganization} style={{ '--vaadin-combo-box-overlay-width': '350px' } as React.CSSProperties} />
             </>
           }
           {
-            visibleFields['department'] && organization?.organizationName &&
+            visibleFields['department'] && organization?.organizationFilter.id != null &&
             <>
               <div className='text-sm font-medium ml-5 mr-2 text-gray-400'>Department</div>
-              <ComboBox dataProvider={departmentDataProvider} itemLabelPath='name' itemValuePath='name' clearButtonVisible value={department?.departmentName} onValueChanged={handleDepartment} style={{ '--vaadin-combo-box-overlay-width': '350px' } as React.CSSProperties} />
+              <ComboBox dataProvider={departmentDataProvider} itemLabelPath='name' clearButtonVisible itemValuePath='id' onSelectedItemChanged={handleDepartment} style={{ '--vaadin-combo-box-overlay-width': '350px' } as React.CSSProperties} />
             </>
           }
           {
-            visibleFields['programme'] && department?.departmentName &&
+            visibleFields['programme'] && department?.departmentFilter.id != null &&
             <>
               <div className='text-sm font-medium ml-5 mr-2 text-gray-400'>Programme</div>
-              <ComboBox dataProvider={programmeDataProvider} itemLabelPath='name' itemValuePath='name' clearButtonVisible value={programme?.programmeName} onValueChanged={handleProgramme} style={{ '--vaadin-combo-box-overlay-width': '350px' } as React.CSSProperties} />
+              <ComboBox dataProvider={programmeDataProvider} itemLabelPath='name' clearButtonVisible itemValuePath='id' onSelectedItemChanged={handleProgramme} style={{ '--vaadin-combo-box-overlay-width': '350px' } as React.CSSProperties} />
             </>
           }
           {
-            visibleFields['batch'] && programme?.programmeName &&
+            visibleFields['batch'] && programme?.programmeFilter.id != null &&
             <>
               <div className='text-sm font-medium ml-5 mr-2 text-gray-400'>Batch</div>
-              <ComboBox dataProvider={batchDataProvider} itemLabelPath='name' itemValuePath='name' clearButtonVisible value={batch?.batchName} onValueChanged={handleBatch} style={{ '--vaadin-combo-box-overlay-width': '350px' } as React.CSSProperties} />
+              <ComboBox dataProvider={batchDataProvider} itemLabelPath='name' clearButtonVisible itemValuePath='id' onSelectedItemChanged={handleBatch} style={{ '--vaadin-combo-box-overlay-width': '350px' } as React.CSSProperties} />
             </>
           }
           {
-            visibleFields['semester'] && batch?.batchName &&
+            visibleFields['semester'] && batch?.batchFilter.id != null &&
             <>
               <div className='text-sm font-medium ml-5 mr-2 text-gray-400'>Semester</div>
-              <ComboBox dataProvider={semesterDataProvider} itemLabelPath='semester' itemValuePath='semester' clearButtonVisible value={semester?.semesterName} onValueChanged={handleSemester} style={{ '--vaadin-combo-box-overlay-width': '350px' } as React.CSSProperties} />
+              <ComboBox dataProvider={semesterDataProvider} itemLabelPath='semester' clearButtonVisible itemValuePath='id' onSelectedItemChanged={handleSemester} style={{ '--vaadin-combo-box-overlay-width': '350px' } as React.CSSProperties} />
             </>
           }
           {
-            visibleFields['course'] && programme?.programmeName &&
+            visibleFields['course'] && programme?.programmeFilter.id != null &&
             <>
               <div className='text-sm font-medium ml-5 mr-2 text-gray-400'>Batch</div>
-              <ComboBox dataProvider={courseDataProvider} itemLabelPath='name' itemValuePath='name' clearButtonVisible value={course?.courseName} onValueChanged={handleCourse} style={{ '--vaadin-combo-box-overlay-width': '350px' } as React.CSSProperties} />
+              <ComboBox dataProvider={courseDataProvider} itemLabelPath='name' itemValuePath='id' clearButtonVisible onSelectedItemChanged={handleCourse} style={{ '--vaadin-combo-box-overlay-width': '350px' } as React.CSSProperties} />
             </>
           }
         </div>
