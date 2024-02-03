@@ -77,6 +77,9 @@ export default function MainLayout() {
           <p className="text-lg font-semibold m-0">{currentTitle}</p>
           <AvatarControlRC />
         </div>
+        <div slot='content'>
+
+        </div>
         <Suspense fallback={<Placeholder />}>
           <Outlet />
         </Suspense>

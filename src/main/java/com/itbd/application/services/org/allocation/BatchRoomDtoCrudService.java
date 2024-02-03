@@ -34,7 +34,6 @@ import java.util.Set;
 public class BatchRoomDtoCrudService implements CrudService<BatchRoomDTO, Long> {
     private final JpaFilterConverter jpaFilterConverter;
     private final BatchRoomRepo batchRoomRepo;
-
     private final BatchCoordinatorRepo batchCoordinatorRepo;
 
     public BatchRoomDtoCrudService(BatchRoomRepo batchRoomRepo,BatchCoordinatorRepo batchCoordinatorRepo, JpaFilterConverter jpaFilterConverter) {

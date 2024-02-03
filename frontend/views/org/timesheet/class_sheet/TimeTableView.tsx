@@ -143,6 +143,7 @@ function TimeTableView() {
         params: ComboBoxDataProviderParams,
         callback: ComboBoxDataProviderCallback<BatchCourseDTOModel>
       ) => {
+        console.log('semesterNameFilter', semesterNameFilter);
         const child: PropertyStringFilter[] = [
           {
             '@type': 'propertyString',
@@ -154,16 +155,21 @@ function TimeTableView() {
             propertyId: 'course.code',
             filterValue: params.filter,
             matcher: Matcher.CONTAINS
-          },];
-
-        if (params.filter !== undefined && params.filter !== null && params.filter !== '') {
-          child.push({
+          }, {
             '@type': 'propertyString',
             propertyId: 'semester',
-            filterValue: semesterNameFilter || '',
+            filterValue: semesterNameFilter || '0',
             matcher: Matcher.EQUALS
-          });
-        }
+          },];
+
+        // if (sectorNameFilter !== undefined && sectorNameFilter !== null && sectorNameFilter !== '') {
+        //   child.push({
+        //     '@type': 'propertyString',
+        //     propertyId: 'semester',
+        //     filterValue: sectorNameFilter || '',
+        //     matcher: Matcher.EQUALS
+        //   });
+        // }
 
         const { pagination, filters } = comboBoxLazyFilter(params, 'and', child);
         BatchCourseDtoCrudService.list(pagination, filters).then((result: any) => {
@@ -176,7 +182,14 @@ function TimeTableView() {
   const batchRoomDataProvider = useEffect(
     () => {
       const child: PropertyStringFilter[] = [
+        {
+          '@type': 'propertyString',
+          propertyId: 'batchCourse.semester',
+          filterValue: semesterNameFilter || '0',
+          matcher: Matcher.EQUALS
+        },
       ];
+
       const pagination: Pageable = {
         pageNumber: 0,
         pageSize: 1,

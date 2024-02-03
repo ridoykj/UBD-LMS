@@ -307,7 +307,7 @@ const BatchCourseView = () => {
               </div>
               <TextField label={'Headline'}  {...field(model.headline)} className="w-fit" />
               <TextField label={'Type'}  {...field(model.type)} className="w-fit" />
-              <IntegerField label={'Semester'}  {...field(model.semester)} className="w-fit" />
+              <IntegerField label={'Semester'} min={1} defaultValue={1} {...field(model.semester)} className="w-fit" />
               <NumberField label={'Credits'}  {...field(model.numberOfCredits)} className="w-fit" />
               <NumberField label={'Lectures'}  {...field(model.numberOfLecture)} className="w-fit" />
               <NumberField label={'Tutorials'}  {...field(model.numberOfTutorial)} className="w-fit" />

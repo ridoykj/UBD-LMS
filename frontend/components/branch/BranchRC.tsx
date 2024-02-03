@@ -178,19 +178,26 @@ export default function BranchRC({ visibleFields, organization, department, prog
             matcher: Matcher.EQUALS
           },];
 
-        if (params.filter !== undefined && params.filter !== null && params.filter !== ''  ) {
+        if (params.filter !== undefined && params.filter !== null && params.filter !== '') {
           child.push({
             '@type': 'propertyString',
             propertyId: 'semester',
-            filterValue: params.filter,
+            filterValue: params.filter || '0',
             matcher: Matcher.EQUALS
           });
         }
 
         const { pagination, filters } = comboBoxLazyFilter(params, 'and', child);
         BatchCourseDtoCrudService.list(pagination, filters).then((result: any) => {
-          console.log('semesterDataProvider', result);
-          callback(result, result.length);
+          // console.log('semesterDataProvider', result);
+          const putSemester: BatchCourseDTOModel[] = [];
+          result.map((item: BatchCourseDTOModel) => {
+            if (putSemester.findIndex((i: BatchCourseDTOModel) => i.semester === item.semester) === -1) {
+              putSemester.push(item);
+            }
+          });
+          let uniqueSemester = putSemester.sort((a, b) => Number(a.semester) - Number(b.semester));
+          callback(uniqueSemester, uniqueSemester.length);
         });
       },
     [batch?.batchName]
@@ -259,50 +266,53 @@ export default function BranchRC({ visibleFields, organization, department, prog
   };
   return (
     <>
-      <div className='flex flex-row overflow-x-auto w-full items-center rounded-xl border-4'>
-        {
-          visibleFields['organization'] &&
-          <>
-            <div className='text-sm font-medium ml-5 mr-2 text-gray-400'>Profile</div>
-            <ComboBox dataProvider={organizationDataProvider} itemLabelPath='name' itemValuePath='name' clearButtonVisible onValueChanged={handleOrganization} style={{ '--vaadin-combo-box-overlay-width': '350px' } as React.CSSProperties} />
-          </>
-        }
-        {
-          visibleFields['department'] && organization?.organizationName &&
-          <>
-            <div className='text-sm font-medium ml-5 mr-2 text-gray-400'>Department</div>
-            <ComboBox dataProvider={departmentDataProvider} itemLabelPath='name' itemValuePath='name' clearButtonVisible value={department?.departmentName} onValueChanged={handleDepartment} style={{ '--vaadin-combo-box-overlay-width': '350px' } as React.CSSProperties} />
-          </>
-        }
-        {
-          visibleFields['programme'] && department?.departmentName &&
-          <>
-            <div className='text-sm font-medium ml-5 mr-2 text-gray-400'>Programme</div>
-            <ComboBox dataProvider={programmeDataProvider} itemLabelPath='name' itemValuePath='name' clearButtonVisible value={programme?.programmeName} onValueChanged={handleProgramme} style={{ '--vaadin-combo-box-overlay-width': '350px' } as React.CSSProperties} />
-          </>
-        }
-        {
-          visibleFields['batch'] && programme?.programmeName &&
-          <>
-            <div className='text-sm font-medium ml-5 mr-2 text-gray-400'>Batch</div>
-            <ComboBox dataProvider={batchDataProvider} itemLabelPath='name' itemValuePath='name' clearButtonVisible value={batch?.batchName} onValueChanged={handleBatch} style={{ '--vaadin-combo-box-overlay-width': '350px' } as React.CSSProperties} />
-          </>
-        }
-        {
-          visibleFields['semester'] && batch?.batchName &&
-          <>
-            <div className='text-sm font-medium ml-5 mr-2 text-gray-400'>Semester</div>
-            <ComboBox dataProvider={semesterDataProvider} itemLabelPath='semester' itemValuePath='semester' clearButtonVisible value={semester?.semesterName} onValueChanged={handleSemester} style={{ '--vaadin-combo-box-overlay-width': '350px' } as React.CSSProperties} />
-          </>
-        }
-        {
-          visibleFields['course'] && programme?.programmeName &&
-          <>
-            <div className='text-sm font-medium ml-5 mr-2 text-gray-400'>Batch</div>
-            <ComboBox dataProvider={courseDataProvider} itemLabelPath='name' itemValuePath='name' clearButtonVisible value={course?.courseName} onValueChanged={handleCourse} style={{ '--vaadin-combo-box-overlay-width': '350px' } as React.CSSProperties} />
-          </>
-        }
+      <div className='p-2 pt-0 m-auto drop-shadow-[0_5px_5px_#dfe7ff] w-full'>
+        <div className='flex flex-row overflow-x-auto w-full items-center rounded-xl border-2 border-[#dfe7ff]'>
+          {
+            visibleFields['organization'] &&
+            <>
+              <div className='text-sm font-medium ml-5 mr-2 text-gray-400'>Profile</div>
+              <ComboBox dataProvider={organizationDataProvider} itemLabelPath='name' itemValuePath='name' clearButtonVisible onValueChanged={handleOrganization} style={{ '--vaadin-combo-box-overlay-width': '350px' } as React.CSSProperties} />
+            </>
+          }
+          {
+            visibleFields['department'] && organization?.organizationName &&
+            <>
+              <div className='text-sm font-medium ml-5 mr-2 text-gray-400'>Department</div>
+              <ComboBox dataProvider={departmentDataProvider} itemLabelPath='name' itemValuePath='name' clearButtonVisible value={department?.departmentName} onValueChanged={handleDepartment} style={{ '--vaadin-combo-box-overlay-width': '350px' } as React.CSSProperties} />
+            </>
+          }
+          {
+            visibleFields['programme'] && department?.departmentName &&
+            <>
+              <div className='text-sm font-medium ml-5 mr-2 text-gray-400'>Programme</div>
+              <ComboBox dataProvider={programmeDataProvider} itemLabelPath='name' itemValuePath='name' clearButtonVisible value={programme?.programmeName} onValueChanged={handleProgramme} style={{ '--vaadin-combo-box-overlay-width': '350px' } as React.CSSProperties} />
+            </>
+          }
+          {
+            visibleFields['batch'] && programme?.programmeName &&
+            <>
+              <div className='text-sm font-medium ml-5 mr-2 text-gray-400'>Batch</div>
+              <ComboBox dataProvider={batchDataProvider} itemLabelPath='name' itemValuePath='name' clearButtonVisible value={batch?.batchName} onValueChanged={handleBatch} style={{ '--vaadin-combo-box-overlay-width': '350px' } as React.CSSProperties} />
+            </>
+          }
+          {
+            visibleFields['semester'] && batch?.batchName &&
+            <>
+              <div className='text-sm font-medium ml-5 mr-2 text-gray-400'>Semester</div>
+              <ComboBox dataProvider={semesterDataProvider} itemLabelPath='semester' itemValuePath='semester' clearButtonVisible value={semester?.semesterName} onValueChanged={handleSemester} style={{ '--vaadin-combo-box-overlay-width': '350px' } as React.CSSProperties} />
+            </>
+          }
+          {
+            visibleFields['course'] && programme?.programmeName &&
+            <>
+              <div className='text-sm font-medium ml-5 mr-2 text-gray-400'>Batch</div>
+              <ComboBox dataProvider={courseDataProvider} itemLabelPath='name' itemValuePath='name' clearButtonVisible value={course?.courseName} onValueChanged={handleCourse} style={{ '--vaadin-combo-box-overlay-width': '350px' } as React.CSSProperties} />
+            </>
+          }
+        </div>
       </div>
+
     </>
   );
 }

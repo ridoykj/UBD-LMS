@@ -172,35 +172,37 @@ export default function BranchRC({ visibleFields, sector, building, floor, room,
 
   return (
     <>
-      <div className="flex flex-row overflow-x-auto w-full items-center rounded-xl border-4">
-        {
-          visibleFields['sector'] &&
-          <>
-            <div className='text-sm font-medium ml-5 mr-2 text-gray-400'>Sector</div>
-            <ComboBox dataProvider={sectorDataProvider} itemLabelPath='name' itemValuePath='name' clearButtonVisible onValueChanged={handleSector} />
-          </>
-        }
-        {
-          visibleFields['building'] && sector?.sectorName &&
-          <>
-            <div className='text-sm font-medium ml-5 mr-2 text-gray-400'>Building</div>
-            <ComboBox dataProvider={buildingDataProvider} itemLabelPath='name' itemValuePath='name' clearButtonVisible value={building?.buildingName} onValueChanged={handleBuilding} />
-          </>
-        }
-        {
-          visibleFields['floor'] && building?.buildingName &&
-          <>
-            <div className='text-sm font-medium ml-5 mr-2 text-gray-400'>Floor</div>
-            <ComboBox dataProvider={floorDataProvider} itemLabelPath='name' itemValuePath='name' clearButtonVisible value={floor?.floorName} onValueChanged={handleFloor} />
-          </>
-        }
-        {
-          visibleFields['room'] && floor?.floorName &&
-          <>
-            <div className='text-sm font-medium ml-5 mr-2 text-gray-400'>Room</div>
-            <ComboBox dataProvider={roomDataProvider} itemLabelPath='name' itemValuePath='name' clearButtonVisible value={room?.roomName} onValueChanged={handleRoom} />
-          </>
-        }
+      <div className='p-2 pt-0 m-auto drop-shadow-[0_5px_5px_#dfe7ff] w-full'>
+        <div className="flex flex-row overflow-x-auto w-full items-center rounded-xl border-2 border-[#dfe7ff]">
+          {
+            visibleFields['sector'] &&
+            <>
+              <div className='text-sm font-medium ml-5 mr-2 text-gray-400'>Sector</div>
+              <ComboBox dataProvider={sectorDataProvider} itemLabelPath='name' itemValuePath='name' clearButtonVisible onValueChanged={handleSector} />
+            </>
+          }
+          {
+            visibleFields['building'] && sector?.sectorName &&
+            <>
+              <div className='text-sm font-medium ml-5 mr-2 text-gray-400'>Building</div>
+              <ComboBox dataProvider={buildingDataProvider} itemLabelPath='name' itemValuePath='name' clearButtonVisible value={building?.buildingName} onValueChanged={handleBuilding} />
+            </>
+          }
+          {
+            visibleFields['floor'] && building?.buildingName &&
+            <>
+              <div className='text-sm font-medium ml-5 mr-2 text-gray-400'>Floor</div>
+              <ComboBox dataProvider={floorDataProvider} itemLabelPath='name' itemValuePath='name' clearButtonVisible value={floor?.floorName} onValueChanged={handleFloor} />
+            </>
+          }
+          {
+            visibleFields['room'] && floor?.floorName &&
+            <>
+              <div className='text-sm font-medium ml-5 mr-2 text-gray-400'>Room</div>
+              <ComboBox dataProvider={roomDataProvider} itemLabelPath='name' itemValuePath='name' clearButtonVisible value={room?.roomName} onValueChanged={handleRoom} />
+            </>
+          }
+        </div>
       </div>
     </>
   );
