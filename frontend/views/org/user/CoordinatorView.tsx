@@ -17,13 +17,17 @@ import BloodGroupsEnum from "Frontend/generated/com/itbd/application/constants/B
 import GenderEnum from "Frontend/generated/com/itbd/application/constants/GenderEnum";
 import InstructorDTO from "Frontend/generated/com/itbd/application/dto/user/instructor/InstructorDTO";
 import InstructorDTOModel from "Frontend/generated/com/itbd/application/dto/user/instructor/InstructorDTOModel";
-import { InstructorDtoCrudService } from "Frontend/generated/endpoints";
+import { DownloadController, InstructorDtoCrudService } from "Frontend/generated/endpoints";
 import NotificationUtil from "Frontend/util/NotificationUtil";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+
+import { Upload, UploadSuccessEvent } from "@hilla/react-components/Upload.js";
+import { UploadBeforeEvent } from "@vaadin/upload";
 
 const CoordinatorView = () => {
     const [dialogOpened, setDialogOpened] = useState<boolean>(false);
     const [successNotification, setSuccessNotification] = useState<boolean>(false);
+    const [imageView, setImageView] = useState<Blob>();
 
     const autoGridRef = React.useRef<AutoGridRef>(null);
 
@@ -39,6 +43,15 @@ const CoordinatorView = () => {
             });
         }
     });
+
+    useEffect(() => {
+        DownloadController.getImage(btoa('/user/' + value.person?.id + '/' + value.person?.id + '.png')).then((result) => {
+            // let byteArray = new Uint8Array(result);
+            // let blob = new Blob([result], { type: "image/jpeg" }); // adjust the type according to your image format
+            // let url = URL.createObjectURL(blob);
+            // setImageView(result);
+        })
+    }, [selectedInstructorItems]);
 
 
     const genders = Object.values(GenderEnum).map(level => ({ label: level, value: level }));
@@ -112,6 +125,10 @@ const CoordinatorView = () => {
                             <Button className="text-white content-end bg-blue-500 hover:bg-blue-600" onClick={() => {
                                 clear();
                                 setSelectedInstructorItems([]);
+                                const dd = DownloadController.getImage(btoa('/user/15/15.png'));
+                                dd.then((result) => {
+                                    console.log('dd', result);
+                                });
                             }}>
                                 <Icon icon="vaadin:plus" />New
                             </Button>
@@ -119,7 +136,10 @@ const CoordinatorView = () => {
                     </header>
                     <main className="overflow-y-scroll w-full h-full">
                         <FormLayout responsiveSteps={responsiveSteps} className="w-fit h-fit p-2">
-                            <label slot="label">Profile</label>
+                            <div>
+                                {/* <img className="w-24 h-24 rounded-full mx-auto" src={`/v1/content/image?imagePath=${btoa(value.person?.id + '/' + value.person?.id + '.png')}`} alt="" width="384" height="512" /> */}
+                                <img className="w-24 h-24 rounded-full mx-auto" src={imageView} alt="" width="384" height="512" />
+                            </div>
                             <TextField label={'First Name'}  {...{ colspan: 2 }} {...field(model.person.givenName)} />
                             <TextField label={'Middle Name'} {...{ colspan: 1 }}  {...field(model.person.additionalName)} />
                             <TextField label={'Last Name'}   {...{ colspan: 1 }}{...field(model.person.familyName)} />
@@ -152,39 +172,58 @@ const CoordinatorView = () => {
 
                             <TextArea label={'Description'} {...{ colspan: 2 }}  {...field(model.description)} />
                             <TextArea label={'Qualification'} {...{ colspan: 2 }}  {...field(model.qualification)} />
+                            {value.id &&
+                                <Upload capture="camera"
+                                    method="POST"
+                                    target="/api/fileupload"
+                                    headers={`{"path": "/user/${value.person?.id || ''}", "filename": "${value.person?.id || ''}.png" }`}
+                                    // onUploadBefore={async (e: UploadBeforeEvent) => {
+                                    //     const file = e.detail.file;
+                                    //     // e.preventDefault();
+                                    //     console.log('file', file);
+                                    //     // if (form.value) {
+                                    //     //   form.value.avatarBase64 = await readAsDataURL(file);
+                                    //     // }
+                                    // }}
+                                    onUploadSuccess={(e: UploadSuccessEvent) => {
+                                        const file = e.detail.file;
+                                        console.log('file s', file);
+                                    }}
+                                ></Upload>
+                            }
                         </FormLayout>
                     </main>
                     <footer className="flex flex-row bg-gray-100 w-full">
                         <div className="w-full">
                             {
-                                selectedInstructorItems[0]?.id === undefined ? null :
-                                    <Button
-                                        className="text-white bg-red-400 hover:bg-red-500"
-                                        onClick={() => {
-                                            setDialogOpened(true);
-                                            console.log('delete', selectedInstructorItems[0]?.id);
-                                        }}
-                                    >Delete</Button>
+                                value.id &&
+                                <Button
+                                    className="text-white bg-red-400 hover:bg-red-500"
+                                    onClick={() => {
+                                        setDialogOpened(true);
+                                        console.log('delete', selectedInstructorItems[0]?.id);
+                                    }}
+                                >Delete</Button>
                             }
                         </div>
                         {
-                            !dirty ? null :
-                                <div className="flex flex-row content-end space-x-4">
-                                    <Button
-                                        className={discardButtonColors[dirty.toString()]}
-                                        disabled={!dirty}
-                                        onClick={reset}
-                                    >
-                                        Discard
-                                    </Button>
-                                    <Button
-                                        className={saveButtonColors[dirty.toString()]}
-                                        disabled={invalid || submitting || !dirty}
-                                        onClick={submit}
-                                    >
-                                        {selectedInstructorItems[0]?.id !== undefined ? 'Update' : 'Save'}
-                                    </Button>
-                                </div>
+                            !dirty &&
+                            <div className="flex flex-row content-end space-x-4">
+                                <Button
+                                    className={discardButtonColors[dirty.toString()]}
+                                    disabled={!dirty}
+                                    onClick={reset}
+                                >
+                                    Discard
+                                </Button>
+                                <Button
+                                    className={saveButtonColors[dirty.toString()]}
+                                    disabled={invalid || submitting || !dirty}
+                                    onClick={submit}
+                                >
+                                    {selectedInstructorItems[0]?.id !== undefined ? 'Update' : 'Save'}
+                                </Button>
+                            </div>
                         }
                     </footer>
                 </VerticalLayout>

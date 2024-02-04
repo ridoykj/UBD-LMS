@@ -11,6 +11,8 @@ import { useForm } from "@hilla/react-form";
 import BranchRC from "Frontend/components/branch/BranchRC";
 import { AutoGrid, AutoGridRef } from "Frontend/components/grid/autogrid";
 import ProgrammeTypeEnum from "Frontend/generated/com/itbd/application/constants/ProgrammeTypeEnum";
+import OrganizationDAO from "Frontend/generated/com/itbd/application/dao/org/academic/OrganizationDAO";
+import DepartmentDAO from "Frontend/generated/com/itbd/application/dao/org/edu/DepartmentDAO";
 import DepartmentDTOModel from "Frontend/generated/com/itbd/application/dto/org/edu/DepartmentDTOModel";
 import ProgrammeDTO from "Frontend/generated/com/itbd/application/dto/org/edu/ProgrammeDTO";
 import ProgrammeDTOModel from "Frontend/generated/com/itbd/application/dto/org/edu/ProgrammeDTOModel";
@@ -22,20 +24,21 @@ import { comboBoxLazyFilter } from "Frontend/util/comboboxLazyFilterUtil";
 import React, { useMemo, useState } from "react";
 
 const ProgrammeView = () => {
-  const [orgNameFilter, setOrgNameFilter] = useState('');
-  const [departmentNameFilter, setDepartmentNameFilter] = useState('');
+  const [orgFilter, setOrgFilter] = useState<OrganizationDAO>({} as OrganizationDAO);
+  const [departmentFilter, setDepartmentFilter] = useState<DepartmentDAO>({} as DepartmentDAO);
+
   const [dialogOpened, setDialogOpened] = useState<boolean>(false);
   const [successNotification, setSuccessNotification] = useState<boolean>(false);
 
   const autoGridRef = React.useRef<AutoGridRef>(null);
 
-  const [selectedProgrameeItems, setSelectedProgrameeItems] = useState<ProgrammeDTO[]>([]);
+  const [selectedProgrammeItems, setSelectedProgrammeItems] = useState<ProgrammeDTO[]>([]);
 
   const { model, field, value, read, submit, clear, reset, visited, dirty, invalid, submitting } = useForm(ProgrammeDTOModel, {
     onSubmit: async (programme) => {
       await ProgrammeDtoCrudService.save(programme).then((result) => {
         refreshGrid();
-        setSelectedProgrameeItems(result ? [result] : []);
+        setSelectedProgrammeItems(result ? [result] : []);
         setSuccessNotification(true);
         clear();
       });
@@ -61,8 +64,8 @@ const ProgrammeView = () => {
           matcher: Matcher.CONTAINS
         }, {
           '@type': 'propertyString',
-          propertyId: 'organization.name',
-          filterValue: orgNameFilter,
+          propertyId: 'organization.id',
+          filterValue: orgFilter.id?.toString() ?? '0',
           matcher: Matcher.EQUALS
         },];
 
@@ -71,7 +74,7 @@ const ProgrammeView = () => {
           callback(result, result.length);
         });
       },
-    [orgNameFilter]
+    [orgFilter]
   );
 
   const responsiveSteps = [
@@ -98,28 +101,28 @@ const ProgrammeView = () => {
               { organization: true, department: true }
             }
             organization={{
-              organizationFilter: orgNameFilter,
-              setOrganizationFilter: setOrgNameFilter
+              organizationFilter: orgFilter,
+              setOrganizationFilter: setOrgFilter
             }}
             department={{
-              departmentFilter: departmentNameFilter,
-              setDepartmentFilter: setDepartmentNameFilter
+              departmentFilter: departmentFilter,
+              setDepartmentFilter: setDepartmentFilter
             }}
           />
           <AutoGrid service={ProgrammeDtoCrudService} model={ProgrammeDTOModel} ref={autoGridRef}
-            visibleColumns={['name','code', 'studyLevel', 'department.name', 'status',]}
-            selectedItems={selectedProgrameeItems}
+            visibleColumns={['name', 'code', 'studyLevel', 'department.name', 'status',]}
+            selectedItems={selectedProgrammeItems}
             theme="row-stripes"
             onActiveItemChanged={(e) => {
               const item = e.detail.value;
-              setSelectedProgrameeItems(item ? [item] : []);
+              setSelectedProgrammeItems(item ? [item] : []);
               read(item);
             }}
             columnOptions={{
               'department.name': {
                 header: 'Department',
-                externalValue: departmentNameFilter,
-                setExternalValue: setDepartmentNameFilter,
+                externalValue: departmentFilter !=null ? departmentFilter.name : '',
+                // setExternalValue: setDepartmentFilter,
               },
             }}
           />
@@ -147,12 +150,12 @@ const ProgrammeView = () => {
           <footer className="flex flex-row bg-gray-100 w-full">
             <div className="w-full">
               {
-                selectedProgrameeItems[0]?.id === undefined ? null :
+                selectedProgrammeItems[0]?.id === undefined ? null :
                   <Button
                     className="text-white bg-red-400 hover:bg-red-500"
                     onClick={() => {
                       setDialogOpened(true);
-                      console.log('delete', selectedProgrameeItems[0]?.id);
+                      console.log('delete', selectedProgrammeItems[0]?.id);
                     }}
                   >Delete</Button>
               }
@@ -172,7 +175,7 @@ const ProgrammeView = () => {
                     disabled={invalid || submitting || !dirty}
                     onClick={submit}
                   >
-                    {selectedProgrameeItems[0]?.id !== undefined ? 'Update' : 'Save'}
+                    {selectedProgrammeItems[0]?.id !== undefined ? 'Update' : 'Save'}
                   </Button>
                 </div>
             }
@@ -206,9 +209,9 @@ const ProgrammeView = () => {
           }
         }}
         onConfirm={() => {
-          ProgrammeDtoCrudService.delete(selectedProgrameeItems[0]?.id).then((result) => {
+          ProgrammeDtoCrudService.delete(selectedProgrammeItems[0]?.id).then((result) => {
             refreshGrid();
-            setSelectedProgrameeItems([]);
+            setSelectedProgrammeItems([]);
             reset();
           });
         }}>

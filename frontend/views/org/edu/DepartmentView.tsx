@@ -9,6 +9,7 @@ import { VerticalLayout } from "@hilla/react-components/VerticalLayout";
 import { useForm } from '@hilla/react-form';
 import BranchRC from 'Frontend/components/branch/BranchRC';
 import { AutoGrid, AutoGridRef } from 'Frontend/components/grid/autogrid';
+import OrganizationDAO from 'Frontend/generated/com/itbd/application/dao/org/academic/OrganizationDAO';
 import OrganizationDTOModel from 'Frontend/generated/com/itbd/application/dto/org/academic/OrganizationDTOModel';
 import DepartmentDTO from 'Frontend/generated/com/itbd/application/dto/org/edu/DepartmentDTO';
 import DepartmentDTOModel from 'Frontend/generated/com/itbd/application/dto/org/edu/DepartmentDTOModel';
@@ -20,7 +21,8 @@ import { comboBoxLazyFilter } from 'Frontend/util/comboboxLazyFilterUtil';
 import React, { useMemo, useState } from 'react';
 
 const DepartmentView = () => {
-  const [orgNameFilter, setOrgNameFilter] = useState('');
+  const [orgFilter, setOrgFilter] = useState<OrganizationDAO>({} as OrganizationDAO);
+
   const [dialogOpened, setDialogOpened] = useState<boolean>(false);
   const [successNotification, setSuccessNotification] = useState<boolean>(false);
 
@@ -65,7 +67,7 @@ const DepartmentView = () => {
           callback(result);
         });
       },
-    [orgNameFilter]
+    [orgFilter]
   );
 
   const responsiveSteps = [
@@ -92,8 +94,8 @@ const DepartmentView = () => {
               { organization: true }
             }
             organization={{
-              organizationFilter: orgNameFilter,
-              setOrganizationFilter: setOrgNameFilter
+              organizationFilter: orgFilter,
+              setOrganizationFilter: setOrgFilter
             }}
           />
           <AutoGrid service={DepartmentDtoCrudService} model={DepartmentDTOModel} ref={autoGridRef}
@@ -108,8 +110,8 @@ const DepartmentView = () => {
             columnOptions={{
               'organization.name': {
                 header: 'Organization',
-                externalValue: orgNameFilter,
-                setExternalValue: setOrgNameFilter,
+                externalValue: orgFilter != null ? orgFilter.name : '',
+                // setExternalValue: setOrgFilter,
               },
             }}
           />

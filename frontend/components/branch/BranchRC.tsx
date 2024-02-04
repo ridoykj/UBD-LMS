@@ -57,6 +57,10 @@ type VisibleFields = {
   course?: boolean,
 };
 
+const comboboxStyle = {
+  '--vaadin-combo-box-overlay-width': '350px'
+} as React.CSSProperties;
+
 export default function BranchRC({ visibleFields, organization, department, programme, batch, semester, course, }: {
   visibleFields: VisibleFields, // ['organization', 'department', 'programme', 'batch', 'course'];
   organization?: OrganizationProps
@@ -123,7 +127,7 @@ export default function BranchRC({ visibleFields, organization, department, prog
           {
             '@type': 'propertyString',
             propertyId: 'department.id',
-            filterValue: department?.departmentFilter.id?.toString() || '',
+            filterValue: department?.departmentFilter.id?.toString() || '0',
             matcher: Matcher.EQUALS
           }, {
             '@type': 'propertyString',
@@ -152,7 +156,7 @@ export default function BranchRC({ visibleFields, organization, department, prog
           {
             '@type': 'propertyString',
             propertyId: 'programme.id',
-            filterValue: programme?.programmeFilter.id?.toString() || '',
+            filterValue: programme?.programmeFilter.id?.toString() || '0',
             matcher: Matcher.EQUALS
           }, {
             '@type': 'propertyString',
@@ -175,22 +179,21 @@ export default function BranchRC({ visibleFields, organization, department, prog
         params: ComboBoxDataProviderParams,
         callback: ComboBoxDataProviderCallback<BatchCourseDTOModel>
       ) => {
+
         const child: PropertyStringFilter[] = [
           {
             '@type': 'propertyString',
             propertyId: 'batch.id',
-            filterValue: batch?.batchFilter.id?.toString() || '',
+            filterValue: batch?.batchFilter.id?.toString() || '0',
             matcher: Matcher.EQUALS
           },];
 
-        if (params.filter !== undefined && params.filter !== null && params.filter !== '') {
-          child.push({
-            '@type': 'propertyString',
-            propertyId: 'semester',
-            filterValue: params.filter || '0',
-            matcher: Matcher.EQUALS
-          });
-        }
+        params.filter && child.push({
+          '@type': 'propertyString',
+          propertyId: 'semester',
+          filterValue: params.filter || '0',
+          matcher: Matcher.EQUALS
+        });
 
         const { pagination, filters } = comboBoxLazyFilter(params, 'and', child);
         BatchCourseDtoCrudService.list(pagination, filters).then((result: any) => {
@@ -218,7 +221,7 @@ export default function BranchRC({ visibleFields, organization, department, prog
           {
             '@type': 'propertyString',
             propertyId: 'programme.id',
-            filterValue: programme?.programmeFilter.id?.toString() || '',
+            filterValue: programme?.programmeFilter.id?.toString() || '0',
             matcher: Matcher.EQUALS
           }, {
             '@type': 'propertyString',
@@ -236,27 +239,44 @@ export default function BranchRC({ visibleFields, organization, department, prog
   );
 
   const handleOrganization = (e: any) => {
+    console.log('Organization - ack');
     const selectedItem = e.detail.value;
-    department?.setDepartmentFilter((dr) => ({} as DepartmentDAO)); // Reset department combobox
+
+    department?.setDepartmentFilter((dr) => ({} as DepartmentDAO)); // Reset department combobox   
+    programme?.setProgrammeFilter((d) => ({} as ProgrammeDAO)); // Reset programme combobox   
+    batch?.setBatchFilter((d) => ({} as BatchDAO)); // Reset batch combobox
+    course?.setCourseFilter((d) => ({} as CourseDAO)); // Reset course combobox
+    semester?.setSemesterFilter((d) => ({} as BatchCourseDAO)); // Reset semester combobox
+
     organization?.setOrganizationFilter((o) => selectedItem);
   };
 
   const handleDepartment = (e: any) => {
     const selectedItem = e.detail.value;
-    programme?.setProgrammeFilter((d) => ({} as ProgrammeDAO));  // Reset department combobox
+
+    programme?.setProgrammeFilter((d) => ({} as ProgrammeDAO)); // Reset programme combobox   
+    batch?.setBatchFilter((d) => ({} as BatchDAO)); // Reset batch combobox
+    course?.setCourseFilter((d) => ({} as CourseDAO)); // Reset course combobox
+    semester?.setSemesterFilter((d) => ({} as BatchCourseDAO)); // Reset semester combobox
     department?.setDepartmentFilter((d) => selectedItem);
   };
 
   const handleProgramme = (e: any) => {
     const selectedItem = e.detail.value;
-    batch?.setBatchFilter((d) => ({} as BatchDAO));  // Reset department combobox    
-    course?.setCourseFilter((d) => ({} as CourseDAO));  // Reset department combobox
+
+    batch?.setBatchFilter((d) => ({} as BatchDAO)); // Reset batch combobox
+    course?.setCourseFilter((d) => ({} as CourseDAO)); // Reset course combobox
+    semester?.setSemesterFilter((d) => ({} as BatchCourseDAO)); // Reset semester combobox
+
     programme?.setProgrammeFilter((d) => selectedItem);
   };
 
   const handleBatch = (e: any) => {
     const selectedItem = e.detail.value;
-    semester?.setSemesterFilter((d) => ({} as BatchCourseDAO));  // Reset department combobox
+
+    course?.setCourseFilter((d) => ({} as CourseDAO)); // Reset course combobox
+    semester?.setSemesterFilter((d) => ({} as BatchCourseDAO)); // Reset semester combobox
+
     batch?.setBatchFilter((d) => selectedItem);
   };
 
@@ -277,42 +297,42 @@ export default function BranchRC({ visibleFields, organization, department, prog
             visibleFields['organization'] &&
             <>
               <div className='text-sm font-medium ml-5 mr-2 text-gray-400'>Profile</div>
-              <ComboBox dataProvider={organizationDataProvider} itemLabelPath='name' itemValuePath='name' clearButtonVisible onSelectedItemChanged={handleOrganization} style={{ '--vaadin-combo-box-overlay-width': '350px' } as React.CSSProperties} />
+              <ComboBox dataProvider={organizationDataProvider} itemLabelPath='name' itemValuePath='name' onSelectedItemChanged={handleOrganization} style={comboboxStyle} clearButtonVisible />
             </>
           }
           {
-            visibleFields['department'] && organization?.organizationFilter.id != null &&
+            visibleFields['department'] && organization?.organizationFilter?.id &&
             <>
               <div className='text-sm font-medium ml-5 mr-2 text-gray-400'>Department</div>
-              <ComboBox dataProvider={departmentDataProvider} itemLabelPath='name' clearButtonVisible itemValuePath='id' onSelectedItemChanged={handleDepartment} style={{ '--vaadin-combo-box-overlay-width': '350px' } as React.CSSProperties} />
+              <ComboBox dataProvider={departmentDataProvider} itemLabelPath='name' itemValuePath='id' onSelectedItemChanged={handleDepartment} style={comboboxStyle} clearButtonVisible />
             </>
           }
           {
-            visibleFields['programme'] && department?.departmentFilter.id != null &&
+            visibleFields['programme'] && department?.departmentFilter?.id &&
             <>
               <div className='text-sm font-medium ml-5 mr-2 text-gray-400'>Programme</div>
-              <ComboBox dataProvider={programmeDataProvider} itemLabelPath='name' clearButtonVisible itemValuePath='id' onSelectedItemChanged={handleProgramme} style={{ '--vaadin-combo-box-overlay-width': '350px' } as React.CSSProperties} />
+              <ComboBox dataProvider={programmeDataProvider} itemLabelPath='name' itemValuePath='id' onSelectedItemChanged={handleProgramme} style={comboboxStyle} clearButtonVisible />
             </>
           }
           {
-            visibleFields['batch'] && programme?.programmeFilter.id != null &&
+            visibleFields['batch'] && programme?.programmeFilter?.id &&
             <>
               <div className='text-sm font-medium ml-5 mr-2 text-gray-400'>Batch</div>
-              <ComboBox dataProvider={batchDataProvider} itemLabelPath='name' clearButtonVisible itemValuePath='id' onSelectedItemChanged={handleBatch} style={{ '--vaadin-combo-box-overlay-width': '350px' } as React.CSSProperties} />
+              <ComboBox dataProvider={batchDataProvider} itemLabelPath='name' itemValuePath='id' onSelectedItemChanged={handleBatch} style={comboboxStyle} clearButtonVisible />
             </>
           }
           {
-            visibleFields['semester'] && batch?.batchFilter.id != null &&
+            visibleFields['semester'] && batch?.batchFilter?.id &&
             <>
               <div className='text-sm font-medium ml-5 mr-2 text-gray-400'>Semester</div>
-              <ComboBox dataProvider={semesterDataProvider} itemLabelPath='semester' clearButtonVisible itemValuePath='id' onSelectedItemChanged={handleSemester} style={{ '--vaadin-combo-box-overlay-width': '350px' } as React.CSSProperties} />
+              <ComboBox dataProvider={semesterDataProvider} itemLabelPath='semester' itemValuePath='id' onSelectedItemChanged={handleSemester} style={comboboxStyle} clearButtonVisible />
             </>
           }
           {
-            visibleFields['course'] && programme?.programmeFilter.id != null &&
+            visibleFields['course'] && programme?.programmeFilter?.id &&
             <>
-              <div className='text-sm font-medium ml-5 mr-2 text-gray-400'>Batch</div>
-              <ComboBox dataProvider={courseDataProvider} itemLabelPath='name' itemValuePath='id' clearButtonVisible onSelectedItemChanged={handleCourse} style={{ '--vaadin-combo-box-overlay-width': '350px' } as React.CSSProperties} />
+              <div className='text-sm font-medium ml-5 mr-2 text-gray-400'>Course</div>
+              <ComboBox dataProvider={courseDataProvider} itemLabelPath='name' itemValuePath='id' onSelectedItemChanged={handleCourse} style={comboboxStyle} clearButtonVisible />
             </>
           }
         </div>

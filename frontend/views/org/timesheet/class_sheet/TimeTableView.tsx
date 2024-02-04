@@ -15,6 +15,13 @@ import PlaceRC from 'Frontend/components/branch/PlaceRC';
 import SpeedDialRC from 'Frontend/components/speeddial/SpeedDialRC';
 import DayTypeEnum from 'Frontend/generated/com/itbd/application/constants/DayTypeEnum';
 import EventTypeEnum from 'Frontend/generated/com/itbd/application/constants/EventTypeEnum';
+import OrganizationDAO from 'Frontend/generated/com/itbd/application/dao/org/academic/OrganizationDAO';
+import BatchCourseDAO from 'Frontend/generated/com/itbd/application/dao/org/allocation/BatchCourseDAO';
+import DepartmentDAO from 'Frontend/generated/com/itbd/application/dao/org/edu/DepartmentDAO';
+import ProgrammeDAO from 'Frontend/generated/com/itbd/application/dao/org/edu/ProgrammeDAO';
+import BuildingDAO from 'Frontend/generated/com/itbd/application/dao/org/place/BuildingDAO';
+import FloorDAO from 'Frontend/generated/com/itbd/application/dao/org/place/FloorDAO';
+import SectorDAO from 'Frontend/generated/com/itbd/application/dao/org/place/SectorDAO';
 import BatchCourseDTO from 'Frontend/generated/com/itbd/application/dto/org/allocation/BatchCourseDTO';
 import BatchCourseDTOModel from 'Frontend/generated/com/itbd/application/dto/org/allocation/BatchCourseDTOModel';
 import BatchRoomDTO from 'Frontend/generated/com/itbd/application/dto/org/allocation/BatchRoomDTO';
@@ -31,16 +38,6 @@ import { useEffect, useMemo, useState } from 'react';
 import { FaCopy, FaDownload, FaPrint, FaRegCalendarPlus, FaShareAlt } from 'react-icons/fa';
 import { FaX } from 'react-icons/fa6';
 import TimeTableComponent, { DayItem, TimeRange } from './TimeTableComponent';
-import BuildingDTOModel from 'Frontend/generated/com/itbd/application/dto/org/place/BuildingDTOModel';
-import FloorDTOModel from 'Frontend/generated/com/itbd/application/dto/org/place/FloorDTOModel';
-import SectorDTOModel from 'Frontend/generated/com/itbd/application/dto/org/place/SectorDTOModel';
-import SectorDAO from 'Frontend/generated/com/itbd/application/dao/org/place/SectorDAO';
-import BuildingDAO from 'Frontend/generated/com/itbd/application/dao/org/place/BuildingDAO';
-import FloorDAO from 'Frontend/generated/com/itbd/application/dao/org/place/FloorDAO';
-import BatchCourseDAO from 'Frontend/generated/com/itbd/application/dao/org/allocation/BatchCourseDAO';
-import OrganizationDAO from 'Frontend/generated/com/itbd/application/dao/org/academic/OrganizationDAO';
-import DepartmentDAO from 'Frontend/generated/com/itbd/application/dao/org/edu/DepartmentDAO';
-import ProgrammeDAO from 'Frontend/generated/com/itbd/application/dao/org/edu/ProgrammeDAO';
 
 const dayNames = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT',];
 const timeRange: TimeRange = { open: '09:00', close: '21:00', interval: 30 };
@@ -58,7 +55,7 @@ const courseCustomItemRenderer = (item: BatchCourseDTOModel<BatchCourseDTO>) => 
   // console.log('courseCustomItemRenderer', item.valueOf().name);
   return (
     <div className="border-b">
-      <p className="text-sm font-semibold">{`${batch.course?.code} - ${batch.course?.name} - [${batch.semester}]`}</p>
+      <p className="text-sm font-semibold">{`[${batch.semester}] - ${batch.course?.code} - ${batch.course?.name}`}</p>
     </div>
   );
 };
@@ -130,7 +127,7 @@ function TimeTableView() {
           {
             '@type': 'propertyString',
             propertyId: 'floor.id',
-            filterValue: floorFilter.id?.toString() || '0',
+            filterValue: floorFilter?.id?.toString() || '0',
             matcher: Matcher.EQUALS
           },
           {
@@ -159,7 +156,7 @@ function TimeTableView() {
           {
             '@type': 'propertyString',
             propertyId: 'batch.id',
-            filterValue: batchFilter.id?.toString() || '0',
+            filterValue: batchFilter?.id?.toString() || '0',
             matcher: Matcher.EQUALS
           }, {
             '@type': 'propertyString',
@@ -169,18 +166,9 @@ function TimeTableView() {
           }, {
             '@type': 'propertyString',
             propertyId: 'semester',
-            filterValue: semesterFilter.semester?.toString() || '0',
+            filterValue: semesterFilter?.semester?.toString() || '0',
             matcher: Matcher.EQUALS
           },];
-
-        // if (sectorNameFilter !== undefined && sectorNameFilter !== null && sectorNameFilter !== '') {
-        //   child.push({
-        //     '@type': 'propertyString',
-        //     propertyId: 'semester',
-        //     filterValue: sectorNameFilter || '',
-        //     matcher: Matcher.EQUALS
-        //   });
-        // }
 
         const { pagination, filters } = comboBoxLazyFilter(params, 'and', child);
         BatchCourseDtoCrudService.list(pagination, filters).then((result: any) => {
@@ -196,7 +184,7 @@ function TimeTableView() {
         {
           '@type': 'propertyString',
           propertyId: 'batchCourse.semester',
-          filterValue: semesterFilter.semester?.toString() || '0',
+          filterValue: semesterFilter?.semester?.toString() || '0',
           matcher: Matcher.EQUALS
         },
       ];

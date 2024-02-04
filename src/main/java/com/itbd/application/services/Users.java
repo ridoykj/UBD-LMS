@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 public class Users {
     public User[] getUsers() {
         User[] users = new User[]{
-                new User(1, "Ridoy", "John", " ridoykj@gmail.com  ", "Software Engineer"),
+                new User(1, "Ridoy", "John", " ridoykj@gmail.com", "Software Engineer"),
                 new User(2, "John", "Doe", "johndoe@example.com", "Designer"),
                 new User(1, "Jane", "Johnson", "bobsmith@example.com", "Product Manager"),
                 new User(1, "Jane", "Smith", "janedoe@example.com", "Marketing Manager"),

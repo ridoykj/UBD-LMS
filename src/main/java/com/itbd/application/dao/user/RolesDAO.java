@@ -34,6 +34,6 @@ public class RolesDAO extends AbstractEntity<Long> {
     @Column(columnDefinition = "longtext")
     private String permissions;
     @ManyToMany
-    @JoinTable(name = "map_user_roles", joinColumns = @JoinColumn(name = "role_id"), inverseJoinColumns = @JoinColumn(name = "user_id"))
+    @JoinTable(name = "t_map_user_roles", joinColumns = @JoinColumn(name = "role_id"), inverseJoinColumns = @JoinColumn(name = "user_id"))
     private Set<UserDAO> users = new HashSet<>();
 }

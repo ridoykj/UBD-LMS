@@ -11,6 +11,8 @@ import { VerticalLayout } from "@hilla/react-components/VerticalLayout";
 import { useForm } from "@hilla/react-form";
 import BranchRC from "Frontend/components/branch/BranchRC";
 import { AutoGrid, AutoGridRef } from "Frontend/components/grid/autogrid";
+import OrganizationDAO from "Frontend/generated/com/itbd/application/dao/org/academic/OrganizationDAO";
+import DepartmentDAO from "Frontend/generated/com/itbd/application/dao/org/edu/DepartmentDAO";
 import CourseDTO from "Frontend/generated/com/itbd/application/dto/org/edu/CourseDTO";
 import CourseDTOModel from "Frontend/generated/com/itbd/application/dto/org/edu/CourseDTOModel";
 import ProgrammeDTOModel from "Frontend/generated/com/itbd/application/dto/org/edu/ProgrammeDTOModel";
@@ -23,9 +25,8 @@ import React, { useMemo, useState } from "react";
 
 const CourseView = () => {
 
-  const [orgNameFilter, setOrgNameFilter] = useState('');
-  const [departmentNameFilter, setDepartmentNameFilter] = useState('');
-  const [programmeNameFilter, setProgrammeNameFilter] = useState('');
+  const [orgFilter, setOrgFilter] = useState<OrganizationDAO>({} as OrganizationDAO);
+  const [departmentFilter, setDepartmentFilter] = useState<DepartmentDAO>({} as DepartmentDAO);
 
   const autoGridRef = React.useRef<AutoGridRef>(null);
 
@@ -58,8 +59,8 @@ const CourseView = () => {
         const child: PropertyStringFilter[] = [
           {
             '@type': 'propertyString',
-            propertyId: 'department.name',
-            filterValue: departmentNameFilter || '',
+            propertyId: 'department.id',
+            filterValue: departmentFilter.id?.toString() ?? '0',
             matcher: Matcher.EQUALS
           }, {
             '@type': 'propertyString',
@@ -74,7 +75,7 @@ const CourseView = () => {
         });
 
       },
-    [departmentNameFilter]
+    [departmentFilter]
   );
 
   const responsiveSteps = [
@@ -126,8 +127,8 @@ const CourseView = () => {
             columnOptions={{
               'organization.name': {
                 header: 'Organization',
-                externalValue: orgNameFilter,
-                setExternalValue: setOrgNameFilter,
+                externalValue: orgFilter != null ? orgFilter.name : '',
+                // setExternalValue: setOrgFilter,
               },
               'code': {
                 header: 'Course Code',

@@ -157,19 +157,22 @@ export default function BranchRC({ visibleFields, sector, building, floor, room,
 
   const handleSector = (e: any) => {
     const selectedItem = e.detail.value;
-    building?.setBuildingFilter((dr) => ({} as BuildingDTO)); // Reset department combobox
+    building?.setBuildingFilter((dr) => ({} as BuildingDTO)); // Reset Building combobox
+    floor?.setFloorFilter((d) => ({} as FloorDTO));  // Reset Floor combobox
+    room?.setRoomFilter((d) => ({} as RoomDTO)); // Reset Room combobox
     sector?.setSectorFilter((o) => selectedItem);
   };
 
   const handleBuilding = (e: any) => {
     const selectedItem = e.detail.value;
-    floor?.setFloorFilter((d) => ({} as FloorDTO)); // Reset department combobox
+    floor?.setFloorFilter((d) => ({} as FloorDTO));  // Reset Floor combobox
+    room?.setRoomFilter((d) => ({} as RoomDTO)); // Reset Room combobox
     building?.setBuildingFilter((d) => selectedItem);
   };
 
   const handleFloor = (e: any) => {
     const selectedItem = e.detail.value;
-    room?.setRoomFilter((d) => ({} as RoomDTO)); // Reset department combobox
+    room?.setRoomFilter((d) => ({} as RoomDTO)); // Reset Room combobox
     floor?.setFloorFilter((d) => selectedItem);
   };
 
@@ -190,21 +193,21 @@ export default function BranchRC({ visibleFields, sector, building, floor, room,
             </>
           }
           {
-            visibleFields['building'] && sector?.sectorFilter?.id != null &&
+            visibleFields['building'] && sector?.sectorFilter?.id &&
             <>
               <div className='text-sm font-medium ml-5 mr-2 text-gray-400'>Building</div>
               <ComboBox dataProvider={buildingDataProvider} itemLabelPath='name' itemValuePath='id' onSelectedItemChanged={handleBuilding} clearButtonVisible />
             </>
           }
           {
-            visibleFields['floor'] && building?.buildingFilter?.id != null &&
+            visibleFields['floor'] && building?.buildingFilter?.id &&
             <>
               <div className='text-sm font-medium ml-5 mr-2 text-gray-400'>Floor</div>
               <ComboBox dataProvider={floorDataProvider} itemLabelPath='name' itemValuePath='id' onSelectedItemChanged={handleFloor} clearButtonVisible />
             </>
           }
           {
-            visibleFields['room'] && floor?.floorFilter?.id != null &&
+            visibleFields['room'] && floor?.floorFilter?.id &&
             <>
               <div className='text-sm font-medium ml-5 mr-2 text-gray-400'>Room</div>
               <ComboBox dataProvider={roomDataProvider} itemLabelPath='name' itemValuePath='id' onSelectedItemChanged={handleRoom} clearButtonVisible />
