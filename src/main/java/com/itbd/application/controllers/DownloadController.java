@@ -1,56 +1,62 @@
 package com.itbd.application.controllers;
 
-import com.vaadin.flow.server.auth.AnonymousAllowed;
-import dev.hilla.Endpoint;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.*;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Base64;
+import java.util.Optional;
 
-//@RestController(value = "/v1/content")
+@RestController
+@RequestMapping(value = "/v1/content")
 @Slf4j
-@AnonymousAllowed
-//@PermitAll
-@Endpoint
 public class DownloadController {
     @Value("${itbd.server.file.source}")
     protected String fileSource;
 
-    //    @GetMapping(value = "/image", produces = MediaType.IMAGE_JPEG_VALUE)
+    @GetMapping(value = "/image", produces = MediaType.IMAGE_JPEG_VALUE)
     public @ResponseBody byte[] getImage(@RequestParam String imagePath) throws IOException {
         Path path = Path.of(fileSource, urlBase64Decode(imagePath));
         File file = path.toFile();
-        log.info("Image request Found! {}", file.getAbsolutePath());
-        if (file.exists()) return FileUtils.readFileToByteArray(file);
-//        return FileUtils.readFileToByteArray(new ClassPathResource("META-INF/resources/images/default/store/no_image.png", this.getClass().getClassLoader()).getFile());
-        return "".getBytes(StandardCharsets.UTF_8);
+//        log.info("Image request Found! {}", file.getAbsolutePath());
+        if (file.exists()) {
+            return FileUtils.readFileToByteArray(file);
+        }
+        return FileUtils.readFileToByteArray(new ClassPathResource("META-INF/resources/images/default/no_image.png", this.getClass().getClassLoader()).getFile());
     }
-//
-//    @GetMapping(value = "/byte")
-//    public ResponseEntity<Resource> getByte(@RequestParam String filePath) throws IOException {
-////        log.info("Image request Found!");
-//        File file = new File(urlBase64Decode(filePath));
-//        if (file.exists()) {
-//            HttpHeaders headers = new HttpHeaders();
-//            headers.add("Cache-Control", "no-cache, no-store, must-revalidate");
-//            headers.add("Pragma", "no-cache");
-//            headers.add("Expires", "0");
-//            headers.add("Content-Disposition", String.format("attachment; filename=\"" + file.getName() + "\""));
-//
-//            InputStreamResource resource = new InputStreamResource(new FileInputStream(file));
-////            return ResponseEntity.ok().headers(headers).contentLength(file.length()).contentType(MediaType.APPLICATION_OCTET_STREAM).body(resource);
-//            String contentType = Optional.ofNullable(Files.probeContentType(file.toPath())).orElse("application/octet-stream");
-//            return ResponseEntity.ok().headers(headers).contentLength(file.length()).contentType(MediaType.parseMediaType(contentType)).body(resource);
-//        }
-//        return ResponseEntity.notFound().build();
-//    }
+
+    @GetMapping(value = "/byte")
+    public ResponseEntity<Resource> getByte(@RequestParam String filePath) throws IOException {
+//        log.info("Image request Found!");
+        File file = new File(urlBase64Decode(filePath));
+        if (file.exists()) {
+            HttpHeaders headers = new HttpHeaders();
+            headers.add("Cache-Control", "no-cache, no-store, must-revalidate");
+            headers.add("Pragma", "no-cache");
+            headers.add("Expires", "0");
+            headers.add("Content-Disposition", String.format("attachment; filename=\"" + file.getName() + "\""));
+
+            InputStreamResource resource = new InputStreamResource(new FileInputStream(file));
+//            return ResponseEntity.ok().headers(headers).contentLength(file.length()).contentType(MediaType.APPLICATION_OCTET_STREAM).body(resource);
+            String contentType = Optional.ofNullable(Files.probeContentType(file.toPath())).orElse("application/octet-stream");
+            return ResponseEntity.ok().headers(headers).contentLength(file.length()).contentType(MediaType.parseMediaType(contentType)).body(resource);
+        }
+        return ResponseEntity.notFound().build();
+    }
 
     public static String urlBase64Encode(String value) {
         return Base64.getUrlEncoder().encodeToString(value.getBytes(StandardCharsets.UTF_8));

@@ -17,17 +17,15 @@ import BloodGroupsEnum from "Frontend/generated/com/itbd/application/constants/B
 import GenderEnum from "Frontend/generated/com/itbd/application/constants/GenderEnum";
 import InstructorDTO from "Frontend/generated/com/itbd/application/dto/user/instructor/InstructorDTO";
 import InstructorDTOModel from "Frontend/generated/com/itbd/application/dto/user/instructor/InstructorDTOModel";
-import { DownloadController, InstructorDtoCrudService } from "Frontend/generated/endpoints";
 import NotificationUtil from "Frontend/util/NotificationUtil";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 
 import { Upload, UploadSuccessEvent } from "@hilla/react-components/Upload.js";
-import { UploadBeforeEvent } from "@vaadin/upload";
+import { InstructorDtoCrudService } from "Frontend/generated/endpoints";
 
 const CoordinatorView = () => {
     const [dialogOpened, setDialogOpened] = useState<boolean>(false);
     const [successNotification, setSuccessNotification] = useState<boolean>(false);
-    const [imageView, setImageView] = useState<Blob>();
 
     const autoGridRef = React.useRef<AutoGridRef>(null);
 
@@ -43,16 +41,6 @@ const CoordinatorView = () => {
             });
         }
     });
-
-    useEffect(() => {
-        DownloadController.getImage(btoa('/user/' + value.person?.id + '/' + value.person?.id + '.png')).then((result) => {
-            // let byteArray = new Uint8Array(result);
-            // let blob = new Blob([result], { type: "image/jpeg" }); // adjust the type according to your image format
-            // let url = URL.createObjectURL(blob);
-            // setImageView(result);
-        })
-    }, [selectedInstructorItems]);
-
 
     const genders = Object.values(GenderEnum).map(level => ({ label: level, value: level }));
     const bloodGroups = Object.values(BloodGroupsEnum).map(level => ({ label: level, value: level }));
@@ -119,26 +107,21 @@ const CoordinatorView = () => {
                     />
                 </VerticalLayout>
                 <VerticalLayout className="w-1/4 min-w-96">
-                    <header className="bg-gray-100 w-full">
+                    <header className="bg-gray-100 w-full  border-2 border-blue-500 rounded-2xl">
                         <div className="flex flex-row space-x-4">
                             <p className="text-blue-600 text-xl font-bold truncate p-1 m-1 w-full">#{selectedInstructorItems[0]?.id ?? ''} - Coordinator</p>
                             <Button className="text-white content-end bg-blue-500 hover:bg-blue-600" onClick={() => {
                                 clear();
                                 setSelectedInstructorItems([]);
-                                const dd = DownloadController.getImage(btoa('/user/15/15.png'));
-                                dd.then((result) => {
-                                    console.log('dd', result);
-                                });
                             }}>
                                 <Icon icon="vaadin:plus" />New
                             </Button>
                         </div>
                     </header>
                     <main className="overflow-y-scroll w-full h-full">
-                        <FormLayout responsiveSteps={responsiveSteps} className="w-fit h-fit p-2">
+                        <FormLayout responsiveSteps={responsiveSteps} className="w-fit h-fit p-2 bg-[#f9fbfe]">
                             <div>
-                                {/* <img className="w-24 h-24 rounded-full mx-auto" src={`/v1/content/image?imagePath=${btoa(value.person?.id + '/' + value.person?.id + '.png')}`} alt="" width="384" height="512" /> */}
-                                <img className="w-24 h-24 rounded-full mx-auto" src={imageView} alt="" width="384" height="512" />
+                                {value.id && <img className="w-24 h-24 rounded-full mx-auto ring-4 ring-blue-500 drop-shadow-[0_15px_15px_#dfe7ff]" src={`/v1/content/image?imagePath=${btoa('/user/' + value.person?.id + '/' + value.person?.id + '.png')}`} alt="image not found" />}
                             </div>
                             <TextField label={'First Name'}  {...{ colspan: 2 }} {...field(model.person.givenName)} />
                             <TextField label={'Middle Name'} {...{ colspan: 1 }}  {...field(model.person.additionalName)} />
@@ -193,7 +176,7 @@ const CoordinatorView = () => {
                             }
                         </FormLayout>
                     </main>
-                    <footer className="flex flex-row bg-gray-100 w-full">
+                    <footer className="flex flex-row bg-gray-100 w-full border-2 border-blue-500 rounded-2xl">
                         <div className="w-full">
                             {
                                 value.id &&
@@ -207,7 +190,7 @@ const CoordinatorView = () => {
                             }
                         </div>
                         {
-                            !dirty &&
+                            dirty &&
                             <div className="flex flex-row content-end space-x-4">
                                 <Button
                                     className={discardButtonColors[dirty.toString()]}
