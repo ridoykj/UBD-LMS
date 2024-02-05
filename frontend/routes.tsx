@@ -17,7 +17,7 @@ import FloorView from './views/org/place/FloorView';
 import RoomView from './views/org/place/RoomView';
 import SectorView from './views/org/place/SectorView';
 import AuthorizationView from './views/org/user/AuthorizationView';
-import CoordinatorView from './views/org/user/CoordinatorView';
+import CoordinatorView from './views/org/user/Coordinator/CoordinatorView';
 import StudentView from './views/org/user/StudentView';
 import TimeTableView from './views/org/timesheet/class_sheet/TimeTableView';
 import ProfileView from './views/profile/ProfileView';

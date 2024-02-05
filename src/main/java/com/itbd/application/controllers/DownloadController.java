@@ -3,13 +3,11 @@ package com.itbd.application.controllers;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.File;
@@ -32,11 +30,11 @@ public class DownloadController {
     public @ResponseBody byte[] getImage(@RequestParam String imagePath) throws IOException {
         Path path = Path.of(fileSource, urlBase64Decode(imagePath));
         File file = path.toFile();
-//        log.info("Image request Found! {}", file.getAbsolutePath());
         if (file.exists()) {
             return FileUtils.readFileToByteArray(file);
         }
-        return FileUtils.readFileToByteArray(new ClassPathResource("META-INF/resources/images/default/no_image.png", this.getClass().getClassLoader()).getFile());
+//        return FileUtils.readFileToByteArray(new ClassPathResource("META-INF/resources/images/default/no_image.png", this.getClass().getClassLoader()).getFile());
+        return null;
     }
 
     @GetMapping(value = "/byte")

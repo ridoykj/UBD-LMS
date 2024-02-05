@@ -22,10 +22,32 @@ import React, { useState } from "react";
 
 import { Upload, UploadSuccessEvent } from "@hilla/react-components/Upload.js";
 import { InstructorDtoCrudService } from "Frontend/generated/endpoints";
+import CoordinatorRenderer from "./CoordinatorRenderer";
+
+const responsiveSteps = [
+    { minWidth: '0', columns: 1 },
+    { minWidth: '500px', columns: 4 },
+];
+
+const discardButtonColors: { [key: string]: string } = {
+    true: 'text-white bg-indigo-400 hover:bg-indigo-500',
+    false: 'text-white bg-gray-300',
+};
+
+const saveButtonColors: { [key: string]: string } = {
+    true: 'text-white bg-emerald-400 hover:bg-emerald-500',
+    false: 'text-white bg-gray-300',
+};
+
+const genders = Object.values(GenderEnum).map(level => ({ label: level, value: level }));
+const bloodGroups = Object.values(BloodGroupsEnum).map(level => ({ label: level, value: level }));
 
 const CoordinatorView = () => {
     const [dialogOpened, setDialogOpened] = useState<boolean>(false);
     const [successNotification, setSuccessNotification] = useState<boolean>(false);
+    const [formImage, setFormImage] = useState('');
+
+
 
     const autoGridRef = React.useRef<AutoGridRef>(null);
 
@@ -42,40 +64,29 @@ const CoordinatorView = () => {
         }
     });
 
-    const genders = Object.values(GenderEnum).map(level => ({ label: level, value: level }));
-    const bloodGroups = Object.values(BloodGroupsEnum).map(level => ({ label: level, value: level }));
-
     function refreshGrid() {
         autoGridRef.current?.refresh();
     }
-
-    const responsiveSteps = [
-        { minWidth: '0', columns: 1 },
-        { minWidth: '500px', columns: 4 },
-    ];
-
-    const discardButtonColors: { [key: string]: string } = {
-        true: 'text-white bg-indigo-400 hover:bg-indigo-500',
-        false: 'text-white bg-gray-300',
-    };
-
-    const saveButtonColors: { [key: string]: string } = {
-        true: 'text-white bg-emerald-400 hover:bg-emerald-500',
-        false: 'text-white bg-gray-300',
-    };
 
     return (
         <>
             <SplitLayout className="h-full w-full">
                 <VerticalLayout className="h-full w-full items-stretch">
                     <AutoGrid service={InstructorDtoCrudService} model={InstructorDTOModel} ref={autoGridRef}
-                        visibleColumns={['person.givenName', 'person.additionalName', 'person.familyName', 'designation', 'person.medical.gender', 'person.bloodGroup', 'person.contact.email', 'person.contact.mobile',]}
+                        visibleColumns={['id', 'person.givenName', 'designation', 'person.medical.gender', 'person.bloodGroup', 'person.contact.email', 'person.contact.mobile',]}
                         selectedItems={selectedInstructorItems}
                         theme="row-stripes"
                         columnOptions={{
-                            'person.givenName': {
-                                header: 'First Name',
+                            'id': {
+                                header: 'ID',
                                 resizable: true,
+                            },
+                            'person.givenName': {
+                                header: 'Full Name',
+                                resizable: true,
+                                autoWidth: false,
+                                width: '250px',
+                                renderer: ({ item }) => <CoordinatorRenderer item={item} />,
                             },
                             'person.additionalName': {
                                 header: 'Middle Name',
@@ -103,11 +114,12 @@ const CoordinatorView = () => {
                             console.log('item', item);
                             setSelectedInstructorItems(item ? [item] : []);
                             read(item);
+                            setFormImage(`/v1/content/image?imagePath=${btoa('/user/' + item?.person?.id + '/' + item?.person?.id + '.png')}`);
                         }}
                     />
                 </VerticalLayout>
                 <VerticalLayout className="w-1/4 min-w-96">
-                    <header className="bg-gray-100 w-full  border-2 border-blue-500 rounded-2xl">
+                    <header className="bg-gray-100 w-full border-2 border-blue-500 rounded-2xl">
                         <div className="flex flex-row space-x-4">
                             <p className="text-blue-600 text-xl font-bold truncate p-1 m-1 w-full">#{selectedInstructorItems[0]?.id ?? ''} - Coordinator</p>
                             <Button className="text-white content-end bg-blue-500 hover:bg-blue-600" onClick={() => {
@@ -121,11 +133,11 @@ const CoordinatorView = () => {
                     <main className="overflow-y-scroll w-full h-full">
                         <FormLayout responsiveSteps={responsiveSteps} className="w-fit h-fit p-2 bg-[#f9fbfe]">
                             <div>
-                                {value.id && <img className="w-24 h-24 rounded-full mx-auto ring-4 ring-blue-500 drop-shadow-[0_15px_15px_#dfe7ff]" src={`/v1/content/image?imagePath=${btoa('/user/' + value.person?.id + '/' + value.person?.id + '.png')}`} alt="image not found" />}
+                                {value.id && <img className="w-24 h-24 object-cover rounded-full mx-auto ring-4 ring-blue-500 drop-shadow-[0_15px_15px_#dfe7ff] bg-[url('images/default/no_image.png')] bg-no-repeat bg-center" src={formImage} alt="" />}
                             </div>
-                            <TextField label={'First Name'}  {...{ colspan: 2 }} {...field(model.person.givenName)} />
-                            <TextField label={'Middle Name'} {...{ colspan: 1 }}  {...field(model.person.additionalName)} />
-                            <TextField label={'Last Name'}   {...{ colspan: 1 }}{...field(model.person.familyName)} />
+                            <TextField label={'Full Name'}  {...{ colspan: 2 }} {...field(model.person.givenName)} />
+                            {/* <TextField label={'Middle Name'} {...{ colspan: 1 }}  {...field(model.person.additionalName)} /> */}
+                            {/* <TextField label={'Last Name'}   {...{ colspan: 1 }}{...field(model.person.familyName)} /> */}
 
                             <TextField label={'Designation'} {...{ colspan: 4 }} {...field(model.designation)} />
 
@@ -158,7 +170,7 @@ const CoordinatorView = () => {
                             {value.id &&
                                 <Upload capture="camera"
                                     method="POST"
-                                    target="/api/fileupload"
+                                    target="/v1/content/upload/image"
                                     headers={`{"path": "/user/${value.person?.id || ''}", "filename": "${value.person?.id || ''}.png" }`}
                                     // onUploadBefore={async (e: UploadBeforeEvent) => {
                                     //     const file = e.detail.file;
@@ -168,9 +180,16 @@ const CoordinatorView = () => {
                                     //     //   form.value.avatarBase64 = await readAsDataURL(file);
                                     //     // }
                                     // }}
+                                    onUploadBefore={(e) => {
+                                        console.log('before', e);
+                                        setFormImage('');
+                                        // refreshGrid();
+                                    }}
                                     onUploadSuccess={(e: UploadSuccessEvent) => {
                                         const file = e.detail.file;
                                         console.log('file s', file);
+                                        setFormImage(`/v1/content/image?imagePath=${btoa('/user/' + value.person?.id + '/' + value.person?.id + '.png')}`);
+                                        refreshGrid();
                                     }}
                                 ></Upload>
                             }
@@ -204,7 +223,7 @@ const CoordinatorView = () => {
                                     disabled={invalid || submitting || !dirty}
                                     onClick={submit}
                                 >
-                                    {selectedInstructorItems[0]?.id !== undefined ? 'Update' : 'Save'}
+                                    {value.id !== undefined ? 'Update' : 'Save'}
                                 </Button>
                             </div>
                         }

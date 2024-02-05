@@ -32,6 +32,7 @@ import NotificationUtil from "Frontend/util/NotificationUtil";
 import { comboBoxLazyFilter } from "Frontend/util/comboboxLazyFilterUtil";
 import React, { useMemo, useState } from "react";
 import { FaTrash, FaUserPlus } from "react-icons/fa";
+import CoordinatorRenderer from "../user/Coordinator/CoordinatorRenderer";
 
 const BatchCourseView = () => {
 
@@ -164,10 +165,13 @@ const BatchCourseView = () => {
   }
 
   function renderInvitedPeopleTable() {
+    console.log('value.batchCoordinators', value.batchCoordinators);
     return (
       <>
         <Grid items={value.batchCoordinators} allRowsVisible className="w-full">
-          <GridColumn header="Name" path='instructor.person.givenName' autoWidth resizable />
+          <GridColumn header="Name" autoWidth resizable
+           renderer = {({ item }) => <CoordinatorRenderer item={item.instructor} />}
+          />
           <GridColumn path="type" autoWidth resizable />
           <GridColumn header="">
             {({ item: coordinator }) => (
@@ -286,6 +290,7 @@ const BatchCourseView = () => {
                   onSelectedItemChanged={(event) => {
                     event.detail.value ? setItems({ instructor: event.detail.value.valueOf(), batchCourse: { id: value.id, version: value.version } }) : null;
                   }}
+                  renderer={({ item }) => <CoordinatorRenderer item={item} />}
                 />
                 <div>
                   <ComboBox label={'Activity'} items={coordinatorType} itemLabelPath="label" itemValuePath="label"
