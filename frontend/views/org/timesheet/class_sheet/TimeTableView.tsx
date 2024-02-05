@@ -44,7 +44,7 @@ const timeRange: TimeRange = { open: '09:00', close: '21:00', interval: 30 };
 
 const responsiveSteps = [
   { minWidth: '0', columns: 1 },
-  { minWidth: '320px', columns: 2 },
+  { minWidth: '20em', columns: 2 },
 ];
 
 const days = Object.values(DayTypeEnum).map(level => ({ label: level, value: level }));
@@ -243,7 +243,7 @@ function TimeTableView() {
 
   return (
     <>
-      {batchRoomDataProvider}
+      {/* {batchRoomDataProvider} */}
       <div className='flex flex-col h-full'>
         <div className='flex-none'>
           <PlaceRC
@@ -316,7 +316,7 @@ function TimeTableView() {
           </div>
         </TabSheet >
       </div >
-      <div>
+      <div className='w-full'>
         <NotificationUtil opened={successNotification} type="update"
           message={{
             title: 'Successfully Updated',
@@ -341,7 +341,7 @@ function TimeTableView() {
           }}
           onClick={() => { setSuccessNotification(false) }}
         />
-        <Dialog aria-label="Reserve Schedule" draggable modeless opened={isOpen} className="w-1/4"
+        <Dialog aria-label="Reserve Schedule" draggable resizable modeless opened={isOpen}
           onOpenedChanged={(event) => {
             setIsOpen(event.detail.value);
           }}
@@ -359,7 +359,7 @@ function TimeTableView() {
               </button>
             </>
           )}
-          footerRenderer={() => (
+          footerRenderer={({ original }) => (
             <>
               <Button className="border-2 border-gray-500 text-gray-500 hover:bg-gray-500 hover:text-white" onClick={() => {
                 setIsOpen(false);
@@ -378,9 +378,8 @@ function TimeTableView() {
                 {value.id != null ? 'Update' : 'Add'}</Button>
             </>
           )}
-        >
-          <div className="w-96">
-            <FormLayout responsiveSteps={responsiveSteps} className="p-2 w-full">
+          renderer={() => (
+            <FormLayout responsiveSteps={responsiveSteps} className="p-2 min-w-40 items-stretch">
               <ComboBox label={'Course Code'} dataProvider={batchCourseDataProvider}  {...{ colspan: 2 }} {...field(model.batchCourse)} itemLabelPath='course.code' itemValuePath='batchCourse' clearButtonVisible
                 renderer={({ item }) => courseCustomItemRenderer(item)}
                 style={{ '--vaadin-combo-box-overlay-width': '350px' } as React.CSSProperties} />
@@ -391,7 +390,7 @@ function TimeTableView() {
                 onValueChanged={(event) => {
                   setStartDate(event.detail.value);
                 }} />
-              <DatePicker label={'End Date'} min={startDate} {...{ colspan: 1 }} {...field(model.endDate)}
+              <DatePicker label={'End Date'} min={startDate} {...{ colspan: 1 }} {...field(model.endDate)} className='w-full'
                 onValueChanged={(event) => {
                   setCloseDate(event.detail.value);
                 }} />
@@ -406,7 +405,9 @@ function TimeTableView() {
               {/* <TextField label={'Contact'}  {...{ colspan: 2 }} {...field(model.contact)} /> */}
               <TextArea label={'Description'}  {...{ colspan: 2 }} {...field(model.description)} />
             </FormLayout>
-          </div>
+          )}
+        >
+
         </Dialog>
         <SpeedDialRC children={[
           { name: 'Share', icon: <FaShareAlt />, onClick: () => { console.log('Share') } },
