@@ -169,32 +169,32 @@ const BatchCourseView = () => {
     return (
       <>
         <Grid items={value.batchCoordinators} allRowsVisible className="w-full">
-          <GridColumn header="Name" autoWidth resizable
-           renderer = {({ item }) => <CoordinatorRenderer item={item.instructor} />}
+          <GridColumn autoWidth resizable
+            renderer={({ item }) => <>
+              <div className="flex flex-col items-center ">
+                <span className="bg-purple-100 text-purple-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-purple-900 dark:text-purple-300 w-full">{item.type}</span>
+                <div className="flex flex-row items-center ">
+                  <CoordinatorRenderer item={item.instructor} />
+                  <div className="text-red-500 hover:text-red-600 bg-transparent p-0 m-0"
+                    onClick={() => {
+                      console.log('delete', item.instructor.id);
+                      if (item.instructor.id != null) {
+                        BatchCoordinatorDtoCrudService.delete(item.instructor.id).then((result) => {
+                          refreshGrid();
+                          clear();
+                        })
+                      } else {
+                        value.batchCoordinators = value.batchCoordinators?.filter((p) => p?.instructor?.id !== item.instructor.instructor.id);
+                        update();
+                      };
+                    }}
+                  >
+                    <FaTrash />
+                  </div>
+                </div>
+              </div>
+            </>}
           />
-          <GridColumn path="type" autoWidth resizable />
-          <GridColumn header="">
-            {({ item: coordinator }) => (
-              <Button className="text-red-500 hover:text-red-600 bg-transparent border"
-                onClick={() => {
-                  if (coordinator.id != null) {
-                    BatchCoordinatorDtoCrudService.delete(coordinator.id).then((result) => {
-                      refreshGrid();
-                      clear();
-                    })
-                  }
-                  else {
-                    // console.log('batchCoordinators', value.batchCoordinators);
-                    // console.log('coordinator', coordinator);
-                    value.batchCoordinators = value.batchCoordinators?.filter((p) => p?.instructor?.id !== coordinator.instructor.id);
-                    update();
-                  };
-                }}
-              >
-                <FaTrash />
-              </Button>
-            )}
-          </GridColumn>
         </Grid>
       </>
     );
