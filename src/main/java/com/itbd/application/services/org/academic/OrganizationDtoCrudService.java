@@ -1,6 +1,7 @@
 package com.itbd.application.services.org.academic;
 
 import com.itbd.application.dao.org.academic.OrganizationDAO;
+import com.itbd.application.dto.custom.IDashBoardRptDTO;
 import com.itbd.application.dto.org.academic.OrganizationDTO;
 import com.itbd.application.repos.org.academic.OrganizationRepo;
 import com.itbd.application.repos.user.person.*;
@@ -23,27 +24,13 @@ import java.util.List;
 @AnonymousAllowed
 public class OrganizationDtoCrudService implements CrudService<OrganizationDTO, Long> {
 
-    @Autowired
-    private JpaFilterConverter jpaFilterConverter;
+    private final JpaFilterConverter jpaFilterConverter;
+    private final OrganizationRepo personRepo;
 
-    @Autowired
-    private OrganizationRepo personRepo;
-    @Autowired
-    private AddressRepo addressRepo;
-    @Autowired
-    private ContactRepo contactRepo;
-    @Autowired
-    private DocumentRecordsRepo documentRecordsRepo;
-    @Autowired
-    private MedicalRepo medicalRepo;
-    @Autowired
-    private OccupationRepo occupationRepo;
-
-    // public PersonMargeDtoCrudService(TestimonialRepo personRepo, AddressRepo
-    // addressRepo) {
-    // this.personRepo = personRepo;
-    // this.addressRepo = addressRepo;
-    // }
+    public OrganizationDtoCrudService(JpaFilterConverter jpaFilterConverter, OrganizationRepo personRepo) {
+        this.jpaFilterConverter = jpaFilterConverter;
+        this.personRepo = personRepo;
+    }
 
     @Override
     @Nonnull
@@ -76,5 +63,9 @@ public class OrganizationDtoCrudService implements CrudService<OrganizationDTO, 
     @Override
     public void delete(Long id) {
         personRepo.deleteById(id);
+    }
+
+    public IDashBoardRptDTO getDashBoardRpt() {
+        return IDashBoardRptDTO.fromEntity(personRepo.getDashBoardRpt());
     }
 }
