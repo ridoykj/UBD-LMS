@@ -18,6 +18,11 @@ import { BuildingDtoCrudService, FloorDtoCrudService, RoomDtoCrudService, Sector
 import { comboBoxLazyFilter } from 'Frontend/util/comboboxLazyFilterUtil';
 import { Dispatch, SetStateAction, useMemo } from 'react';
 
+const comboboxStyle = {
+  '--vaadin-combo-box-overlay-width': '350px'
+} as React.CSSProperties;
+
+
 type SectorProps = {
   sectorFilter: SectorDAO,
   setSectorFilter: Dispatch<SetStateAction<SectorDAO>>
@@ -189,28 +194,28 @@ export default function BranchRC({ visibleFields, sector, building, floor, room,
             visibleFields['sector'] &&
             <>
               <div className='text-sm font-medium ml-5 mr-2 text-gray-400'>Sector</div>
-              <ComboBox dataProvider={sectorDataProvider} itemLabelPath='name' itemValuePath='id' onSelectedItemChanged={handleSector} clearButtonVisible />
+              <ComboBox dataProvider={sectorDataProvider} itemLabelPath='name' itemValuePath='id' onSelectedItemChanged={handleSector} style={comboboxStyle} clearButtonVisible />
             </>
           }
           {
             visibleFields['building'] && sector?.sectorFilter?.id &&
             <>
               <div className='text-sm font-medium ml-5 mr-2 text-gray-400'>Building</div>
-              <ComboBox dataProvider={buildingDataProvider} itemLabelPath='name' itemValuePath='id' onSelectedItemChanged={handleBuilding} clearButtonVisible />
+              <ComboBox dataProvider={buildingDataProvider} itemLabelPath='name' itemValuePath='id' onSelectedItemChanged={handleBuilding} style={comboboxStyle} clearButtonVisible />
             </>
           }
           {
             visibleFields['floor'] && building?.buildingFilter?.id &&
             <>
               <div className='text-sm font-medium ml-5 mr-2 text-gray-400'>Floor</div>
-              <ComboBox dataProvider={floorDataProvider} itemLabelPath='name' itemValuePath='id' onSelectedItemChanged={handleFloor} clearButtonVisible />
+              <ComboBox dataProvider={floorDataProvider} itemLabelPath='name' itemValuePath='id' onSelectedItemChanged={handleFloor} style={comboboxStyle} clearButtonVisible />
             </>
           }
           {
             visibleFields['room'] && floor?.floorFilter?.id &&
             <>
               <div className='text-sm font-medium ml-5 mr-2 text-gray-400'>Room</div>
-              <ComboBox dataProvider={roomDataProvider} itemLabelPath='name' itemValuePath='id' onSelectedItemChanged={handleRoom} clearButtonVisible />
+              <ComboBox dataProvider={roomDataProvider} itemLabelPath='name' itemValuePath='id' onSelectedItemChanged={handleRoom} style={comboboxStyle} clearButtonVisible />
             </>
           }
         </div>

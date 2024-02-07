@@ -1,9 +1,8 @@
 import { NotNull } from '@hilla/form';
 import { Button } from '@hilla/react-components/Button.js';
 import { ComboBox, ComboBoxDataProviderCallback, ComboBoxDataProviderParams } from '@hilla/react-components/ComboBox.js';
-import { DatePicker } from '@hilla/react-components/DatePicker.js';
+import { DatePicker, DatePickerDate, DatePickerI18n } from '@hilla/react-components/DatePicker.js';
 import { Dialog } from '@hilla/react-components/Dialog.js';
-import { FormLayout } from '@hilla/react-components/FormLayout.js';
 import { Tab } from '@hilla/react-components/Tab.js';
 import { TabSheet } from '@hilla/react-components/TabSheet.js';
 import { Tabs } from '@hilla/react-components/Tabs.js';
@@ -38,14 +37,11 @@ import { useEffect, useMemo, useState } from 'react';
 import { FaCopy, FaDownload, FaPrint, FaRegCalendarPlus, FaShareAlt } from 'react-icons/fa';
 import { FaX } from 'react-icons/fa6';
 import TimeTableComponent, { DayItem, TimeRange } from './TimeTableComponent';
+import { format, parse } from 'date-fns';
+import { configDatePickerI18n } from 'Frontend/util/DatePickerI18n';
 
 const dayNames = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT',];
 const timeRange: TimeRange = { open: '09:00', close: '21:00', interval: 30 };
-
-const responsiveSteps = [
-  { minWidth: '0', columns: 1 },
-  { minWidth: '20em', columns: 2 },
-];
 
 const days = Object.values(DayTypeEnum).map(level => ({ label: level, value: level }));
 const eventTypes = Object.values(EventTypeEnum).map(level => ({ label: level, value: level }));
@@ -59,6 +55,9 @@ const courseCustomItemRenderer = (item: BatchCourseDTOModel<BatchCourseDTO>) => 
     </div>
   );
 };
+
+const fromDateConfig = configDatePickerI18n;
+const toDateConfig = configDatePickerI18n;
 
 function TimeTableView() {
 
@@ -137,6 +136,7 @@ function TimeTableView() {
             matcher: Matcher.CONTAINS
           },];
 
+        console.log('roomDataProvider', floorFilter);
         const { pagination, filters } = comboBoxLazyFilter(params, 'and', child);
         RoomDtoCrudService.list(pagination, filters).then((result: any) => {
           callback(result, result.length);
@@ -243,7 +243,6 @@ function TimeTableView() {
 
   return (
     <>
-      {/* {batchRoomDataProvider} */}
       <div className='flex flex-col h-full'>
         <div className='flex-none'>
           <PlaceRC
@@ -341,7 +340,7 @@ function TimeTableView() {
           }}
           onClick={() => { setSuccessNotification(false) }}
         />
-        <Dialog aria-label="Reserve Schedule" draggable resizable modeless opened={isOpen}
+        <Dialog aria-label="Reserve Schedule" draggable resizable modeless opened={isOpen} className='w-[50%]'
           onOpenedChanged={(event) => {
             setIsOpen(event.detail.value);
           }}
@@ -378,36 +377,35 @@ function TimeTableView() {
                 {value.id != null ? 'Update' : 'Add'}</Button>
             </>
           )}
-          renderer={() => (
-            <FormLayout responsiveSteps={responsiveSteps} className="p-2 min-w-40 items-stretch">
-              <ComboBox label={'Course Code'} dataProvider={batchCourseDataProvider}  {...{ colspan: 2 }} {...field(model.batchCourse)} itemLabelPath='course.code' itemValuePath='batchCourse' clearButtonVisible
-                renderer={({ item }) => courseCustomItemRenderer(item)}
-                style={{ '--vaadin-combo-box-overlay-width': '350px' } as React.CSSProperties} />
-              <ComboBox label={'Room'} dataProvider={roomDataProvider} {...{ colspan: 2 }} {...field(model.room)} itemLabelPath='name' itemValuePath='room' clearButtonVisible />
-              <ComboBox label={'Day'}  {...{ colspan: 2 }} {...field(model.dayName)} items={days} itemLabelPath="label" />
-              <ComboBox label={'Event Activity'}  {...{ colspan: 2 }} {...field(model.eventType)} items={eventTypes} itemLabelPath="label" />
-              <DatePicker label={'Start Date'} max={closeDate} {...{ colspan: 1 }} {...field(model.startDate)}
-                onValueChanged={(event) => {
-                  setStartDate(event.detail.value);
-                }} />
-              <DatePicker label={'End Date'} min={startDate} {...{ colspan: 1 }} {...field(model.endDate)} className='w-full'
-                onValueChanged={(event) => {
-                  setCloseDate(event.detail.value);
-                }} />
-              <TimePicker label={'Start Time'} min='09:00' max={closeTime} {...{ colspan: 1 }} {...field(model.startTime)}
-                onValueChanged={(event) => {
-                  setStartTime(event.detail.value);
-                }} />
-              <TimePicker label={'End Time'} min={startTime} max='20:00' {...{ colspan: 1 }} {...field(model.endTime)}
-                onValueChanged={(event) => {
-                  setCloseTime(event.detail.value);
-                }} />
-              {/* <TextField label={'Contact'}  {...{ colspan: 2 }} {...field(model.contact)} /> */}
-              <TextArea label={'Description'}  {...{ colspan: 2 }} {...field(model.description)} />
-            </FormLayout>
-          )}
         >
-
+          <div className='grid grid-cols-2 gap-4'>
+            <ComboBox label={'Course Code'} dataProvider={batchCourseDataProvider} {...field(model.batchCourse)} itemLabelPath='course.code' itemValuePath='batchCourse.id' clearButtonVisible
+              renderer={({ item }) => courseCustomItemRenderer(item)}
+              style={{ '--vaadin-combo-box-overlay-width': '350px' } as React.CSSProperties} />
+            <ComboBox label={'Room'} dataProvider={roomDataProvider} {...field(model.room)} itemLabelPath='name' itemValuePath='room.id' clearButtonVisible />
+            <ComboBox label={'Day'}  {...field(model.dayName)} items={days} itemLabelPath="label" />
+            <ComboBox label={'Event Activity'}  {...field(model.eventType)} items={eventTypes} itemLabelPath="label" />
+            <DatePicker label={'Start Date'} max={closeDate}  {...field(model.startDate)}
+              i18n={{ ...fromDateConfig, }}
+              onValueChanged={(event) => {
+                setStartDate(event.detail.value);
+              }} />
+            <DatePicker label={'End Date'} min={startDate} {...field(model.endDate)}
+              i18n={{ ...toDateConfig, }}
+              onValueChanged={(event) => {
+                setCloseDate(event.detail.value);
+              }} />
+            <TimePicker label={'Start Time'} min='09:00' max={closeTime}  {...field(model.startTime)}
+              onValueChanged={(event) => {
+                setStartTime(event.detail.value);
+              }} />
+            <TimePicker label={'End Time'} min={startTime} max='20:00' {...field(model.endTime)}
+              onValueChanged={(event) => {
+                setCloseTime(event.detail.value);
+              }} />
+            {/* <TextField label={'Contact'}  {...{ colspan: 2 }} {...field(model.contact)} /> */}
+            <TextArea label={'Description'} className='col-span-2' {...field(model.description)} />
+          </div>
         </Dialog>
         <SpeedDialRC children={[
           { name: 'Share', icon: <FaShareAlt />, onClick: () => { console.log('Share') } },
