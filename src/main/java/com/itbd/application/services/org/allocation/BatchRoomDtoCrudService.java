@@ -98,7 +98,6 @@ public class BatchRoomDtoCrudService implements CrudService<BatchRoomDTO, Long> 
             return batchCoordinator;
         }).collect(HashSet::new, HashSet::add, HashSet::addAll);
 
-
         CourseDAO course = batchCourse.getCourse();
         course.setBatchCourses(null);
         batchCourse.setCourse(course);
