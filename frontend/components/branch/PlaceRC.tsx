@@ -50,12 +50,20 @@ type VisibleFields = {
   room?: boolean,
 };
 
-export default function BranchRC({ visibleFields, sector, building, floor, room, }: {
+type PlaceProps = {
+  sectorFilter?: BuildingDAO,
+  buildingFilter?: BuildingDAO,
+  floorFilter?: FloorDAO,
+  roomFilter?: RoomDAO,
+}
+
+export default function PlaceRC({ visibleFields, sector, building, floor, room, }: {
   visibleFields: VisibleFields, // ['sector', 'building', 'floor', 'room',];
-  sector?: SectorProps
-  building?: BuildingProps
-  floor?: FloorProps
-  room?: RoomProps
+  sector?: SectorProps,
+  building?: BuildingProps,
+  floor?: FloorProps,
+  room?: RoomProps,
+  place?: PlaceProps,
 }) {
   const sectorDataProvider = useMemo(
     () =>
