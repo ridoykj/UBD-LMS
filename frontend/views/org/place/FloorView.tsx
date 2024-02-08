@@ -9,10 +9,8 @@ import { TextField } from "@hilla/react-components/TextField.js";
 import { VerticalLayout } from "@hilla/react-components/VerticalLayout";
 import { AutoGridRef } from "@hilla/react-crud";
 import { useForm } from "@hilla/react-form";
-import PlaceRC, { PlaceDom } from "Frontend/components/branch/PlaceRC";
+import PlaceRC, { PlaceCombobox } from "Frontend/components/branch/PlaceRC";
 import { AutoGrid } from "Frontend/components/grid/autogrid";
-import BuildingDAO from "Frontend/generated/com/itbd/application/dao/org/place/BuildingDAO";
-import SectorDAO from "Frontend/generated/com/itbd/application/dao/org/place/SectorDAO";
 import FloorDTO from "Frontend/generated/com/itbd/application/dto/org/place/FloorDTO";
 import FloorDTOModel from "Frontend/generated/com/itbd/application/dto/org/place/FloorDTOModel";
 import PropertyStringFilter from "Frontend/generated/dev/hilla/crud/filter/PropertyStringFilter";
@@ -23,12 +21,9 @@ import { comboBoxLazyFilter } from "Frontend/util/comboboxLazyFilterUtil";
 import React, { useMemo, useState } from "react";
 
 const FloorView = () => {
-  // const [sectorFilter, setSectorFilter] = useState<SectorDAO>({} as SectorDAO);
-  // const [buildingFilter, setBuildingFilter] = useState<BuildingDAO>({} as BuildingDAO);
-
-  const [placeFilter, setPlaceFilter] = useState<PlaceDom>({
-    sectorFilter: {} as SectorDAO,
-    buildingFilter: {} as BuildingDAO,
+  const [placeFilter, setPlaceFilter] = useState<PlaceCombobox>({
+    sectorFilter: undefined,
+    buildingFilter: undefined,
   });
 
   const [dialogOpened, setDialogOpened] = useState<boolean>(false);
@@ -64,7 +59,7 @@ const FloorView = () => {
           {
             '@type': 'propertyString',
             propertyId: 'sector.id',
-            filterValue: sectorFilter.id?.toString() || '0',
+            filterValue: placeFilter?.sectorFilter?.id?.toString() || '0',
             matcher: Matcher.EQUALS
           }, {
             '@type': 'propertyString',
@@ -80,7 +75,7 @@ const FloorView = () => {
         });
 
       },
-    [sectorFilter]
+    [placeFilter.sectorFilter]
   );
 
   // const buildingType = Object.values(BuildingTypeEnum).map(level => ({ label: level, value: level }));
@@ -107,14 +102,15 @@ const FloorView = () => {
             visibleFields={
               { sector: true, building: true, }
             }
-            sector={{
-              sectorFilter: sectorFilter,
-              setSectorFilter: setSectorFilter
-            }}
-            building={{
-              buildingFilter: buildingFilter,
-              setBuildingFilter: setBuildingFilter
-            }}
+            // sector={{
+            //   sectorFilter: sectorFilter,
+            //   setSectorFilter: setSectorFilter
+            // }}
+            // building={{
+            //   buildingFilter: buildingFilter,
+            //   setBuildingFilter: setBuildingFilter
+            // }}
+            placeProps={{ place: placeFilter, setPlace: setPlaceFilter }}
           />
           <AutoGrid service={FloorDtoCrudService} model={FloorDTOModel} ref={autoGridRef}
             visibleColumns={['name', 'floorLevel', 'totalBlocks', 'floorColor', 'alternateName', 'building.name',]}
@@ -144,7 +140,7 @@ const FloorView = () => {
               'building.name': {
                 header: 'Building',
                 resizable: true,
-                externalValue: buildingFilter != null ? buildingFilter.name : '',
+                externalValue: placeFilter.buildingFilter != null ? placeFilter.buildingFilter.name : '',
               },
             }}
             onActiveItemChanged={(e) => {

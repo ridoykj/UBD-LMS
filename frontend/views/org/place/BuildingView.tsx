@@ -9,10 +9,9 @@ import { TextField } from "@hilla/react-components/TextField.js";
 import { TimePicker } from "@hilla/react-components/TimePicker.js";
 import { VerticalLayout } from "@hilla/react-components/VerticalLayout";
 import { useForm } from "@hilla/react-form";
-import PlaceRC, { PlaceDom } from "Frontend/components/branch/PlaceRC";
+import PlaceRC, { PlaceCombobox } from "Frontend/components/branch/PlaceRC";
 import { AutoGrid, AutoGridRef } from "Frontend/components/grid/autogrid";
 import BuildingTypeEnum from "Frontend/generated/com/itbd/application/constants/BuildingTypeEnum";
-import SectorDAO from "Frontend/generated/com/itbd/application/dao/org/place/SectorDAO";
 import SectorDAOModel from "Frontend/generated/com/itbd/application/dao/org/place/SectorDAOModel";
 import BuildingDTO from "Frontend/generated/com/itbd/application/dto/org/place/BuildingDTO";
 import BuildingDTOModel from "Frontend/generated/com/itbd/application/dto/org/place/BuildingDTOModel";
@@ -24,10 +23,8 @@ import { comboBoxLazyFilter } from "Frontend/util/comboboxLazyFilterUtil";
 import React, { useMemo, useState } from "react";
 
 const BuildingView = () => {
-  // const [sectorFilter, setSectorFilter] = useState<SectorDAO>({} as SectorDAO);
-
-  const [placeFilter, setPlaceFilter] = useState<PlaceDom>({
-    sectorFilter: {} as SectorDAO,
+  const [placeFilter, setPlaceFilter] = useState<PlaceCombobox>({
+    sectorFilter: undefined,
   });
 
   const [dialogOpened, setDialogOpened] = useState<boolean>(false);
@@ -135,7 +132,7 @@ const BuildingView = () => {
               'sector.name': {
                 header: 'Sector',
                 resizable: true,
-                externalValue: placeFilter?.sectorFilter.name?.toString() || '', // This is for filtering
+                externalValue: placeFilter?.sectorFilter?.name?.toString() || '', // This is for filtering
               },
             }}
             onActiveItemChanged={(e) => {

@@ -10,12 +10,9 @@ import { TextField } from "@hilla/react-components/TextField.js";
 import { VerticalLayout } from "@hilla/react-components/VerticalLayout";
 import { AutoGridRef } from "@hilla/react-crud";
 import { useForm } from "@hilla/react-form";
-import PlaceRC from "Frontend/components/branch/PlaceRC";
+import PlaceRC, { PlaceCombobox } from "Frontend/components/branch/PlaceRC";
 import { AutoGrid } from "Frontend/components/grid/autogrid";
 import RoomTypeEnum from "Frontend/generated/com/itbd/application/constants/RoomTypeEnum";
-import BuildingDAO from "Frontend/generated/com/itbd/application/dao/org/place/BuildingDAO";
-import FloorDAO from "Frontend/generated/com/itbd/application/dao/org/place/FloorDAO";
-import SectorDAO from "Frontend/generated/com/itbd/application/dao/org/place/SectorDAO";
 import FloorDTOModel from "Frontend/generated/com/itbd/application/dto/org/place/FloorDTOModel";
 import RoomDTO from "Frontend/generated/com/itbd/application/dto/org/place/RoomDTO";
 import RoomDTOModel from "Frontend/generated/com/itbd/application/dto/org/place/RoomDTOModel";
@@ -27,10 +24,12 @@ import { comboBoxLazyFilter } from "Frontend/util/comboboxLazyFilterUtil";
 import React, { useMemo, useState } from "react";
 
 const RoomView = () => {
+  const [placeFilter, setPlaceFilter] = useState<PlaceCombobox>({
+    sectorFilter: undefined,
+    buildingFilter: undefined,
+    floorFilter: undefined,
+  });
 
-  const [sectorFilter, setSectorFilter] = useState<SectorDAO>({} as SectorDAO);
-  const [buildingFilter, setBuildingFilter] = useState<BuildingDAO>({} as BuildingDAO);
-  const [floorFilter, setFloorFilter] = useState<FloorDAO>({} as FloorDAO);
 
   const [dialogOpened, setDialogOpened] = useState<boolean>(false);
   const [successNotification, setSuccessNotification] = useState<boolean>(false);
@@ -64,13 +63,13 @@ const RoomView = () => {
         callback: ComboBoxDataProviderCallback<FloorDTOModel>
       ) => {
 
-        console.log('floorDataProvider1', buildingFilter.id?.toString());
+        console.log('floorDataProvider1', placeFilter.buildingFilter?.id?.toString());
         console.log('floorDataProvider2', params.filter);
         const child: PropertyStringFilter[] = [
           {
             '@type': 'propertyString',
             propertyId: 'building.id',
-            filterValue: buildingFilter.id?.toString() ?? '0',
+            filterValue: placeFilter.buildingFilter?.id?.toString() ?? '0',
             matcher: Matcher.EQUALS
           }, {
             '@type': 'propertyString',
@@ -86,7 +85,7 @@ const RoomView = () => {
         });
 
       },
-    [floorFilter]
+    [placeFilter.buildingFilter]
   );
 
   // const buildingType = Object.values(BuildingTypeEnum).map(level => ({ label: level, value: level }));
@@ -113,18 +112,7 @@ const RoomView = () => {
             visibleFields={
               { sector: true, building: true, floor: true }
             }
-            sector={{
-              sectorFilter: sectorFilter,
-              setSectorFilter: setSectorFilter
-            }}
-            building={{
-              buildingFilter: buildingFilter,
-              setBuildingFilter: setBuildingFilter
-            }}
-            floor={{
-              floorFilter: floorFilter,
-              setFloorFilter: setFloorFilter
-            }}
+            placeProps={{ place: placeFilter, setPlace: setPlaceFilter }}
           />
           <AutoGrid service={RoomDtoCrudService} model={RoomDTOModel} ref={autoGridRef}
             visibleColumns={['name', 'hasPublicAccess', 'block', 'totalRooms', 'floor.name', 'floor.building.name',]}
@@ -150,12 +138,12 @@ const RoomView = () => {
               'floor.name': {
                 header: 'Floor',
                 resizable: true,
-                externalValue: floorFilter != null ? floorFilter.name : ''
+                externalValue: placeFilter.floorFilter != null ? placeFilter.floorFilter.name : ''
               },
               'floor.building.name': {
                 header: 'Building',
                 resizable: true,
-                externalValue: buildingFilter != null ? buildingFilter.name : ''
+                externalValue: placeFilter.buildingFilter != null ? placeFilter.buildingFilter.name : ''
               },
             }}
             onActiveItemChanged={(e) => {

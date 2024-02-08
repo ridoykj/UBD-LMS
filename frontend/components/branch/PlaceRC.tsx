@@ -4,12 +4,8 @@ import '@vaadin/icons';
 import BuildingDAO from 'Frontend/generated/com/itbd/application/dao/org/place/BuildingDAO';
 import FloorDAO from 'Frontend/generated/com/itbd/application/dao/org/place/FloorDAO';
 import RoomDAO from 'Frontend/generated/com/itbd/application/dao/org/place/RoomDAO';
-import SectorDAO from 'Frontend/generated/com/itbd/application/dao/org/place/SectorDAO';
-import BuildingDTO from 'Frontend/generated/com/itbd/application/dto/org/place/BuildingDTO';
 import BuildingDTOModel from 'Frontend/generated/com/itbd/application/dto/org/place/BuildingDTOModel';
-import FloorDTO from 'Frontend/generated/com/itbd/application/dto/org/place/FloorDTO';
 import FloorDTOModel from 'Frontend/generated/com/itbd/application/dto/org/place/FloorDTOModel';
-import RoomDTO from 'Frontend/generated/com/itbd/application/dto/org/place/RoomDTO';
 import RoomDTOModel from 'Frontend/generated/com/itbd/application/dto/org/place/RoomDTOModel';
 import SectorDTOModel from 'Frontend/generated/com/itbd/application/dto/org/place/SectorDTOModel';
 import PropertyStringFilter from 'Frontend/generated/dev/hilla/crud/filter/PropertyStringFilter';
@@ -22,27 +18,6 @@ const comboboxStyle = {
   '--vaadin-combo-box-overlay-width': '350px'
 } as React.CSSProperties;
 
-
-type SectorProps = {
-  sectorFilter: SectorDAO,
-  setSectorFilter: Dispatch<SetStateAction<SectorDAO>>
-}
-
-type BuildingProps = {
-  buildingFilter: BuildingDAO,
-  setBuildingFilter: Dispatch<SetStateAction<BuildingDAO>>
-}
-
-type FloorProps = {
-  floorFilter: FloorDAO,
-  setFloorFilter: Dispatch<SetStateAction<FloorDAO>>
-}
-
-type RoomProps = {
-  roomFilter: RoomDAO,
-  setRoomFilter: Dispatch<SetStateAction<RoomDAO>>
-}
-
 type VisibleFields = {
   sector?: boolean,
   building?: boolean,
@@ -50,7 +25,7 @@ type VisibleFields = {
   room?: boolean,
 };
 
-export type PlaceDom = {
+export type PlaceCombobox = {
   sectorFilter?: BuildingDAO,
   buildingFilter?: BuildingDAO,
   floorFilter?: FloorDAO,
@@ -58,27 +33,15 @@ export type PlaceDom = {
 }
 
 type PlaceProps = {
-  place: PlaceDom,
-  setPlace: Dispatch<SetStateAction<PlaceDom>>
+  place: PlaceCombobox,
+  setPlace: Dispatch<SetStateAction<PlaceCombobox>>
 }
-
-// export default function PlaceRC({ visibleFields, sector, building, floor, room, placeProps, }: {
-//   visibleFields: VisibleFields, // ['sector', 'building', 'floor', 'room',];
-//   sector?: SectorProps,
-//   building?: BuildingProps,
-//   floor?: FloorProps,
-//   room?: RoomProps,
-//   placeProps?: PlaceProps,
-// }) 
 
 export default function PlaceRC({ visibleFields, placeProps, }: {
   visibleFields: VisibleFields, // ['sector', 'building', 'floor', 'room',];
-  // sector?: SectorProps,
-  // building?: BuildingProps,
-  // floor?: FloorProps,
-  // room?: RoomProps,
-  placeProps?: PlaceProps,
+  placeProps: PlaceProps,
 }) {
+  const { sectorFilter, buildingFilter, floorFilter, roomFilter } = placeProps.place;
   const sectorDataProvider = useMemo(
     () =>
       async (
@@ -109,7 +72,7 @@ export default function PlaceRC({ visibleFields, placeProps, }: {
           {
             '@type': 'propertyString',
             propertyId: 'sector.id',
-            filterValue: placeProps?.place.sectorFilter?.id?.toString() || '0',
+            filterValue: sectorFilter?.id?.toString() || '0',
             matcher: Matcher.EQUALS
           }, {
             '@type': 'propertyString',
@@ -124,7 +87,7 @@ export default function PlaceRC({ visibleFields, placeProps, }: {
           callback(result, result.length);
         });
       },
-    [placeProps?.place.sectorFilter]
+    [sectorFilter]
   );
 
   const floorDataProvider = useMemo(
@@ -137,7 +100,7 @@ export default function PlaceRC({ visibleFields, placeProps, }: {
           {
             '@type': 'propertyString',
             propertyId: 'building.id',
-            filterValue: placeProps?.place.buildingFilter?.id?.toString() || '0',
+            filterValue: buildingFilter?.id?.toString() || '0',
             matcher: Matcher.EQUALS
           }, {
             '@type': 'propertyString',
@@ -152,7 +115,7 @@ export default function PlaceRC({ visibleFields, placeProps, }: {
         });
 
       },
-    [placeProps?.place.buildingFilter]
+    [buildingFilter]
   );
 
   const roomDataProvider = useMemo(
@@ -165,7 +128,7 @@ export default function PlaceRC({ visibleFields, placeProps, }: {
           {
             '@type': 'propertyString',
             propertyId: 'floor.id',
-            filterValue: placeProps?.place.floorFilter?.id?.toString() || '0',
+            filterValue: floorFilter?.id?.toString() || '0',
             matcher: Matcher.EQUALS
           }, {
             '@type': 'propertyString',
@@ -179,17 +142,17 @@ export default function PlaceRC({ visibleFields, placeProps, }: {
           callback(result, result.length);
         });
       },
-    [placeProps?.place.floorFilter]
+    [floorFilter]
   );
 
   const handleSector = (e: any) => {
     const selectedItem = e.detail.value;
-    placeProps?.setPlace((d) => {
+    placeProps.setPlace((d) => {
       return {
         ...d,
-        buildingFilter: {} as BuildingDAO,
-        floorFilter: {} as FloorDAO,
-        roomFilter: {} as RoomDAO,
+        buildingFilter: undefined,
+        floorFilter: undefined,
+        roomFilter: undefined,
         sectorFilter: selectedItem,
       }
     }); // Reset Building combobox
@@ -197,11 +160,11 @@ export default function PlaceRC({ visibleFields, placeProps, }: {
 
   const handleBuilding = (e: any) => {
     const selectedItem = e.detail.value;
-    placeProps?.setPlace((d) => {
+    placeProps.setPlace((d) => {
       return {
         ...d,
-        floorFilter: {} as FloorDAO,
-        roomFilter: {} as RoomDAO,
+        floorFilter: undefined,
+        roomFilter: undefined,
         buildingFilter: selectedItem,
       }
     }); // Reset Building combobox
@@ -209,10 +172,10 @@ export default function PlaceRC({ visibleFields, placeProps, }: {
 
   const handleFloor = (e: any) => {
     const selectedItem = e.detail.value;
-    placeProps?.setPlace((d) => {
+    placeProps.setPlace((d) => {
       return {
         ...d,
-        roomFilter: {} as RoomDAO,
+        roomFilter: undefined,
         floorFilter: selectedItem,
       };
     }); // Reset Building combobox
@@ -220,7 +183,7 @@ export default function PlaceRC({ visibleFields, placeProps, }: {
 
   const handleRoom = (e: any) => {
     const selectedItem = e.detail.value;
-    placeProps?.setPlace((d) => {
+    placeProps.setPlace((d) => {
       return {
         ...d,
         roomFilter: selectedItem,
@@ -240,21 +203,21 @@ export default function PlaceRC({ visibleFields, placeProps, }: {
             </>
           }
           {
-            visibleFields['building'] && placeProps?.place?.sectorFilter?.id &&
+            visibleFields['building'] && sectorFilter?.id &&
             <>
               <div className='text-sm font-medium ml-5 mr-2 text-gray-400'>Building</div>
               <ComboBox dataProvider={buildingDataProvider} itemLabelPath='name' itemValuePath='id' onSelectedItemChanged={handleBuilding} style={comboboxStyle} clearButtonVisible />
             </>
           }
           {
-            visibleFields['floor'] && placeProps?.place?.buildingFilter?.id &&
+            visibleFields['floor'] && buildingFilter?.id &&
             <>
               <div className='text-sm font-medium ml-5 mr-2 text-gray-400'>Floor</div>
               <ComboBox dataProvider={floorDataProvider} itemLabelPath='name' itemValuePath='id' onSelectedItemChanged={handleFloor} style={comboboxStyle} clearButtonVisible />
             </>
           }
           {
-            visibleFields['room'] && placeProps?.place?.floorFilter?.id &&
+            visibleFields['room'] && floorFilter?.id &&
             <>
               <div className='text-sm font-medium ml-5 mr-2 text-gray-400'>Room</div>
               <ComboBox dataProvider={roomDataProvider} itemLabelPath='name' itemValuePath='id' onSelectedItemChanged={handleRoom} style={comboboxStyle} clearButtonVisible />

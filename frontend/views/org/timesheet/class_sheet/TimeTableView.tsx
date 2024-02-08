@@ -10,7 +10,7 @@ import { TextArea } from '@hilla/react-components/TextArea.js';
 import { TimePicker } from '@hilla/react-components/TimePicker.js';
 import { useForm, useFormPart } from '@hilla/react-form';
 import BranchRC from 'Frontend/components/branch/BranchRC';
-import PlaceRC, { PlaceDom } from 'Frontend/components/branch/PlaceRC';
+import PlaceRC, { PlaceCombobox } from 'Frontend/components/branch/PlaceRC';
 import SpeedDialRC from 'Frontend/components/speeddial/SpeedDialRC';
 import DayTypeEnum from 'Frontend/generated/com/itbd/application/constants/DayTypeEnum';
 import EventTypeEnum from 'Frontend/generated/com/itbd/application/constants/EventTypeEnum';
@@ -18,9 +18,6 @@ import OrganizationDAO from 'Frontend/generated/com/itbd/application/dao/org/aca
 import BatchCourseDAO from 'Frontend/generated/com/itbd/application/dao/org/allocation/BatchCourseDAO';
 import DepartmentDAO from 'Frontend/generated/com/itbd/application/dao/org/edu/DepartmentDAO';
 import ProgrammeDAO from 'Frontend/generated/com/itbd/application/dao/org/edu/ProgrammeDAO';
-import BuildingDAO from 'Frontend/generated/com/itbd/application/dao/org/place/BuildingDAO';
-import FloorDAO from 'Frontend/generated/com/itbd/application/dao/org/place/FloorDAO';
-import SectorDAO from 'Frontend/generated/com/itbd/application/dao/org/place/SectorDAO';
 import BatchCourseDTO from 'Frontend/generated/com/itbd/application/dto/org/allocation/BatchCourseDTO';
 import BatchCourseDTOModel from 'Frontend/generated/com/itbd/application/dto/org/allocation/BatchCourseDTOModel';
 import BatchRoomDTO from 'Frontend/generated/com/itbd/application/dto/org/allocation/BatchRoomDTO';
@@ -63,12 +60,12 @@ function TimeTableView() {
 
   const [isOpen, setIsOpen] = useState(false);
 
-  const [placeFilter, setPlaceFilter] = useState<PlaceDom>({
-    sectorFilter: {} as SectorDAO,
-    buildingFilter: {} as BuildingDAO,
-    floorFilter: {} as FloorDAO,
+  const [placeFilter, setPlaceFilter] = useState<PlaceCombobox>({
+    sectorFilter: undefined,
+    buildingFilter: undefined,
+    floorFilter: undefined,
   });
-
+  
   const [orgFilter, setOrgFilter] = useState<OrganizationDAO>({} as OrganizationDAO);
   const [departmentFilter, setDepartmentFilter] = useState<DepartmentDAO>({} as DepartmentDAO);
   const [programmeFilter, setProgrammeFilter] = useState<ProgrammeDAO>({} as ProgrammeDAO);
