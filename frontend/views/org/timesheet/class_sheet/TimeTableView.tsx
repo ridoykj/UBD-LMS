@@ -1,7 +1,7 @@
 import { NotNull } from '@hilla/form';
 import { Button } from '@hilla/react-components/Button.js';
 import { ComboBox, ComboBoxDataProviderCallback, ComboBoxDataProviderParams } from '@hilla/react-components/ComboBox.js';
-import { DatePicker, DatePickerElement, DatePickerI18n } from '@hilla/react-components/DatePicker.js';
+import { DatePicker } from '@hilla/react-components/DatePicker.js';
 import { Dialog } from '@hilla/react-components/Dialog.js';
 import { Tab } from '@hilla/react-components/Tab.js';
 import { TabSheet } from '@hilla/react-components/TabSheet.js';
@@ -10,7 +10,7 @@ import { TextArea } from '@hilla/react-components/TextArea.js';
 import { TimePicker } from '@hilla/react-components/TimePicker.js';
 import { useForm, useFormPart } from '@hilla/react-form';
 import BranchRC from 'Frontend/components/branch/BranchRC';
-import PlaceRC from 'Frontend/components/branch/PlaceRC';
+import PlaceRC, { PlaceDom } from 'Frontend/components/branch/PlaceRC';
 import SpeedDialRC from 'Frontend/components/speeddial/SpeedDialRC';
 import DayTypeEnum from 'Frontend/generated/com/itbd/application/constants/DayTypeEnum';
 import EventTypeEnum from 'Frontend/generated/com/itbd/application/constants/EventTypeEnum';
@@ -31,13 +31,13 @@ import PropertyStringFilter from 'Frontend/generated/dev/hilla/crud/filter/Prope
 import Matcher from 'Frontend/generated/dev/hilla/crud/filter/PropertyStringFilter/Matcher';
 import Pageable from 'Frontend/generated/dev/hilla/mappedtypes/Pageable';
 import { BatchCourseDtoCrudService, BatchRoomDtoCrudService, RoomDtoCrudService } from 'Frontend/generated/endpoints';
+import { configDatePickerI18n } from 'Frontend/util/DatePickerI18n';
 import NotificationUtil from 'Frontend/util/NotificationUtil';
 import { comboBoxLazyFilter } from 'Frontend/util/comboboxLazyFilterUtil';
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { FaCopy, FaDownload, FaPrint, FaRegCalendarPlus, FaShareAlt } from 'react-icons/fa';
 import { FaX } from 'react-icons/fa6';
 import TimeTableComponent, { DayItem, TimeRange } from './TimeTableComponent';
-import { configDatePickerI18n } from 'Frontend/util/DatePickerI18n';
 
 const dayNames = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT',];
 const timeRange: TimeRange = { open: '09:00', close: '21:00', interval: 30 };
@@ -63,9 +63,11 @@ function TimeTableView() {
 
   const [isOpen, setIsOpen] = useState(false);
 
-  const [sectorFilter, setSectorFilter] = useState<SectorDAO>({} as SectorDAO);
-  const [buildingFilter, setBuildingFilter] = useState<BuildingDAO>({} as BuildingDAO);
-  const [floorFilter, setFloorFilter] = useState<FloorDAO>({} as FloorDAO);
+  const [placeFilter, setPlaceFilter] = useState<PlaceDom>({
+    sectorFilter: {} as SectorDAO,
+    buildingFilter: {} as BuildingDAO,
+    floorFilter: {} as FloorDAO,
+  });
 
   const [orgFilter, setOrgFilter] = useState<OrganizationDAO>({} as OrganizationDAO);
   const [departmentFilter, setDepartmentFilter] = useState<DepartmentDAO>({} as DepartmentDAO);
@@ -99,12 +101,10 @@ function TimeTableView() {
       new NotNull({
         message: 'Please select a Course'
       }));
-
     roomField.addValidator(
       new NotNull({
         message: 'Please select a Room'
       }));
-
   }, []);
 
   const roomDataProvider = useMemo(
@@ -117,7 +117,7 @@ function TimeTableView() {
           {
             '@type': 'propertyString',
             propertyId: 'floor.id',
-            filterValue: floorFilter?.id?.toString() || '0',
+            filterValue: placeFilter.floorFilter?.id?.toString() || '0',
             matcher: Matcher.EQUALS
           },
           {
@@ -127,13 +127,13 @@ function TimeTableView() {
             matcher: Matcher.CONTAINS
           },];
 
-        console.log('roomDataProvider', floorFilter);
+        console.log('roomDataProvider', placeFilter.floorFilter);
         const { pagination, filters } = comboBoxLazyFilter(params, 'and', child);
         RoomDtoCrudService.list(pagination, filters).then((result: any) => {
           callback(result, result.length);
         });
       },
-    [floorFilter]
+    [placeFilter.floorFilter]
   );
 
   const batchCourseDataProvider = useMemo(
@@ -240,23 +240,7 @@ function TimeTableView() {
             visibleFields={
               { sector: true, building: true, floor: true, room: true }
             }
-            sector={{
-              sectorFilter: sectorFilter,
-              setSectorFilter: setSectorFilter
-            }}
-            building={{
-              buildingFilter: buildingFilter,
-              setBuildingFilter: setBuildingFilter
-            }}
-            floor={{
-              floorFilter: floorFilter,
-              setFloorFilter: setFloorFilter
-            }}
-            place={{
-              sectorFilter: sectorFilter,
-              buildingFilter: buildingFilter,
-              floorFilter: floorFilter,          
-            }}
+            placeProps={{ place: placeFilter, setPlace: setPlaceFilter }}
           />
           <BranchRC
             visibleFields={

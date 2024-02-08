@@ -9,7 +9,7 @@ import { TextField } from "@hilla/react-components/TextField.js";
 import { TimePicker } from "@hilla/react-components/TimePicker.js";
 import { VerticalLayout } from "@hilla/react-components/VerticalLayout";
 import { useForm } from "@hilla/react-form";
-import PlaceRC from "Frontend/components/branch/PlaceRC";
+import PlaceRC, { PlaceDom } from "Frontend/components/branch/PlaceRC";
 import { AutoGrid, AutoGridRef } from "Frontend/components/grid/autogrid";
 import BuildingTypeEnum from "Frontend/generated/com/itbd/application/constants/BuildingTypeEnum";
 import SectorDAO from "Frontend/generated/com/itbd/application/dao/org/place/SectorDAO";
@@ -24,7 +24,12 @@ import { comboBoxLazyFilter } from "Frontend/util/comboboxLazyFilterUtil";
 import React, { useMemo, useState } from "react";
 
 const BuildingView = () => {
-  const [sectorFilter, setSectorFilter] = useState<SectorDAO>({} as SectorDAO);
+  // const [sectorFilter, setSectorFilter] = useState<SectorDAO>({} as SectorDAO);
+
+  const [placeFilter, setPlaceFilter] = useState<PlaceDom>({
+    sectorFilter: {} as SectorDAO,
+  });
+
   const [dialogOpened, setDialogOpened] = useState<boolean>(false);
   const [successNotification, setSuccessNotification] = useState<boolean>(false);
 
@@ -69,7 +74,7 @@ const BuildingView = () => {
         });
 
       },
-    [sectorFilter]
+    [placeFilter.sectorFilter]
   );
 
   const buildingType = Object.values(BuildingTypeEnum).map(level => ({ label: level, value: level }));
@@ -96,10 +101,7 @@ const BuildingView = () => {
             visibleFields={
               { sector: true }
             }
-            sector={{
-              sectorFilter: sectorFilter,
-              setSectorFilter: setSectorFilter
-            }}
+            placeProps={{ place: placeFilter, setPlace: setPlaceFilter }}
           />
           <AutoGrid service={BuildingDtoCrudService} model={BuildingDTOModel} ref={autoGridRef}
             visibleColumns={['name', 'alternateName', 'type', 'block', 'openingTime', 'closingTime', 'sector.name',]}
@@ -133,7 +135,7 @@ const BuildingView = () => {
               'sector.name': {
                 header: 'Sector',
                 resizable: true,
-                externalValue: sectorFilter.name?.toString() || '', // This is for filtering
+                externalValue: placeFilter?.sectorFilter.name?.toString() || '', // This is for filtering
               },
             }}
             onActiveItemChanged={(e) => {

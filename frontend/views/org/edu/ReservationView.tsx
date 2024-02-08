@@ -10,7 +10,7 @@ import { TextField } from "@hilla/react-components/TextField.js";
 import { VerticalLayout } from "@hilla/react-components/VerticalLayout";
 import { useForm } from "@hilla/react-form";
 import BranchRC from "Frontend/components/branch/BranchRC";
-import PlaceRC from "Frontend/components/branch/PlaceRC";
+import PlaceRC, { PlaceDom } from "Frontend/components/branch/PlaceRC";
 import { AutoGrid, AutoGridRef } from "Frontend/components/grid/autogrid";
 import { ClassActivity, ItemSelect } from "Frontend/constants/ItemSelect";
 import OrganizationDAO from "Frontend/generated/com/itbd/application/dao/org/academic/OrganizationDAO";
@@ -39,9 +39,16 @@ const ReservationView = () => {
   const [departmentFilter, setDepartmentFilter] = useState<DepartmentDAO>({} as DepartmentDAO);
   const [programmeFilter, setProgrammeFilter] = useState<ProgrammeDAO>({} as ProgrammeDAO);
 
-  const [sectorFilter, setSectorFilter] = useState<SectorDAO>({} as SectorDAO);
-  const [buildingFilter, setBuildingFilter] = useState<BuildingDAO>({} as BuildingDAO);
-  const [floorFilter, setFloorFilter] = useState<FloorDAO>({} as FloorDAO);
+  // const [sectorFilter, setSectorFilter] = useState<SectorDAO>({} as SectorDAO);
+  // const [buildingFilter, setBuildingFilter] = useState<BuildingDAO>({} as BuildingDAO);
+  // const [floorFilter, setFloorFilter] = useState<FloorDAO>({} as FloorDAO);
+
+  const [placeFilter, setPlaceFilter] = useState<PlaceDom>({
+    sectorFilter: {} as SectorDAO,
+    buildingFilter: {} as BuildingDAO,
+    floorFilter: {} as FloorDAO,
+  });
+
 
   const [dialogOpened, setDialogOpened] = useState<boolean>(false);
   const [successNotification, setSuccessNotification] = useState<boolean>(false);
@@ -223,18 +230,19 @@ const ReservationView = () => {
             visibleFields={
               { sector: true, building: true, }
             }
-            sector={{
-              sectorFilter: sectorFilter,
-              setSectorFilter: setSectorFilter
-            }}
-            building={{
-              buildingFilter: buildingFilter,
-              setBuildingFilter: setBuildingFilter
-            }}
-            floor={{
-              floorFilter: floorFilter,
-              setFloorFilter: setFloorFilter
-            }}
+            // sector={{
+            //   sectorFilter: sectorFilter,
+            //   setSectorFilter: setSectorFilter
+            // }}
+            // building={{
+            //   buildingFilter: buildingFilter,
+            //   setBuildingFilter: setBuildingFilter
+            // }}
+            // floor={{
+            //   floorFilter: floorFilter,
+            //   setFloorFilter: setFloorFilter
+            // }}
+            placeProps={{ place: placeFilter, setPlace: setPlaceFilter }}
           />
           <BranchRC
             visibleFields={

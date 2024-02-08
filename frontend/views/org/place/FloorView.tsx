@@ -9,7 +9,7 @@ import { TextField } from "@hilla/react-components/TextField.js";
 import { VerticalLayout } from "@hilla/react-components/VerticalLayout";
 import { AutoGridRef } from "@hilla/react-crud";
 import { useForm } from "@hilla/react-form";
-import PlaceRC from "Frontend/components/branch/PlaceRC";
+import PlaceRC, { PlaceDom } from "Frontend/components/branch/PlaceRC";
 import { AutoGrid } from "Frontend/components/grid/autogrid";
 import BuildingDAO from "Frontend/generated/com/itbd/application/dao/org/place/BuildingDAO";
 import SectorDAO from "Frontend/generated/com/itbd/application/dao/org/place/SectorDAO";
@@ -23,8 +23,13 @@ import { comboBoxLazyFilter } from "Frontend/util/comboboxLazyFilterUtil";
 import React, { useMemo, useState } from "react";
 
 const FloorView = () => {
-  const [sectorFilter, setSectorFilter] = useState<SectorDAO>({} as SectorDAO);
-  const [buildingFilter, setBuildingFilter] = useState<BuildingDAO>({} as BuildingDAO);
+  // const [sectorFilter, setSectorFilter] = useState<SectorDAO>({} as SectorDAO);
+  // const [buildingFilter, setBuildingFilter] = useState<BuildingDAO>({} as BuildingDAO);
+
+  const [placeFilter, setPlaceFilter] = useState<PlaceDom>({
+    sectorFilter: {} as SectorDAO,
+    buildingFilter: {} as BuildingDAO,
+  });
 
   const [dialogOpened, setDialogOpened] = useState<boolean>(false);
   const [successNotification, setSuccessNotification] = useState<boolean>(false);
