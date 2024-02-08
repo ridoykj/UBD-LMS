@@ -1,7 +1,7 @@
 import { NotNull } from '@hilla/form';
 import { Button } from '@hilla/react-components/Button.js';
 import { ComboBox, ComboBoxDataProviderCallback, ComboBoxDataProviderParams } from '@hilla/react-components/ComboBox.js';
-import { DatePicker, DatePickerDate, DatePickerI18n } from '@hilla/react-components/DatePicker.js';
+import { DatePicker, DatePickerElement, DatePickerI18n } from '@hilla/react-components/DatePicker.js';
 import { Dialog } from '@hilla/react-components/Dialog.js';
 import { Tab } from '@hilla/react-components/Tab.js';
 import { TabSheet } from '@hilla/react-components/TabSheet.js';
@@ -33,11 +33,10 @@ import Pageable from 'Frontend/generated/dev/hilla/mappedtypes/Pageable';
 import { BatchCourseDtoCrudService, BatchRoomDtoCrudService, RoomDtoCrudService } from 'Frontend/generated/endpoints';
 import NotificationUtil from 'Frontend/util/NotificationUtil';
 import { comboBoxLazyFilter } from 'Frontend/util/comboboxLazyFilterUtil';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { FaCopy, FaDownload, FaPrint, FaRegCalendarPlus, FaShareAlt } from 'react-icons/fa';
 import { FaX } from 'react-icons/fa6';
 import TimeTableComponent, { DayItem, TimeRange } from './TimeTableComponent';
-import { format, parse } from 'date-fns';
 import { configDatePickerI18n } from 'Frontend/util/DatePickerI18n';
 
 const dayNames = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT',];
@@ -48,7 +47,6 @@ const eventTypes = Object.values(EventTypeEnum).map(level => ({ label: level, va
 
 const courseCustomItemRenderer = (item: BatchCourseDTOModel<BatchCourseDTO>) => {
   const batch: BatchCourseDTO = item.valueOf();
-  // console.log('courseCustomItemRenderer', item.valueOf().name);
   return (
     <div className="border-b">
       <p className="text-sm font-semibold">{`[${batch.semester}] - ${batch.course?.code} - ${batch.course?.name}`}</p>
@@ -56,14 +54,7 @@ const courseCustomItemRenderer = (item: BatchCourseDTOModel<BatchCourseDTO>) => 
   );
 };
 
-const fromDateConfig = configDatePickerI18n;
-const toDateConfig = configDatePickerI18n;
-
 function TimeTableView() {
-
-  const [startDate, setStartDate] = useState('');
-  const [closeDate, setCloseDate] = useState('');
-
   const [startTime, setStartTime] = useState('');
   const [closeTime, setCloseTime] = useState('');
 
@@ -261,6 +252,11 @@ function TimeTableView() {
               floorFilter: floorFilter,
               setFloorFilter: setFloorFilter
             }}
+            place={{
+              sectorFilter: sectorFilter,
+              buildingFilter: buildingFilter,
+              floorFilter: floorFilter,          
+            }}
           />
           <BranchRC
             visibleFields={
@@ -385,15 +381,15 @@ function TimeTableView() {
             <ComboBox label={'Room'} dataProvider={roomDataProvider} {...field(model.room)} itemLabelPath='name' itemValuePath='room.id' clearButtonVisible />
             <ComboBox label={'Day'}  {...field(model.dayName)} items={days} itemLabelPath="label" />
             <ComboBox label={'Event Activity'}  {...field(model.eventType)} items={eventTypes} itemLabelPath="label" />
-            <DatePicker label={'Start Date'} max={closeDate}  {...field(model.startDate)}
-              i18n={{ ...fromDateConfig, }}
+            <DatePicker label={'Start Date'} {...field(model.startDate)} i18n={{ ...configDatePickerI18n, }}
+              max={value.endDate ? value.endDate.toString() : ''}
               onValueChanged={(event) => {
-                setStartDate(event.detail.value);
+                console.log('event.detail.value', event.detail.value);
               }} />
-            <DatePicker label={'End Date'} min={startDate} {...field(model.endDate)}
-              i18n={{ ...toDateConfig, }}
+            <DatePicker label={'End Date'}  {...field(model.endDate)} i18n={{ ...configDatePickerI18n, }}
+              min={value.startDate ? value.startDate.toString() : ''}
               onValueChanged={(event) => {
-                setCloseDate(event.detail.value);
+                console.log('event.detail.value', event.detail.value);
               }} />
             <TimePicker label={'Start Time'} min='09:00' max={closeTime}  {...field(model.startTime)}
               onValueChanged={(event) => {
