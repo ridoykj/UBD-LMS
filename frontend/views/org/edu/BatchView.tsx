@@ -11,11 +11,8 @@ import { Upload, UploadSuccessEvent } from "@hilla/react-components/Upload.js";
 import { VerticalLayout } from "@hilla/react-components/VerticalLayout.js";
 import { useForm } from "@hilla/react-form";
 import { UploadBeforeEvent } from "@vaadin/upload";
-import BranchRC from "Frontend/components/branch/BranchRC";
+import BranchRC, { BranchCombobox } from "Frontend/components/branch/BranchRC";
 import { AutoGrid, AutoGridRef } from "Frontend/components/grid/autogrid";
-import OrganizationDAO from "Frontend/generated/com/itbd/application/dao/org/academic/OrganizationDAO";
-import DepartmentDAO from "Frontend/generated/com/itbd/application/dao/org/edu/DepartmentDAO";
-import ProgrammeDAO from "Frontend/generated/com/itbd/application/dao/org/edu/ProgrammeDAO";
 import BatchDTO from "Frontend/generated/com/itbd/application/dto/org/edu/BatchDTO";
 import BatchDTOModel from "Frontend/generated/com/itbd/application/dto/org/edu/BatchDTOModel";
 import ProgrammeDTOModel from "Frontend/generated/com/itbd/application/dto/org/edu/ProgrammeDTOModel";
@@ -40,9 +37,15 @@ function parseDateIso8601(inputValue: string) {
 
 
 const BatchView = () => {
-  const [orgFilter, setOrgFilter] = useState<OrganizationDAO>({} as OrganizationDAO);
-  const [departmentFilter, setDepartmentFilter] = useState<DepartmentDAO>({} as DepartmentDAO);
-  const [programmeFilter, setProgrammeFilter] = useState<ProgrammeDAO>({} as ProgrammeDAO);
+  const [branchFilter, setBranchFilter] = useState<BranchCombobox>({
+    organizationFilter: undefined,
+    departmentFilter: undefined,
+    programmeFilter: undefined,
+  });
+
+  // const [orgFilter, setOrgFilter] = useState<OrganizationDAO>({} as OrganizationDAO);
+  // const [departmentFilter, setDepartmentFilter] = useState<DepartmentDAO>({} as DepartmentDAO);
+  // const [programmeFilter, setProgrammeFilter] = useState<ProgrammeDAO>({} as ProgrammeDAO);
 
   const autoGridRef = React.useRef<AutoGridRef>(null);
 
@@ -79,7 +82,7 @@ const BatchView = () => {
           {
             '@type': 'propertyString',
             propertyId: 'department.id',
-            filterValue: departmentFilter.id?.toString() ?? '0',
+            filterValue: branchFilter.departmentFilter?.id?.toString() ?? '0',
             matcher: Matcher.EQUALS
           }, {
             '@type': 'propertyString',
@@ -95,7 +98,7 @@ const BatchView = () => {
         });
 
       },
-    [departmentFilter]
+    [branchFilter.departmentFilter]
   );
 
   const responsiveSteps = [
@@ -121,18 +124,19 @@ const BatchView = () => {
             visibleFields={
               { organization: true, department: true, programme: true }
             }
-            organization={{
-              organizationFilter: orgFilter,
-              setOrganizationFilter: setOrgFilter
-            }}
-            department={{
-              departmentFilter: departmentFilter,
-              setDepartmentFilter: setDepartmentFilter
-            }}
-            programme={{
-              programmeFilter: programmeFilter,
-              setProgrammeFilter: setProgrammeFilter
-            }}
+            // organization={{
+            //   organizationFilter: orgFilter,
+            //   setOrganizationFilter: setOrgFilter
+            // }}
+            // department={{
+            //   departmentFilter: departmentFilter,
+            //   setDepartmentFilter: setDepartmentFilter
+            // }}
+            // programme={{
+            //   programmeFilter: programmeFilter,
+            //   setProgrammeFilter: setProgrammeFilter
+            // }}
+            branchProps={{ branch: branchFilter, setBranch: setBranchFilter }}
           />
           <AutoGrid service={BatchDtoCrudService} model={BatchDTOModel} ref={autoGridRef}
             visibleColumns={['name', 'programme.name', 'graduationDate', 'admissionStartDate', 'admissionEndDate', 'status',]}
@@ -147,7 +151,7 @@ const BatchView = () => {
             columnOptions={{
               'programme.name': {
                 header: 'Programme',
-                externalValue: programmeFilter != null ? programmeFilter.name : '',
+                externalValue: branchFilter.programmeFilter != null ? branchFilter.programmeFilter?.name : '',
                 // setExternalValue: setProgrammeFilter,
               },
             }}

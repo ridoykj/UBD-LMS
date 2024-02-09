@@ -1,7 +1,7 @@
 package com.itbd.application.dto.org.allocation;
 
-import com.itbd.application.constants.DayTypeEnum;
-import com.itbd.application.constants.EventTypeEnum;
+import com.itbd.application.constants.enums.DayTypeEnum;
+import com.itbd.application.constants.enums.EventTypeEnum;
 import com.itbd.application.dao.org.allocation.BatchCourseDAO;
 import com.itbd.application.dao.org.allocation.BatchRoomDAO;
 import com.itbd.application.dao.org.place.BuildingDAO;

@@ -9,7 +9,7 @@ import { TextArea } from "@hilla/react-components/TextArea.js";
 import { TextField } from "@hilla/react-components/TextField.js";
 import { VerticalLayout } from "@hilla/react-components/VerticalLayout";
 import { useForm } from "@hilla/react-form";
-import BranchRC from "Frontend/components/branch/BranchRC";
+import BranchRC, { BranchCombobox } from "Frontend/components/branch/BranchRC";
 import { AutoGrid, AutoGridRef } from "Frontend/components/grid/autogrid";
 import OrganizationDAO from "Frontend/generated/com/itbd/application/dao/org/academic/OrganizationDAO";
 import DepartmentDAO from "Frontend/generated/com/itbd/application/dao/org/edu/DepartmentDAO";
@@ -25,8 +25,10 @@ import React, { useMemo, useState } from "react";
 
 const CourseView = () => {
 
-  const [orgFilter, setOrgFilter] = useState<OrganizationDAO>({} as OrganizationDAO);
-  const [departmentFilter, setDepartmentFilter] = useState<DepartmentDAO>({} as DepartmentDAO);
+  const [branchFilter, setBranchFilter] = useState<BranchCombobox>({
+    organizationFilter: undefined,
+    departmentFilter: undefined,
+  });
 
   const autoGridRef = React.useRef<AutoGridRef>(null);
 
@@ -60,7 +62,7 @@ const CourseView = () => {
           {
             '@type': 'propertyString',
             propertyId: 'department.id',
-            filterValue: departmentFilter.id?.toString() ?? '0',
+            filterValue: branchFilter.departmentFilter?.id?.toString() ?? '0',
             matcher: Matcher.EQUALS
           }, {
             '@type': 'propertyString',
@@ -75,7 +77,7 @@ const CourseView = () => {
         });
 
       },
-    [departmentFilter]
+    [branchFilter.departmentFilter]
   );
 
   const responsiveSteps = [
@@ -127,7 +129,7 @@ const CourseView = () => {
             columnOptions={{
               'organization.name': {
                 header: 'Organization',
-                externalValue: orgFilter != null ? orgFilter.name : '',
+                externalValue: branchFilter.organizationFilter != null ? branchFilter.organizationFilter.name : '',
                 // setExternalValue: setOrgFilter,
               },
               'code': {

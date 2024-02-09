@@ -1,8 +1,7 @@
 package com.itbd.application.dto.org.edu;
 
-import com.itbd.application.constants.ProgrammeTypeEnum;
+import com.itbd.application.constants.enums.ProgrammeTypeEnum;
 import com.itbd.application.dao.org.edu.BatchDAO;
-import com.itbd.application.dao.org.edu.CourseDAO;
 import com.itbd.application.dao.org.edu.DepartmentDAO;
 import com.itbd.application.dao.org.edu.ProgrammeDAO;
 import jakarta.validation.constraints.NotEmpty;

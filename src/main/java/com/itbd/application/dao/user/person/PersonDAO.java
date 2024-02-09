@@ -1,7 +1,7 @@
 package com.itbd.application.dao.user.person;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.itbd.application.constants.BloodGroupsEnum;
+import com.itbd.application.constants.enums.BloodGroupsEnum;
 import com.itbd.application.dao.AbstractEntity;
 import com.itbd.application.dao.user.InstructorDAO;
 import com.itbd.application.dao.user.StudentDAO;

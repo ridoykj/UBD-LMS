@@ -8,11 +8,9 @@ import { SplitLayout } from '@hilla/react-components/SplitLayout.js';
 import { TextField } from '@hilla/react-components/TextField.js';
 import { VerticalLayout } from "@hilla/react-components/VerticalLayout";
 import { useForm } from "@hilla/react-form";
-import BranchRC from "Frontend/components/branch/BranchRC";
+import BranchRC, { BranchCombobox } from "Frontend/components/branch/BranchRC";
 import { AutoGrid, AutoGridRef } from "Frontend/components/grid/autogrid";
-import ProgrammeTypeEnum from "Frontend/generated/com/itbd/application/constants/ProgrammeTypeEnum";
-import OrganizationDAO from "Frontend/generated/com/itbd/application/dao/org/academic/OrganizationDAO";
-import DepartmentDAO from "Frontend/generated/com/itbd/application/dao/org/edu/DepartmentDAO";
+import ProgrammeTypeEnum from "Frontend/generated/com/itbd/application/constants/enums/ProgrammeTypeEnum";
 import DepartmentDTOModel from "Frontend/generated/com/itbd/application/dto/org/edu/DepartmentDTOModel";
 import ProgrammeDTO from "Frontend/generated/com/itbd/application/dto/org/edu/ProgrammeDTO";
 import ProgrammeDTOModel from "Frontend/generated/com/itbd/application/dto/org/edu/ProgrammeDTOModel";
@@ -24,8 +22,14 @@ import { comboBoxLazyFilter } from "Frontend/util/comboboxLazyFilterUtil";
 import React, { useMemo, useState } from "react";
 
 const ProgrammeView = () => {
-  const [orgFilter, setOrgFilter] = useState<OrganizationDAO>({} as OrganizationDAO);
-  const [departmentFilter, setDepartmentFilter] = useState<DepartmentDAO>({} as DepartmentDAO);
+  const [branchFilter, setBranchFilter] = useState<BranchCombobox>({
+    organizationFilter: undefined,
+    departmentFilter: undefined,
+  });
+
+
+  // const [orgFilter, setOrgFilter] = useState<OrganizationDAO>({} as OrganizationDAO);
+  // const [departmentFilter, setDepartmentFilter] = useState<DepartmentDAO>({} as DepartmentDAO);
 
   const [dialogOpened, setDialogOpened] = useState<boolean>(false);
   const [successNotification, setSuccessNotification] = useState<boolean>(false);
@@ -65,7 +69,7 @@ const ProgrammeView = () => {
         }, {
           '@type': 'propertyString',
           propertyId: 'organization.id',
-          filterValue: orgFilter.id?.toString() ?? '0',
+          filterValue: branchFilter.organizationFilter?.id?.toString() ?? '0',
           matcher: Matcher.EQUALS
         },];
 
@@ -74,7 +78,7 @@ const ProgrammeView = () => {
           callback(result, result.length);
         });
       },
-    [orgFilter]
+    [branchFilter.organizationFilter]
   );
 
   const responsiveSteps = [
@@ -100,14 +104,7 @@ const ProgrammeView = () => {
             visibleFields={
               { organization: true, department: true }
             }
-            organization={{
-              organizationFilter: orgFilter,
-              setOrganizationFilter: setOrgFilter
-            }}
-            department={{
-              departmentFilter: departmentFilter,
-              setDepartmentFilter: setDepartmentFilter
-            }}
+            branchProps={{ branch: branchFilter, setBranch: setBranchFilter }}
           />
           <AutoGrid service={ProgrammeDtoCrudService} model={ProgrammeDTOModel} ref={autoGridRef}
             visibleColumns={['name', 'code', 'studyLevel', 'department.name', 'status',]}
@@ -121,7 +118,7 @@ const ProgrammeView = () => {
             columnOptions={{
               'department.name': {
                 header: 'Department',
-                externalValue: departmentFilter !=null ? departmentFilter.name : '',
+                externalValue: branchFilter.departmentFilter != null ? branchFilter.departmentFilter.name : '',
                 // setExternalValue: setDepartmentFilter,
               },
             }}

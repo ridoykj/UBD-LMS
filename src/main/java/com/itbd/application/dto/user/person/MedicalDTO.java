@@ -1,6 +1,6 @@
 package com.itbd.application.dto.user.person;
 
-import com.itbd.application.constants.GenderEnum;
+import com.itbd.application.constants.enums.GenderEnum;
 import com.itbd.application.dao.user.person.MedicalDAO;
 import org.springframework.data.annotation.Version;
 

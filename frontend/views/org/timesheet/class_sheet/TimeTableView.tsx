@@ -9,15 +9,11 @@ import { Tabs } from '@hilla/react-components/Tabs.js';
 import { TextArea } from '@hilla/react-components/TextArea.js';
 import { TimePicker } from '@hilla/react-components/TimePicker.js';
 import { useForm, useFormPart } from '@hilla/react-form';
-import BranchRC from 'Frontend/components/branch/BranchRC';
+import BranchRC, { BranchCombobox } from 'Frontend/components/branch/BranchRC';
 import PlaceRC, { PlaceCombobox } from 'Frontend/components/branch/PlaceRC';
 import SpeedDialRC from 'Frontend/components/speeddial/SpeedDialRC';
-import DayTypeEnum from 'Frontend/generated/com/itbd/application/constants/DayTypeEnum';
-import EventTypeEnum from 'Frontend/generated/com/itbd/application/constants/EventTypeEnum';
-import OrganizationDAO from 'Frontend/generated/com/itbd/application/dao/org/academic/OrganizationDAO';
-import BatchCourseDAO from 'Frontend/generated/com/itbd/application/dao/org/allocation/BatchCourseDAO';
-import DepartmentDAO from 'Frontend/generated/com/itbd/application/dao/org/edu/DepartmentDAO';
-import ProgrammeDAO from 'Frontend/generated/com/itbd/application/dao/org/edu/ProgrammeDAO';
+import DayTypeEnum from 'Frontend/generated/com/itbd/application/constants/enums/DayTypeEnum';
+import EventTypeEnum from 'Frontend/generated/com/itbd/application/constants/enums/EventTypeEnum';
 import BatchCourseDTO from 'Frontend/generated/com/itbd/application/dto/org/allocation/BatchCourseDTO';
 import BatchCourseDTOModel from 'Frontend/generated/com/itbd/application/dto/org/allocation/BatchCourseDTOModel';
 import BatchRoomDTO from 'Frontend/generated/com/itbd/application/dto/org/allocation/BatchRoomDTO';
@@ -65,13 +61,22 @@ function TimeTableView() {
     buildingFilter: undefined,
     floorFilter: undefined,
   });
-  
-  const [orgFilter, setOrgFilter] = useState<OrganizationDAO>({} as OrganizationDAO);
-  const [departmentFilter, setDepartmentFilter] = useState<DepartmentDAO>({} as DepartmentDAO);
-  const [programmeFilter, setProgrammeFilter] = useState<ProgrammeDAO>({} as ProgrammeDAO);
 
-  const [batchFilter, setBatchFilter] = useState<BatchCourseDAO>({} as BatchCourseDAO);
-  const [semesterFilter, setSemesterFilter] = useState<BatchCourseDAO>({} as BatchCourseDAO);
+
+  const [branchFilter, setBranchFilter] = useState<BranchCombobox>({
+    organizationFilter: undefined,
+    departmentFilter: undefined,
+    programmeFilter: undefined,
+    batchFilter: undefined,
+    semesterFilter: undefined,
+  });
+
+  // const [orgFilter, setOrgFilter] = useState<OrganizationDAO>({} as OrganizationDAO);
+  // const [departmentFilter, setDepartmentFilter] = useState<DepartmentDAO>({} as DepartmentDAO);
+  // const [programmeFilter, setProgrammeFilter] = useState<ProgrammeDAO>({} as ProgrammeDAO);
+
+  // const [batchFilter, setBatchFilter] = useState<BatchCourseDAO>({} as BatchCourseDAO);
+  // const [semesterFilter, setSemesterFilter] = useState<BatchCourseDAO>({} as BatchCourseDAO);
 
   const [dayEvents, setDayEvents] = useState<DayItem[]>();
   const [eventRefresh, setEventRefresh] = useState<boolean>(false);
@@ -139,12 +144,12 @@ function TimeTableView() {
         params: ComboBoxDataProviderParams,
         callback: ComboBoxDataProviderCallback<BatchCourseDTOModel>
       ) => {
-        console.log('semesterNameFilter', semesterFilter);
+        console.log('semesterNameFilter', branchFilter.semesterFilter);
         const child: PropertyStringFilter[] = [
           {
             '@type': 'propertyString',
             propertyId: 'batch.id',
-            filterValue: batchFilter?.id?.toString() || '0',
+            filterValue: branchFilter.batchFilter?.id?.toString() || '0',
             matcher: Matcher.EQUALS
           }, {
             '@type': 'propertyString',
@@ -154,7 +159,7 @@ function TimeTableView() {
           }, {
             '@type': 'propertyString',
             propertyId: 'semester',
-            filterValue: semesterFilter?.semester?.toString() || '0',
+            filterValue: branchFilter.semesterFilter?.semester?.toString() || '0',
             matcher: Matcher.EQUALS
           },];
 
@@ -163,7 +168,7 @@ function TimeTableView() {
           callback(result);
         });
       },
-    [batchFilter, semesterFilter,]
+    [branchFilter.batchFilter, branchFilter.semesterFilter,]
   );
 
   const batchRoomDataProvider = useEffect(
@@ -172,7 +177,7 @@ function TimeTableView() {
         {
           '@type': 'propertyString',
           propertyId: 'batchCourse.semester',
-          filterValue: semesterFilter?.semester?.toString() || '0',
+          filterValue: branchFilter.semesterFilter?.semester?.toString() || '0',
           matcher: Matcher.EQUALS
         },
       ];
@@ -218,7 +223,7 @@ function TimeTableView() {
         setDayEvents(dayEvents);
       });
     },
-    [semesterFilter, eventRefresh]
+    [branchFilter.semesterFilter, eventRefresh]
   );
 
   useEffect(() => {
@@ -243,26 +248,7 @@ function TimeTableView() {
             visibleFields={
               { organization: true, department: true, programme: true, batch: true, semester: true }
             }
-            organization={{
-              organizationFilter: orgFilter,
-              setOrganizationFilter: setOrgFilter
-            }}
-            department={{
-              departmentFilter: departmentFilter,
-              setDepartmentFilter: setDepartmentFilter
-            }}
-            programme={{
-              programmeFilter: programmeFilter,
-              setProgrammeFilter: setProgrammeFilter
-            }}
-            batch={{
-              batchFilter: batchFilter,
-              setBatchFilter: setBatchFilter
-            }}
-            semester={{
-              semesterFilter: semesterFilter,
-              setSemesterFilter: setSemesterFilter
-            }}
+            branchProps={{ branch: branchFilter, setBranch: setBranchFilter }}
           />
         </div>
         <TabSheet className='grow overflow-x-auto p-0 m-0'>

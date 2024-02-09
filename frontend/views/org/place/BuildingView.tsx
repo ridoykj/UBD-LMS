@@ -11,7 +11,7 @@ import { VerticalLayout } from "@hilla/react-components/VerticalLayout";
 import { useForm } from "@hilla/react-form";
 import PlaceRC, { PlaceCombobox } from "Frontend/components/branch/PlaceRC";
 import { AutoGrid, AutoGridRef } from "Frontend/components/grid/autogrid";
-import BuildingTypeEnum from "Frontend/generated/com/itbd/application/constants/BuildingTypeEnum";
+import BuildingTypeEnum from "Frontend/generated/com/itbd/application/constants/enums/BuildingTypeEnum";
 import SectorDAOModel from "Frontend/generated/com/itbd/application/dao/org/place/SectorDAOModel";
 import BuildingDTO from "Frontend/generated/com/itbd/application/dto/org/place/BuildingDTO";
 import BuildingDTOModel from "Frontend/generated/com/itbd/application/dto/org/place/BuildingDTOModel";

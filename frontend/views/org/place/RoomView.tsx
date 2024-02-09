@@ -12,7 +12,7 @@ import { AutoGridRef } from "@hilla/react-crud";
 import { useForm } from "@hilla/react-form";
 import PlaceRC, { PlaceCombobox } from "Frontend/components/branch/PlaceRC";
 import { AutoGrid } from "Frontend/components/grid/autogrid";
-import RoomTypeEnum from "Frontend/generated/com/itbd/application/constants/RoomTypeEnum";
+import RoomTypeEnum from "Frontend/generated/com/itbd/application/constants/enums/RoomTypeEnum";
 import FloorDTOModel from "Frontend/generated/com/itbd/application/dto/org/place/FloorDTOModel";
 import RoomDTO from "Frontend/generated/com/itbd/application/dto/org/place/RoomDTO";
 import RoomDTOModel from "Frontend/generated/com/itbd/application/dto/org/place/RoomDTOModel";

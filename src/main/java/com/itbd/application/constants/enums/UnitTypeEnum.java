@@ -1,4 +1,4 @@
-package com.itbd.application.constants;
+package com.itbd.application.constants.enums;
 
 public enum UnitTypeEnum {
     METERS("m"),

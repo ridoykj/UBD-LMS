@@ -19,13 +19,9 @@ import org.springframework.boot.web.servlet.support.SpringBootServletInitializer
 @SpringBootApplication
 @Theme(value = "ubd-lms")
 @PWA(name = "UBD-LMS", shortName = "UBD-LMS", iconPath = "favicon/favicon.png")
-public class WeApplication extends SpringBootServletInitializer implements AppShellConfigurator {
+public class WeApplication implements AppShellConfigurator {
     public static void main(String[] args) {
         SpringApplication.run(WeApplication.class, args);
     }
 
-    @Override
-    protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
-        return application.sources(WeApplication.class);
-    }
 }

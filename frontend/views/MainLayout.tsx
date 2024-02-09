@@ -19,12 +19,9 @@ export default function MainLayout() {
         <div slot="drawer" className="min-h-screen bg-gray-800 flex flex-col justify-between p-m">
           <header className="flex flex-col overflow-hidden">
             <div className="flex items-center justify-center h-20 shadow-md">
-              {/* <img src="images/move-right.png" alt="" className='w-10' />            
-            <h1 className="text-3xl uppercase text-indigo-500">My App</h1> */}
               {/* <img src="images/logo_uoa.svg" alt="" className='w-30' /> */}
               <img src="images/move-right.png" alt="" className='w-20' />
-              {/* <h1 className="text-3xl uppercase text-indigo-500 font-bold">AFG College with the Univerity of Aberdeen</h1> */}
-              {/* <h1 className="text-xl text-indigo-500 font-bold">AFG College with the University of Aberdeen</h1> */}
+              {/* <p className="text-xl uppercase text-center text-purple-500 font-bold drop-shadow-[0_10px_10px_rgba(255, 255, 255, 0.8)]">AFG College with the Univerity of Aberdeen</p> */}
             </div>
             <nav className='overflow-y-auto h-full'>
 

@@ -1,9 +1,8 @@
 package com.itbd.application.dao.org.place;
 
-import com.itbd.application.constants.RoomTypeEnum;
-import com.itbd.application.constants.UnitTypeEnum;
+import com.itbd.application.constants.enums.RoomTypeEnum;
+import com.itbd.application.constants.enums.UnitTypeEnum;
 import com.itbd.application.dao.AbstractEntity;
-import com.itbd.application.dao.org.allocation.BatchCoordinatorDAO;
 import com.itbd.application.dao.org.allocation.BatchRoomDAO;
 import com.itbd.application.dao.org.edu.ReservationDAO;
 import jakarta.annotation.Nullable;
@@ -11,12 +10,12 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.List;
 import java.util.Set;
 
-@Entity(name = "t_place_room")
+@Entity
 @Getter
 @Setter
+@Table(name = "t_place_room", uniqueConstraints = {@UniqueConstraint(name = "ctx_place_room_unique", columnNames = {"name", "floor"})})
 public class RoomDAO extends AbstractEntity<Long> {
     @Id
     @Column(name = "id_room_key", nullable = false, updatable = false)

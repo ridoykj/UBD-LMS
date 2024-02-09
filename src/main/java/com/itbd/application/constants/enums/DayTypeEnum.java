@@ -1,4 +1,4 @@
-package com.itbd.application.constants;
+package com.itbd.application.constants.enums;
 
 public enum DayTypeEnum {
     FRIDAY("Friday"), MONDAY("Monday"), SATURDAY("Saturday"), SUNDAY("Sunday"), THURSDAY("Thursday"), TUESDAY("Tuesday"), WEDNESDAY("Wednesday");

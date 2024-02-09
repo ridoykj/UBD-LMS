@@ -1,6 +1,6 @@
 package com.itbd.application.dao.org.allocation;
 
-import com.itbd.application.constants.CoordinatorTypeEnum;
+import com.itbd.application.constants.enums.CoordinatorTypeEnum;
 import com.itbd.application.dao.AbstractEntity;
 import com.itbd.application.dao.user.InstructorDAO;
 import jakarta.annotation.Nullable;

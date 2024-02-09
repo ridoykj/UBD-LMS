@@ -19,34 +19,9 @@ import { BatchCourseDtoCrudService, BatchDtoCrudService, CourseDtoCrudService, D
 import { comboBoxLazyFilter } from 'Frontend/util/comboboxLazyFilterUtil';
 import { Dispatch, SetStateAction, useMemo } from 'react';
 
-type OrganizationProps = {
-  organizationFilter: OrganizationDAO,
-  setOrganizationFilter: Dispatch<SetStateAction<OrganizationDAO>>
-}
-
-type DepartmentProps = {
-  departmentFilter: DepartmentDAO,
-  setDepartmentFilter: Dispatch<SetStateAction<DepartmentDAO>>
-}
-
-type ProgrammeProps = {
-  programmeFilter: ProgrammeDAO,
-  setProgrammeFilter: Dispatch<SetStateAction<ProgrammeDAO>>
-}
-
-type BatchProps = {
-  batchFilter: BatchDAO,
-  setBatchFilter: Dispatch<SetStateAction<BatchDAO>>
-}
-type SemesterProps = {
-  semesterFilter: BatchCourseDAO,
-  setSemesterFilter: Dispatch<SetStateAction<BatchCourseDAO>>
-}
-
-type CourseProps = {
-  courseFilter: CourseDAO,
-  setCourseFilter: Dispatch<SetStateAction<CourseDAO>>
-}
+const comboboxStyle = {
+  '--vaadin-combo-box-overlay-width': '350px'
+} as React.CSSProperties;
 
 type VisibleFields = {
   organization?: boolean,
@@ -57,19 +32,26 @@ type VisibleFields = {
   course?: boolean,
 };
 
-const comboboxStyle = {
-  '--vaadin-combo-box-overlay-width': '350px'
-} as React.CSSProperties;
+export type BranchCombobox = {
+  organizationFilter?: OrganizationDAO,
+  departmentFilter?: DepartmentDAO,
+  programmeFilter?: ProgrammeDAO,
+  batchFilter?: BatchDAO,
+  semesterFilter?: BatchCourseDAO,
+  courseFilter?: CourseDAO
+}
 
-export default function BranchRC({ visibleFields, organization, department, programme, batch, semester, course, }: {
+type BranchProps = {
+  branch: BranchCombobox,
+  setBranch: Dispatch<SetStateAction<BranchCombobox>>
+}
+
+export default function BranchRC({ visibleFields, branchProps, }: {
   visibleFields: VisibleFields, // ['organization', 'department', 'programme', 'batch', 'course'];
-  organization?: OrganizationProps
-  department?: DepartmentProps
-  programme?: ProgrammeProps
-  batch?: BatchProps
-  semester?: SemesterProps
-  course?: CourseProps
+  branchProps: BranchProps
 }) {
+  const { organizationFilter, departmentFilter, programmeFilter, batchFilter, semesterFilter, courseFilter, } = branchProps.branch;
+
   const organizationDataProvider = useMemo(
     () =>
       async (
@@ -100,7 +82,7 @@ export default function BranchRC({ visibleFields, organization, department, prog
           {
             '@type': 'propertyString',
             propertyId: 'organization.id',
-            filterValue: organization?.organizationFilter.id?.toString() || '0',
+            filterValue: organizationFilter?.id?.toString() || '0',
             matcher: Matcher.EQUALS
           }, {
             '@type': 'propertyString',
@@ -114,7 +96,7 @@ export default function BranchRC({ visibleFields, organization, department, prog
           callback(result, result.length);
         });
       },
-    [organization?.organizationFilter]
+    [organizationFilter]
   );
 
   const programmeDataProvider = useMemo(
@@ -127,7 +109,7 @@ export default function BranchRC({ visibleFields, organization, department, prog
           {
             '@type': 'propertyString',
             propertyId: 'department.id',
-            filterValue: department?.departmentFilter.id?.toString() || '0',
+            filterValue: departmentFilter?.id?.toString() || '0',
             matcher: Matcher.EQUALS
           }, {
             '@type': 'propertyString',
@@ -142,7 +124,7 @@ export default function BranchRC({ visibleFields, organization, department, prog
         });
 
       },
-    [department?.departmentFilter]
+    [departmentFilter]
   );
 
 
@@ -156,7 +138,7 @@ export default function BranchRC({ visibleFields, organization, department, prog
           {
             '@type': 'propertyString',
             propertyId: 'programme.id',
-            filterValue: programme?.programmeFilter.id?.toString() || '0',
+            filterValue: programmeFilter?.id?.toString() || '0',
             matcher: Matcher.EQUALS
           }, {
             '@type': 'propertyString',
@@ -170,7 +152,7 @@ export default function BranchRC({ visibleFields, organization, department, prog
           callback(result, result.length);
         });
       },
-    [programme?.programmeFilter]
+    [programmeFilter]
   );
 
   const semesterDataProvider = useMemo(
@@ -184,7 +166,7 @@ export default function BranchRC({ visibleFields, organization, department, prog
           {
             '@type': 'propertyString',
             propertyId: 'batch.id',
-            filterValue: batch?.batchFilter.id?.toString() || '0',
+            filterValue: batchFilter?.id?.toString() || '0',
             matcher: Matcher.EQUALS
           },];
 
@@ -208,7 +190,7 @@ export default function BranchRC({ visibleFields, organization, department, prog
           callback(uniqueSemester, uniqueSemester.length);
         });
       },
-    [batch?.batchFilter]
+    [batchFilter]
   );
 
   const courseDataProvider = useMemo(
@@ -221,7 +203,7 @@ export default function BranchRC({ visibleFields, organization, department, prog
           {
             '@type': 'propertyString',
             propertyId: 'programme.id',
-            filterValue: programme?.programmeFilter.id?.toString() || '0',
+            filterValue: programmeFilter?.id?.toString() || '0',
             matcher: Matcher.EQUALS
           }, {
             '@type': 'propertyString',
@@ -235,59 +217,108 @@ export default function BranchRC({ visibleFields, organization, department, prog
           callback(result, result.length);
         });
       },
-    [programme?.programmeFilter]
+    [programmeFilter]
   );
 
   const handleOrganization = (e: any) => {
     console.log('Organization - ack');
     const selectedItem = e.detail.value;
 
-    department?.setDepartmentFilter((dr) => ({} as DepartmentDAO)); // Reset department combobox   
-    programme?.setProgrammeFilter((d) => ({} as ProgrammeDAO)); // Reset programme combobox   
-    batch?.setBatchFilter((d) => ({} as BatchDAO)); // Reset batch combobox
-    course?.setCourseFilter((d) => ({} as CourseDAO)); // Reset course combobox
-    semester?.setSemesterFilter((d) => ({} as BatchCourseDAO)); // Reset semester combobox
+    branchProps.setBranch((b) => ({
+      ...b,
+      departmentFilter: undefined,
+      programmeFilter: undefined,
+      batchFilter: undefined,
+      semesterFilter: undefined,
+      courseFilter: undefined,
+      organizationFilter: selectedItem,
+    }));
 
-    organization?.setOrganizationFilter((o) => selectedItem);
+
+    // department?.setDepartmentFilter((dr) => ({} as DepartmentDAO)); // Reset department combobox   
+    // programme?.setProgrammeFilter((d) => ({} as ProgrammeDAO)); // Reset programme combobox   
+    // batch?.setBatchFilter((d) => ({} as BatchDAO)); // Reset batch combobox
+    // course?.setCourseFilter((d) => ({} as CourseDAO)); // Reset course combobox
+    // semester?.setSemesterFilter((d) => ({} as BatchCourseDAO)); // Reset semester combobox
+
+    // organization?.setOrganizationFilter((o) => selectedItem);
   };
 
   const handleDepartment = (e: any) => {
     const selectedItem = e.detail.value;
 
-    programme?.setProgrammeFilter((d) => ({} as ProgrammeDAO)); // Reset programme combobox   
-    batch?.setBatchFilter((d) => ({} as BatchDAO)); // Reset batch combobox
-    course?.setCourseFilter((d) => ({} as CourseDAO)); // Reset course combobox
-    semester?.setSemesterFilter((d) => ({} as BatchCourseDAO)); // Reset semester combobox
-    department?.setDepartmentFilter((d) => selectedItem);
+    branchProps.setBranch((b) => ({
+      ...b,
+      programmeFilter: undefined,
+      batchFilter: undefined,
+      semesterFilter: undefined,
+      courseFilter: undefined,
+      departmentFilter: selectedItem,
+    }));
+
+
+    // programme?.setProgrammeFilter((d) => ({} as ProgrammeDAO)); // Reset programme combobox   
+    // batch?.setBatchFilter((d) => ({} as BatchDAO)); // Reset batch combobox
+    // course?.setCourseFilter((d) => ({} as CourseDAO)); // Reset course combobox
+    // semester?.setSemesterFilter((d) => ({} as BatchCourseDAO)); // Reset semester combobox
+    // department?.setDepartmentFilter((d) => selectedItem);
   };
 
   const handleProgramme = (e: any) => {
     const selectedItem = e.detail.value;
 
-    batch?.setBatchFilter((d) => ({} as BatchDAO)); // Reset batch combobox
-    course?.setCourseFilter((d) => ({} as CourseDAO)); // Reset course combobox
-    semester?.setSemesterFilter((d) => ({} as BatchCourseDAO)); // Reset semester combobox
 
-    programme?.setProgrammeFilter((d) => selectedItem);
+    branchProps.setBranch((b) => ({
+      ...b,
+      batchFilter: undefined,
+      semesterFilter: undefined,
+      courseFilter: undefined,
+      programmeFilter: selectedItem,
+    }));
+
+
+    // batch?.setBatchFilter((d) => ({} as BatchDAO)); // Reset batch combobox
+    // course?.setCourseFilter((d) => ({} as CourseDAO)); // Reset course combobox
+    // semester?.setSemesterFilter((d) => ({} as BatchCourseDAO)); // Reset semester combobox
+
+    // programme?.setProgrammeFilter((d) => selectedItem);
   };
 
   const handleBatch = (e: any) => {
     const selectedItem = e.detail.value;
 
-    course?.setCourseFilter((d) => ({} as CourseDAO)); // Reset course combobox
-    semester?.setSemesterFilter((d) => ({} as BatchCourseDAO)); // Reset semester combobox
+    branchProps.setBranch((b) => ({
+      ...b,
+      semesterFilter: undefined,
+      courseFilter: undefined,
+      batchFilter: selectedItem,
+    }));
 
-    batch?.setBatchFilter((d) => selectedItem);
+    // course?.setCourseFilter((d) => ({} as CourseDAO)); // Reset course combobox
+    // semester?.setSemesterFilter((d) => ({} as BatchCourseDAO)); // Reset semester combobox
+
+    // batch?.setBatchFilter((d) => selectedItem);
   };
 
   const handleSemester = (e: any) => {
     const selectedItem = e.detail.value;
-    semester?.setSemesterFilter((d) => selectedItem);
+    branchProps.setBranch((b) => ({
+      ...b,
+      semesterFilter: selectedItem,
+    }));
+
+    // semester?.setSemesterFilter((d) => selectedItem);
   };
 
   const handleCourse = (e: any) => {
     const selectedItem = e.detail.value;
-    batch?.setBatchFilter((d) => selectedItem);
+
+    branchProps.setBranch((b) => ({
+      ...b,
+      batchFilter: selectedItem,
+    }));
+
+    // batch?.setBatchFilter((d) => selectedItem);
   };
   return (
     <>
@@ -301,35 +332,35 @@ export default function BranchRC({ visibleFields, organization, department, prog
             </>
           }
           {
-            visibleFields['department'] && organization?.organizationFilter?.id &&
+            visibleFields['department'] && organizationFilter?.id &&
             <>
               <div className='text-sm font-medium ml-5 mr-2 text-gray-400'>Department</div>
               <ComboBox dataProvider={departmentDataProvider} itemLabelPath='name' itemValuePath='id' onSelectedItemChanged={handleDepartment} style={comboboxStyle} clearButtonVisible />
             </>
           }
           {
-            visibleFields['programme'] && department?.departmentFilter?.id &&
+            visibleFields['programme'] && departmentFilter?.id &&
             <>
               <div className='text-sm font-medium ml-5 mr-2 text-gray-400'>Programme</div>
               <ComboBox dataProvider={programmeDataProvider} itemLabelPath='name' itemValuePath='id' onSelectedItemChanged={handleProgramme} style={comboboxStyle} clearButtonVisible />
             </>
           }
           {
-            visibleFields['batch'] && programme?.programmeFilter?.id &&
+            visibleFields['batch'] && programmeFilter?.id &&
             <>
               <div className='text-sm font-medium ml-5 mr-2 text-gray-400'>Batch</div>
               <ComboBox dataProvider={batchDataProvider} itemLabelPath='name' itemValuePath='id' onSelectedItemChanged={handleBatch} style={comboboxStyle} clearButtonVisible />
             </>
           }
           {
-            visibleFields['semester'] && batch?.batchFilter?.id &&
+            visibleFields['semester'] && batchFilter?.id &&
             <>
               <div className='text-sm font-medium ml-5 mr-2 text-gray-400'>Semester</div>
               <ComboBox dataProvider={semesterDataProvider} itemLabelPath='semester' itemValuePath='id' onSelectedItemChanged={handleSemester} style={comboboxStyle} clearButtonVisible />
             </>
           }
           {
-            visibleFields['course'] && programme?.programmeFilter?.id &&
+            visibleFields['course'] && programmeFilter?.id &&
             <>
               <div className='text-sm font-medium ml-5 mr-2 text-gray-400'>Course</div>
               <ComboBox dataProvider={courseDataProvider} itemLabelPath='name' itemValuePath='id' onSelectedItemChanged={handleCourse} style={comboboxStyle} clearButtonVisible />

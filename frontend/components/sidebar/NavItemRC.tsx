@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { FaChevronDown, FaChevronUp } from "react-icons/fa";
 import { NavLink } from "react-router-dom";
-const navCss = `relative flex flex-row items-center h-11 border-transparent pr-6  border-l-4
+const navCss = `relative flex flex-row items-center border-transparent border-l-4 h-11 pr-6
 hover:text-white focus:outline-none hover:bg-gray-500 hover:border-indigo-500 hover:text-indigo-500 hover:font-bold hover:no-underline `
 
 type subItemType = { name: string, icon: any, route: string }
@@ -35,7 +35,7 @@ function ChevronIcon({ isOpen }: { isOpen: boolean }) {
 // Dropdown button component
 function DropdownButton({ name, icon, isDropdownOpen, toggleDropdown }: { name: string, icon: any, isDropdownOpen: boolean, toggleDropdown: () => void }) {
     return (
-        <button className={`${navCss} w-full flex justify-between items-center text-white `} onClick={toggleDropdown}>
+        <button type="button" className={`${navCss} w-full flex justify-between items-center text-white `} onClick={toggleDropdown}>
             <div className="flex items-center">
                 <span className="inline-flex text-white justify-center items-center ml-4">
                     {icon}
@@ -50,14 +50,10 @@ function DropdownButton({ name, icon, isDropdownOpen, toggleDropdown }: { name: 
 // Component to display the list of sub items
 function SubItemList({ subItems }: { subItems: subItemType[] }) {
     return (
-        <div className="bg-gray-700" style={
-            {
-                borderLeft: '5px solid rgb(72 113 247)',
-            }
-        }>
+        <div className="bg-gray-700 border-l-4 border-blue-500">
             <ul>
-                {subItems.map((item) => (
-                    <li key={item.route}>
+                {subItems.map((item, index) => (
+                    <li key={index}>
                         <NavLinkItem name={item.name} icon={item.icon} route={item.route} />
                     </li>
                 ))}

@@ -13,8 +13,8 @@ import { TextField } from "@hilla/react-components/TextField.js";
 import { VerticalLayout } from "@hilla/react-components/VerticalLayout";
 import { useForm } from "@hilla/react-form";
 import { AutoGrid, AutoGridRef } from "Frontend/components/grid/autogrid";
-import BloodGroupsEnum from "Frontend/generated/com/itbd/application/constants/BloodGroupsEnum";
-import GenderEnum from "Frontend/generated/com/itbd/application/constants/GenderEnum";
+import BloodGroupsEnum from "Frontend/generated/com/itbd/application/constants/enums/BloodGroupsEnum";
+import GenderEnum from "Frontend/generated/com/itbd/application/constants/enums/GenderEnum";
 import InstructorDTO from "Frontend/generated/com/itbd/application/dto/user/instructor/InstructorDTO";
 import InstructorDTOModel from "Frontend/generated/com/itbd/application/dto/user/instructor/InstructorDTOModel";
 import NotificationUtil from "Frontend/util/NotificationUtil";
@@ -23,6 +23,7 @@ import React, { useState } from "react";
 import { Upload, UploadSuccessEvent } from "@hilla/react-components/Upload.js";
 import { InstructorDtoCrudService } from "Frontend/generated/endpoints";
 import CoordinatorRenderer from "./CoordinatorRenderer";
+import ImgRC from "Frontend/components/Image/ImgRC";
 
 const responsiveSteps = [
     { minWidth: '0', columns: 1 },
@@ -46,8 +47,6 @@ const CoordinatorView = () => {
     const [dialogOpened, setDialogOpened] = useState<boolean>(false);
     const [successNotification, setSuccessNotification] = useState<boolean>(false);
     const [formImage, setFormImage] = useState('');
-
-
 
     const autoGridRef = React.useRef<AutoGridRef>(null);
 
@@ -114,7 +113,7 @@ const CoordinatorView = () => {
                             console.log('item', item);
                             setSelectedInstructorItems(item ? [item] : []);
                             read(item);
-                            setFormImage(`/v1/content/image?imagePath=${btoa('/user/' + item?.person?.id + '/' + item?.person?.id + '.png')}`);
+                            setFormImage(`v1/content/image?imagePath=${btoa('/user/' + item?.person?.id + '/' + item?.person?.id + '.png')}`);
                         }}
                     />
                 </VerticalLayout>
@@ -133,7 +132,10 @@ const CoordinatorView = () => {
                     <main className="overflow-y-scroll w-full h-full">
                         <FormLayout responsiveSteps={responsiveSteps} className="w-fit h-fit p-2 bg-[#f9fbfe]">
                             <div>
-                                {value.id && <img className="w-24 h-24 object-cover rounded-full mx-auto ring-4 ring-blue-500 drop-shadow-[0_15px_15px_#dfe7ff] bg-[url('images/default/no_image.png')] bg-no-repeat bg-center" src={formImage} alt="" />}
+                                {value.id &&
+                                    <img className="w-24 h-24 object-cover rounded-full mx-auto ring-4 ring-blue-500 drop-shadow-[0_15px_15px_#dfe7ff]" src={formImage}
+                                        onError={(e: any) => { e.target.src = `images/default/no_image.png`; }} alt="no_image" />
+                                }
                             </div>
                             <TextField label={'Full Name'}  {...{ colspan: 2 }} {...field(model.person.givenName)} />
                             {/* <TextField label={'Middle Name'} {...{ colspan: 1 }}  {...field(model.person.additionalName)} /> */}
@@ -188,7 +190,7 @@ const CoordinatorView = () => {
                                     onUploadSuccess={(e: UploadSuccessEvent) => {
                                         const file = e.detail.file;
                                         console.log('file s', file);
-                                        setFormImage(`/v1/content/image?imagePath=${btoa('/user/' + value.person?.id + '/' + value.person?.id + '.png')}`);
+                                        setFormImage(`v1/content/image?imagePath=${btoa('/user/' + value.person?.id + '/' + value.person?.id + '.png')}`);
                                         refreshGrid();
                                     }}
                                 ></Upload>

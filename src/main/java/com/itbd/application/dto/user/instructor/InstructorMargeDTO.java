@@ -1,6 +1,6 @@
 package com.itbd.application.dto.user.instructor;
 
-import com.itbd.application.constants.BloodGroupsEnum;
+import com.itbd.application.constants.enums.BloodGroupsEnum;
 import com.itbd.application.dao.user.InstructorDAO;
 import com.itbd.application.dao.user.person.*;
 import jakarta.persistence.Id;

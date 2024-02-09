@@ -9,13 +9,10 @@ import { SplitLayout } from "@hilla/react-components/SplitLayout.js";
 import { TextField } from "@hilla/react-components/TextField.js";
 import { VerticalLayout } from "@hilla/react-components/VerticalLayout";
 import { useForm } from "@hilla/react-form";
-import BranchRC from "Frontend/components/branch/BranchRC";
+import BranchRC, { BranchCombobox } from "Frontend/components/branch/BranchRC";
 import PlaceRC, { PlaceCombobox } from "Frontend/components/branch/PlaceRC";
 import { AutoGrid, AutoGridRef } from "Frontend/components/grid/autogrid";
 import { ClassActivity, ItemSelect } from "Frontend/constants/ItemSelect";
-import OrganizationDAO from "Frontend/generated/com/itbd/application/dao/org/academic/OrganizationDAO";
-import DepartmentDAO from "Frontend/generated/com/itbd/application/dao/org/edu/DepartmentDAO";
-import ProgrammeDAO from "Frontend/generated/com/itbd/application/dao/org/edu/ProgrammeDAO";
 import BuildingDAO from "Frontend/generated/com/itbd/application/dao/org/place/BuildingDAO";
 import FloorDAO from "Frontend/generated/com/itbd/application/dao/org/place/FloorDAO";
 import SectorDAO from "Frontend/generated/com/itbd/application/dao/org/place/SectorDAO";
@@ -35,9 +32,16 @@ import React, { useMemo, useState } from "react";
 
 const ReservationView = () => {
 
-  const [orgFilter, setOrgFilter] = useState<OrganizationDAO>({} as OrganizationDAO);
-  const [departmentFilter, setDepartmentFilter] = useState<DepartmentDAO>({} as DepartmentDAO);
-  const [programmeFilter, setProgrammeFilter] = useState<ProgrammeDAO>({} as ProgrammeDAO);
+  const [branchFilter, setBranchFilter] = useState<BranchCombobox>({
+    organizationFilter: undefined,
+    departmentFilter: undefined,
+    programmeFilter: undefined,
+  });
+
+
+  // const [orgFilter, setOrgFilter] = useState<OrganizationDAO>({} as OrganizationDAO);
+  // const [departmentFilter, setDepartmentFilter] = useState<DepartmentDAO>({} as DepartmentDAO);
+  // const [programmeFilter, setProgrammeFilter] = useState<ProgrammeDAO>({} as ProgrammeDAO);
 
   // const [sectorFilter, setSectorFilter] = useState<SectorDAO>({} as SectorDAO);
   // const [buildingFilter, setBuildingFilter] = useState<BuildingDAO>({} as BuildingDAO);
@@ -126,7 +130,7 @@ const ReservationView = () => {
           {
             '@type': 'propertyString',
             propertyId: 'programme.id',
-            filterValue: programmeFilter.id?.toString() || '',
+            filterValue: branchFilter.programmeFilter?.id?.toString() || '',
             matcher: Matcher.EQUALS
           }, {
             '@type': 'propertyString',
@@ -140,7 +144,7 @@ const ReservationView = () => {
           callback(result);
         });
       },
-    [programmeFilter]
+    [branchFilter.programmeFilter]
   );
 
   const courseDataProvider = useMemo(
@@ -153,7 +157,7 @@ const ReservationView = () => {
           {
             '@type': 'propertyString',
             propertyId: 'programme.id',
-            filterValue: programmeFilter.id?.toString() || '',
+            filterValue: branchFilter.programmeFilter?.id?.toString() || '',
             matcher: Matcher.EQUALS
           }, {
             '@type': 'propertyString',
@@ -172,7 +176,7 @@ const ReservationView = () => {
           callback(result);
         });
       },
-    [programmeFilter]
+    [branchFilter.programmeFilter]
   );
 
   const instructorDataProvider = useMemo(
@@ -248,18 +252,7 @@ const ReservationView = () => {
             visibleFields={
               { organization: true, department: true, programme: true, }
             }
-            organization={{
-              organizationFilter: orgFilter,
-              setOrganizationFilter: setOrgFilter
-            }}
-            department={{
-              departmentFilter: departmentFilter,
-              setDepartmentFilter: setDepartmentFilter
-            }}
-            programme={{
-              programmeFilter: programmeFilter,
-              setProgrammeFilter: setProgrammeFilter
-            }}
+            branchProps={{ branch: branchFilter, setBranch: setBranchFilter }}
           />
           <AutoGrid service={ReservationDtoCrudService} model={ReservationDTOModel} ref={autoGridRef}
             visibleColumns={['name', 'code', 'duration', 'room.name', 'room.block', 'course.programme.name', 'status',]}
@@ -274,7 +267,7 @@ const ReservationView = () => {
             columnOptions={{
               'course.programme.name': {
                 header: 'Programme',
-                externalValue: programmeFilter != null ? programmeFilter.name : '',
+                externalValue: branchFilter.programmeFilter != null ? branchFilter.programmeFilter?.name : '',
                 // setExternalValue: setProgrammeFilter,
               },
             }}

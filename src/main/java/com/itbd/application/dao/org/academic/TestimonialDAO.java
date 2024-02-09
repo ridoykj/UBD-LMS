@@ -1,6 +1,6 @@
 package com.itbd.application.dao.org.academic;
 
-import com.itbd.application.constants.TestimonialTypeEnum;
+import com.itbd.application.constants.enums.TestimonialTypeEnum;
 import com.itbd.application.dao.AbstractEntity;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.*;

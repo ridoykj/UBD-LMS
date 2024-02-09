@@ -11,9 +11,10 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.Set;
 
-@Entity(name = "t_edu_course")
+@Entity
 @Getter
 @Setter
+@Table(name = "t_edu_course", uniqueConstraints = {@UniqueConstraint(name = "ctx_edu_course_unique", columnNames = {"name", "code"})})
 public class CourseDAO extends AbstractEntity<Long> {
     @Id
     @Column(name = "id_course_key", nullable = false, updatable = false)

@@ -1,6 +1,6 @@
 package com.itbd.application.dto.org.academic;
 
-import com.itbd.application.constants.TestimonialTypeEnum;
+import com.itbd.application.constants.enums.TestimonialTypeEnum;
 import com.itbd.application.dao.org.academic.TestimonialDAO;
 import org.springframework.data.annotation.Version;
 

@@ -1,6 +1,6 @@
 package com.itbd.application.dao.org.place;
 
-import com.itbd.application.constants.BuildingTypeEnum;
+import com.itbd.application.constants.enums.BuildingTypeEnum;
 import com.itbd.application.dao.AbstractEntity;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.*;

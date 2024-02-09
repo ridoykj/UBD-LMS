@@ -3,7 +3,7 @@ import ImgRC from "Frontend/components/Image/ImgRC";
 import InstructorDTOModel from "Frontend/generated/com/itbd/application/dto/user/instructor/InstructorDTOModel";
 const CoordinatorRenderer = ({ item }: { item: InstructorDTOModel }) => {
     const { id, person, designation } = item.valueOf();
-    const imagePath = `/v1/content/image?imagePath=${btoa('/user/' + person?.id + '/temp/100/' + person?.id + '.png')}`;
+    const imagePath = `v1/content/image?imagePath=${btoa('/user/' + person?.id + '/temp/100/' + person?.id + '.png')}`;
     return (
         <>
             <div className="flex items-center gap-4 p-1">

@@ -12,13 +12,10 @@ import { TextArea } from "@hilla/react-components/TextArea.js";
 import { TextField } from "@hilla/react-components/TextField.js";
 import { VerticalLayout } from "@hilla/react-components/VerticalLayout";
 import { useForm } from "@hilla/react-form";
-import BranchRC from "Frontend/components/branch/BranchRC";
+import BranchRC, { BranchCombobox } from "Frontend/components/branch/BranchRC";
 import { AutoGrid, AutoGridRef } from "Frontend/components/grid/autogrid";
-import CoordinatorTypeEnum from "Frontend/generated/com/itbd/application/constants/CoordinatorTypeEnum";
-import OrganizationDAO from "Frontend/generated/com/itbd/application/dao/org/academic/OrganizationDAO";
+import CoordinatorTypeEnum from "Frontend/generated/com/itbd/application/constants/enums/CoordinatorTypeEnum";
 import BatchCoordinatorDAO from "Frontend/generated/com/itbd/application/dao/org/allocation/BatchCoordinatorDAO";
-import DepartmentDAO from "Frontend/generated/com/itbd/application/dao/org/edu/DepartmentDAO";
-import ProgrammeDAO from "Frontend/generated/com/itbd/application/dao/org/edu/ProgrammeDAO";
 import BatchCourseDTO from "Frontend/generated/com/itbd/application/dto/org/allocation/BatchCourseDTO";
 import BatchCourseDTOModel from "Frontend/generated/com/itbd/application/dto/org/allocation/BatchCourseDTOModel";
 import BatchDTOModel from "Frontend/generated/com/itbd/application/dto/org/edu/BatchDTOModel";
@@ -36,14 +33,13 @@ import CoordinatorRenderer from "../user/Coordinator/CoordinatorRenderer";
 
 const BatchCourseView = () => {
 
-  const [orgFilter, setOrgFilter] = useState<OrganizationDAO>({} as OrganizationDAO);
-  const [departmentFilter, setDepartmentFilter] = useState<DepartmentDAO>({} as DepartmentDAO);
-  const [programmeFilter, setProgrammeFilter] = useState<ProgrammeDAO>({} as ProgrammeDAO);
+  const [branchFilter, setBranchFilter] = useState<BranchCombobox>({
+    organizationFilter: undefined,
+    departmentFilter: undefined,
+    programmeFilter: undefined,
+  });
 
   const [items, setItems] = useState<BatchCoordinatorDAO>();
-  // const [invitedPeople, setInvitedPeople] = useState<BatchCoordinatorDAO[]>([]);
-  // const [selectedValue, setSelectedValue] = useState<string>('');
-
   const autoGridRef = React.useRef<AutoGridRef>(null);
 
   const [dialogOpened, setDialogOpened] = useState<boolean>(false);
@@ -104,7 +100,7 @@ const BatchCourseView = () => {
           {
             '@type': 'propertyString',
             propertyId: 'programme.id',
-            filterValue: programmeFilter.id?.toString() || '0',
+            filterValue: branchFilter.programmeFilter?.id?.toString() || '0',
             matcher: Matcher.EQUALS
           }, {
             '@type': 'propertyString',
@@ -118,7 +114,7 @@ const BatchCourseView = () => {
           callback(result);
         });
       },
-    [programmeFilter]
+    [branchFilter.programmeFilter]
   );
 
   const courseDataProvider = useMemo(
@@ -151,7 +147,7 @@ const BatchCourseView = () => {
           callback(result);
         });
       },
-    [programmeFilter]
+    [branchFilter.programmeFilter]
   );
 
   const courseCustomItemRenderer = (item: CourseDTOModel<CourseDTO>) => {
@@ -220,24 +216,11 @@ const BatchCourseView = () => {
       <SplitLayout className="h-full w-full">
         <VerticalLayout className="h-full w-full items-stretch">
           <BranchRC
-            visibleFields={
-              { organization: true, department: true, programme: true, batch: true }
-            }
-            organization={{
-              organizationFilter: orgFilter,
-              setOrganizationFilter: setOrgFilter
-            }}
-            department={{
-              departmentFilter: departmentFilter,
-              setDepartmentFilter: setDepartmentFilter
-            }}
-            programme={{
-              programmeFilter: programmeFilter,
-              setProgrammeFilter: setProgrammeFilter
-            }}
+            visibleFields={{ organization: true, department: true, programme: true, batch: true }}
+            branchProps={{ branch: branchFilter, setBranch: setBranchFilter }}
           />
 
-          <AutoGrid service={BatchCourseDtoCrudService} model={BatchCourseDTOModel} ref={autoGridRef}
+          <AutoGrid service={BatchCourseDtoCrudService} model={BatchCourseDTOModel} ref={autoGridRef} multiSort multiSortPriority="append"
             visibleColumns={['batch.name', 'course.code', 'course.name', 'semester', 'numberOfCredits',]}
             selectedItems={selectedCourseItems}
             theme="row-stripes"
@@ -250,7 +233,7 @@ const BatchCourseView = () => {
             columnOptions={{
               'organization.name': {
                 header: 'Organization',
-                externalValue: orgFilter != null ? orgFilter.name : '',
+                externalValue: branchFilter.organizationFilter != null ? branchFilter.organizationFilter.name : '',
                 // setExternalValue: setOrgFilter,
               },
               'batch.name': {

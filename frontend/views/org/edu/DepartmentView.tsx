@@ -7,9 +7,8 @@ import { SplitLayout } from '@hilla/react-components/SplitLayout.js';
 import { TextField } from '@hilla/react-components/TextField.js';
 import { VerticalLayout } from "@hilla/react-components/VerticalLayout";
 import { useForm } from '@hilla/react-form';
-import BranchRC from 'Frontend/components/branch/BranchRC';
+import BranchRC, { BranchCombobox } from 'Frontend/components/branch/BranchRC';
 import { AutoGrid, AutoGridRef } from 'Frontend/components/grid/autogrid';
-import OrganizationDAO from 'Frontend/generated/com/itbd/application/dao/org/academic/OrganizationDAO';
 import OrganizationDTOModel from 'Frontend/generated/com/itbd/application/dto/org/academic/OrganizationDTOModel';
 import DepartmentDTO from 'Frontend/generated/com/itbd/application/dto/org/edu/DepartmentDTO';
 import DepartmentDTOModel from 'Frontend/generated/com/itbd/application/dto/org/edu/DepartmentDTOModel';
@@ -21,7 +20,12 @@ import { comboBoxLazyFilter } from 'Frontend/util/comboboxLazyFilterUtil';
 import React, { useMemo, useState } from 'react';
 
 const DepartmentView = () => {
-  const [orgFilter, setOrgFilter] = useState<OrganizationDAO>({} as OrganizationDAO);
+  const [branchFilter, setBranchFilter] = useState<BranchCombobox>({
+    organizationFilter: undefined,
+  });
+
+
+  // const [orgFilter, setOrgFilter] = useState<OrganizationDAO>({} as OrganizationDAO);
 
   const [dialogOpened, setDialogOpened] = useState<boolean>(false);
   const [successNotification, setSuccessNotification] = useState<boolean>(false);
@@ -67,7 +71,7 @@ const DepartmentView = () => {
           callback(result);
         });
       },
-    [orgFilter]
+    [branchFilter.organizationFilter]
   );
 
   const responsiveSteps = [
@@ -93,10 +97,7 @@ const DepartmentView = () => {
             visibleFields={
               { organization: true }
             }
-            organization={{
-              organizationFilter: orgFilter,
-              setOrganizationFilter: setOrgFilter
-            }}
+            branchProps={{ branch: branchFilter, setBranch: setBranchFilter }}
           />
           <AutoGrid service={DepartmentDtoCrudService} model={DepartmentDTOModel} ref={autoGridRef}
             visibleColumns={['name', 'code', 'status', 'organization.name',]}
@@ -110,7 +111,7 @@ const DepartmentView = () => {
             columnOptions={{
               'organization.name': {
                 header: 'Organization',
-                externalValue: orgFilter != null ? orgFilter.name : '',
+                externalValue: branchFilter.organizationFilter != null ? branchFilter.organizationFilter?.name : '',
                 // setExternalValue: setOrgFilter,
               },
             }}

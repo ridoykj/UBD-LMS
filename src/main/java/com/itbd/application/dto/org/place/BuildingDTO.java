@@ -1,6 +1,6 @@
 package com.itbd.application.dto.org.place;
 
-import com.itbd.application.constants.BuildingTypeEnum;
+import com.itbd.application.constants.enums.BuildingTypeEnum;
 import com.itbd.application.dao.org.place.BuildingDAO;
 import com.itbd.application.dao.org.place.FloorDAO;
 import com.itbd.application.dao.org.place.SectorDAO;

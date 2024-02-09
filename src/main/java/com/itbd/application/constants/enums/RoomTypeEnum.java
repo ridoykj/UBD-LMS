@@ -1,4 +1,4 @@
-package com.itbd.application.constants;
+package com.itbd.application.constants.enums;
 
 public enum RoomTypeEnum {
     LIVINGROOM, BEDROOM, KITCHEN, BATHROOM, DININGROOM, STUDYROOM, GUESTROOM, STOREROOM, BALCONY, TERRACE, LAWN, GARDEN,

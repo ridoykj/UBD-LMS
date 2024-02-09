@@ -1,6 +1,6 @@
 package com.itbd.application.dto.org.allocation;
 
-import com.itbd.application.constants.CoordinatorTypeEnum;
+import com.itbd.application.constants.enums.CoordinatorTypeEnum;
 import com.itbd.application.dao.org.allocation.BatchCoordinatorDAO;
 import com.itbd.application.dao.org.allocation.BatchCourseDAO;
 import com.itbd.application.dao.user.InstructorDAO;
