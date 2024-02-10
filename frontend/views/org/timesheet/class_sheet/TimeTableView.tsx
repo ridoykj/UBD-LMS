@@ -78,13 +78,6 @@ function TimeTableView() {
     semesterFilter: undefined,
   });
 
-  // const [orgFilter, setOrgFilter] = useState<OrganizationDAO>({} as OrganizationDAO);
-  // const [departmentFilter, setDepartmentFilter] = useState<DepartmentDAO>({} as DepartmentDAO);
-  // const [programmeFilter, setProgrammeFilter] = useState<ProgrammeDAO>({} as ProgrammeDAO);
-
-  // const [batchFilter, setBatchFilter] = useState<BatchCourseDAO>({} as BatchCourseDAO);
-  // const [semesterFilter, setSemesterFilter] = useState<BatchCourseDAO>({} as BatchCourseDAO);
-
   const [dayEvents, setDayEvents] = useState<DayItem[]>();
   const [eventRefresh, setEventRefresh] = useState<boolean>(false);
   const [eventItem, setEventItem] = useState<BatchRoomDTOModel>();
@@ -274,11 +267,11 @@ function TimeTableView() {
               }} />
           </div>
           <div {...{ tab: 'month-tab' }} className="flex flex-col h-full items-center justify-center p-l text-center box-border">
-            <img style={{ width: '200px' }} src="images/empty-plant.png" />
+            <img className='w-52' src="images/empty-plant.png" />
             <h2>This place intentionally left empty</h2>
             <p>It’s a place where you can grow your own UI 🤗</p></div>
           <div {...{ tab: 'day-tab' }} className="flex flex-col h-full items-center justify-center p-l text-center box-border">
-            <img style={{ width: '200px' }} src="images/empty-plant.png" />
+            <img className='w-52' src="images/empty-plant.png" />
             <h2>This place intentionally left empty</h2>
             <p>It’s a place where you can grow your own UI 🤗</p>
           </div>
