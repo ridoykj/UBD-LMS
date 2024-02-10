@@ -1,7 +1,7 @@
 import { Dispatch, SetStateAction } from "react";
 
 const headC = 'sticky top-0 left-0 z-50 bg-white dark:bg-gradient-to-b dark:from-slate-600 dark:to-slate-700 border-slate-100 dark:border-black/10 bg-clip-padding text-slate-900 dark:text-slate-200 border-b text-sm font-medium py-2 text-center';
-const sideC = 'sticky top-0 left-0 border-slate-100 dark:border-slate-200/5 border-4 text-xs p-1 text-right text-slate-500 uppercase bg-white dark:bg-slate-800 font-medium';
+const sideC = 'sticky top-0 left-0 border-slate-100 dark:border-slate-200/5 border-2 text-xs p-1 text-right text-slate-500 uppercase bg-white dark:bg-slate-800 font-medium';
 const cellC = 'bg-blue-400/20 dark:bg-sky-600/50 border border-blue-700/10 dark:border-sky-500 rounded-lg';
 const blankCellC = 'border-slate-100 dark:border-slate-200/5 border-2 min-w-16 p-1 m-1 align-top';
 const defaultDayNames = ['SAT', 'SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI',];
@@ -37,7 +37,7 @@ type EventGroup = {
 };
 
 type EventItem = {
-  id: number  
+  id: number
   item: any
   start: number;
   end: number;
@@ -92,23 +92,17 @@ function groupTime(timeRange: TimeRange, events: EventCapture[]): EventGroup[] {
   return slots;
 }
 
-function TimeTableComponent({ timeRange, dayNames, dayItems, itemSelect }: { timeRange: TimeRange, dayNames?: string[], dayItems: DayItem[], itemSelect: EventItemProps}) {
+function TimeTableComponent({ timeRange, dayNames, dayItems, itemSelect }: { timeRange: TimeRange, dayNames?: string[], dayItems: DayItem[], itemSelect: EventItemProps }) {
 
   function timeManager() {
-    const divItem = [
-      <th scope="col" key={'head_day_time'} className={headC}>Day/Time</th>,
-      ...Array.from({ length: maxSlot(timeRange) }, (_, ind) => {
-        const i = Math.floor((ind + getTimeToSlot(timeRange.open, timeRange.interval)) / 2);
-        const j = (ind % 2) * 30;
-        const time = `${i.toString().padStart(2, '0')}:${j === 0 ? '00' : j}`;
-        return (
-          <th scope="col" key={`day_time_${ind}`} className={headC}>
-            {time}
-          </th>
-        );
-      }),
-    ];
-    return <tr>{divItem}</tr>;
+    const divItem = [<th scope="col" key={'head_day_time'} className={headC}>Day/Time</th>,];
+    for (let index = 0; index < maxSlot(timeRange); index++) {
+      const i = Math.floor((index + getTimeToSlot(timeRange.open, timeRange.interval)) / 2);
+      const j = (index % 2) * 30;
+      const time = `${i.toString().padStart(2, '0')}:${j === 0 ? '00' : j}`;
+      divItem.push(<th scope="col" key={`day_time_${index}`} className={headC}>{time}</th>);
+    }
+    return divItem;
   }
 
 
@@ -119,6 +113,9 @@ function TimeTableComponent({ timeRange, dayNames, dayItems, itemSelect }: { tim
       const rows = [];
       for (let row = 0; row < maxEventLength; row++) {
         const cells = []
+        if (row == 0) {
+          cells.push(<td key={`head_side_${dayName}`} rowSpan={maxEventLength > 0 ? maxEventLength : 1} className={sideC}>{dayName}</td>);
+        }
         for (let column = 0; column < eventGroups.length; column++) {
           const group = eventGroups[column];
           const event = group.events[row];
@@ -126,10 +123,10 @@ function TimeTableComponent({ timeRange, dayNames, dayItems, itemSelect }: { tim
             column += event.end - event.start;
             cells.push(
               <td key={`day_data_${dayName}_${row}_${column}`} draggable="true" colSpan={event.end - event.start + 1} className={blankCellC}
-                onDoubleClick={() => { 
-                  console.log('double click', dayIndex, row, column, event, );
+                onDoubleClick={() => {
+                  console.log('double click', dayIndex, row, column, event,);
                   itemSelect.setEventItem(event.item);
-               }}
+                }}
                 onClick={() => { console.log('click', dayIndex, row, column); }}>
                 <div className={cellC}>
                   <div className='font-bold text-sm'>{`[${dayName}] ${getSlotToTime(event.start, timeRange)} - ${getSlotToTime(event.end, timeRange)}`}</div>
@@ -141,28 +138,27 @@ function TimeTableComponent({ timeRange, dayNames, dayItems, itemSelect }: { tim
             cells.push(<td key={`day_data_${dayName}_${row}_${column}`} draggable="true" className={blankCellC}></td>);
           }
         }
-        rows.push(<tr key={`day_row_${dayName}_${row}`}>{cells}</tr>);
+        rows.push(<tr className="border-2 border-slate-100">{cells}</tr>);
       }
       return (
         <>
-          <td key={`head_side_${dayName}`} rowSpan={maxEventLength + 1} className={sideC}>{dayName}</td>
-          {rows}
-          <tr><td key={`blank_${dayName}`} colSpan={maxSlot(timeRange) + 1} className='bg-blue-300 h-1'></td></tr>
+          {rows.length > 0 ? rows : <tr className="border-2 border-slate-100"><td className={sideC}>{dayName}</td></tr>}
         </>
       );
     });
     return <>{divItem}</>;
   }
 
-  const tableContent = dayNameManager();
   return (
     <>
       <table className="min-w-full divide-y divide-gray-200">
         <thead className="sm:min-w-16 lg:max-w-64">
-          {timeManager()}
+          <tr>
+            {timeManager()}
+          </tr>
         </thead>
         <tbody>
-          {tableContent}
+          {dayNameManager()}
         </tbody>
       </table>
     </>
