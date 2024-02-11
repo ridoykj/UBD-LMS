@@ -105,7 +105,6 @@ function TimeTableComponent({ timeRange, dayNames, dayItems, itemSelect }: { tim
     return divItem;
   }
 
-
   function dayNameManager() {
     return (dayNames ?? defaultDayNames).map((dayName, dayIndex) => {
       const eventGroups = groupTime(timeRange, dayItems.find(item => item.dayName.toUpperCase() === dayName.toUpperCase())?.event || []);
@@ -122,7 +121,7 @@ function TimeTableComponent({ timeRange, dayNames, dayItems, itemSelect }: { tim
           if (event && event.start === column + 1) {
             column += event.end - event.start;
             cells.push(
-              <td key={`day_data_${dayIndex}_${row}_${column}`} draggable="true" colSpan={event.end - event.start + 1} className={blankCellC}
+              <td key={`day_data_${event.id}`} draggable="true" colSpan={event.end - event.start + 1} className={blankCellC}
                 onDoubleClick={() => { itemSelect.setEventItem(event.item); }}
               >
                 <div className={cellC}>
@@ -132,14 +131,14 @@ function TimeTableComponent({ timeRange, dayNames, dayItems, itemSelect }: { tim
               </td>
             );
           } else {
-            cells.push(<td key={`blank_cell_${dayIndex}_${row}_${column}`} draggable="true" className={blankCellC}></td>);
+            cells.push(<td key={`day_data_${dayName}_${row}_${column}`} draggable="true" className={blankCellC}></td>);
           }
         }
-        rows.push(<tr key={`cells_${dayIndex}_${row}`} className="border-2 border-slate-100">{cells}</tr>);
+        rows.push(<tr key={`cells_${dayName}`} className="border-2 border-slate-100">{cells}</tr>);
       }
       return (
         <>
-          {rows.length > 0 ? rows : <tr key={`dayName_${dayIndex}`} className="border-2 border-slate-100"><td className={sideC}>{dayName}</td></tr>}
+          {rows.length > 0 ? rows : <tr key={`dayName_${dayName}`} className="border-2 border-slate-100"><td className={sideC}>{dayName}</td></tr>}
         </>
       );
     });

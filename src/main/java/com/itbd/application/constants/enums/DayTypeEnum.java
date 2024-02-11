@@ -1,9 +1,9 @@
 package com.itbd.application.constants.enums;
 
 public enum DayTypeEnum {
-    FRIDAY("Friday"), MONDAY("Monday"), SATURDAY("Saturday"), SUNDAY("Sunday"), THURSDAY("Thursday"), TUESDAY("Tuesday"), WEDNESDAY("Wednesday");
+    FRIDAY("Friday"), SATURDAY("Saturday"), SUNDAY("Sunday"), MONDAY("Monday"), TUESDAY("Tuesday"), WEDNESDAY("Wednesday"), THURSDAY("Thursday");
 
-    private String value;
+    private final String value;
 
     DayTypeEnum(String value) {
         this.value = value;

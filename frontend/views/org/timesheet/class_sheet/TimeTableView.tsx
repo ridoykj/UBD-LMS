@@ -38,7 +38,6 @@ const responsiveSteps = [
   { minWidth: '500px', columns: 2 },
 ];
 
-
 const dayNames = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT',];
 const timeRange: TimeRange = { open: '09:00', close: '21:00', interval: 30 };
 
@@ -55,9 +54,6 @@ const courseCustomItemRenderer = (item: BatchCourseDTOModel<BatchCourseDTO>) => 
 };
 
 function TimeTableView() {
-  const [startTime, setStartTime] = useState('');
-  const [closeTime, setCloseTime] = useState('');
-
   const [successNotification, setSuccessNotification] = useState<boolean>(false);
   const [failureNotification, setFailureNotification] = useState<boolean>(false);
 
@@ -68,7 +64,6 @@ function TimeTableView() {
     buildingFilter: undefined,
     floorFilter: undefined,
   });
-
 
   const [branchFilter, setBranchFilter] = useState<BranchCombobox>({
     organizationFilter: undefined,
@@ -84,7 +79,6 @@ function TimeTableView() {
 
   const { model, field, value, read, submit, clear, reset, visited, dirty, invalid, submitting, validate, } = useForm(BatchRoomDTOModel, {
     onSubmit: async (batchRoom) => {
-      console.log('instructor', batchRoom);
       await BatchRoomDtoCrudService.save(batchRoom).then((result) => {
         clear();
         setSuccessNotification(true);
@@ -97,6 +91,8 @@ function TimeTableView() {
   });
   const batchCourseField = useFormPart(model.batchCourse);
   const roomField = useFormPart(model.room);
+  const startDateField = useFormPart(model.startDate);
+  const endDateField = useFormPart(model.endDate);
 
   useEffect(() => {
     batchCourseField.addValidator(
@@ -104,6 +100,14 @@ function TimeTableView() {
         message: 'Please select a Course'
       }));
     roomField.addValidator(
+      new NotNull({
+        message: 'Please select a Room'
+      }));
+    startDateField.addValidator(
+      new NotNull({
+        message: 'Please select a Room'
+      }));
+    endDateField.addValidator(
       new NotNull({
         message: 'Please select a Room'
       }));
@@ -129,7 +133,6 @@ function TimeTableView() {
             matcher: Matcher.CONTAINS
           },];
 
-        console.log('roomDataProvider', placeFilter.floorFilter);
         const { pagination, filters } = comboBoxLazyFilter(params, 'and', child);
         RoomDtoCrudService.list(pagination, filters).then((result: any) => {
           callback(result, result.length);
@@ -238,15 +241,11 @@ function TimeTableView() {
       <div className='flex flex-col h-full'>
         <div className='flex-none'>
           <PlaceRC
-            visibleFields={
-              { sector: true, building: true, floor: true, room: true }
-            }
+            visibleFields={{ sector: true, building: true, floor: true, room: true }}
             placeProps={{ place: placeFilter, setPlace: setPlaceFilter }}
           />
           <BranchRC
-            visibleFields={
-              { organization: true, department: true, programme: true, batch: true, semester: true }
-            }
+            visibleFields={{ organization: true, department: true, programme: true, batch: true, semester: true }}
             branchProps={{ branch: branchFilter, setBranch: setBranchFilter }}
           />
         </div>
@@ -318,7 +317,7 @@ function TimeTableView() {
               </button>
             </>
           )}
-          footerRenderer={({ original }) => (
+          footerRenderer={() => (
             <>
               <Button className="border-2 border-gray-500 text-gray-500 hover:bg-gray-500 hover:text-white" onClick={() => {
                 setIsOpen(false);
@@ -345,24 +344,10 @@ function TimeTableView() {
             <ComboBox label={'Room'} {...{ colspan: 1 }} dataProvider={roomDataProvider} {...field(model.room)} itemLabelPath='name' itemValuePath='room.id' clearButtonVisible />
             <ComboBox label={'Day'} {...{ colspan: 1 }} {...field(model.dayName)} items={days} itemLabelPath="label" />
             <ComboBox label={'Event Activity'} {...{ colspan: 1 }} {...field(model.eventType)} items={eventTypes} itemLabelPath="label" />
-            <DatePicker label={'Start Date'} {...{ colspan: 1 }} {...field(model.startDate)} i18n={{ ...configDatePickerI18n, }}
-              max={value.endDate ? value.endDate.toString() : ''}
-              onValueChanged={(event) => {
-                console.log('event.detail.value', event.detail.value);
-              }} />
-            <DatePicker label={'End Date'} {...{ colspan: 1 }} {...field(model.endDate)} i18n={{ ...configDatePickerI18n, }}
-              min={value.startDate ? value.startDate.toString() : ''}
-              onValueChanged={(event) => {
-                console.log('event.detail.value', event.detail.value);
-              }} />
-            <TimePicker label={'Start Time'}{...{ colspan: 1 }} min='09:00' max={closeTime}  {...field(model.startTime)}
-              onValueChanged={(event) => {
-                setStartTime(event.detail.value);
-              }} />
-            <TimePicker label={'End Time'} {...{ colspan: 1 }} min={startTime} max='20:00' {...field(model.endTime)}
-              onValueChanged={(event) => {
-                setCloseTime(event.detail.value);
-              }} />
+            <DatePicker label={'Start Date'} {...{ colspan: 1 }} {...field(model.startDate)} i18n={{ ...configDatePickerI18n, }} max={value.endDate ?? ''} />
+            <DatePicker label={'End Date'} {...{ colspan: 1 }} {...field(model.endDate)} i18n={{ ...configDatePickerI18n, }} min={value.startDate ?? ''} />
+            <TimePicker label={'Start Time'}{...{ colspan: 1 }} min='09:00' max={value.endTime ?? '20:00'}  {...field(model.startTime)} />
+            <TimePicker label={'End Time'} {...{ colspan: 1 }} min={value.startTime ?? '09:00'} max='20:00' {...field(model.endTime)} />
             {/* <TextField label={'Contact'}  {...{ colspan: 2 }} {...field(model.contact)} /> */}
             <TextArea label={'Description'} {...{ colspan: 2 }} className='col-span-2' {...field(model.description)} />
           </FormLayout>
