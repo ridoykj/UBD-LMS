@@ -91,8 +91,6 @@ function TimeTableView() {
   });
   const batchCourseField = useFormPart(model.batchCourse);
   const roomField = useFormPart(model.room);
-  const startDateField = useFormPart(model.startDate);
-  const endDateField = useFormPart(model.endDate);
 
   useEffect(() => {
     batchCourseField.addValidator(
@@ -103,14 +101,15 @@ function TimeTableView() {
       new NotNull({
         message: 'Please select a Room'
       }));
-    startDateField.addValidator(
-      new NotNull({
-        message: 'Please select a Room'
-      }));
-    endDateField.addValidator(
-      new NotNull({
-        message: 'Please select a Room'
-      }));
+    addValidator({
+      message: 'Please select a Room',
+      validate: (value: BatchRoomDTOModel) => {
+        if (value.startDate != undefined && value.endDate != undefined && value.startDate > value.endDate) {
+          return [{ property: model.startDate }];
+        }
+        return [];
+      }
+    });
   }, []);
 
   const roomDataProvider = useMemo(
@@ -364,3 +363,7 @@ function TimeTableView() {
   );
 }
 export default TimeTableView;
+function addValidator(arg0: { message: string; validate: (value: BatchRoomDTOModel) => { property: any; }[]; }) {
+  throw new Error('Function not implemented.');
+}
+
