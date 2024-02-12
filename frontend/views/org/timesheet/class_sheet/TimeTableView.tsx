@@ -102,9 +102,12 @@ function TimeTableView() {
         message: 'Please select a Room'
       }));
     addValidator({
-      message: 'Please select "Start Date" & "End Date" or "Day"',
+      message: 'Please select  "Day" or "Start Date" & "End Date"',
       validate: (value: BatchRoomDTO) => {
-        if (value.dayName == undefined || (value.startDate == undefined && value.endDate == undefined)) {
+        if (value.dayName != undefined && (value.startTime == undefined && value.endTime == undefined)) {
+          return [{ property: model.startTime, message: 'You can\'t leave this field' }, { property: model.startTime, message: 'You can\'t leave this field' }];
+        }
+        else if (value.dayName == undefined && (value.startDate == undefined && value.endDate == undefined)) {
           return [{ property: model.startDate, }, { property: model.endDate, }, { property: model.dayName, }];
         }
         return [];
