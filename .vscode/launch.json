@@ -1,0 +1,21 @@
+{
+  "configurations": [
+    {
+      "name": "Launch Edge",
+      "request": "launch",
+      "type": "msedge",
+      "url": "http://localhost:8088/",
+      "webRoot": "${workspaceFolder}/frontend"
+    },
+    {
+      "type": "java",
+      "name": "Spring Boot-Application<my-hilla-app>",
+      "request": "launch",
+      "cwd": "${workspaceFolder}",
+      "mainClass": "com.itbd.application.Application",
+      "projectName": "my-hilla-app",
+      "args": "",
+      "envFile": "${workspaceFolder}/.env"
+    }
+  ]
+}

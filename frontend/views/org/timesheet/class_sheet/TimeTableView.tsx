@@ -77,7 +77,7 @@ function TimeTableView() {
   const [eventRefresh, setEventRefresh] = useState<boolean>(false);
   const [eventItem, setEventItem] = useState<BatchRoomDTOModel>();
 
-  const { model, field, value, read, submit, clear, reset, visited, dirty, invalid, submitting, validate, } = useForm(BatchRoomDTOModel, {
+  const { model, field, value, read, submit, clear, reset, visited, dirty, invalid, submitting, validate, addValidator } = useForm(BatchRoomDTOModel, {
     onSubmit: async (batchRoom) => {
       await BatchRoomDtoCrudService.save(batchRoom).then((result) => {
         clear();
@@ -102,10 +102,10 @@ function TimeTableView() {
         message: 'Please select a Room'
       }));
     addValidator({
-      message: 'Please select a Room',
-      validate: (value: BatchRoomDTOModel) => {
-        if (value.startDate != undefined && value.endDate != undefined && value.startDate > value.endDate) {
-          return [{ property: model.startDate }];
+      message: 'Please select "Start Date" & "End Date" or "Day"',
+      validate: (value: BatchRoomDTO) => {
+        if (value.dayName == undefined || (value.startDate == undefined && value.endDate == undefined)) {
+          return [{ property: model.startDate, }, { property: model.endDate, }, { property: model.dayName, }];
         }
         return [];
       }
@@ -363,7 +363,3 @@ function TimeTableView() {
   );
 }
 export default TimeTableView;
-function addValidator(arg0: { message: string; validate: (value: BatchRoomDTOModel) => { property: any; }[]; }) {
-  throw new Error('Function not implemented.');
-}
-

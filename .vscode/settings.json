@@ -1,0 +1,11 @@
+{
+  "graalvm.home": "C:\\Program Files\\Java\\graalvm-jdk-17.0.9",
+  "graalvm.installations": [
+    "C:\\Program Files\\Java\\graalvm-jdk-17.0.9"
+  ],
+  "terminal.integrated.env.windows": {
+    "GRAALVM_HOME": "C:\\Program Files\\Java\\graalvm-jdk-17.0.9"
+  },
+  "java.home": "C:\\Program Files\\Java\\graalvm-jdk-17.0.9",
+  "java.compile.nullAnalysis.mode": "automatic"
+}
