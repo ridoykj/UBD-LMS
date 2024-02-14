@@ -32,6 +32,7 @@ import { FaCopy, FaDownload, FaPrint, FaRegCalendarPlus, FaShareAlt } from 'reac
 import { FaX } from 'react-icons/fa6';
 import TimeTableComponent, { DayItem, TimeRange } from './TimeTableComponent';
 import { FormLayout } from '@hilla/react-components/FormLayout.js';
+import PdfViewerRC from 'Frontend/components/pdf/PdfViewerRC';
 
 const responsiveSteps = [
   { minWidth: '0', columns: 1 },
@@ -277,6 +278,7 @@ function TimeTableView() {
             <p>It’s a place where you can grow your own UI 🤗</p>
           </div>
         </TabSheet >
+        <PdfViewerRC dialogShow fileUrl={`/v1/content/byte?filePath=${btoa('/doc/doc.pdf')}`} />
       </div >
       <div className='w-full'>
         <NotificationUtil opened={successNotification} type="update"

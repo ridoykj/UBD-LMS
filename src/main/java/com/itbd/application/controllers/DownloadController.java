@@ -40,7 +40,8 @@ public class DownloadController {
     @GetMapping(value = "/byte")
     public ResponseEntity<Resource> getByte(@RequestParam String filePath) throws IOException {
 //        log.info("Image request Found!");
-        File file = new File(urlBase64Decode(filePath));
+        Path path = Path.of(fileSource, urlBase64Decode(filePath));
+        File file = path.toFile();
         if (file.exists()) {
             HttpHeaders headers = new HttpHeaders();
             headers.add("Cache-Control", "no-cache, no-store, must-revalidate");

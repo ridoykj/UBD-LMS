@@ -32,6 +32,7 @@
     "npm": "^10.4.0",
     "react": "^18.2.0",
     "react-icons": "^5.0.1",
+    "react-pdf": "^7.7.0",
     "react-tooltip": "^5.26.0"
   },
   "devDependencies": {
@@ -97,7 +98,7 @@
       "workbox-core": "7.0.0",
       "workbox-precaching": "7.0.0"
     },
-    "hash": "6e95763db513e0b2b8ab2b5cd4fb79f6256268bd277e05fb2c1b1a0812ce5431"
+    "hash": "85cb21852d05eac613d0a3b2be314a4779a2126e398149028a4714eb63275f2c"
   },
   "overrides": {
     "@vaadin/bundles": "$@vaadin/bundles",
@@ -129,6 +130,7 @@
     "npm": "$npm",
     "react": "$react",
     "date-fns": "$date-fns",
-    "react-tooltip": "$react-tooltip"
+    "react-tooltip": "$react-tooltip",
+    "react-pdf": "$react-pdf"
   }
 }
