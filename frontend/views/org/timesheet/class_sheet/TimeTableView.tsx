@@ -23,13 +23,13 @@ import Filter from 'Frontend/generated/dev/hilla/crud/filter/Filter';
 import PropertyStringFilter from 'Frontend/generated/dev/hilla/crud/filter/PropertyStringFilter';
 import Matcher from 'Frontend/generated/dev/hilla/crud/filter/PropertyStringFilter/Matcher';
 import Pageable from 'Frontend/generated/dev/hilla/mappedtypes/Pageable';
-import { BatchCourseDtoCrudService, BatchRoomDtoCrudService, RoomDtoCrudService } from 'Frontend/generated/endpoints';
+import { BatchCourseDtoCrudService, BatchRoomDtoCrudService, ReportManagerController, RoomDtoCrudService } from 'Frontend/generated/endpoints';
 import { configDatePickerI18n } from 'Frontend/util/DatePickerI18n';
 import NotificationUtil from 'Frontend/util/NotificationUtil';
 import { comboBoxLazyFilter } from 'Frontend/util/comboboxLazyFilterUtil';
 import { useEffect, useMemo, useState } from 'react';
 import { FaCopy, FaDownload, FaPrint, FaRegCalendarPlus, FaShareAlt } from 'react-icons/fa';
-import { FaX } from 'react-icons/fa6';
+import { FaList, FaX } from 'react-icons/fa6';
 import TimeTableComponent, { DayItem, TimeRange } from './TimeTableComponent';
 import { FormLayout } from '@hilla/react-components/FormLayout.js';
 import PdfViewerRC from 'Frontend/components/pdf/PdfViewerRC';
@@ -59,6 +59,7 @@ function TimeTableView() {
   const [failureNotification, setFailureNotification] = useState<boolean>(false);
 
   const [isOpen, setIsOpen] = useState(false);
+  const [isReportOpen, setIsReportOpen] = useState(false);
 
   const [placeFilter, setPlaceFilter] = useState<PlaceCombobox>({
     sectorFilter: undefined,
@@ -278,7 +279,8 @@ function TimeTableView() {
             <p>It’s a place where you can grow your own UI 🤗</p>
           </div>
         </TabSheet >
-        <PdfViewerRC dialogShow fileUrl={`/v1/content/byte?filePath=${btoa('/doc/doc.pdf')}`} />
+        {/* <PdfViewerRC dialogShow={isReportOpen} fileUrl={`/v1/content/byte?filePath=${btoa('/doc/doc.pdf')}`} /> */}
+        <PdfViewerRC dialogShow={isReportOpen} fileUrl={ReportManagerController.getReportByte()} />
       </div >
       <div className='w-full'>
         <NotificationUtil opened={successNotification} type="update"
@@ -361,6 +363,7 @@ function TimeTableView() {
           { name: 'Print', icon: <FaPrint />, onClick: () => { console.log('Print') } },
           { name: 'Save', icon: <FaDownload />, onClick: () => { console.log('Save') } },
           { name: 'Copy', icon: <FaCopy />, onClick: () => { console.log('Copy') } },
+          { name: 'Report', icon: <FaList />, onClick: () => { setIsReportOpen(e => !e) } },
           { name: 'Reserve', icon: <FaRegCalendarPlus />, onClick: () => { setIsOpen(true) } },
         ]} />
       </div >

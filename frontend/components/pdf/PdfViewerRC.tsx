@@ -1,5 +1,5 @@
 import { Dialog } from '@hilla/react-components/Dialog.js';
-import { Component } from 'react';
+import { Component, useEffect } from 'react';
 import { FaX } from 'react-icons/fa6';
 import { Document, Page, pdfjs } from 'react-pdf';
 import 'react-pdf/dist/Page/TextLayer.css';
@@ -16,20 +16,35 @@ const options = {
     // httpHeaders: { 'Access-Control-Allow-Origin': '*' },
 };
 
-// type PDFFile = string | File | null;
+type PDFFile = string | File | null | Promise<number[] | undefined>;
 
-class PdfViewerRC extends Component<{ fileUrl: string, dialogShow: boolean }> {
+class PdfViewerRC extends Component<{ fileUrl: PDFFile, dialogShow: boolean }> {
     state: {
         numPages: number | null,
         pageNumber: number,
-        file: string,
+        file: Blob | null,
         dialogShow: boolean,
     } = {
             numPages: null,
             pageNumber: 1,
-            file: this.props.fileUrl,
-            dialogShow: this.props.dialogShow,
+            file: null,
+            dialogShow: false,
         };
+
+    componentDidUpdate(prevProps: Readonly<{ fileUrl: string; dialogShow: boolean; }>, prevState: Readonly<{}>, snapshot?: any): void {
+        if (prevProps.dialogShow !== this.props.dialogShow) {
+            this.setState({ dialogShow: true });
+        }
+        if (prevProps.fileUrl !== this.props.fileUrl) {
+            if (this.props.fileUrl instanceof Promise) {
+                this.props.fileUrl.then((file: any) => {
+                    console.log('FileR', new Blob([file], { type: 'application/pdf' }));
+                    // new Blob([file], { type: 'application/pdf' })
+                    this.setState({ file: new Blob([file], { type: 'application/pdf' }) });
+                });
+            }
+        }
+    }
 
     onDocumentLoadSuccess = ({ numPages }: { numPages: number }) => {
         this.setState({ numPages });
@@ -43,7 +58,6 @@ class PdfViewerRC extends Component<{ fileUrl: string, dialogShow: boolean }> {
 
     render() {
         const { pageNumber, numPages } = this.state;
-        console.log('this.props', this.props);
         return (
             <>
                 <Dialog modeless draggable resizable opened={this.state.dialogShow} overlayClass='w-1/2'

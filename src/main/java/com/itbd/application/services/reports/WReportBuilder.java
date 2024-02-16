@@ -50,7 +50,7 @@ public class WReportBuilder {
     }
 
 
-    public StreamResource getStreamResource(Integer projectKey, String templatePath, Map<String, Object> parameterLs, String fileName) {
+    public StreamResource getStreamResource(String templatePath, Map<String, Object> parameterLs, String fileName) {
         StreamResource resource = new StreamResource(String.format("%s_%s.pdf", fileName, LocalDateTime.now()), () -> new ByteArrayInputStream(getByteStream(templatePath, parameterLs, fileName)));
         resource.setContentType("application/pdf");
         return resource;

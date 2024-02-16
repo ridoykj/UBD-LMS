@@ -23,7 +23,6 @@ import React, { useState } from "react";
 import { Upload, UploadSuccessEvent } from "@hilla/react-components/Upload.js";
 import { InstructorDtoCrudService } from "Frontend/generated/endpoints";
 import CoordinatorRenderer from "./CoordinatorRenderer";
-import ImgRC from "Frontend/components/Image/ImgRC";
 
 const responsiveSteps = [
     { minWidth: '0', columns: 1 },

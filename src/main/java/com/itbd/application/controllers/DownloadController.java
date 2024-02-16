@@ -37,6 +37,7 @@ public class DownloadController {
         return null;
     }
 
+
     @GetMapping(value = "/byte")
     public ResponseEntity<Resource> getByte(@RequestParam String filePath) throws IOException {
 //        log.info("Image request Found!");
