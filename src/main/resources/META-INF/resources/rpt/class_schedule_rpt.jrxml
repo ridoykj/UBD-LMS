@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 6.21.1.final using JasperReports Library version 6.21.0-4f56c4f36cd19e17675219a9ac4692d5f0f13b06  -->
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="class_schedule_rpt" language="groovy" pageWidth="595" pageHeight="842" whenNoDataType="AllSectionsNoDetail" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="5ab7c4f6-0ac1-41fc-8375-63915e451b5c">
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="class_schedule_rpt" pageWidth="595" pageHeight="842" whenNoDataType="AllSectionsNoDetail" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="5ab7c4f6-0ac1-41fc-8375-63915e451b5c">
 	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="DB-ubd-lms"/>
 	<style name="Table_TH" mode="Opaque" backcolor="#F0F8FF">
@@ -30,179 +30,28 @@
 			<rightPen lineWidth="0.5" lineColor="#000000"/>
 		</box>
 	</style>
-	<subDataset name="dp_person" uuid="c935890d-5c40-4bca-9809-7ecc985372a4">
+	<subDataset name="Dataset1" uuid="2014c678-4e1b-4e32-850b-7d9a2faf925b">
 		<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
 		<property name="com.jaspersoft.studio.data.defaultdataadapter" value="DB-ubd-lms"/>
 		<queryString language="SQL">
-			<![CDATA[SELECT *
+			<![CDATA[SELECT tx_given_name
 FROM t_per_person]]>
 		</queryString>
-		<field name="id_person_key" class="java.lang.Long">
-			<property name="com.jaspersoft.studio.field.name" value="id_person_key"/>
-			<property name="com.jaspersoft.studio.field.label" value="id_person_key"/>
-			<property name="com.jaspersoft.studio.field.tree.path" value="t_per_person"/>
-		</field>
-		<field name="id_action_key" class="java.lang.Long">
-			<property name="com.jaspersoft.studio.field.name" value="id_action_key"/>
-			<property name="com.jaspersoft.studio.field.label" value="id_action_key"/>
-			<property name="com.jaspersoft.studio.field.tree.path" value="t_per_person"/>
-		</field>
-		<field name="dtt_added" class="java.sql.Timestamp">
-			<property name="com.jaspersoft.studio.field.name" value="dtt_added"/>
-			<property name="com.jaspersoft.studio.field.label" value="dtt_added"/>
-			<property name="com.jaspersoft.studio.field.tree.path" value="t_per_person"/>
-		</field>
-		<field name="id_user_gen" class="java.lang.Long">
-			<property name="com.jaspersoft.studio.field.name" value="id_user_gen"/>
-			<property name="com.jaspersoft.studio.field.label" value="id_user_gen"/>
-			<property name="com.jaspersoft.studio.field.tree.path" value="t_per_person"/>
-		</field>
-		<field name="id_env_key" class="java.lang.Long">
-			<property name="com.jaspersoft.studio.field.name" value="id_env_key"/>
-			<property name="com.jaspersoft.studio.field.label" value="id_env_key"/>
-			<property name="com.jaspersoft.studio.field.tree.path" value="t_per_person"/>
-		</field>
-		<field name="id_event_key" class="java.lang.Long">
-			<property name="com.jaspersoft.studio.field.name" value="id_event_key"/>
-			<property name="com.jaspersoft.studio.field.label" value="id_event_key"/>
-			<property name="com.jaspersoft.studio.field.tree.path" value="t_per_person"/>
-		</field>
-		<field name="id_user_mod" class="java.lang.Long">
-			<property name="com.jaspersoft.studio.field.name" value="id_user_mod"/>
-			<property name="com.jaspersoft.studio.field.label" value="id_user_mod"/>
-			<property name="com.jaspersoft.studio.field.tree.path" value="t_per_person"/>
-		</field>
-		<field name="is_active" class="java.lang.Boolean">
-			<property name="com.jaspersoft.studio.field.name" value="is_active"/>
-			<property name="com.jaspersoft.studio.field.label" value="is_active"/>
-			<property name="com.jaspersoft.studio.field.tree.path" value="t_per_person"/>
-		</field>
-		<field name="tx_comment" class="java.lang.String">
-			<property name="com.jaspersoft.studio.field.name" value="tx_comment"/>
-			<property name="com.jaspersoft.studio.field.label" value="tx_comment"/>
-			<property name="com.jaspersoft.studio.field.tree.path" value="t_per_person"/>
-		</field>
-		<field name="id_state_key" class="java.lang.Long">
-			<property name="com.jaspersoft.studio.field.name" value="id_state_key"/>
-			<property name="com.jaspersoft.studio.field.label" value="id_state_key"/>
-			<property name="com.jaspersoft.studio.field.tree.path" value="t_per_person"/>
-		</field>
-		<field name="dtt_mod" class="java.sql.Timestamp">
-			<property name="com.jaspersoft.studio.field.name" value="dtt_mod"/>
-			<property name="com.jaspersoft.studio.field.label" value="dtt_mod"/>
-			<property name="com.jaspersoft.studio.field.tree.path" value="t_per_person"/>
-		</field>
-		<field name="tx_additional_name" class="java.lang.String">
-			<property name="com.jaspersoft.studio.field.name" value="tx_additional_name"/>
-			<property name="com.jaspersoft.studio.field.label" value="tx_additional_name"/>
-			<property name="com.jaspersoft.studio.field.tree.path" value="t_per_person"/>
-		</field>
-		<field name="tx_full_name" class="java.lang.String">
-			<property name="com.jaspersoft.studio.field.name" value="tx_full_name"/>
-			<property name="com.jaspersoft.studio.field.label" value="tx_full_name"/>
-			<property name="com.jaspersoft.studio.field.tree.path" value="t_per_person"/>
-		</field>
-		<field name="dtt_birth" class="java.sql.Timestamp">
-			<property name="com.jaspersoft.studio.field.name" value="dtt_birth"/>
-			<property name="com.jaspersoft.studio.field.label" value="dtt_birth"/>
-			<property name="com.jaspersoft.studio.field.tree.path" value="t_per_person"/>
-		</field>
-		<field name="blood_group" class="java.lang.String">
-			<property name="com.jaspersoft.studio.field.name" value="blood_group"/>
-			<property name="com.jaspersoft.studio.field.label" value="blood_group"/>
-			<property name="com.jaspersoft.studio.field.tree.path" value="t_per_person"/>
-		</field>
-		<field name="dtt_death" class="java.sql.Timestamp">
-			<property name="com.jaspersoft.studio.field.name" value="dtt_death"/>
-			<property name="com.jaspersoft.studio.field.label" value="dtt_death"/>
-			<property name="com.jaspersoft.studio.field.tree.path" value="t_per_person"/>
-		</field>
-		<field name="tx_description" class="java.lang.String">
-			<property name="com.jaspersoft.studio.field.name" value="tx_description"/>
-			<property name="com.jaspersoft.studio.field.label" value="tx_description"/>
-			<property name="com.jaspersoft.studio.field.tree.path" value="t_per_person"/>
-		</field>
-		<field name="tx_family_name" class="java.lang.String">
-			<property name="com.jaspersoft.studio.field.name" value="tx_family_name"/>
-			<property name="com.jaspersoft.studio.field.label" value="tx_family_name"/>
-			<property name="com.jaspersoft.studio.field.tree.path" value="t_per_person"/>
-		</field>
-		<field name="tx_father_name" class="java.lang.String">
-			<property name="com.jaspersoft.studio.field.name" value="tx_father_name"/>
-			<property name="com.jaspersoft.studio.field.label" value="tx_father_name"/>
-			<property name="com.jaspersoft.studio.field.tree.path" value="t_per_person"/>
-		</field>
-		<field name="tx_father_phone" class="java.lang.String">
-			<property name="com.jaspersoft.studio.field.name" value="tx_father_phone"/>
-			<property name="com.jaspersoft.studio.field.label" value="tx_father_phone"/>
-			<property name="com.jaspersoft.studio.field.tree.path" value="t_per_person"/>
-		</field>
-		<field name="tx_fllows" class="java.lang.String">
-			<property name="com.jaspersoft.studio.field.name" value="tx_fllows"/>
-			<property name="com.jaspersoft.studio.field.label" value="tx_fllows"/>
-			<property name="com.jaspersoft.studio.field.tree.path" value="t_per_person"/>
-		</field>
 		<field name="tx_given_name" class="java.lang.String">
 			<property name="com.jaspersoft.studio.field.name" value="tx_given_name"/>
 			<property name="com.jaspersoft.studio.field.label" value="tx_given_name"/>
 			<property name="com.jaspersoft.studio.field.tree.path" value="t_per_person"/>
 		</field>
-		<field name="has_occupation" class="java.lang.Boolean">
-			<property name="com.jaspersoft.studio.field.name" value="has_occupation"/>
-			<property name="com.jaspersoft.studio.field.label" value="has_occupation"/>
-			<property name="com.jaspersoft.studio.field.tree.path" value="t_per_person"/>
-		</field>
-		<field name="tx_honorific_prefix" class="java.lang.String">
-			<property name="com.jaspersoft.studio.field.name" value="tx_honorific_prefix"/>
-			<property name="com.jaspersoft.studio.field.label" value="tx_honorific_prefix"/>
-			<property name="com.jaspersoft.studio.field.tree.path" value="t_per_person"/>
-		</field>
-		<field name="tx_honorific_suffix" class="java.lang.String">
-			<property name="com.jaspersoft.studio.field.name" value="tx_honorific_suffix"/>
-			<property name="com.jaspersoft.studio.field.label" value="tx_honorific_suffix"/>
-			<property name="com.jaspersoft.studio.field.tree.path" value="t_per_person"/>
-		</field>
-		<field name="tx_knows_language" class="java.lang.String">
-			<property name="com.jaspersoft.studio.field.name" value="tx_knows_language"/>
-			<property name="com.jaspersoft.studio.field.label" value="tx_knows_language"/>
-			<property name="com.jaspersoft.studio.field.tree.path" value="t_per_person"/>
-		</field>
-		<field name="tx_mother_name" class="java.lang.String">
-			<property name="com.jaspersoft.studio.field.name" value="tx_mother_name"/>
-			<property name="com.jaspersoft.studio.field.label" value="tx_mother_name"/>
-			<property name="com.jaspersoft.studio.field.tree.path" value="t_per_person"/>
-		</field>
-		<field name="tx_mother_phone" class="java.lang.String">
-			<property name="com.jaspersoft.studio.field.name" value="tx_mother_phone"/>
-			<property name="com.jaspersoft.studio.field.label" value="tx_mother_phone"/>
-			<property name="com.jaspersoft.studio.field.tree.path" value="t_per_person"/>
-		</field>
-		<field name="tx_nationality" class="java.lang.String">
-			<property name="com.jaspersoft.studio.field.name" value="tx_nationality"/>
-			<property name="com.jaspersoft.studio.field.label" value="tx_nationality"/>
-			<property name="com.jaspersoft.studio.field.tree.path" value="t_per_person"/>
-		</field>
-		<field name="tx_ref_person" class="java.lang.String">
-			<property name="com.jaspersoft.studio.field.name" value="tx_ref_person"/>
-			<property name="com.jaspersoft.studio.field.label" value="tx_ref_person"/>
-			<property name="com.jaspersoft.studio.field.tree.path" value="t_per_person"/>
-		</field>
-		<field name="tx_sponsor" class="java.lang.String">
-			<property name="com.jaspersoft.studio.field.name" value="tx_sponsor"/>
-			<property name="com.jaspersoft.studio.field.label" value="tx_sponsor"/>
-			<property name="com.jaspersoft.studio.field.tree.path" value="t_per_person"/>
-		</field>
-		<field name="id_person_ver" class="java.lang.Long">
-			<property name="com.jaspersoft.studio.field.name" value="id_person_ver"/>
-			<property name="com.jaspersoft.studio.field.label" value="id_person_ver"/>
-			<property name="com.jaspersoft.studio.field.tree.path" value="t_per_person"/>
-		</field>
 	</subDataset>
 	<queryString language="SQL">
-		<![CDATA[]]>
+		<![CDATA[select 1]]>
 	</queryString>
+	<field name="1" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.name" value="1"/>
+		<property name="com.jaspersoft.studio.field.label" value="1"/>
+	</field>
 	<title>
-		<band height="79" splitType="Stretch">
+		<band height="35" splitType="Stretch">
 			<textField>
 				<reportElement x="190" y="0" width="140" height="30" uuid="5d3f97f2-045c-49ca-b911-9a8f1eb5dc64"/>
 				<textElement textAlignment="Center">
@@ -213,121 +62,32 @@ FROM t_per_person]]>
 		</band>
 	</title>
 	<detail>
-		<band height="156">
+		<band height="291">
 			<componentElement>
-				<reportElement x="2" y="0" width="550" height="150" uuid="0ee35795-61b7-446f-bddd-47d96bb71cce">
+				<reportElement x="99" y="77" width="200" height="200" uuid="e06a8cf8-8090-44ad-b7e0-c1845451e957">
 					<property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.VerticalRowLayout"/>
 					<property name="com.jaspersoft.studio.table.style.table_header" value="Table_TH"/>
 					<property name="com.jaspersoft.studio.table.style.column_header" value="Table_CH"/>
 					<property name="com.jaspersoft.studio.table.style.detail" value="Table_TD"/>
 				</reportElement>
 				<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
-					<datasetRun subDataset="dp_person" uuid="79a8ce25-d2d5-499f-8953-d90a1d9d5786"/>
-					<jr:column width="93" uuid="a36f2dd5-355e-4d4f-a446-07d466fda7b6">
-						<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column1"/>
-						<jr:tableHeader style="Table_TH" height="30" rowSpan="1"/>
-						<jr:tableFooter style="Table_TH" height="30" rowSpan="1"/>
-						<jr:columnHeader style="Table_CH" height="30" rowSpan="1">
+					<datasetRun subDataset="Dataset1" uuid="01a8a399-3646-4ff0-af28-7c34b769cba5">
+						<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+					</datasetRun>
+					<jr:column width="200" uuid="c95cae5e-3661-43c4-8a97-44f630b1d4d9">
+						<jr:tableHeader style="Table_TH" height="30"/>
+						<jr:tableFooter style="Table_TH" height="30"/>
+						<jr:columnHeader style="Table_CH" height="30">
 							<staticText>
-								<reportElement x="0" y="0" width="93" height="30" uuid="f5aae536-a039-43fc-8906-bfbdd6436722"/>
-								<text><![CDATA[tx_knows_language]]></text>
+								<reportElement x="0" y="0" width="200" height="30" uuid="148cc749-97f4-4fc0-a6d8-ebb77c3a1423"/>
+								<text><![CDATA[tx_given_name]]></text>
 							</staticText>
 						</jr:columnHeader>
-						<jr:columnFooter style="Table_CH" height="30" rowSpan="1"/>
+						<jr:columnFooter style="Table_CH" height="30"/>
 						<jr:detailCell style="Table_TD" height="30">
 							<textField>
-								<reportElement x="0" y="0" width="93" height="30" uuid="52e04a7c-57c6-4948-9cac-e00e76a34b09"/>
-								<textFieldExpression><![CDATA[$F{tx_knows_language}]]></textFieldExpression>
-							</textField>
-						</jr:detailCell>
-					</jr:column>
-					<jr:column width="90" uuid="316c64bd-3e8a-4da3-9f37-d17a01aa08b6">
-						<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column2"/>
-						<jr:tableHeader style="Table_TH" height="30" rowSpan="1"/>
-						<jr:tableFooter style="Table_TH" height="30" rowSpan="1"/>
-						<jr:columnHeader style="Table_CH" height="30" rowSpan="1">
-							<staticText>
-								<reportElement x="0" y="0" width="90" height="30" uuid="4864f267-e88c-4379-a0cf-81de2e90d93b"/>
-								<text><![CDATA[tx_mother_name]]></text>
-							</staticText>
-						</jr:columnHeader>
-						<jr:columnFooter style="Table_CH" height="30" rowSpan="1"/>
-						<jr:detailCell style="Table_TD" height="30">
-							<textField>
-								<reportElement x="0" y="0" width="90" height="30" uuid="6dd9a504-960b-4642-a31c-00309c23ba67"/>
-								<textFieldExpression><![CDATA[$F{tx_mother_name}]]></textFieldExpression>
-							</textField>
-						</jr:detailCell>
-					</jr:column>
-					<jr:column width="93" uuid="2fc8071c-f9a9-4914-b02e-7f9a8aaf8236">
-						<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column3"/>
-						<jr:tableHeader style="Table_TH" height="30" rowSpan="1"/>
-						<jr:tableFooter style="Table_TH" height="30" rowSpan="1"/>
-						<jr:columnHeader style="Table_CH" height="30" rowSpan="1">
-							<staticText>
-								<reportElement x="0" y="0" width="93" height="30" uuid="c83b3685-3c90-4f7d-847f-dfd622f53354"/>
-								<text><![CDATA[tx_mother_phone]]></text>
-							</staticText>
-						</jr:columnHeader>
-						<jr:columnFooter style="Table_CH" height="30" rowSpan="1"/>
-						<jr:detailCell style="Table_TD" height="30">
-							<textField>
-								<reportElement x="0" y="0" width="93" height="30" uuid="a02ecc5a-6325-42a7-b7b9-349e1e731f3f"/>
-								<textFieldExpression><![CDATA[$F{tx_mother_phone}]]></textFieldExpression>
-							</textField>
-						</jr:detailCell>
-					</jr:column>
-					<jr:column width="92" uuid="87b55e4c-721f-4fb3-8c00-565a1314d72b">
-						<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column4"/>
-						<jr:tableHeader style="Table_TH" height="30" rowSpan="1"/>
-						<jr:tableFooter style="Table_TH" height="30" rowSpan="1"/>
-						<jr:columnHeader style="Table_CH" height="30" rowSpan="1">
-							<staticText>
-								<reportElement x="0" y="0" width="92" height="30" uuid="38209d40-2ade-4c6e-9ff0-0dce2958acbf"/>
-								<text><![CDATA[tx_nationality]]></text>
-							</staticText>
-						</jr:columnHeader>
-						<jr:columnFooter style="Table_CH" height="30" rowSpan="1"/>
-						<jr:detailCell style="Table_TD" height="30">
-							<textField>
-								<reportElement x="0" y="0" width="92" height="30" uuid="216e0150-92df-4ba0-be00-5c618728b360"/>
-								<textFieldExpression><![CDATA[$F{tx_nationality}]]></textFieldExpression>
-							</textField>
-						</jr:detailCell>
-					</jr:column>
-					<jr:column width="93" uuid="54725ee2-e37a-4471-953f-baf85c437d1e">
-						<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column5"/>
-						<jr:tableHeader style="Table_TH" height="30" rowSpan="1"/>
-						<jr:tableFooter style="Table_TH" height="30" rowSpan="1"/>
-						<jr:columnHeader style="Table_CH" height="30" rowSpan="1">
-							<staticText>
-								<reportElement x="0" y="0" width="93" height="30" uuid="a725bc58-1291-438c-9099-fb3fc905b690"/>
-								<text><![CDATA[tx_ref_person]]></text>
-							</staticText>
-						</jr:columnHeader>
-						<jr:columnFooter style="Table_CH" height="30" rowSpan="1"/>
-						<jr:detailCell style="Table_TD" height="30">
-							<textField>
-								<reportElement x="0" y="0" width="93" height="30" uuid="46b22919-d389-4828-9808-ae468d4a33d1"/>
-								<textFieldExpression><![CDATA[$F{tx_ref_person}]]></textFieldExpression>
-							</textField>
-						</jr:detailCell>
-					</jr:column>
-					<jr:column width="89" uuid="52cae770-cf94-40de-9434-5ca659613a8f">
-						<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column6"/>
-						<jr:tableHeader style="Table_TH" height="30" rowSpan="1"/>
-						<jr:tableFooter style="Table_TH" height="30" rowSpan="1"/>
-						<jr:columnHeader style="Table_CH" height="30" rowSpan="1">
-							<staticText>
-								<reportElement x="0" y="0" width="89" height="30" uuid="1aaac6cc-6038-4849-9172-c58007a8a98d"/>
-								<text><![CDATA[tx_sponsor]]></text>
-							</staticText>
-						</jr:columnHeader>
-						<jr:columnFooter style="Table_CH" height="30" rowSpan="1"/>
-						<jr:detailCell style="Table_TD" height="30">
-							<textField>
-								<reportElement x="0" y="0" width="89" height="30" uuid="472687fd-6c10-43a4-9f19-a81f58938451"/>
-								<textFieldExpression><![CDATA[$F{tx_sponsor}]]></textFieldExpression>
+								<reportElement x="0" y="0" width="200" height="30" uuid="71e18a60-13ca-4cd3-9e34-74e5e6e619c5"/>
+								<textFieldExpression><![CDATA[$F{tx_given_name}]]></textFieldExpression>
 							</textField>
 						</jr:detailCell>
 					</jr:column>

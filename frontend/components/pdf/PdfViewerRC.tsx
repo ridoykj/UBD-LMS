@@ -1,9 +1,9 @@
 import { Dialog } from '@hilla/react-components/Dialog.js';
-import { Component, useEffect } from 'react';
+import { Component } from 'react';
 import { FaX } from 'react-icons/fa6';
 import { Document, Page, pdfjs } from 'react-pdf';
-import 'react-pdf/dist/Page/TextLayer.css';
 import 'react-pdf/dist/Page/AnnotationLayer.css';
+import 'react-pdf/dist/Page/TextLayer.css';
 
 pdfjs.GlobalWorkerOptions.workerSrc = new URL(
     'pdfjs-dist/build/pdf.worker.min.js',
@@ -36,13 +36,12 @@ class PdfViewerRC extends Component<{ fileUrl: PDFFile, dialogShow: boolean }> {
             this.setState({ dialogShow: true });
         }
         if (prevProps.fileUrl !== this.props.fileUrl) {
-            if (this.props.fileUrl instanceof Promise) {
-                this.props.fileUrl.then((file: any) => {
-                    console.log('FileR', new Blob([file], { type: 'application/pdf' }));
-                    // new Blob([file], { type: 'application/pdf' })
-                    this.setState({ file: new Blob([file], { type: 'application/pdf' }) });
-                });
-            }
+            this.props.fileUrl instanceof Promise && this.props.fileUrl.then((file: any) => {
+                // const uint8Array = new Uint8Array(file);
+                // const datas = new Blob([new Uint8Array(file)], { type: 'application/pdf' });
+
+                this.setState({ file: new Blob([new Uint8Array(file)], { type: 'application/pdf' }) });
+            });
         }
     }
 
