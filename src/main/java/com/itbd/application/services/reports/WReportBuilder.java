@@ -49,13 +49,6 @@ public class WReportBuilder {
         return report;
     }
 
-
-    public StreamResource getStreamResource(String templatePath, Map<String, Object> parameterLs, String fileName) {
-        StreamResource resource = new StreamResource(String.format("%s_%s.pdf", fileName, LocalDateTime.now()), () -> new ByteArrayInputStream(getByteStream(templatePath, parameterLs, fileName)));
-        resource.setContentType("application/pdf");
-        return resource;
-    }
-
     public byte[] getByteStream(String templatePath, Map<String, Object> parameterLs, String fileName) {
         Connection connection = null;
         try {
