@@ -1,29 +1,22 @@
 # Custom project from Hilla
 
-npx @hilla/cli init --react hello-react
+### `npx @hilla/cli init --react hello-react`
 
 This project can be used as a starting point to create your own Hilla application with Spring Boot.
 It contains all the necessary configuration and some placeholder files to get you started.
 
 ## Initilize package
 
-npm i react
-npm i --save-dev @types/react   
-npm i --save-dev @types/react-dom
-
-npm i @fullcalendar/core @fullcalendar/react @fullcalendar/daygrid @fullcalendar/timegrid @fullcalendar/interaction
-
-npm install -D tailwindcss postcss autoprefixer
-
-npx tailwindcss init
-
-npm install react-icons
-
-npm install @headlessui/react
-
-npm i date-fns
-
-npm i react-tooltip
+* `npm i react`
+* `npm i --save-dev @types/react `  
+* `npm i --save-dev @types/react-dom`
+* `npm i @fullcalendar/core @fullcalendar/react @fullcalendar/daygrid @fullcalendar/timegrid @fullcalendar/interaction`
+* `npm install -D tailwindcss postcss autoprefixer`
+* `npx tailwindcss init`
+* `npm install react-icons`
+* `npm install @headlessui/react`
+* `npm i date-fns`
+* `npm i react-tooltip`
 
 ## Running the application
 

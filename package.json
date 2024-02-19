@@ -27,12 +27,12 @@
     "@vaadin/router": "1.7.5",
     "construct-style-sheets-polyfill": "3.1.0",
     "date-fns": "^3.3.1",
-    "i": "^0.3.7",
     "lit": "3.1.0",
-    "npm": "^10.4.0",
     "react": "^18.2.0",
+    "react-dom": "^18.2.0",
     "react-icons": "^5.0.1",
     "react-pdf": "^7.7.0",
+    "react-router-dom": "^6.4.2",
     "react-tooltip": "^5.26.0"
   },
   "devDependencies": {
@@ -98,7 +98,7 @@
       "workbox-core": "7.0.0",
       "workbox-precaching": "7.0.0"
     },
-    "hash": "85cb21852d05eac613d0a3b2be314a4779a2126e398149028a4714eb63275f2c"
+    "hash": "2caa8734f2aaec6ca7f159ecc3ef65de67c976cd756731794a47e626ca953779"
   },
   "overrides": {
     "@vaadin/bundles": "$@vaadin/bundles",
@@ -126,11 +126,11 @@
     "react-icons": "$react-icons",
     "@types/react": "$@types/react",
     "@types/react-dom": "$@types/react-dom",
-    "i": "$i",
-    "npm": "$npm",
     "react": "$react",
     "date-fns": "$date-fns",
     "react-tooltip": "$react-tooltip",
-    "react-pdf": "$react-pdf"
+    "react-pdf": "$react-pdf",
+    "react-dom": "$react-dom",
+    "react-router-dom": "$react-router-dom"
   }
 }

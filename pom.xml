@@ -109,23 +109,14 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
-                <configuration>
-                    <excludes>
-                        <exclude>
-                            <groupId>org.projectlombok</groupId>
-                            <artifactId>lombok</artifactId>
-                        </exclude>
-                    </excludes>
-                </configuration>
-
             </plugin>
+
             <plugin>
                 <groupId>dev.hilla</groupId>
                 <artifactId>hilla-maven-plugin</artifactId>
                 <version>${hilla.version}</version>
                 <executions>
                     <execution>
-                        <id>frontend</id>
                         <goals>
                             <goal>prepare-frontend</goal>
                         </goals>
@@ -137,6 +128,7 @@
 
     <profiles>
         <profile>
+            <!-- Production mode is activated using -Pproduction -->
             <id>production</id>
             <build>
                 <plugins>
@@ -146,14 +138,10 @@
                         <version>${hilla.version}</version>
                         <executions>
                             <execution>
-                                <id>frontend</id>
-                                <phase>compile</phase>
                                 <goals>
                                     <goal>build-frontend</goal>
                                 </goals>
-                                <configuration>
-                                    <productionMode>true</productionMode>
-                                </configuration>
+                                <phase>compile</phase>
                             </execution>
                         </executions>
                     </plugin>
@@ -161,5 +149,4 @@
             </build>
         </profile>
     </profiles>
-
 </project>
