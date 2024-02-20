@@ -25,10 +25,12 @@
     "@vaadin/bundles": "24.3.0",
     "@vaadin/common-frontend": "0.0.19",
     "@vaadin/router": "1.7.5",
+    "apexcharts": "^3.46.0",
     "construct-style-sheets-polyfill": "3.1.0",
     "date-fns": "^3.3.1",
     "lit": "3.1.0",
     "react": "^18.2.0",
+    "react-apexcharts": "^1.4.1",
     "react-dom": "^18.2.0",
     "react-icons": "^5.0.1",
     "react-pdf": "^7.7.0",
@@ -98,7 +100,7 @@
       "workbox-core": "7.0.0",
       "workbox-precaching": "7.0.0"
     },
-    "hash": "2caa8734f2aaec6ca7f159ecc3ef65de67c976cd756731794a47e626ca953779"
+    "hash": "590f4c4d3acd02d24b094405e46c7d24d00cdbc5b96e856e286cfb46ef662a0f"
   },
   "overrides": {
     "@vaadin/bundles": "$@vaadin/bundles",
@@ -131,6 +133,8 @@
     "react-tooltip": "$react-tooltip",
     "react-pdf": "$react-pdf",
     "react-dom": "$react-dom",
-    "react-router-dom": "$react-router-dom"
+    "react-router-dom": "$react-router-dom",
+    "apexcharts": "$apexcharts",
+    "react-apexcharts": "$react-apexcharts"
   }
 }

@@ -23,8 +23,7 @@ public class ReportManagerController {
     public byte[] getReportByte() throws IOException {
         Map<String, Object> parameters = new HashMap<>();
         byte[] bytes = wReportBuilder.getByteStream("class/class_schedule_rpt.jrxml", parameters, "class_schedule_rpt");
-        FileUtils.writeByteArrayToFile(new File("D:\\itbd\\home\\org\\reports\\class\\class_schedule_rpt.pdf"), bytes);
+//        FileUtils.writeByteArrayToFile(new File("D:\\itbd\\home\\org\\reports\\class\\class_schedule_rpt.pdf"), bytes);
         return bytes;
     }
-
 }

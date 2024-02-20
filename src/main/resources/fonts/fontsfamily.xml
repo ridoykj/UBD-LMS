@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<fontFamilies>
+    <fontFamily name="kalpurush">
+        <normal><![CDATA[fonts/kalpurush/kalpurush.ttf]]></normal>
+        <pdfEncoding><![CDATA[Identity-H]]></pdfEncoding>
+        <pdfEmbedded><![CDATA[true]]></pdfEmbedded>
+        <exportFonts/>
+    </fontFamily>
+    <fontFamily name="Siyam Rupali ANSI">
+        <normal><![CDATA[fonts/SiyamRupaliANSI/Siyam Rupali ANSI.ttf]]></normal>
+        <pdfEncoding><![CDATA[Identity-H]]></pdfEncoding>
+        <pdfEmbedded><![CDATA[true]]></pdfEmbedded>
+        <exportFonts/>
+    </fontFamily>
+    <fontFamily name="SolaimanLipi">
+        <normal><![CDATA[fonts/SolaimanLipi/SolaimanLipi_22-02-2012.ttf]]></normal>
+        <bold><![CDATA[fonts/SolaimanLipi/SolaimanLipi_Bold_10-03-12.ttf]]></bold>
+        <pdfEncoding><![CDATA[Identity-H]]></pdfEncoding>
+        <pdfEmbedded><![CDATA[true]]></pdfEmbedded>
+        <exportFonts/>
+    </fontFamily>
+    <fontSet name="FontSetRID">
+        <family familyName="kalpurush" primary="true"/>
+        <family familyName="Siyam Rupali ANSI"/>
+        <family familyName="SolaimanLipi"/>
+    </fontSet>
+</fontFamilies>
