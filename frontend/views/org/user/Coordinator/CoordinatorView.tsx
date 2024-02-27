@@ -23,6 +23,8 @@ import React, { useState } from "react";
 import { Upload, UploadSuccessEvent } from "@hilla/react-components/Upload.js";
 import { InstructorDtoCrudService } from "Frontend/generated/endpoints";
 import CoordinatorRenderer from "./CoordinatorRenderer";
+import { FaPaintBrush } from "react-icons/fa";
+import { FaX } from "react-icons/fa6";
 
 const responsiveSteps = [
     { minWidth: '0', columns: 1 },
@@ -46,6 +48,7 @@ const CoordinatorView = () => {
     const [dialogOpened, setDialogOpened] = useState<boolean>(false);
     const [successNotification, setSuccessNotification] = useState<boolean>(false);
     const [formImage, setFormImage] = useState('');
+    const [showSidebar, setShowSidebar] = useState<boolean>(true);
 
     const autoGridRef = React.useRef<AutoGridRef>(null);
 
@@ -66,8 +69,26 @@ const CoordinatorView = () => {
         autoGridRef.current?.refresh();
     }
 
+    function showSidebarSlide() {
+        return (
+            <>
+                <div className={`top-0 right-0 w-[35vw] bg-blue-600 p-10 pl-20 text-white fixed h-full z-40 ease-in-out duration-300 ${showSidebar ? "translate-x-0 " : "translate-x-full"}`}
+                >
+                    <button type="button" className="absolute right-5 top-5 text-white content-end p-2 bg-blue-600 hover:bg-blue-700" onClick={() => setShowSidebar(false)}>
+                        <FaX />
+                    </button>
+
+                    <h3 className="mt-20 text-4xl font-semibold text-white">I am a sidebar</h3>
+                </div>
+                <div className={`fixed top-0 left-0 w-full h-full bg-black opacity-50 z-30 ease-in-out duration-300 ${showSidebar ? "block" : "hidden"}`}
+                    onClick={() => setShowSidebar(false)}
+                ></div>
+            </>
+        );
+    }
+
     return (
-        <>
+        <>  {showSidebarSlide()}
             <SplitLayout className="h-full w-full">
                 <VerticalLayout className="h-full w-full items-stretch">
                     <AutoGrid service={InstructorDtoCrudService} model={InstructorDTOModel} ref={autoGridRef}
@@ -109,10 +130,10 @@ const CoordinatorView = () => {
                         }}
                         onActiveItemChanged={(e) => {
                             const item = e.detail.value;
-                            console.log('item', item);
                             setSelectedInstructorItems(item ? [item] : []);
                             read(item);
                             setFormImage(`v1/content/image?imagePath=${btoa('/user/' + item?.person?.id + '/' + item?.person?.id + '.png')}`);
+                            setShowSidebar(true);
                         }}
                     />
                 </VerticalLayout>
@@ -171,7 +192,7 @@ const CoordinatorView = () => {
                             {value.id &&
                                 <Upload capture="camera"
                                     method="POST"
-                                    target="/v1/content/upload/image"
+                                    target="v1/content/upload/image"
                                     headers={`{"path": "/user/${value.person?.id || ''}", "filename": "${value.person?.id || ''}.png" }`}
                                     // onUploadBefore={async (e: UploadBeforeEvent) => {
                                     //     const file = e.detail.file;

@@ -19,9 +19,25 @@
         <pdfEmbedded><![CDATA[true]]></pdfEmbedded>
         <exportFonts/>
     </fontFamily>
+    <fontFamily name="arial">
+        <normal><![CDATA[fonts/arial/arial.ttf]]></normal>
+        <bold><![CDATA[fonts/arial/arialbd.ttf]]></bold>
+        <pdfEncoding><![CDATA[Identity-H]]></pdfEncoding>
+        <pdfEmbedded><![CDATA[true]]></pdfEmbedded>
+        <exportFonts/>
+    </fontFamily>
+    <fontFamily name="calibri">
+        <normal><![CDATA[fonts/calibri/calibri.ttf]]></normal>
+        <bold><![CDATA[fonts/calibri/calibrib.ttf]]></bold>
+        <pdfEncoding><![CDATA[Identity-H]]></pdfEncoding>
+        <pdfEmbedded><![CDATA[true]]></pdfEmbedded>
+        <exportFonts/>
+    </fontFamily>
     <fontSet name="FontSetRID">
         <family familyName="kalpurush" primary="true"/>
         <family familyName="Siyam Rupali ANSI"/>
         <family familyName="SolaimanLipi"/>
+        <family familyName="arial"/>
+        <family familyName="calibri"/>
     </fontSet>
 </fontFamilies>
