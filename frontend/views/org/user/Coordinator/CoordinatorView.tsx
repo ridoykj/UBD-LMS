@@ -19,6 +19,7 @@ import InstructorDTO from "Frontend/generated/com/itbd/application/dto/user/inst
 import InstructorDTOModel from "Frontend/generated/com/itbd/application/dto/user/instructor/InstructorDTOModel";
 import NotificationUtil from "Frontend/util/NotificationUtil";
 import React, { useState } from "react";
+import { Resizable, ResizeCallbackData } from 'react-resizable';
 
 import { Upload, UploadSuccessEvent } from "@hilla/react-components/Upload.js";
 import { InstructorDtoCrudService } from "Frontend/generated/endpoints";
@@ -70,19 +71,32 @@ const CoordinatorView = () => {
     }
 
     function showSidebarSlide() {
+        const [width, setWidth] = useState(200);
+
+        const handleResize = (e: React.SyntheticEvent<Element, Event>, data: ResizeCallbackData) => {
+            setWidth(data.size.width);
+        };
+        // const handleResize = (event, { element, size }) => {
+        //     setWidth(size.width);
+        // };
+
         return (
             <>
                 <div className={`top-0 right-0 w-[35vw] bg-blue-600 p-10 pl-20 text-white fixed h-full z-40 ease-in-out duration-300 ${showSidebar ? "translate-x-0 " : "translate-x-full"}`}
                 >
-                    <button type="button" className="absolute right-5 top-5 text-white content-end p-2 bg-blue-600 hover:bg-blue-700" onClick={() => setShowSidebar(false)}>
+                    <button type="button" className="absolute right-5 top-5 text-white content-end p-2 bg-blue-600 hover:bg-blue-700" onClick={() => setShowSidebar(false)} title="Close Sidebar">
                         <FaX />
                     </button>
-
                     <h3 className="mt-20 text-4xl font-semibold text-white">I am a sidebar</h3>
+                    <Resizable width={width} height={0} onResize={handleResize} axis="x">
+                        <div style={{ width, border: '1px solid black' }}>
+                            Sidebar content
+                        </div>
+                    </Resizable>
                 </div>
-                <div className={`fixed top-0 left-0 w-full h-full bg-black opacity-50 z-30 ease-in-out duration-300 ${showSidebar ? "block" : "hidden"}`}
+                {/* <div className={`fixed top-0 left-0 w-full h-full bg-black opacity-50 z-30 ease-in-out duration-300 ${showSidebar ? "block" : "hidden"}`}
                     onClick={() => setShowSidebar(false)}
-                ></div>
+                ></div> */}
             </>
         );
     }
