@@ -10,8 +10,8 @@ const CoordinatorRenderer = ({ item }: { item: InstructorDTOModel }) => {
             <div className="flex items-center gap-4 p-1">
                 <ImgRC imageUrl={imagePath} />
                 <div className="flex flex-col w-full">
-                    <strong className="text-slate-900 text-sm font-medium dark:text-slate-200">{`${person?.givenName}`}</strong>
-                    <p className="text-slate-500 text-sm font-medium dark:text-slate-400 truncate w-48">{`#${id} - ${designation}`}</p>
+                    <strong className="text-slate-900 text-sm font-medium dark:text-slate-900">{`${person?.givenName}`}</strong>
+                    <p className="text-slate-500 text-sm font-medium dark:text-slate-500 truncate w-48">{`#${id} - ${designation}`}</p>
                 </div>
             </div>
         </>);
