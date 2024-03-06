@@ -102,7 +102,7 @@
       "workbox-core": "7.0.0",
       "workbox-precaching": "7.0.0"
     },
-    "hash": "590f4c4d3acd02d24b094405e46c7d24d00cdbc5b96e856e286cfb46ef662a0f"
+    "hash": "d11af7f08d4a079699258c9b388c60e9170b5b2b9dcd7f573c19bb267a870337"
   },
   "overrides": {
     "@vaadin/bundles": "$@vaadin/bundles",
@@ -137,6 +137,8 @@
     "react-dom": "$react-dom",
     "react-router-dom": "$react-router-dom",
     "apexcharts": "$apexcharts",
-    "react-apexcharts": "$react-apexcharts"
+    "react-apexcharts": "$react-apexcharts",
+    "react-resizable": "$react-resizable",
+    "react-split-pane": "$react-split-pane"
   }
 }
