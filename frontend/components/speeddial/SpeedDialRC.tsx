@@ -15,7 +15,7 @@ const SpeedDialRC = ({ children }: { children: ChildrenProps[] }) => {
     const toggleOpen = () => setIsOpen(!isOpen);
 
     return (
-        <div className="fixed bottom-6 end-10 group">
+        <div className="absolute bottom-5 end-5 group">
             {isOpen && (
                 <div className="flex flex-col items-center mb-4 space-y-2">
                     {
