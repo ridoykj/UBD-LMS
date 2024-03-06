@@ -1,19 +1,16 @@
 import { Button } from "@hilla/react-components/Button.js";
 import { ComboBox, ComboBoxDataProviderCallback, ComboBoxDataProviderParams } from "@hilla/react-components/ComboBox.js";
-import { ConfirmDialog } from "@hilla/react-components/ConfirmDialog.js";
 import { FormLayout } from "@hilla/react-components/FormLayout.js";
 import { Grid } from "@hilla/react-components/Grid.js";
 import { GridColumn } from "@hilla/react-components/GridColumn.js";
-import { Icon } from "@hilla/react-components/Icon.js";
 import { IntegerField } from "@hilla/react-components/IntegerField.js";
 import { NumberField } from "@hilla/react-components/NumberField.js";
-import { SplitLayout } from "@hilla/react-components/SplitLayout.js";
 import { TextArea } from "@hilla/react-components/TextArea.js";
 import { TextField } from "@hilla/react-components/TextField.js";
-import { VerticalLayout } from "@hilla/react-components/VerticalLayout";
 import { useForm } from "@hilla/react-form";
 import BranchRC, { BranchCombobox } from "Frontend/components/branch/BranchRC";
 import { AutoGrid, AutoGridRef } from "Frontend/components/grid/autogrid";
+import SideCrudRC from "Frontend/components/layout/splitlayout/SideCrudRC";
 import CoordinatorTypeEnum from "Frontend/generated/com/itbd/application/constants/enums/CoordinatorTypeEnum";
 import BatchCoordinatorDAO from "Frontend/generated/com/itbd/application/dao/org/allocation/BatchCoordinatorDAO";
 import BatchCourseDTO from "Frontend/generated/com/itbd/application/dto/org/allocation/BatchCourseDTO";
@@ -25,14 +22,17 @@ import InstructorDTOModel from "Frontend/generated/com/itbd/application/dto/user
 import PropertyStringFilter from "Frontend/generated/dev/hilla/crud/filter/PropertyStringFilter";
 import Matcher from "Frontend/generated/dev/hilla/crud/filter/PropertyStringFilter/Matcher";
 import { BatchCoordinatorDtoCrudService, BatchCourseDtoCrudService, BatchDtoCrudService, CourseDtoCrudService, InstructorDtoCrudService } from "Frontend/generated/endpoints";
-import NotificationUtil from "Frontend/util/NotificationUtil";
 import { comboBoxLazyFilter } from "Frontend/util/comboboxLazyFilterUtil";
 import React, { useMemo, useState } from "react";
 import { FaTrash, FaUserPlus } from "react-icons/fa";
 import CoordinatorRenderer from "../user/Coordinator/CoordinatorRenderer";
 
-const BatchCourseView = () => {
+const responsiveSteps = [
+  { minWidth: '0', columns: 1 },
+  { minWidth: '600px', columns: 2 },
+];
 
+const BatchCourseView = () => {
   const [branchFilter, setBranchFilter] = useState<BranchCombobox>({
     organizationFilter: undefined,
     departmentFilter: undefined,
@@ -41,25 +41,22 @@ const BatchCourseView = () => {
 
   const [items, setItems] = useState<BatchCoordinatorDAO>();
   const autoGridRef = React.useRef<AutoGridRef>(null);
-
-  const [dialogOpened, setDialogOpened] = useState<boolean>(false);
-  const [successNotification, setSuccessNotification] = useState<boolean>(false);
-
+  const [showSidebar, setShowSidebar] = useState<boolean>(false);
   const [selectedCourseItems, setSelectedCourseItems] = useState<BatchCourseDTO[]>([]);
 
-  const { model, field, value, read, submit, clear, reset, visited, dirty, invalid, submitting, setValue, update, validate } = useForm(BatchCourseDTOModel, {
+  const form = useForm(BatchCourseDTOModel, {
     onSubmit: async (batch) => {
       await BatchCourseDtoCrudService.save(batch).then((result) => {
         refreshGrid();
         setSelectedCourseItems(result ? [result] : []);
-        setSuccessNotification(true);
         clear();
       }).catch((error) => {
         console.log('error', error);
-
       });
     }
   });
+
+  const { model, field, value, read, clear, reset, update } = form;
 
   function refreshGrid() {
     autoGridRef.current?.refresh();
@@ -161,7 +158,6 @@ const BatchCourseView = () => {
   }
 
   function renderInvitedPeopleTable() {
-    console.log('value.batchCoordinators', value.batchCoordinators);
     return (
       <>
         <Grid items={value.batchCoordinators} allRowsVisible className="w-full">
@@ -196,187 +192,116 @@ const BatchCourseView = () => {
     );
   }
 
-  const responsiveSteps = [
-    { minWidth: '0', columns: 1 },
-    { minWidth: '600px', columns: 2 },
-  ];
+  const primary = () => {
+    return (
+      <>
+        <BranchRC
+          visibleFields={{ organization: true, department: true, programme: true, batch: true }}
+          branchProps={{ branch: branchFilter, setBranch: setBranchFilter }}
+        />
+        <AutoGrid service={BatchCourseDtoCrudService} model={BatchCourseDTOModel} ref={autoGridRef} multiSort multiSortPriority="append"
+          visibleColumns={['batch.name', 'course.code', 'course.name', 'semester', 'numberOfCredits',]}
+          selectedItems={selectedCourseItems}
+          theme="row-stripes"
+          columnOptions={{
+            'organization.name': {
+              header: 'Organization',
+              externalValue: branchFilter.organizationFilter != null ? branchFilter.organizationFilter.name : '',
+              // setExternalValue: setOrgFilter,
+            },
+            'batch.name': {
+              header: 'Batch',
+            },
+            'course.code': {
+              header: 'Course Code',
+            },
+            'course.name': {
+              header: 'Course',
+            },
+            'numberOfCredits': {
+              header: 'Credits',
+            },
+          }}
+          onActiveItemChanged={(e) => {
+            const item = e.detail.value;
+            setSelectedCourseItems(item ? [item] : []);
+            // console.log('onActiveItemChanged', item);
+            read(item);
+            setShowSidebar(item?.id !== undefined);
+          }}
+        />
+      </>
+    );
+  }
 
-  const discardButtonColors: { [key: string]: string } = {
-    true: 'text-white bg-indigo-400 hover:bg-indigo-500',
-    false: 'text-white bg-gray-300',
-  };
+  const secondary = () => {
+    return (
+      <>
+        <FormLayout responsiveSteps={responsiveSteps} className="w-fit h-fit mx-5">
+          <ComboBox label={'Batch'}  {...field(model.batch)} dataProvider={batchDataProvider} itemLabelPath='name' itemValuePath='name' clearButtonVisible />
+          <ComboBox label={'Course'}  {...field(model.course)} dataProvider={courseDataProvider} itemLabelPath='name' itemValuePath='name' clearButtonVisible
+            renderer={({ item }) => courseCustomItemRenderer(item)}
+            style={{ '--vaadin-combo-box-overlay-width': '350px' } as React.CSSProperties}
+          />
+          <div className="flex flex-col p-1 w-fit border-2 drop-shadow-sm">
+            <ComboBox label={'Coordinator'} dataProvider={instructorDataProvider} itemLabelPath="person.givenName" itemValuePath="id"
+              onSelectedItemChanged={(event) => {
+                event.detail.value ? setItems({ instructor: event.detail.value.valueOf(), batchCourse: { id: value.id, version: value.version } }) : null;
+              }}
+              renderer={({ item }) => <CoordinatorRenderer item={item} />}
+            />
+            <div>
+              <ComboBox label={'Activity'} items={coordinatorType} itemLabelPath="label" itemValuePath="label"
+                onSelectedItemChanged={(event) => {
+                  if (items) {
+                    setItems({ ...items, type: event.detail.value?.value });
+                  }
+                }}
+              />
+              <Button className="text-white hover:bg-blue-600 bg-blue-500 drop-shadow-sm w-fit"
+                onClick={() => {
+                  if (!value.batchCoordinators?.some(coordinator => coordinator?.instructor?.id === items?.instructor?.id)) {
+                    value.batchCoordinators = [...value.batchCoordinators ?? [], items ?? {}];
+                    update();
+                  }
+                }}
+              >
+                <FaUserPlus />
+              </Button>
+            </div>
+            {value.batchCoordinators?.length ?? 0 > 0 ? renderInvitedPeopleTable() : null}
+          </div>
+          <TextField label={'Headline'}  {...field(model.headline)} className="w-fit" />
+          <TextField label={'Type'}  {...field(model.type)} className="w-fit" />
+          <IntegerField label={'Semester'} min={1} defaultValue={1} {...field(model.semester)} className="w-fit" />
+          <NumberField label={'Credits'}  {...field(model.numberOfCredits)} className="w-fit" />
+          <NumberField label={'Lectures'}  {...field(model.numberOfLecture)} className="w-fit" />
+          <NumberField label={'Tutorials'}  {...field(model.numberOfTutorial)} className="w-fit" />
+          <NumberField label={'Duration (min)'}  {...field(model.duration)} className="w-fit" />
+          <TextArea label={'About'}  {...field(model.about)} className="w-fit" />
+        </FormLayout>
+      </>
+    );
+  }
 
-  const saveButtonColors: { [key: string]: string } = {
-    true: 'text-white bg-emerald-400 hover:bg-emerald-500',
-    false: 'text-white bg-gray-300',
-  };
+  async function onConfirm() {
+    return await BatchCourseDtoCrudService.delete(selectedCourseItems[0]?.id).then((result) => {
+      refreshGrid();
+      setSelectedCourseItems([]);
+      reset();
+    });
+  }
 
   return (
     <>
-      <SplitLayout className="h-full w-full">
-        <VerticalLayout className="h-full w-full items-stretch">
-          <BranchRC
-            visibleFields={{ organization: true, department: true, programme: true, batch: true }}
-            branchProps={{ branch: branchFilter, setBranch: setBranchFilter }}
-          />
-
-          <AutoGrid service={BatchCourseDtoCrudService} model={BatchCourseDTOModel} ref={autoGridRef} multiSort multiSortPriority="append"
-            visibleColumns={['batch.name', 'course.code', 'course.name', 'semester', 'numberOfCredits',]}
-            selectedItems={selectedCourseItems}
-            theme="row-stripes"
-            onActiveItemChanged={(e) => {
-              const item = e.detail.value;
-              setSelectedCourseItems(item ? [item] : []);
-              // console.log('onActiveItemChanged', item);
-              read(item);
-            }}
-            columnOptions={{
-              'organization.name': {
-                header: 'Organization',
-                externalValue: branchFilter.organizationFilter != null ? branchFilter.organizationFilter.name : '',
-                // setExternalValue: setOrgFilter,
-              },
-              'batch.name': {
-                header: 'Batch',
-              },
-              'course.code': {
-                header: 'Course Code',
-              },
-              'course.name': {
-                header: 'Course',
-              },
-              'numberOfCredits': {
-                header: 'Credits',
-              },
-            }}
-          />
-
-        </VerticalLayout>
-        <VerticalLayout className="w-1/4 min-w-96">
-          <header className="bg-gray-100 w-full">
-            <div className="flex flex-row space-x-4">
-              <p className="text-blue-600 text-xl font-bold truncate p-1 m-1 w-full"># {value.name ?? 'Batch & Course'}</p>
-              <Button className="text-white content-end bg-blue-500 hover:bg-blue-600" onClick={clear}>
-                <Icon icon="vaadin:plus" />New
-              </Button>
-            </div>
-          </header>
-          <main className="overflow-y-scroll w-full h-full">
-            <FormLayout responsiveSteps={responsiveSteps} className="w-fit h-fit mx-5">
-              <ComboBox label={'Batch'}  {...field(model.batch)} dataProvider={batchDataProvider} itemLabelPath='name' itemValuePath='name' clearButtonVisible />
-              <ComboBox label={'Course'}  {...field(model.course)} dataProvider={courseDataProvider} itemLabelPath='name' itemValuePath='name' clearButtonVisible
-                renderer={({ item }) => courseCustomItemRenderer(item)}
-                style={{ '--vaadin-combo-box-overlay-width': '350px' } as React.CSSProperties}
-              />
-              <div className="flex flex-col w-fit border-2 drop-shadow-sm">
-                <ComboBox label={'Coordinator'} dataProvider={instructorDataProvider} itemLabelPath="person.givenName" itemValuePath="id"
-                  onSelectedItemChanged={(event) => {
-                    event.detail.value ? setItems({ instructor: event.detail.value.valueOf(), batchCourse: { id: value.id, version: value.version } }) : null;
-                  }}
-                  renderer={({ item }) => <CoordinatorRenderer item={item} />}
-                />
-                <div>
-                  <ComboBox label={'Activity'} items={coordinatorType} itemLabelPath="label" itemValuePath="label"
-                    onSelectedItemChanged={(event) => {
-                      if (items) {
-                        setItems({ ...items, type: event.detail.value?.value });
-                      }
-                    }}
-                  />
-                  <Button className="text-white hover:bg-blue-600 bg-blue-500 drop-shadow-sm w-fit"
-                    onClick={() => {
-                      if (!value.batchCoordinators?.some(coordinator => coordinator?.instructor?.id === items?.instructor?.id)) {
-                        value.batchCoordinators = [...value.batchCoordinators ?? [], items ?? {}];
-                        update();
-                      }
-                    }}
-                  >
-                    <FaUserPlus />
-                  </Button>
-                </div>
-                {value.batchCoordinators?.length ?? 0 > 0 ? renderInvitedPeopleTable() : null}
-              </div>
-              <TextField label={'Headline'}  {...field(model.headline)} className="w-fit" />
-              <TextField label={'Type'}  {...field(model.type)} className="w-fit" />
-              <IntegerField label={'Semester'} min={1} defaultValue={1} {...field(model.semester)} className="w-fit" />
-              <NumberField label={'Credits'}  {...field(model.numberOfCredits)} className="w-fit" />
-              <NumberField label={'Lectures'}  {...field(model.numberOfLecture)} className="w-fit" />
-              <NumberField label={'Tutorials'}  {...field(model.numberOfTutorial)} className="w-fit" />
-              <NumberField label={'Duration (min)'}  {...field(model.duration)} className="w-fit" />
-              <TextArea label={'About'}  {...field(model.about)} className="w-fit" />
-            </FormLayout>
-          </main>
-          <footer className="flex flex-row bg-gray-100 w-full">
-            <div className="w-full">
-              {
-                value?.id === undefined ? null :
-                  <Button
-                    className="text-white bg-red-400 hover:bg-red-500"
-                    onClick={() => {
-                      setDialogOpened(true);
-                      // console.log('delete', selectedCourseItems[0]?.id);
-                    }}
-                  >Delete</Button>
-              }
-            </div>
-            {
-              !dirty ? null :
-                <div className="flex flex-row content-end space-x-4">
-                  <Button
-                    className={discardButtonColors[dirty.toString()]}
-                    disabled={!dirty}
-                    onClick={reset}
-                  >
-                    Discard
-                  </Button>
-                  <Button
-                    className={saveButtonColors[dirty.toString()]}
-                    disabled={invalid || submitting || !dirty}
-                    onClick={submit}
-                  >
-                    {value?.id !== undefined ? 'Update' : 'Save'}
-                  </Button>
-                </div>
-            }
-          </footer>
-        </VerticalLayout>
-      </SplitLayout>
-      <NotificationUtil opened={successNotification} type="update"
-        message={{
-          title: 'Successfully Updated',
-          description: value.name,
-        }}
-        onOpenedChanged={(event) => {
-          if (!event.detail.value) {
-            setSuccessNotification(event.detail.value);
-          }
-        }}
-        onClick={() => { setSuccessNotification(false) }}
+      <SideCrudRC
+        primary={primary()}
+        secondary={secondary()}
+        form={form}
+        onConfirm={onConfirm}
+        showSidebar={showSidebar}
+        setShowSidebar={setShowSidebar}
       />
-      <ConfirmDialog
-        header="Delete Item"
-        cancelButtonVisible
-        rejectButtonVisible
-        rejectText="Discard"
-        confirmText="Confirm"
-        confirmTheme="error primary"
-        opened={dialogOpened}
-        onOpenedChanged={(event) => {
-          setDialogOpened(event.detail.value);
-          if (event.detail.value) {
-            // setStatus('');
-          }
-        }}
-        onConfirm={() => {
-          BatchCourseDtoCrudService.delete(selectedCourseItems[0]?.id).then((result) => {
-            refreshGrid();
-            setSelectedCourseItems([]);
-            reset();
-          });
-        }}>
-        Do you want to delete?
-        {value.name}
-      </ConfirmDialog >
     </>
   );
 };
