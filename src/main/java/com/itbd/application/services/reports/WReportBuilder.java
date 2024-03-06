@@ -62,7 +62,7 @@ public class WReportBuilder {
                 try {
                     connection.close();
                 } catch (SQLException e) {
-                    e.printStackTrace();
+                    log.trace("Unable to close connection: [{}]", e.toString());
                 }
         }
         return null;
