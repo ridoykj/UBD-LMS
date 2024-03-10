@@ -14,8 +14,8 @@
 // import { AutoGrid, AutoGridRef } from "Frontend/components/grid/autogrid";
 // import BloodGroupsEnum from "Frontend/generated/com/itbd/application/constants/enums/BloodGroupsEnum";
 // import GenderEnum from "Frontend/generated/com/itbd/application/constants/enums/GenderEnum";
-// import InstructorDTO from "Frontend/generated/com/itbd/application/dto/user/instructor/InstructorDTO";
-// import InstructorDTOModel from "Frontend/generated/com/itbd/application/dto/user/instructor/InstructorDTOModel";
+// import InstructorDto from "Frontend/generated/com/itbd/application/dto/user/instructor/InstructorDto";
+// import InstructorDtoModel from "Frontend/generated/com/itbd/application/dto/user/instructor/InstructorDtoModel";
 // import NotificationUtil from "Frontend/util/NotificationUtil";
 // import React, { useState } from "react";
 // import { Resizable, ResizeCallbackData } from 'react-resizable';
@@ -51,9 +51,9 @@
 
 //     const autoGridRef = React.useRef<AutoGridRef>(null);
 
-//     const [selectedInstructorItems, setSelectedInstructorItems] = useState<InstructorDTO[]>([]);
+//     const [selectedInstructorItems, setSelectedInstructorItems] = useState<InstructorDto[]>([]);
 
-//     const form  = useForm(InstructorDTOModel, {
+//     const form  = useForm(InstructorDtoModel, {
 //         onSubmit: async (instructor) => {
 //             await InstructorDtoCrudService.save(instructor).then((result) => {
 //                 refreshGrid();
@@ -106,7 +106,7 @@
 //             {/* {showSidebarSlide()} */}
 //             <SplitLayout className="h-full w-full">
 //                 <div className={`h-full flex flex-col items-stretch sm:w-full ${showSidebar ? "w-0" : "w-full"}`}>
-//                     <AutoGrid service={InstructorDtoCrudService} model={InstructorDTOModel} ref={autoGridRef}
+//                     <AutoGrid service={InstructorDtoCrudService} model={InstructorDtoModel} ref={autoGridRef}
 //                         visibleColumns={['id', 'person.givenName', 'designation', 'person.medical.gender', 'person.bloodGroup', 'person.contact.email', 'person.contact.mobile',]}
 //                         selectedItems={selectedInstructorItems}
 //                         theme="row-stripes"

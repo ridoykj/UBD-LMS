@@ -9,9 +9,9 @@ import { AutoGrid, AutoGridRef } from "Frontend/components/grid/autogrid";
 import SideCrudRC from "Frontend/components/layout/splitlayout/SideCrudRC";
 import SpeedDialRC from "Frontend/components/speeddial/SpeedDialRC";
 import BuildingTypeEnum from "Frontend/generated/com/itbd/application/constants/enums/BuildingTypeEnum";
-import SectorDAOModel from "Frontend/generated/com/itbd/application/dao/org/place/SectorDAOModel";
-import BuildingDTO from "Frontend/generated/com/itbd/application/dto/org/place/BuildingDTO";
-import BuildingDTOModel from "Frontend/generated/com/itbd/application/dto/org/place/BuildingDTOModel";
+import SectorDaoModel from "Frontend/generated/com/itbd/application/dao/org/place/SectorDaoModel";
+import BuildingDto from "Frontend/generated/com/itbd/application/dto/org/place/BuildingDto";
+import BuildingDtoModel from "Frontend/generated/com/itbd/application/dto/org/place/BuildingDtoModel";
 import PropertyStringFilter from "Frontend/generated/dev/hilla/crud/filter/PropertyStringFilter";
 import Matcher from "Frontend/generated/dev/hilla/crud/filter/PropertyStringFilter/Matcher";
 import { BuildingDtoCrudService, SectorDtoCrudService } from "Frontend/generated/endpoints";
@@ -31,9 +31,9 @@ const BuildingView = () => {
 
   const [showSidebar, setShowSidebar] = useState<boolean>(false);
   const autoGridRef = React.useRef<AutoGridRef>(null);
-  const [selectedInstructorItems, setSelectedInstructorItems] = useState<BuildingDTO[]>([]);
+  const [selectedInstructorItems, setSelectedInstructorItems] = useState<BuildingDto[]>([]);
 
-  const form = useForm(BuildingDTOModel, {
+  const form = useForm(BuildingDtoModel, {
     onSubmit: async (instructor) => {
       console.log('instructor', instructor);
       await BuildingDtoCrudService.save(instructor).then((result) => {
@@ -54,7 +54,7 @@ const BuildingView = () => {
     () =>
       async (
         params: ComboBoxDataProviderParams,
-        callback: ComboBoxDataProviderCallback<SectorDAOModel>
+        callback: ComboBoxDataProviderCallback<SectorDaoModel>
       ) => {
         const child: PropertyStringFilter[] = [
           {
@@ -85,7 +85,7 @@ const BuildingView = () => {
           }
           placeProps={{ place: placeFilter, setPlace: setPlaceFilter }}
         />
-        <AutoGrid service={BuildingDtoCrudService} model={BuildingDTOModel} ref={autoGridRef}
+        <AutoGrid service={BuildingDtoCrudService} model={BuildingDtoModel} ref={autoGridRef}
           visibleColumns={['name', 'alternateName', 'type', 'block', 'openingTime', 'closingTime', 'sector.name',]}
           selectedItems={selectedInstructorItems}
           theme="row-stripes"

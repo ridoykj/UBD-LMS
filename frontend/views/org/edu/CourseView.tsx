@@ -7,9 +7,9 @@ import { BranchCombobox } from "Frontend/components/branch/BranchRC";
 import { AutoGrid, AutoGridRef } from "Frontend/components/grid/autogrid";
 import SideCrudRC from "Frontend/components/layout/splitlayout/SideCrudRC";
 import SpeedDialRC from "Frontend/components/speeddial/SpeedDialRC";
-import CourseDTO from "Frontend/generated/com/itbd/application/dto/org/edu/CourseDTO";
-import CourseDTOModel from "Frontend/generated/com/itbd/application/dto/org/edu/CourseDTOModel";
-import ProgrammeDTOModel from "Frontend/generated/com/itbd/application/dto/org/edu/ProgrammeDTOModel";
+import CourseDto from "Frontend/generated/com/itbd/application/dto/org/edu/CourseDto";
+import CourseDtoModel from "Frontend/generated/com/itbd/application/dto/org/edu/CourseDtoModel";
+import ProgrammeDtoModel from "Frontend/generated/com/itbd/application/dto/org/edu/ProgrammeDtoModel";
 import PropertyStringFilter from "Frontend/generated/dev/hilla/crud/filter/PropertyStringFilter";
 import Matcher from "Frontend/generated/dev/hilla/crud/filter/PropertyStringFilter/Matcher";
 import { CourseDtoCrudService, ProgrammeDtoCrudService } from "Frontend/generated/endpoints";
@@ -30,9 +30,9 @@ const CourseView = () => {
 
   const autoGridRef = React.useRef<AutoGridRef>(null);
   const [showSidebar, setShowSidebar] = useState<boolean>(false);
-  const [selectedCourseItems, setSelectedCourseItems] = useState<CourseDTO[]>([]);
+  const [selectedCourseItems, setSelectedCourseItems] = useState<CourseDto[]>([]);
 
-  const form = useForm(CourseDTOModel, {
+  const form = useForm(CourseDtoModel, {
     onSubmit: async (batch) => {
       await CourseDtoCrudService.save(batch).then((result) => {
         refreshGrid();
@@ -52,7 +52,7 @@ const CourseView = () => {
     () =>
       async (
         params: ComboBoxDataProviderParams,
-        callback: ComboBoxDataProviderCallback<ProgrammeDTOModel>
+        callback: ComboBoxDataProviderCallback<ProgrammeDtoModel>
       ) => {
         const child: PropertyStringFilter[] = [
           {
@@ -79,7 +79,7 @@ const CourseView = () => {
   const primary = () => {
     return (
       <>
-        <AutoGrid service={CourseDtoCrudService} model={CourseDTOModel} ref={autoGridRef}
+        <AutoGrid service={CourseDtoCrudService} model={CourseDtoModel} ref={autoGridRef}
           visibleColumns={['code', 'name', 'language',]}
           selectedItems={selectedCourseItems}
           theme="row-stripes"

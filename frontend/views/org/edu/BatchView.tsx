@@ -10,9 +10,9 @@ import BranchRC, { BranchCombobox } from "Frontend/components/branch/BranchRC";
 import { AutoGrid, AutoGridRef } from "Frontend/components/grid/autogrid";
 import SideCrudRC from "Frontend/components/layout/splitlayout/SideCrudRC";
 import SpeedDialRC from "Frontend/components/speeddial/SpeedDialRC";
-import BatchDTO from "Frontend/generated/com/itbd/application/dto/org/edu/BatchDTO";
-import BatchDTOModel from "Frontend/generated/com/itbd/application/dto/org/edu/BatchDTOModel";
-import ProgrammeDTOModel from "Frontend/generated/com/itbd/application/dto/org/edu/ProgrammeDTOModel";
+import BatchDto from "Frontend/generated/com/itbd/application/dto/org/edu/BatchDto";
+import BatchDtoModel from "Frontend/generated/com/itbd/application/dto/org/edu/BatchDtoModel";
+import ProgrammeDtoModel from "Frontend/generated/com/itbd/application/dto/org/edu/ProgrammeDtoModel";
 import PropertyStringFilter from "Frontend/generated/dev/hilla/crud/filter/PropertyStringFilter";
 import Matcher from "Frontend/generated/dev/hilla/crud/filter/PropertyStringFilter/Matcher";
 import { BatchDtoCrudService, ProgrammeDtoCrudService } from "Frontend/generated/endpoints";
@@ -34,8 +34,8 @@ const BatchView = () => {
   const autoGridRef = React.useRef<AutoGridRef>(null);
   const [showSidebar, setShowSidebar] = useState<boolean>(false);
 
-  const [selectedBatchItems, setSelectedBatchItems] = useState<BatchDTO[]>([]);
-  const form = useForm(BatchDTOModel, {
+  const [selectedBatchItems, setSelectedBatchItems] = useState<BatchDto[]>([]);
+  const form = useForm(BatchDtoModel, {
     onSubmit: async (batch) => {
       await BatchDtoCrudService.save(batch).then((result) => {
         console.log('result', result);
@@ -57,7 +57,7 @@ const BatchView = () => {
     () =>
       async (
         params: ComboBoxDataProviderParams,
-        callback: ComboBoxDataProviderCallback<ProgrammeDTOModel>
+        callback: ComboBoxDataProviderCallback<ProgrammeDtoModel>
       ) => {
         const child: PropertyStringFilter[] = [
           {
@@ -90,7 +90,7 @@ const BatchView = () => {
           }
           branchProps={{ branch: branchFilter, setBranch: setBranchFilter }}
         />
-        <AutoGrid service={BatchDtoCrudService} model={BatchDTOModel} ref={autoGridRef}
+        <AutoGrid service={BatchDtoCrudService} model={BatchDtoModel} ref={autoGridRef}
           visibleColumns={['name', 'programme.name', 'graduationDate', 'admissionStartDate', 'admissionEndDate', 'status',]}
           selectedItems={selectedBatchItems}
           theme="row-stripes"

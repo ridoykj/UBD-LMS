@@ -6,9 +6,9 @@ import BranchRC, { BranchCombobox } from 'Frontend/components/branch/BranchRC';
 import { AutoGrid, AutoGridRef } from 'Frontend/components/grid/autogrid';
 import SideCrudRC from 'Frontend/components/layout/splitlayout/SideCrudRC';
 import SpeedDialRC from 'Frontend/components/speeddial/SpeedDialRC';
-import OrganizationDTOModel from 'Frontend/generated/com/itbd/application/dto/org/academic/OrganizationDTOModel';
-import DepartmentDTO from 'Frontend/generated/com/itbd/application/dto/org/edu/DepartmentDTO';
-import DepartmentDTOModel from 'Frontend/generated/com/itbd/application/dto/org/edu/DepartmentDTOModel';
+import OrganizationDtoModel from 'Frontend/generated/com/itbd/application/dto/org/academic/OrganizationDtoModel';
+import DepartmentDto from 'Frontend/generated/com/itbd/application/dto/org/edu/DepartmentDto';
+import DepartmentDtoModel from 'Frontend/generated/com/itbd/application/dto/org/edu/DepartmentDtoModel';
 import PropertyStringFilter from 'Frontend/generated/dev/hilla/crud/filter/PropertyStringFilter';
 import Matcher from 'Frontend/generated/dev/hilla/crud/filter/PropertyStringFilter/Matcher';
 import { DepartmentDtoCrudService, OrganizationDtoCrudService } from "Frontend/generated/endpoints";
@@ -27,9 +27,9 @@ const DepartmentView = () => {
   });
   const [showSidebar, setShowSidebar] = useState<boolean>(false);
   const autoGridRef = React.useRef<AutoGridRef>(null);
-  const [selectedDepartmentItems, setSelectedDepartmentItems] = useState<DepartmentDTO[]>([]);
+  const [selectedDepartmentItems, setSelectedDepartmentItems] = useState<DepartmentDto[]>([]);
 
-  const form = useForm(DepartmentDTOModel, {
+  const form = useForm(DepartmentDtoModel, {
     onSubmit: async (department) => {
       await DepartmentDtoCrudService.save(department).then((result) => {
         refreshGrid();
@@ -51,7 +51,7 @@ const DepartmentView = () => {
     () =>
       async (
         params: ComboBoxDataProviderParams,
-        callback: ComboBoxDataProviderCallback<OrganizationDTOModel>
+        callback: ComboBoxDataProviderCallback<OrganizationDtoModel>
       ) => {
         const child: PropertyStringFilter[] = [{
           '@type': 'propertyString',
@@ -79,7 +79,7 @@ const DepartmentView = () => {
           }
           branchProps={{ branch: branchFilter, setBranch: setBranchFilter }}
         />
-        <AutoGrid service={DepartmentDtoCrudService} model={DepartmentDTOModel} ref={autoGridRef}
+        <AutoGrid service={DepartmentDtoCrudService} model={DepartmentDtoModel} ref={autoGridRef}
           visibleColumns={['name', 'code', 'status', 'organization.name',]}
           selectedItems={selectedDepartmentItems}
           theme="row-stripes"

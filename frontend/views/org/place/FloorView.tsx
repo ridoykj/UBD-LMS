@@ -8,8 +8,8 @@ import PlaceRC, { PlaceCombobox } from "Frontend/components/branch/PlaceRC";
 import { AutoGrid } from "Frontend/components/grid/autogrid";
 import SideCrudRC from "Frontend/components/layout/splitlayout/SideCrudRC";
 import SpeedDialRC from "Frontend/components/speeddial/SpeedDialRC";
-import FloorDTO from "Frontend/generated/com/itbd/application/dto/org/place/FloorDTO";
-import FloorDTOModel from "Frontend/generated/com/itbd/application/dto/org/place/FloorDTOModel";
+import FloorDto from "Frontend/generated/com/itbd/application/dto/org/place/FloorDto";
+import FloorDtoModel from "Frontend/generated/com/itbd/application/dto/org/place/FloorDtoModel";
 import PropertyStringFilter from "Frontend/generated/dev/hilla/crud/filter/PropertyStringFilter";
 import Matcher from "Frontend/generated/dev/hilla/crud/filter/PropertyStringFilter/Matcher";
 import { BuildingDtoCrudService, FloorDtoCrudService } from "Frontend/generated/endpoints";
@@ -30,9 +30,9 @@ const FloorView = () => {
 
   const [showSidebar, setShowSidebar] = useState<boolean>(false);
   const autoGridRef = React.useRef<AutoGridRef>(null);
-  const [selectedInstructorItems, setSelectedInstructorItems] = useState<FloorDTO[]>([]);
+  const [selectedInstructorItems, setSelectedInstructorItems] = useState<FloorDto[]>([]);
 
-  const form = useForm(FloorDTOModel, {
+  const form = useForm(FloorDtoModel, {
     onSubmit: async (instructor) => {
       console.log('instructor', instructor);
       await FloorDtoCrudService.save(instructor).then((result) => {
@@ -53,7 +53,7 @@ const FloorView = () => {
     () =>
       async (
         params: ComboBoxDataProviderParams,
-        callback: ComboBoxDataProviderCallback<FloorDTOModel>
+        callback: ComboBoxDataProviderCallback<FloorDtoModel>
       ) => {
         const child: PropertyStringFilter[] = [
           {
@@ -95,7 +95,7 @@ const FloorView = () => {
           // }}
           placeProps={{ place: placeFilter, setPlace: setPlaceFilter }}
         />
-        <AutoGrid service={FloorDtoCrudService} model={FloorDTOModel} ref={autoGridRef}
+        <AutoGrid service={FloorDtoCrudService} model={FloorDtoModel} ref={autoGridRef}
           visibleColumns={['name', 'floorLevel', 'totalBlocks', 'floorColor', 'alternateName', 'building.name',]}
           selectedItems={selectedInstructorItems}
           theme="row-stripes"

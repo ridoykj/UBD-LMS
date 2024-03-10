@@ -1,12 +1,12 @@
 import CardRC from "Frontend/components/card/CardRC";
-import IDashBoardRptDTO from "Frontend/generated/com/itbd/application/dto/custom/IDashBoardRptDTO";
+import IDashBoardRptDto from "Frontend/generated/com/itbd/application/dto/custom/IDashBoardRptDto";
 import { OrganizationDtoCrudService } from "Frontend/generated/endpoints";
 import { useEffect, useState } from "react";
 
 import Chart from "react-apexcharts";
 
 export default function HomeView() {
-  const [dashData, setDashData] = useState<IDashBoardRptDTO>();
+  const [dashData, setDashData] = useState<IDashBoardRptDto>();
 
   const data = {
     options: {

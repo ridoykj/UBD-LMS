@@ -1,7 +1,7 @@
 import { VerticalLayout } from "@hilla/react-components/VerticalLayout";
 import { AutoCrud } from "@hilla/react-crud";
 import { AutoGrid } from "Frontend/components/grid/autogrid";
-import StudentDTOModel from "Frontend/generated/com/itbd/application/dto/user/student/StudentDTOModel";
+import StudentDtoModel from "Frontend/generated/com/itbd/application/dto/user/student/StudentDtoModel";
 import { StudentDtoCrudService } from "Frontend/generated/endpoints";
 
 const StudentView = () => {
@@ -9,7 +9,7 @@ const StudentView = () => {
   return (
     <VerticalLayout style={{ alignItems: 'stretch', height: '100%', width: '100%' }}>
       <AutoGrid
-        service={StudentDtoCrudService} model={StudentDTOModel}
+        service={StudentDtoCrudService} model={StudentDtoModel}
 
         style={{ height: '100%', width: '100%' }}
       // formProps={{

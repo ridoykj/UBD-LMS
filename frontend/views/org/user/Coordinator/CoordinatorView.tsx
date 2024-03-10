@@ -10,8 +10,8 @@ import { useForm } from "@hilla/react-form";
 import { AutoGrid, AutoGridRef } from "Frontend/components/grid/autogrid";
 import BloodGroupsEnum from "Frontend/generated/com/itbd/application/constants/enums/BloodGroupsEnum";
 import GenderEnum from "Frontend/generated/com/itbd/application/constants/enums/GenderEnum";
-import InstructorDTO from "Frontend/generated/com/itbd/application/dto/user/instructor/InstructorDTO";
-import InstructorDTOModel from "Frontend/generated/com/itbd/application/dto/user/instructor/InstructorDTOModel";
+import InstructorDto from "Frontend/generated/com/itbd/application/dto/user/instructor/InstructorDto";
+import InstructorDtoModel from "Frontend/generated/com/itbd/application/dto/user/instructor/InstructorDtoModel";
 import React, { useState } from "react";
 import { Resizable, ResizeCallbackData } from 'react-resizable';
 
@@ -34,9 +34,9 @@ const CoordinatorView = () => {
     const [formImage, setFormImage] = useState('');
     const [showSidebar, setShowSidebar] = useState<boolean>(false);
     const autoGridRef = React.useRef<AutoGridRef>(null);
-    const [selectedInstructorItems, setSelectedInstructorItems] = useState<InstructorDTO[]>([]);
+    const [selectedInstructorItems, setSelectedInstructorItems] = useState<InstructorDto[]>([]);
 
-    const form = useForm(InstructorDTOModel, {
+    const form = useForm(InstructorDtoModel, {
         onSubmit: async (instructor) => {
             await InstructorDtoCrudService.save(instructor).then((result) => {
                 refreshGrid();
@@ -70,11 +70,9 @@ const CoordinatorView = () => {
                         <FaX />
                     </button>
                     <h3 className="mt-20 text-4xl font-semibold text-white">I am a sidebar</h3>
-                    <Resizable width={width} height={5} onResize={handleResize} axis="x">
-                        <div style={{ width, border: '1px solid black' }}>
-                            Sidebar content
-                        </div>
-                    </Resizable>
+                    <div style={{ width, border: '1px solid black' }}>
+                        Sidebar content
+                    </div>
                 </div>
                 {/* <div className={`fixed top-0 left-0 w-full h-full bg-black opacity-50 z-30 ease-in-out duration-300 ${showSidebar ? "block" : "hidden"}`}
                     onClick={() => setShowSidebar(false)}
@@ -94,7 +92,7 @@ const CoordinatorView = () => {
     const primary = () => {
         return (
             <>
-                <AutoGrid service={InstructorDtoCrudService} model={InstructorDTOModel} ref={autoGridRef}
+                <AutoGrid service={InstructorDtoCrudService} model={InstructorDtoModel} ref={autoGridRef}
                     visibleColumns={['id', 'person.givenName', 'designation', 'person.medical.gender', 'person.bloodGroup', 'person.contact.email', 'person.contact.mobile',]}
                     selectedItems={selectedInstructorItems}
                     theme="row-stripes"

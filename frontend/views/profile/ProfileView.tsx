@@ -1,6 +1,6 @@
 import { VerticalLayout } from "@hilla/react-components/VerticalLayout";
 import { AutoCrud } from "@hilla/react-crud";
-import PersonMargeDTOModel from "Frontend/generated/com/itbd/application/dto/user/person/PersonMargeDTOModel";
+import PersonMargeDtoModel from "Frontend/generated/com/itbd/application/dto/user/person/PersonMargeDtoModel";
 import { PersonMargeDtoCrudService } from "Frontend/generated/endpoints";
 
 const PrifileView = () => {
@@ -8,11 +8,11 @@ const PrifileView = () => {
   return (
     <VerticalLayout style={{ alignItems: 'stretch', height: '100%', width: '100%' }}>
       <AutoCrud
-        // service={PersonDtoCrudService} model={PersonDTOModel}
+        // service={PersonDtoCrudService} model={PersonDtoModel}
         // service={ProductDtoCrudService} model={ProductDtoModel}
         // service={EmployeeService} model={EmployeeModel}
-        // service={ContactDtoCrudService} model={ContactDTOModel}
-        service={PersonMargeDtoCrudService} model={PersonMargeDTOModel}
+        // service={ContactDtoCrudService} model={ContactDtoModel}
+        service={PersonMargeDtoCrudService} model={PersonMargeDtoModel}
 
         style={{ height: '100%', width: '100%' }}
       // formProps={{

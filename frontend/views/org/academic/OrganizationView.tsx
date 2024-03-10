@@ -5,16 +5,16 @@ import { TextField } from '@hilla/react-components/TextField.js';
 import { useForm } from '@hilla/react-form';
 import { AutoGrid, AutoGridRef } from 'Frontend/components/grid/autogrid';
 import SideCrudRC from 'Frontend/components/layout/splitlayout/SideCrudRC';
-import OrganizationDTO from 'Frontend/generated/com/itbd/application/dto/org/academic/OrganizationDTO';
-import OrganizationDTOModel from 'Frontend/generated/com/itbd/application/dto/org/academic/OrganizationDTOModel';
+import OrganizationDto from 'Frontend/generated/com/itbd/application/dto/org/academic/OrganizationDto';
+import OrganizationDtoModel from 'Frontend/generated/com/itbd/application/dto/org/academic/OrganizationDtoModel';
 import { OrganizationDtoCrudService } from "Frontend/generated/endpoints";
 import React, { useState } from 'react';
 
 const OrganizationView = () => {
   const [showSidebar, setShowSidebar] = useState<boolean>(false);
   const autoGridRef = React.useRef<AutoGridRef>(null);
-  const [selectedOrgItems, setSelectedOrgItems] = useState<OrganizationDTO[]>([]);
-  const form = useForm(OrganizationDTOModel, {
+  const [selectedOrgItems, setSelectedOrgItems] = useState<OrganizationDto[]>([]);
+  const form = useForm(OrganizationDtoModel, {
     onSubmit: async (org) => {
       await OrganizationDtoCrudService.save(org).then((result) => {
         refreshGrid();
@@ -39,7 +39,7 @@ const OrganizationView = () => {
   const primary = () => {
     return (
       <>
-        <AutoGrid service={OrganizationDtoCrudService} model={OrganizationDTOModel} ref={autoGridRef}
+        <AutoGrid service={OrganizationDtoCrudService} model={OrganizationDtoModel} ref={autoGridRef}
           visibleColumns={['name', 'alternateName', 'foundingDate', 'email', 'phone', 'taxId', 'vatId', 'address', 'website',]}
           selectedItems={selectedOrgItems}
           theme="row-stripes"

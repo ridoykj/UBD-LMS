@@ -6,8 +6,8 @@ import { useForm } from "@hilla/react-form";
 import { AutoGrid } from "Frontend/components/grid/autogrid";
 import SideCrudRC from "Frontend/components/layout/splitlayout/SideCrudRC";
 import SpeedDialRC from "Frontend/components/speeddial/SpeedDialRC";
-import SectorDTO from "Frontend/generated/com/itbd/application/dto/org/place/SectorDTO";
-import SectorDTOModel from "Frontend/generated/com/itbd/application/dto/org/place/SectorDTOModel";
+import SectorDto from "Frontend/generated/com/itbd/application/dto/org/place/SectorDto";
+import SectorDtoModel from "Frontend/generated/com/itbd/application/dto/org/place/SectorDtoModel";
 import { SectorDtoCrudService } from "Frontend/generated/endpoints";
 import React, { useState } from "react";
 import { FaUserPlus } from "react-icons/fa";
@@ -20,9 +20,9 @@ const responsiveSteps = [
 const SectorView = () => {
   const [showSidebar, setShowSidebar] = useState<boolean>(false);
   const autoGridRef = React.useRef<AutoGridRef>(null);
-  const [selectedInstructorItems, setSelectedInstructorItems] = useState<SectorDTO[]>([]);
+  const [selectedInstructorItems, setSelectedInstructorItems] = useState<SectorDto[]>([]);
 
-  const form = useForm(SectorDTOModel, {
+  const form = useForm(SectorDtoModel, {
     onSubmit: async (instructor) => {
       console.log('instructor', instructor);
       await SectorDtoCrudService.save(instructor).then((result) => {
@@ -43,7 +43,7 @@ const SectorView = () => {
   const primary = () => {
     return (
       <>
-        <AutoGrid service={SectorDtoCrudService} model={SectorDTOModel} ref={autoGridRef}
+        <AutoGrid service={SectorDtoCrudService} model={SectorDtoModel} ref={autoGridRef}
           visibleColumns={['name', 'city', 'state', 'alternateName', 'contact',]}
           selectedItems={selectedInstructorItems}
           theme="row-stripes"

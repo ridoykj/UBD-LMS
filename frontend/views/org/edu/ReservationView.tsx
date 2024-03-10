@@ -10,16 +10,16 @@ import { AutoGrid, AutoGridRef } from "Frontend/components/grid/autogrid";
 import SideCrudRC from "Frontend/components/layout/splitlayout/SideCrudRC";
 import SpeedDialRC from "Frontend/components/speeddial/SpeedDialRC";
 import { ClassActivity, ItemSelect } from "Frontend/constants/ItemSelect";
-import BuildingDAO from "Frontend/generated/com/itbd/application/dao/org/place/BuildingDAO";
-import FloorDAO from "Frontend/generated/com/itbd/application/dao/org/place/FloorDAO";
-import SectorDAO from "Frontend/generated/com/itbd/application/dao/org/place/SectorDAO";
-import BatchDTOModel from "Frontend/generated/com/itbd/application/dto/org/edu/BatchDTOModel";
-import CourseDTO from "Frontend/generated/com/itbd/application/dto/org/edu/CourseDTO";
-import CourseDTOModel from "Frontend/generated/com/itbd/application/dto/org/edu/CourseDTOModel";
-import ReservationDTO from "Frontend/generated/com/itbd/application/dto/org/edu/ReservationDTO";
-import ReservationDTOModel from "Frontend/generated/com/itbd/application/dto/org/edu/ReservationDTOModel";
-import RoomDTOModel from "Frontend/generated/com/itbd/application/dto/org/place/RoomDTOModel";
-import InstructorDTOModel from "Frontend/generated/com/itbd/application/dto/user/instructor/InstructorDTOModel";
+import BuildingDao from "Frontend/generated/com/itbd/application/dao/org/place/BuildingDao";
+import FloorDao from "Frontend/generated/com/itbd/application/dao/org/place/FloorDao";
+import SectorDao from "Frontend/generated/com/itbd/application/dao/org/place/SectorDao";
+import BatchDtoModel from "Frontend/generated/com/itbd/application/dto/org/edu/BatchDtoModel";
+import CourseDto from "Frontend/generated/com/itbd/application/dto/org/edu/CourseDto";
+import CourseDtoModel from "Frontend/generated/com/itbd/application/dto/org/edu/CourseDtoModel";
+import ReservationDto from "Frontend/generated/com/itbd/application/dto/org/edu/ReservationDto";
+import ReservationDtoModel from "Frontend/generated/com/itbd/application/dto/org/edu/ReservationDtoModel";
+import RoomDtoModel from "Frontend/generated/com/itbd/application/dto/org/place/RoomDtoModel";
+import InstructorDtoModel from "Frontend/generated/com/itbd/application/dto/user/instructor/InstructorDtoModel";
 import PropertyStringFilter from "Frontend/generated/dev/hilla/crud/filter/PropertyStringFilter";
 import Matcher from "Frontend/generated/dev/hilla/crud/filter/PropertyStringFilter/Matcher";
 import { BatchDtoCrudService, CourseDtoCrudService, InstructorDtoCrudService, ReservationDtoCrudService, RoomDtoCrudService } from "Frontend/generated/endpoints";
@@ -40,16 +40,16 @@ const ReservationView = () => {
   });
 
   const [placeFilter, setPlaceFilter] = useState<PlaceCombobox>({
-    sectorFilter: {} as SectorDAO,
-    buildingFilter: {} as BuildingDAO,
-    floorFilter: {} as FloorDAO,
+    sectorFilter: {} as SectorDao,
+    buildingFilter: {} as BuildingDao,
+    floorFilter: {} as FloorDao,
   });
 
   const [showSidebar, setShowSidebar] = useState<boolean>(false);
   const autoGridRef = React.useRef<AutoGridRef>(null);
-  const [selectedReservationItems, setSelectedReservationItems] = useState<ReservationDTO[]>([]);
+  const [selectedReservationItems, setSelectedReservationItems] = useState<ReservationDto[]>([]);
 
-  const form = useForm(ReservationDTOModel, {
+  const form = useForm(ReservationDtoModel, {
     onSubmit: async (reservation) => {
       console.log('reservation', reservation);
       await ReservationDtoCrudService.save(reservation).then((result) => {
@@ -89,7 +89,7 @@ const ReservationView = () => {
     () =>
       async (
         params: ComboBoxDataProviderParams,
-        callback: ComboBoxDataProviderCallback<RoomDTOModel>
+        callback: ComboBoxDataProviderCallback<RoomDtoModel>
       ) => {
         const child: PropertyStringFilter[] = [{
           '@type': 'propertyString',
@@ -110,7 +110,7 @@ const ReservationView = () => {
     () =>
       async (
         params: ComboBoxDataProviderParams,
-        callback: ComboBoxDataProviderCallback<BatchDTOModel>
+        callback: ComboBoxDataProviderCallback<BatchDtoModel>
       ) => {
         const child: PropertyStringFilter[] = [
           {
@@ -137,7 +137,7 @@ const ReservationView = () => {
     () =>
       async (
         params: ComboBoxDataProviderParams,
-        callback: ComboBoxDataProviderCallback<CourseDTOModel>
+        callback: ComboBoxDataProviderCallback<CourseDtoModel>
       ) => {
         const child: PropertyStringFilter[] = [
           {
@@ -169,7 +169,7 @@ const ReservationView = () => {
     () =>
       async (
         params: ComboBoxDataProviderParams,
-        callback: ComboBoxDataProviderCallback<InstructorDTOModel>
+        callback: ComboBoxDataProviderCallback<InstructorDtoModel>
       ) => {
         const child: PropertyStringFilter[] = [{
           '@type': 'propertyString',
@@ -187,8 +187,8 @@ const ReservationView = () => {
     []
   );
 
-  const courseCustomItemRenderer = (item: CourseDTOModel<CourseDTO>) => {
-    const course: CourseDTO = item.valueOf();
+  const courseCustomItemRenderer = (item: CourseDtoModel<CourseDto>) => {
+    const course: CourseDto = item.valueOf();
     console.log('courseCustomItemRenderer', item.valueOf().name);
     return (
       <div className="border-b">
@@ -213,7 +213,7 @@ const ReservationView = () => {
           }
           branchProps={{ branch: branchFilter, setBranch: setBranchFilter }}
         />
-        <AutoGrid service={ReservationDtoCrudService} model={ReservationDTOModel} ref={autoGridRef}
+        <AutoGrid service={ReservationDtoCrudService} model={ReservationDtoModel} ref={autoGridRef}
           visibleColumns={['name', 'code', 'duration', 'room.name', 'room.block', 'course.programme.name', 'status',]}
           selectedItems={selectedReservationItems}
           theme="row-stripes"

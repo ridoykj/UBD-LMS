@@ -1,6 +1,6 @@
 import { VerticalLayout } from "@hilla/react-components/VerticalLayout";
 import { AutoCrud } from "@hilla/react-crud";
-import TestimonialDTOModel from "Frontend/generated/com/itbd/application/dto/org/academic/TestimonialDTOModel";
+import TestimonialDtoModel from "Frontend/generated/com/itbd/application/dto/org/academic/TestimonialDtoModel";
 import { TestimonialDtoCrudService } from "Frontend/generated/endpoints";
 
 const TestimonialView = () => {
@@ -8,7 +8,7 @@ const TestimonialView = () => {
   return (
     <VerticalLayout style={{ alignItems: 'stretch', height: '100%', width: '100%' }}>
       <AutoCrud
-        service={TestimonialDtoCrudService} model={TestimonialDTOModel}
+        service={TestimonialDtoCrudService} model={TestimonialDtoModel}
 
         style={{ height: '100%', width: '100%' }}
       // formProps={{

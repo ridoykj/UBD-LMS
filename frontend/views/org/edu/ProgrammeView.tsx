@@ -8,9 +8,9 @@ import { AutoGrid, AutoGridRef } from "Frontend/components/grid/autogrid";
 import SideCrudRC from "Frontend/components/layout/splitlayout/SideCrudRC";
 import SpeedDialRC from "Frontend/components/speeddial/SpeedDialRC";
 import ProgrammeTypeEnum from "Frontend/generated/com/itbd/application/constants/enums/ProgrammeTypeEnum";
-import DepartmentDTOModel from "Frontend/generated/com/itbd/application/dto/org/edu/DepartmentDTOModel";
-import ProgrammeDTO from "Frontend/generated/com/itbd/application/dto/org/edu/ProgrammeDTO";
-import ProgrammeDTOModel from "Frontend/generated/com/itbd/application/dto/org/edu/ProgrammeDTOModel";
+import DepartmentDtoModel from "Frontend/generated/com/itbd/application/dto/org/edu/DepartmentDtoModel";
+import ProgrammeDto from "Frontend/generated/com/itbd/application/dto/org/edu/ProgrammeDto";
+import ProgrammeDtoModel from "Frontend/generated/com/itbd/application/dto/org/edu/ProgrammeDtoModel";
 import PropertyStringFilter from "Frontend/generated/dev/hilla/crud/filter/PropertyStringFilter";
 import Matcher from "Frontend/generated/dev/hilla/crud/filter/PropertyStringFilter/Matcher";
 import { DepartmentDtoCrudService, ProgrammeDtoCrudService } from "Frontend/generated/endpoints";
@@ -31,9 +31,9 @@ const ProgrammeView = () => {
 
   const [showSidebar, setShowSidebar] = useState<boolean>(false);
   const autoGridRef = React.useRef<AutoGridRef>(null);
-  const [selectedProgrammeItems, setSelectedProgrammeItems] = useState<ProgrammeDTO[]>([]);
+  const [selectedProgrammeItems, setSelectedProgrammeItems] = useState<ProgrammeDto[]>([]);
 
-  const form = useForm(ProgrammeDTOModel, {
+  const form = useForm(ProgrammeDtoModel, {
     onSubmit: async (programme) => {
       await ProgrammeDtoCrudService.save(programme).then((result) => {
         refreshGrid();
@@ -55,7 +55,7 @@ const ProgrammeView = () => {
     () =>
       async (
         params: ComboBoxDataProviderParams,
-        callback: ComboBoxDataProviderCallback<DepartmentDTOModel>
+        callback: ComboBoxDataProviderCallback<DepartmentDtoModel>
       ) => {
         console.log('params department', params);
         const child: PropertyStringFilter[] = [{
@@ -87,7 +87,7 @@ const ProgrammeView = () => {
           }
           branchProps={{ branch: branchFilter, setBranch: setBranchFilter }}
         />
-        <AutoGrid service={ProgrammeDtoCrudService} model={ProgrammeDTOModel} ref={autoGridRef}
+        <AutoGrid service={ProgrammeDtoCrudService} model={ProgrammeDtoModel} ref={autoGridRef}
           visibleColumns={['name', 'code', 'studyLevel', 'department.name', 'status',]}
           selectedItems={selectedProgrammeItems}
           theme="row-stripes"  

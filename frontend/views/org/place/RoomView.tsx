@@ -10,9 +10,9 @@ import { AutoGrid } from "Frontend/components/grid/autogrid";
 import SideCrudRC from "Frontend/components/layout/splitlayout/SideCrudRC";
 import SpeedDialRC from "Frontend/components/speeddial/SpeedDialRC";
 import RoomTypeEnum from "Frontend/generated/com/itbd/application/constants/enums/RoomTypeEnum";
-import FloorDTOModel from "Frontend/generated/com/itbd/application/dto/org/place/FloorDTOModel";
-import RoomDTO from "Frontend/generated/com/itbd/application/dto/org/place/RoomDTO";
-import RoomDTOModel from "Frontend/generated/com/itbd/application/dto/org/place/RoomDTOModel";
+import FloorDtoModel from "Frontend/generated/com/itbd/application/dto/org/place/FloorDtoModel";
+import RoomDto from "Frontend/generated/com/itbd/application/dto/org/place/RoomDto";
+import RoomDtoModel from "Frontend/generated/com/itbd/application/dto/org/place/RoomDtoModel";
 import PropertyStringFilter from "Frontend/generated/dev/hilla/crud/filter/PropertyStringFilter";
 import Matcher from "Frontend/generated/dev/hilla/crud/filter/PropertyStringFilter/Matcher";
 import { FloorDtoCrudService, RoomDtoCrudService } from "Frontend/generated/endpoints";
@@ -34,9 +34,9 @@ const RoomView = () => {
 
   const [showSidebar, setShowSidebar] = useState<boolean>(false);
   const autoGridRef = React.useRef<AutoGridRef>(null);
-  const [selectedInstructorItems, setSelectedInstructorItems] = useState<RoomDTO[]>([]);
+  const [selectedInstructorItems, setSelectedInstructorItems] = useState<RoomDto[]>([]);
 
-  const form = useForm(RoomDTOModel, {
+  const form = useForm(RoomDtoModel, {
     onSubmit: async (instructor) => {
       console.log('instructor', instructor);
       await RoomDtoCrudService.save(instructor).then((result) => {
@@ -59,7 +59,7 @@ const RoomView = () => {
     () =>
       async (
         params: ComboBoxDataProviderParams,
-        callback: ComboBoxDataProviderCallback<FloorDTOModel>
+        callback: ComboBoxDataProviderCallback<FloorDtoModel>
       ) => {
 
         console.log('floorDataProvider1', placeFilter.buildingFilter?.id?.toString());
@@ -98,7 +98,7 @@ const RoomView = () => {
           }
           placeProps={{ place: placeFilter, setPlace: setPlaceFilter }}
         />
-        <AutoGrid service={RoomDtoCrudService} model={RoomDTOModel} ref={autoGridRef}
+        <AutoGrid service={RoomDtoCrudService} model={RoomDtoModel} ref={autoGridRef}
           visibleColumns={['name', 'hasPublicAccess', 'block', 'totalRooms', 'floor.name', 'floor.building.name',]}
           selectedItems={selectedInstructorItems}
           theme="row-stripes"

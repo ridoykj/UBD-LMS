@@ -12,13 +12,13 @@ import BranchRC, { BranchCombobox } from "Frontend/components/branch/BranchRC";
 import { AutoGrid, AutoGridRef } from "Frontend/components/grid/autogrid";
 import SideCrudRC from "Frontend/components/layout/splitlayout/SideCrudRC";
 import CoordinatorTypeEnum from "Frontend/generated/com/itbd/application/constants/enums/CoordinatorTypeEnum";
-import BatchCoordinatorDAO from "Frontend/generated/com/itbd/application/dao/org/allocation/BatchCoordinatorDAO";
-import BatchCourseDTO from "Frontend/generated/com/itbd/application/dto/org/allocation/BatchCourseDTO";
-import BatchCourseDTOModel from "Frontend/generated/com/itbd/application/dto/org/allocation/BatchCourseDTOModel";
-import BatchDTOModel from "Frontend/generated/com/itbd/application/dto/org/edu/BatchDTOModel";
-import CourseDTO from "Frontend/generated/com/itbd/application/dto/org/edu/CourseDTO";
-import CourseDTOModel from "Frontend/generated/com/itbd/application/dto/org/edu/CourseDTOModel";
-import InstructorDTOModel from "Frontend/generated/com/itbd/application/dto/user/instructor/InstructorDTOModel";
+import BatchCoordinatorDao from "Frontend/generated/com/itbd/application/dao/org/allocation/BatchCoordinatorDao";
+import BatchCourseDto from "Frontend/generated/com/itbd/application/dto/org/allocation/BatchCourseDto";
+import BatchCourseDtoModel from "Frontend/generated/com/itbd/application/dto/org/allocation/BatchCourseDtoModel";
+import BatchDtoModel from "Frontend/generated/com/itbd/application/dto/org/edu/BatchDtoModel";
+import CourseDto from "Frontend/generated/com/itbd/application/dto/org/edu/CourseDto";
+import CourseDtoModel from "Frontend/generated/com/itbd/application/dto/org/edu/CourseDtoModel";
+import InstructorDtoModel from "Frontend/generated/com/itbd/application/dto/user/instructor/InstructorDtoModel";
 import PropertyStringFilter from "Frontend/generated/dev/hilla/crud/filter/PropertyStringFilter";
 import Matcher from "Frontend/generated/dev/hilla/crud/filter/PropertyStringFilter/Matcher";
 import { BatchCoordinatorDtoCrudService, BatchCourseDtoCrudService, BatchDtoCrudService, CourseDtoCrudService, InstructorDtoCrudService } from "Frontend/generated/endpoints";
@@ -39,12 +39,12 @@ const BatchCourseView = () => {
     programmeFilter: undefined,
   });
 
-  const [items, setItems] = useState<BatchCoordinatorDAO>();
+  const [items, setItems] = useState<BatchCoordinatorDao>();
   const autoGridRef = React.useRef<AutoGridRef>(null);
   const [showSidebar, setShowSidebar] = useState<boolean>(false);
-  const [selectedCourseItems, setSelectedCourseItems] = useState<BatchCourseDTO[]>([]);
+  const [selectedCourseItems, setSelectedCourseItems] = useState<BatchCourseDto[]>([]);
 
-  const form = useForm(BatchCourseDTOModel, {
+  const form = useForm(BatchCourseDtoModel, {
     onSubmit: async (batch) => {
       await BatchCourseDtoCrudService.save(batch).then((result) => {
         refreshGrid();
@@ -68,7 +68,7 @@ const BatchCourseView = () => {
     () =>
       async (
         params: ComboBoxDataProviderParams,
-        callback: ComboBoxDataProviderCallback<InstructorDTOModel>
+        callback: ComboBoxDataProviderCallback<InstructorDtoModel>
       ) => {
         const childName: PropertyStringFilter[] = [
           {
@@ -91,7 +91,7 @@ const BatchCourseView = () => {
     () =>
       async (
         params: ComboBoxDataProviderParams,
-        callback: ComboBoxDataProviderCallback<BatchDTOModel>
+        callback: ComboBoxDataProviderCallback<BatchDtoModel>
       ) => {
         const child: PropertyStringFilter[] = [
           {
@@ -118,7 +118,7 @@ const BatchCourseView = () => {
     () =>
       async (
         params: ComboBoxDataProviderParams,
-        callback: ComboBoxDataProviderCallback<CourseDTOModel>
+        callback: ComboBoxDataProviderCallback<CourseDtoModel>
       ) => {
         const child: PropertyStringFilter[] = [
           // {
@@ -147,8 +147,8 @@ const BatchCourseView = () => {
     [branchFilter.programmeFilter]
   );
 
-  const courseCustomItemRenderer = (item: CourseDTOModel<CourseDTO>) => {
-    const course: CourseDTO = item.valueOf();
+  const courseCustomItemRenderer = (item: CourseDtoModel<CourseDto>) => {
+    const course: CourseDto = item.valueOf();
     // console.log('courseCustomItemRenderer', item.valueOf().name);
     return (
       <div className="border-b">
@@ -199,7 +199,7 @@ const BatchCourseView = () => {
           visibleFields={{ organization: true, department: true, programme: true, batch: true }}
           branchProps={{ branch: branchFilter, setBranch: setBranchFilter }}
         />
-        <AutoGrid service={BatchCourseDtoCrudService} model={BatchCourseDTOModel} ref={autoGridRef} multiSort multiSortPriority="append"
+        <AutoGrid service={BatchCourseDtoCrudService} model={BatchCourseDtoModel} ref={autoGridRef} multiSort multiSortPriority="append"
           visibleColumns={['batch.name', 'course.code', 'course.name', 'semester', 'numberOfCredits',]}
           selectedItems={selectedCourseItems}
           theme="row-stripes"

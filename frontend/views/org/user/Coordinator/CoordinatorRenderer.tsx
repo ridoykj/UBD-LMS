@@ -1,7 +1,7 @@
 
 import ImgRC from "Frontend/components/Image/ImgRC";
-import InstructorDTOModel from "Frontend/generated/com/itbd/application/dto/user/instructor/InstructorDTOModel";
-const CoordinatorRenderer = ({ item }: { item: InstructorDTOModel }) => {
+import InstructorDtoModel from "Frontend/generated/com/itbd/application/dto/user/instructor/InstructorDtoModel";
+const CoordinatorRenderer = ({ item }: { item: InstructorDtoModel }) => {
     const { id, person, designation } = item.valueOf();
     const imagePath = `v1/content/image?imagePath=${btoa('/user/' + person?.id + '/temp/100/' + person?.id + '.png')}`;
     // console.log('ImageUrl', imagePath);

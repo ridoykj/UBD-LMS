@@ -15,11 +15,11 @@ import PlaceRC, { PlaceCombobox } from 'Frontend/components/branch/PlaceRC';
 import SpeedDialRC from 'Frontend/components/speeddial/SpeedDialRC';
 import DayTypeEnum from 'Frontend/generated/com/itbd/application/constants/enums/DayTypeEnum';
 import EventTypeEnum from 'Frontend/generated/com/itbd/application/constants/enums/EventTypeEnum';
-import BatchCourseDTO from 'Frontend/generated/com/itbd/application/dto/org/allocation/BatchCourseDTO';
-import BatchCourseDTOModel from 'Frontend/generated/com/itbd/application/dto/org/allocation/BatchCourseDTOModel';
-import BatchRoomDTO from 'Frontend/generated/com/itbd/application/dto/org/allocation/BatchRoomDTO';
-import BatchRoomDTOModel from 'Frontend/generated/com/itbd/application/dto/org/allocation/BatchRoomDTOModel';
-import RoomDTOModel from 'Frontend/generated/com/itbd/application/dto/org/place/RoomDTOModel';
+import BatchCourseDto from 'Frontend/generated/com/itbd/application/dto/org/allocation/BatchCourseDto';
+import BatchCourseDtoModel from 'Frontend/generated/com/itbd/application/dto/org/allocation/BatchCourseDtoModel';
+import BatchRoomDto from 'Frontend/generated/com/itbd/application/dto/org/allocation/BatchRoomDto';
+import BatchRoomDtoModel from 'Frontend/generated/com/itbd/application/dto/org/allocation/BatchRoomDtoModel';
+import RoomDtoModel from 'Frontend/generated/com/itbd/application/dto/org/place/RoomDtoModel';
 import Filter from 'Frontend/generated/dev/hilla/crud/filter/Filter';
 import PropertyStringFilter from 'Frontend/generated/dev/hilla/crud/filter/PropertyStringFilter';
 import Matcher from 'Frontend/generated/dev/hilla/crud/filter/PropertyStringFilter/Matcher';
@@ -45,8 +45,8 @@ const timeRange: TimeRange = { open: '09:00', close: '21:00', interval: 30 };
 const days = Object.values(DayTypeEnum).map(level => ({ label: level, value: level }));
 const eventTypes = Object.values(EventTypeEnum).map(level => ({ label: level, value: level }));
 
-const courseCustomItemRenderer = (item: BatchCourseDTOModel<BatchCourseDTO>) => {
-  const batch: BatchCourseDTO = item.valueOf();
+const courseCustomItemRenderer = (item: BatchCourseDtoModel<BatchCourseDto>) => {
+  const batch: BatchCourseDto = item.valueOf();
   return (
     <div className="border-b">
       <p className="text-sm font-semibold">{`[${batch.semester}] - ${batch.course?.code} - ${batch.course?.name}`}</p>
@@ -77,9 +77,9 @@ function TimeTableView() {
 
   const [dayEvents, setDayEvents] = useState<DayItem[]>();
   const [eventRefresh, setEventRefresh] = useState<boolean>(false);
-  const [eventItem, setEventItem] = useState<BatchRoomDTOModel>();
+  const [eventItem, setEventItem] = useState<BatchRoomDtoModel>();
 
-  const { model, field, value, read, submit, clear, reset, visited, dirty, invalid, submitting, validate, addValidator } = useForm(BatchRoomDTOModel, {
+  const { model, field, value, read, submit, clear, reset, visited, dirty, invalid, submitting, validate, addValidator } = useForm(BatchRoomDtoModel, {
     onSubmit: async (batchRoom) => {
       await BatchRoomDtoCrudService.save(batchRoom).then((result) => {
         clear();
@@ -105,7 +105,7 @@ function TimeTableView() {
       }));
     addValidator({
       message: 'Please select  "Day" or "Start Date" & "End Date"',
-      validate: (value: BatchRoomDTO) => {
+      validate: (value: BatchRoomDto) => {
         if (value.dayName != undefined && (value.startTime == undefined && value.endTime == undefined)) {
           return [{ property: model.startTime, message: 'You can\'t leave this field' }, { property: model.startTime, message: 'You can\'t leave this field' }];
         }
@@ -121,7 +121,7 @@ function TimeTableView() {
     () =>
       async (
         params: ComboBoxDataProviderParams,
-        callback: ComboBoxDataProviderCallback<RoomDTOModel>
+        callback: ComboBoxDataProviderCallback<RoomDtoModel>
       ) => {
         const child: PropertyStringFilter[] = [
           {
@@ -149,7 +149,7 @@ function TimeTableView() {
     () =>
       async (
         params: ComboBoxDataProviderParams,
-        callback: ComboBoxDataProviderCallback<BatchCourseDTOModel>
+        callback: ComboBoxDataProviderCallback<BatchCourseDtoModel>
       ) => {
         console.log('semesterNameFilter', branchFilter.semesterFilter);
         const child: PropertyStringFilter[] = [
@@ -200,7 +200,7 @@ function TimeTableView() {
         '@type': 'or',
         children: child
       };
-      BatchRoomDtoCrudService.list(pagination, filters).then((result: BatchRoomDTO[]) => {
+      BatchRoomDtoCrudService.list(pagination, filters).then((result: BatchRoomDto[]) => {
         const dayEvents: DayItem[] = [];
         result.map((batchRoom, index) => {
           const events = dayEvents.find((item) => item.dayName === batchRoom.dayName?.substring(0, 3));
