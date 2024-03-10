@@ -1,6 +1,6 @@
 package com.itbd.application.dao.custom;
 
-public interface IDashBoardRptDAO {
+public interface IDashBoardRptDao {
     Long getSectors();
     Long getBuildings();
     Long getFloors();

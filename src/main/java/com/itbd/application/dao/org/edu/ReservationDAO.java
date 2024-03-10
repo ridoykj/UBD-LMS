@@ -1,8 +1,8 @@
 package com.itbd.application.dao.org.edu;
 
 import com.itbd.application.dao.AbstractEntity;
-import com.itbd.application.dao.org.place.RoomDAO;
-import com.itbd.application.dao.user.InstructorDAO;
+import com.itbd.application.dao.org.place.RoomDao;
+import com.itbd.application.dao.user.InstructorDao;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -13,7 +13,7 @@ import java.time.LocalDate;
 @Entity(name = "t_edu_reservation")
 @Getter
 @Setter
-public class ReservationDAO extends AbstractEntity<Long> {
+public class ReservationDao extends AbstractEntity<Long> {
     @Id
     @Column(name = "id_reservation_key", nullable = false, updatable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -66,14 +66,14 @@ public class ReservationDAO extends AbstractEntity<Long> {
 
     @ManyToOne
     @JoinColumn(name = "id_batch_key")
-    private BatchDAO batch;
+    private BatchDao batch;
 
     @ManyToOne
     @JoinColumn(name = "id_room_key")
-    private RoomDAO room;
+    private RoomDao room;
 
     @ManyToOne
     @JoinColumn(name = "id_instructor_key")
-    private InstructorDAO instructor;
+    private InstructorDao instructor;
 
 }

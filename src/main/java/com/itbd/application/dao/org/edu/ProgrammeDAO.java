@@ -13,7 +13,7 @@ import java.util.List;
 @Setter
 @Entity
 @Table(name = "t_edu_programme")
-public class ProgrammeDAO extends AbstractEntity<Long> {
+public class ProgrammeDao extends AbstractEntity<Long> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -43,10 +43,10 @@ public class ProgrammeDAO extends AbstractEntity<Long> {
 
     @ManyToOne
     @JoinColumn(name = "id_department_key", nullable = false)
-    private DepartmentDAO department;
+    private DepartmentDao department;
 
     @OneToMany(mappedBy = "programme", cascade = CascadeType.ALL)
-    private List<BatchDAO> batches;
+    private List<BatchDao> batches;
 
 //    @OneToMany(mappedBy = "programme", cascade = CascadeType.ALL)
 //    private List<CourseDAO> courses;

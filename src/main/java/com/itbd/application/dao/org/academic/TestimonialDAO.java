@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 @Entity(name = "t_aca_testimonial")
 @Getter
 @Setter
-public class TestimonialDAO extends AbstractEntity<Long> {
+public class TestimonialDao extends AbstractEntity<Long> {
     @Id
     @Column(name = "id_testimonial_key", nullable = false, updatable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)

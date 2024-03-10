@@ -10,7 +10,7 @@ import lombok.Setter;
 @Table(name = "t_aca_section")
 @Getter
 @Setter
-public class SectionDAO extends AbstractEntity<Long> {
+public class SectionDao extends AbstractEntity<Long> {
     @Id
     @Column(name = "id_section_key", nullable = false, updatable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)

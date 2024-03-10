@@ -3,7 +3,7 @@ package com.itbd.application.dao.org.allocation;
 import com.itbd.application.constants.enums.DayTypeEnum;
 import com.itbd.application.constants.enums.EventTypeEnum;
 import com.itbd.application.dao.AbstractEntity;
-import com.itbd.application.dao.org.place.RoomDAO;
+import com.itbd.application.dao.org.place.RoomDao;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -16,7 +16,7 @@ import java.time.LocalTime;
 @Setter
 @Entity
 @Table(name = "T_MAP_BATCH_ROOM")
-public class BatchRoomDAO extends AbstractEntity<Long> {
+public class BatchRoomDao extends AbstractEntity<Long> {
     @Id
     @Column(name = "id_batch_room_key", nullable = false, updatable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -52,9 +52,9 @@ public class BatchRoomDAO extends AbstractEntity<Long> {
 
     @ManyToOne
     @JoinColumn(name = "id_batch_course_key")
-    private BatchCourseDAO batchCourse;
+    private BatchCourseDao batchCourse;
 
     @ManyToOne
     @JoinColumn(name = "id_room_key")
-    private RoomDAO room;
+    private RoomDao room;
 }

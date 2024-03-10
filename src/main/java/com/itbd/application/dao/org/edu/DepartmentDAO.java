@@ -1,7 +1,7 @@
 package com.itbd.application.dao.org.edu;
 
 import com.itbd.application.dao.AbstractEntity;
-import com.itbd.application.dao.org.academic.OrganizationDAO;
+import com.itbd.application.dao.org.academic.OrganizationDao;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -12,7 +12,7 @@ import java.util.List;
 @Entity(name = "t_edu_department")
 @Getter
 @Setter
-public class DepartmentDAO extends AbstractEntity<Long> {
+public class DepartmentDao extends AbstractEntity<Long> {
     @Id
     @Column(name = "id_department_key", nullable = false, updatable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -39,10 +39,10 @@ public class DepartmentDAO extends AbstractEntity<Long> {
     private String headOfDepartment;
 
     @OneToMany(mappedBy = "department", cascade = CascadeType.ALL)
-    private List<ProgrammeDAO> programmes;
+    private List<ProgrammeDao> programmes;
 
     @ManyToOne
     @JoinColumn(name = "id_organization_key")
-    private OrganizationDAO organization;
+    private OrganizationDao organization;
 
 }

@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 @Entity(name = "t_aca_attendance")
 @Getter
 @Setter
-public class AttendanceDAO extends AbstractEntity<Long> {
+public class AttendanceDao extends AbstractEntity<Long> {
     @Id
     @Column(name = "id_attendance_key", nullable = false, updatable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)

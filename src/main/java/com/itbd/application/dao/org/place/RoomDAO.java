@@ -3,8 +3,8 @@ package com.itbd.application.dao.org.place;
 import com.itbd.application.constants.enums.RoomTypeEnum;
 import com.itbd.application.constants.enums.UnitTypeEnum;
 import com.itbd.application.dao.AbstractEntity;
-import com.itbd.application.dao.org.allocation.BatchRoomDAO;
-import com.itbd.application.dao.org.edu.ReservationDAO;
+import com.itbd.application.dao.org.allocation.BatchRoomDao;
+import com.itbd.application.dao.org.edu.ReservationDao;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -16,7 +16,7 @@ import java.util.Set;
 @Getter
 @Setter
 @Table(name = "t_place_room", uniqueConstraints = {@UniqueConstraint(name = "ctx_place_room_unique", columnNames = {"name", "floor"})})
-public class RoomDAO extends AbstractEntity<Long> {
+public class RoomDao extends AbstractEntity<Long> {
     @Id
     @Column(name = "id_room_key", nullable = false, updatable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -74,11 +74,11 @@ public class RoomDAO extends AbstractEntity<Long> {
 
     @ManyToOne
     @JoinColumn(name = "id_floor_key")
-    private FloorDAO floor;
+    private FloorDao floor;
 
     @OneToMany(mappedBy = "room")
-    private Set<ReservationDAO> reservations;
+    private Set<ReservationDao> reservations;
 
     @OneToMany(mappedBy = "room", cascade = CascadeType.ALL)
-    private Set<BatchRoomDAO> batchRooms;
+    private Set<BatchRoomDao> batchRooms;
 }

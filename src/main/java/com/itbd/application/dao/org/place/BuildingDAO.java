@@ -15,7 +15,7 @@ import java.util.List;
 @Entity(name = "t_place_building")
 @Getter
 @Setter
-public class BuildingDAO extends AbstractEntity<Long> {
+public class BuildingDao extends AbstractEntity<Long> {
     @Id
     @Column(name = "id_building_key", nullable = false, updatable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -147,12 +147,12 @@ public class BuildingDAO extends AbstractEntity<Long> {
     private String googleMapLink;
 
     @OneToMany(mappedBy = "building")
-    private List<FloorDAO> floors;
+    private List<FloorDao> floors;
 
 
     @ManyToOne
     @JoinColumn(name = "id_sector_key")
-    private SectorDAO sector;
+    private SectorDao sector;
 
 
 }

@@ -1,8 +1,8 @@
 package com.itbd.application.dao.org.allocation;
 
 import com.itbd.application.dao.AbstractEntity;
-import com.itbd.application.dao.org.edu.BatchDAO;
-import com.itbd.application.dao.org.edu.CourseDAO;
+import com.itbd.application.dao.org.edu.BatchDao;
+import com.itbd.application.dao.org.edu.CourseDao;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -14,7 +14,7 @@ import java.util.Set;
 @Entity(name = "t_map_batch_course")
 @Getter
 @Setter
-public class BatchCourseDAO extends AbstractEntity<Long> {
+public class BatchCourseDao extends AbstractEntity<Long> {
     @Id
     @Column(name = "id_batch_course_key", nullable = false, updatable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -63,12 +63,12 @@ public class BatchCourseDAO extends AbstractEntity<Long> {
 
     @ManyToOne
     @JoinColumn(name = "id_course_key")
-    private CourseDAO course;
+    private CourseDao course;
 
     @ManyToOne
     @JoinColumn(name = "id_batch_key")
-    private BatchDAO batch;
+    private BatchDao batch;
 
     @OneToMany(mappedBy = "batchCourse", cascade = CascadeType.ALL)
-    private Set<BatchCoordinatorDAO> batchCoordinators;
+    private Set<BatchCoordinatorDao> batchCoordinators;
 }

@@ -3,9 +3,9 @@ package com.itbd.application.dao.user.person;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.itbd.application.constants.enums.BloodGroupsEnum;
 import com.itbd.application.dao.AbstractEntity;
-import com.itbd.application.dao.user.InstructorDAO;
-import com.itbd.application.dao.user.StudentDAO;
-import com.itbd.application.dao.user.UserDAO;
+import com.itbd.application.dao.user.InstructorDao;
+import com.itbd.application.dao.user.StudentDao;
+import com.itbd.application.dao.user.UserDao;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -17,7 +17,7 @@ import java.time.LocalDateTime;
 @Entity(name = "t_per_person")
 @Getter
 @Setter
-public class PersonDAO extends AbstractEntity<Long> {
+public class PersonDao extends AbstractEntity<Long> {
 
     @Id
     @Column(name = "id_person_key", nullable = false, updatable = false)
@@ -92,40 +92,40 @@ public class PersonDAO extends AbstractEntity<Long> {
     @OneToOne(mappedBy = "person", cascade = CascadeType.ALL)
     @ToString.Exclude
     @JsonManagedReference
-    private AddressDAO address;
+    private AddressDao address;
 
     @OneToOne(mappedBy = "person", cascade = CascadeType.ALL)
     @ToString.Exclude
     @JsonManagedReference
-    private ContactDAO contact;
+    private ContactDao contact;
 
     @OneToOne(mappedBy = "person", cascade = CascadeType.ALL)
     @ToString.Exclude
     @JsonManagedReference
-    private DocumentRecordsDAO record;
+    private DocumentRecordsDao record;
 
     @OneToOne(mappedBy = "person", cascade = CascadeType.ALL)
     @ToString.Exclude
     @JsonManagedReference
-    private MedicalDAO medical;
+    private MedicalDao medical;
 
     @OneToOne(mappedBy = "person", cascade = CascadeType.ALL)
     @ToString.Exclude
     @JsonManagedReference
-    private OccupationDAO occupation;
+    private OccupationDao occupation;
 
     @OneToOne(mappedBy = "person", cascade = CascadeType.ALL)
     @ToString.Exclude
     @JsonManagedReference
-    private UserDAO user;
+    private UserDao user;
 
     @OneToOne(mappedBy = "person", cascade = CascadeType.ALL)
     @ToString.Exclude
     @JsonManagedReference
-    private StudentDAO student;
+    private StudentDao student;
 
     @OneToOne(mappedBy = "person", cascade = CascadeType.ALL)
     @ToString.Exclude
 //    @JsonManagedReference
-    private InstructorDAO instructor;
+    private InstructorDao instructor;
 }

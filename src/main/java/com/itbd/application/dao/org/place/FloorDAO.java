@@ -13,7 +13,7 @@ import java.util.List;
 @Getter
 @Setter
 @Table(name = "t_place_floor", uniqueConstraints = {@UniqueConstraint(name = "ctx_floor_unique", columnNames = {"name", "floorLevel", "building"})})
-public class FloorDAO extends AbstractEntity<Long> {
+public class FloorDao extends AbstractEntity<Long> {
     @Id
     @Column(name = "id_floor_key", nullable = false, updatable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -68,11 +68,11 @@ public class FloorDAO extends AbstractEntity<Long> {
     private Integer totalExits;
 
     @OneToMany(mappedBy = "floor")
-    private List<RoomDAO> rooms;
+    private List<RoomDao> rooms;
 
 
     @ManyToOne
     @JoinColumn(name = "id_building_key")
-    private BuildingDAO building;
+    private BuildingDao building;
 
 }

@@ -13,7 +13,7 @@ import java.math.BigDecimal;
 @Entity(name = "t_per_medical")
 @Getter
 @Setter
-public class MedicalDAO extends AbstractEntity<Long> {
+public class MedicalDao extends AbstractEntity<Long> {
 
     @Id
     @Column(name = "id_medical_key", nullable = false, updatable = false)
@@ -46,6 +46,6 @@ public class MedicalDAO extends AbstractEntity<Long> {
     // @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "id_person_key")
     @JsonBackReference
-    private PersonDAO person;
+    private PersonDao person;
 
 }

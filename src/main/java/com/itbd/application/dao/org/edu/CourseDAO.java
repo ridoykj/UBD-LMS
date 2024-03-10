@@ -1,21 +1,20 @@
 package com.itbd.application.dao.org.edu;
 
 import com.itbd.application.dao.AbstractEntity;
-import com.itbd.application.dao.org.allocation.BatchCourseDAO;
+import com.itbd.application.dao.org.allocation.BatchCourseDao;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.math.BigDecimal;
-import java.util.List;
 import java.util.Set;
 
 @Entity
 @Getter
 @Setter
 @Table(name = "t_edu_course", uniqueConstraints = {@UniqueConstraint(name = "ctx_edu_course_unique", columnNames = {"name", "code"})})
-public class CourseDAO extends AbstractEntity<Long> {
+public class CourseDao extends AbstractEntity<Long> {
     @Id
     @Column(name = "id_course_key", nullable = false, updatable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -63,7 +62,7 @@ public class CourseDAO extends AbstractEntity<Long> {
     private String durationUnit;
 
     @OneToMany(mappedBy = "course")
-    private Set<BatchCourseDAO> batchCourses;
+    private Set<BatchCourseDao> batchCourses;
 
 
 //    @OneToMany(mappedBy = "course")

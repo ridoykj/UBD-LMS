@@ -10,7 +10,7 @@ import lombok.Setter;
 @Entity(name = "t_per_document_records")
 @Getter
 @Setter
-public class DocumentRecordsDAO extends AbstractEntity<Long> {
+public class DocumentRecordsDao extends AbstractEntity<Long> {
 
     @Id
     @Column(name = "id_document_records_key", nullable = false, updatable = false)
@@ -42,6 +42,6 @@ public class DocumentRecordsDAO extends AbstractEntity<Long> {
     // @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "id_person_key")
     @JsonBackReference
-    private PersonDAO person;
+    private PersonDao person;
 
 }

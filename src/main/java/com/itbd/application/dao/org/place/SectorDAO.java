@@ -11,7 +11,7 @@ import java.util.List;
 @Entity(name = "t_place_sector")
 @Getter
 @Setter
-public class SectorDAO extends AbstractEntity<Long> {
+public class SectorDao extends AbstractEntity<Long> {
     @Id
     @Column(name = "id_sector_key", nullable = false, updatable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -44,5 +44,5 @@ public class SectorDAO extends AbstractEntity<Long> {
     private String description;
 
     @OneToMany(mappedBy = "sector")
-    private List<BuildingDAO> buildings;
+    private List<BuildingDao> buildings;
 }

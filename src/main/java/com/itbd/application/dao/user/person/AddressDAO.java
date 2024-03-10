@@ -10,7 +10,7 @@ import lombok.Setter;
 @Entity(name = "t_per_address")
 @Getter
 @Setter
-public class AddressDAO extends AbstractEntity<Long> {
+public class AddressDao extends AbstractEntity<Long> {
     @Id
     @Column(name = "id_address_key", nullable = false, updatable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -39,5 +39,5 @@ public class AddressDAO extends AbstractEntity<Long> {
     @OneToOne
     @JoinColumn(name = "id_person_key")
     @JsonBackReference
-    private PersonDAO person;
+    private PersonDao person;
 }

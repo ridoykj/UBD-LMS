@@ -1,23 +1,20 @@
 package com.itbd.application.dao.user;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.itbd.application.dao.AbstractEntity;
-import com.itbd.application.dao.org.allocation.BatchCoordinatorDAO;
-import com.itbd.application.dao.org.allocation.BatchCourseDAO;
-import com.itbd.application.dao.org.edu.ReservationDAO;
-import com.itbd.application.dao.user.person.PersonDAO;
+import com.itbd.application.dao.org.allocation.BatchCoordinatorDao;
+import com.itbd.application.dao.org.edu.ReservationDao;
+import com.itbd.application.dao.user.person.PersonDao;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.List;
 import java.util.Set;
 
 @Entity(name = "t_org_instructor")
 @Getter
 @Setter
-public class InstructorDAO extends AbstractEntity<Long> {
+public class InstructorDao extends AbstractEntity<Long> {
     @Id
     @Column(name = "id_instructor_key", nullable = false, updatable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -45,12 +42,12 @@ public class InstructorDAO extends AbstractEntity<Long> {
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "id_person_key")
-//    @JsonBackReference
-    private PersonDAO person;
+    // @JsonBackReference
+    private PersonDao person;
 
     @OneToMany(mappedBy = "instructor")
-    private Set<ReservationDAO> reservations;
+    private Set<ReservationDao> reservations;
 
     @OneToMany(mappedBy = "instructor")
-    private Set<BatchCoordinatorDAO> batchCoordinators;
+    private Set<BatchCoordinatorDao> batchCoordinators;
 }

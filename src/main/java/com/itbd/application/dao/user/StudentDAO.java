@@ -2,8 +2,8 @@ package com.itbd.application.dao.user;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.itbd.application.dao.AbstractEntity;
-import com.itbd.application.dao.org.edu.BatchDAO;
-import com.itbd.application.dao.user.person.PersonDAO;
+import com.itbd.application.dao.org.edu.BatchDao;
+import com.itbd.application.dao.user.person.PersonDao;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -13,7 +13,7 @@ import lombok.Setter;
 @Table(name = "t_org_student")
 @Getter
 @Setter
-public class StudentDAO extends AbstractEntity<Long> {
+public class StudentDao extends AbstractEntity<Long> {
     @Id
     @Column(name = "id_student_key", nullable = false, updatable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -44,10 +44,10 @@ public class StudentDAO extends AbstractEntity<Long> {
 
     @ManyToOne
     @JoinColumn(name = "id_batch_key")
-    private BatchDAO batch;
+    private BatchDao batch;
 
     @OneToOne
     @JoinColumn(name = "id_person_key")
     @JsonBackReference
-    private PersonDAO person;
+    private PersonDao person;
 }

@@ -2,7 +2,8 @@ package com.itbd.application.dao.user;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.itbd.application.dao.AbstractEntity;
-import com.itbd.application.dao.user.person.PersonDAO;
+import com.itbd.application.dao.resources.RolesDao;
+import com.itbd.application.dao.user.person.PersonDao;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -14,7 +15,7 @@ import java.util.Set;
 @Entity(name = "t_user")
 @Getter
 @Setter
-public class UserDAO extends AbstractEntity<Long> {
+public class UserDao extends AbstractEntity<Long> {
 
     @Id
     @Column(name = "id_user_key", nullable = false, updatable = false)
@@ -50,9 +51,9 @@ public class UserDAO extends AbstractEntity<Long> {
     @OneToOne
     @JoinColumn(name = "id_person_key")
     @JsonBackReference
-    private PersonDAO person;
+    private PersonDao person;
 
     @ManyToMany
     @JoinTable(name = "t_map_user_roles", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
-    private Set<RolesDAO> roles = new HashSet<>();
+    private Set<RolesDao> roles = new HashSet<>();
 }
