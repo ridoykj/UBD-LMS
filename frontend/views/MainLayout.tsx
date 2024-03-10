@@ -7,7 +7,7 @@ import RNavItemRC from 'Frontend/components/sidebar/NavItemRC';
 import { useRouteMetadata } from 'Frontend/util/routing';
 import { Suspense } from 'react';
 import { FaChartArea, FaDoorOpen, FaHome, FaKey, FaPaintRoller, FaScroll, FaUserTie } from 'react-icons/fa';
-import { FaBarsStaggered, FaBezierCurve, FaBuildingCircleCheck, FaBuildingFlag, FaCalendarDay, FaCodeCompare, FaMapLocationDot, FaShop, FaUser, FaUserGear, FaUserGraduate } from 'react-icons/fa6';
+import { FaBarsStaggered, FaBezierCurve, FaBuildingCircleCheck, FaBuildingFlag, FaCalendarDay, FaCodeCompare, FaFileShield, FaLock, FaMapLocationDot, FaShop, FaUser, FaUserGear, FaUserGraduate, FaUserShield } from 'react-icons/fa6';
 import { Outlet } from 'react-router-dom';
 
 export default function MainLayout() {
@@ -53,6 +53,10 @@ export default function MainLayout() {
                 { name: 'Class', icon: <FaCalendarDay />, route: 'time_sheet/class' },
                 { name: 'Examination', icon: <FaCalendarDay />, route: 'default' },
                 { name: 'Attendance', icon: <FaCalendarDay />, route: 'default' },
+              ]} />
+              <RNavItemRC name='Permission' icon={<FaLock />} route='' subItems={[
+                { name: 'Role', icon: <FaUserShield />, route: 'permission/roles' },
+                { name: 'Resources', icon: <FaFileShield />, route: 'permission/resources' },
               ]} />
               {/* <RNavItemRC name='Report' icon={<FaClipboard />} route='' subItems={[
                 { name: 'Result', icon: <FaReceipt />, route: '/default' },
