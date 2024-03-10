@@ -25,6 +25,8 @@ import ShopView from './views/shop/ShopView';
 import UserView from './views/users/UserView';
 import BatchCourseView from './views/org/allocation/BatchCourseView';
 import HomeView from './views/home/HomeView';
+import RoleView from './views/permission/role/RoleView';
+import ResourcesView from './views/permission/resource/ResourceView';
 
 const AboutView = lazy(async () => import('Frontend/views/about/AboutView.js'));
 
@@ -66,6 +68,9 @@ export const routes: RouteObject[] = [
       { path: 'user/authorization', element: <AuthorizationView />, handle: { title: 'Authorization' } },
       { path: 'user/coordinators', element: <CoordinatorView />, handle: { title: 'Coordinator' } },
       { path: 'user/students', element: <StudentView />, handle: { title: 'Student' } },
+
+      { path: 'permission/roles', element: <RoleView />, handle: { title: 'Roles' } },
+      { path: 'permission/resources', element: <ResourcesView />, handle: { title: 'Resources' } },
 
       { path: 'users', element: <UserView />, handle: { title: 'Users' } },
       { path: 'profiles', element: <ProfileView />, handle: { title: 'profiles' } },
