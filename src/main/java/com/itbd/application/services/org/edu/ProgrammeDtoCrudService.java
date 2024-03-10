@@ -1,8 +1,8 @@
 package com.itbd.application.services.org.edu;
 
-import com.itbd.application.dao.org.edu.DepartmentDAO;
-import com.itbd.application.dao.org.edu.ProgrammeDAO;
-import com.itbd.application.dto.org.edu.ProgrammeDTO;
+import com.itbd.application.dao.org.edu.DepartmentDao;
+import com.itbd.application.dao.org.edu.ProgrammeDao;
+import com.itbd.application.dto.org.edu.ProgrammeDto;
 import com.itbd.application.repos.org.edu.ProgrammeRepo;
 import com.vaadin.flow.server.auth.AnonymousAllowed;
 import dev.hilla.BrowserCallable;
@@ -20,7 +20,7 @@ import java.util.List;
 
 @BrowserCallable
 @AnonymousAllowed
-public class ProgrammeDtoCrudService implements CrudService<ProgrammeDTO, Long> {
+public class ProgrammeDtoCrudService implements CrudService<ProgrammeDto, Long> {
     private final JpaFilterConverter jpaFilterConverter;
     private final ProgrammeRepo personRepo;
 
@@ -31,15 +31,15 @@ public class ProgrammeDtoCrudService implements CrudService<ProgrammeDTO, Long> 
 
     @Override
     @Nonnull
-    public List<@Nonnull ProgrammeDTO> list(Pageable pageable, @Nullable Filter filter) {
+    public List<@Nonnull ProgrammeDto> list(Pageable pageable, @Nullable Filter filter) {
         // Basic list implementation that only covers pagination,
         // but not sorting or filtering
-        Specification<ProgrammeDAO> spec = filter != null
-                ? jpaFilterConverter.toSpec(filter, ProgrammeDAO.class)
+        Specification<ProgrammeDao> spec = filter != null
+                ? jpaFilterConverter.toSpec(filter, ProgrammeDao.class)
                 : Specification.anyOf();
-        Page<ProgrammeDAO> persons = personRepo.findAll(spec, pageable);
+        Page<ProgrammeDao> persons = personRepo.findAll(spec, pageable);
         return persons.stream().map(p -> {
-            DepartmentDAO department = p.getDepartment();
+            DepartmentDao department = p.getDepartment();
             // OrganizationDAO organization = department.getOrganization();
             // department.setOrganization(organization);
             department.setProgrammes(null);
@@ -47,20 +47,20 @@ public class ProgrammeDtoCrudService implements CrudService<ProgrammeDTO, Long> 
             p.setDepartment(department);
             p.setBatches(null);
             return p;
-        }).map(ProgrammeDTO::fromEntity).toList();
+        }).map(ProgrammeDto::fromEntity).toList();
     }
 
     @Override
     @Transactional
-    public @Nullable ProgrammeDTO save(ProgrammeDTO value) {
+    public @Nullable ProgrammeDto save(ProgrammeDto value) {
         boolean check = value.id() != null && value.id() > 0;
-        ProgrammeDAO person = check
+        ProgrammeDao person = check
                 ? personRepo.getReferenceById(value.id())
-                : new ProgrammeDAO();
+                : new ProgrammeDao();
 
         // person.setRecordComment(check ? "UPDATE" : "NEW");
-        ProgrammeDTO.fromDTO(value, person);
-        return ProgrammeDTO.fromEntity(personRepo.save(person));
+        ProgrammeDto.fromDTO(value, person);
+        return ProgrammeDto.fromEntity(personRepo.save(person));
     }
 
     @Override

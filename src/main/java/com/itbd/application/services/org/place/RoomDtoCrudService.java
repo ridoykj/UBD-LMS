@@ -1,7 +1,7 @@
 package com.itbd.application.services.org.place;
 
-import com.itbd.application.dao.org.place.RoomDAO;
-import com.itbd.application.dto.org.place.RoomDTO;
+import com.itbd.application.dao.org.place.RoomDao;
+import com.itbd.application.dto.org.place.RoomDto;
 import com.itbd.application.repos.org.place.RoomRepo;
 import com.vaadin.flow.server.auth.AnonymousAllowed;
 import dev.hilla.BrowserCallable;
@@ -19,7 +19,7 @@ import java.util.List;
 
 @BrowserCallable
 @AnonymousAllowed
-public class RoomDtoCrudService implements CrudService<RoomDTO, Long> {
+public class RoomDtoCrudService implements CrudService<RoomDto, Long> {
     private final JpaFilterConverter jpaFilterConverter;
     private final RoomRepo roomRepo;
 
@@ -30,27 +30,27 @@ public class RoomDtoCrudService implements CrudService<RoomDTO, Long> {
 
     @Override
     @Nonnull
-    public List<@Nonnull RoomDTO> list(Pageable pageable, @Nullable Filter filter) {
+    public List<@Nonnull RoomDto> list(Pageable pageable, @Nullable Filter filter) {
         // Basic list implementation that only covers pagination,
         // but not sorting or filtering
-        Specification<RoomDAO> spec = filter != null
-                ? jpaFilterConverter.toSpec(filter, RoomDAO.class)
+        Specification<RoomDao> spec = filter != null
+                ? jpaFilterConverter.toSpec(filter, RoomDao.class)
                 : Specification.anyOf();
-        Page<RoomDAO> persons = roomRepo.findAll(spec, pageable);
-        return persons.stream().map(RoomDTO::fromEntity).toList();
+        Page<RoomDao> persons = roomRepo.findAll(spec, pageable);
+        return persons.stream().map(RoomDto::fromEntity).toList();
     }
 
     @Override
     @Transactional
-    public @Nullable RoomDTO save(RoomDTO value) {
+    public @Nullable RoomDto save(RoomDto value) {
         boolean check = value.id() != null && value.id() > 0;
-        RoomDAO person = check
+        RoomDao person = check
                 ? roomRepo.getReferenceById(value.id())
-                : new RoomDAO();
+                : new RoomDao();
 
         // person.setRecordComment(check ? "UPDATE" : "NEW");
-        RoomDTO.fromDTO(value, person);
-        return RoomDTO.fromEntity(roomRepo.save(person));
+        RoomDto.fromDTO(value, person);
+        return RoomDto.fromEntity(roomRepo.save(person));
     }
 
     @Override

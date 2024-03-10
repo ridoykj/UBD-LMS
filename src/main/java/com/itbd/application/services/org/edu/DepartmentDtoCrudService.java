@@ -1,8 +1,8 @@
 package com.itbd.application.services.org.edu;
 
-import com.itbd.application.dao.org.academic.OrganizationDAO;
-import com.itbd.application.dao.org.edu.DepartmentDAO;
-import com.itbd.application.dto.org.edu.DepartmentDTO;
+import com.itbd.application.dao.org.academic.OrganizationDao;
+import com.itbd.application.dao.org.edu.DepartmentDao;
+import com.itbd.application.dto.org.edu.DepartmentDto;
 import com.itbd.application.repos.org.edu.DepartmentRepo;
 import com.vaadin.flow.server.auth.AnonymousAllowed;
 import dev.hilla.BrowserCallable;
@@ -22,7 +22,7 @@ import java.util.List;
 @BrowserCallable
 @AnonymousAllowed
 @Slf4j
-public class DepartmentDtoCrudService implements CrudService<DepartmentDTO, Long> {
+public class DepartmentDtoCrudService implements CrudService<DepartmentDto, Long> {
     private final JpaFilterConverter jpaFilterConverter;
     private final DepartmentRepo personRepo;
 
@@ -33,34 +33,34 @@ public class DepartmentDtoCrudService implements CrudService<DepartmentDTO, Long
 
     @Override
     @Nonnull
-    public List<@Nonnull DepartmentDTO> list(Pageable pageable, @Nullable Filter filter) {
+    public List<@Nonnull DepartmentDto> list(Pageable pageable, @Nullable Filter filter) {
         // Basic list implementation that only covers pagination,
         // but not sorting or filtering
-        Specification<DepartmentDAO> spec = filter != null
-                ? jpaFilterConverter.toSpec(filter, DepartmentDAO.class)
+        Specification<DepartmentDao> spec = filter != null
+                ? jpaFilterConverter.toSpec(filter, DepartmentDao.class)
                 : Specification.anyOf();
-        Page<DepartmentDAO> persons = personRepo.findAll(spec, pageable);
+        Page<DepartmentDao> persons = personRepo.findAll(spec, pageable);
         return persons.stream().map(d -> {
-            OrganizationDAO organization = d.getOrganization();
+            OrganizationDao organization = d.getOrganization();
             organization.setDepartments(null);
             d.setOrganization(organization);
             // d.setProgrammes(List.of());
             d.setProgrammes(null);
             return d;
-        }).map(DepartmentDTO::fromEntity).toList();
+        }).map(DepartmentDto::fromEntity).toList();
     }
 
     @Override
     @Transactional
-    public @Nullable DepartmentDTO save(DepartmentDTO value) {
+    public @Nullable DepartmentDto save(DepartmentDto value) {
         boolean check = value.id() != null && value.id() > 0;
-        DepartmentDAO person = check
+        DepartmentDao person = check
                 ? personRepo.getReferenceById(value.id())
-                : new DepartmentDAO();
+                : new DepartmentDao();
 
         // person.setRecordComment(check ? "UPDATE" : "NEW");
-        DepartmentDTO.fromDTO(value, person);
-        return DepartmentDTO.fromEntity(personRepo.save(person));
+        DepartmentDto.fromDTO(value, person);
+        return DepartmentDto.fromEntity(personRepo.save(person));
     }
 
     @Override
@@ -68,11 +68,11 @@ public class DepartmentDtoCrudService implements CrudService<DepartmentDTO, Long
         personRepo.deleteById(id);
     }
 
-    public Page<DepartmentDAO> lazyList(Pageable pageable, @Nullable Filter filter) {
+    public Page<DepartmentDao> lazyList(Pageable pageable, @Nullable Filter filter) {
         // Basic list implementation that only covers pagination,
         // but not sorting or filtering
-        Specification<DepartmentDAO> spec = filter != null
-                ? jpaFilterConverter.toSpec(filter, DepartmentDAO.class)
+        Specification<DepartmentDao> spec = filter != null
+                ? jpaFilterConverter.toSpec(filter, DepartmentDao.class)
                 : Specification.anyOf();
         return personRepo.findAll(spec, pageable);
     }

@@ -1,7 +1,7 @@
 package com.itbd.application.services.user.person;
 
-import com.itbd.application.dao.user.person.ContactDAO;
-import com.itbd.application.dto.user.person.ContactDTO;
+import com.itbd.application.dao.user.person.ContactDao;
+import com.itbd.application.dto.user.person.ContactDto;
 import com.itbd.application.repos.user.person.ContactRepo;
 import com.vaadin.flow.server.auth.AnonymousAllowed;
 import dev.hilla.BrowserCallable;
@@ -16,7 +16,7 @@ import java.util.List;
 
 @BrowserCallable
 @AnonymousAllowed
-public class ContactDtoCrudService implements CrudService<ContactDTO, Long> {
+public class ContactDtoCrudService implements CrudService<ContactDto, Long> {
     private final ContactRepo contactRepo;
 
     public ContactDtoCrudService(ContactRepo contactRepo) {
@@ -25,23 +25,23 @@ public class ContactDtoCrudService implements CrudService<ContactDTO, Long> {
 
     @Override
     @Nonnull
-    public List<@Nonnull ContactDTO> list(Pageable pageable, @Nullable Filter filter) {
+    public List<@Nonnull ContactDto> list(Pageable pageable, @Nullable Filter filter) {
         // Basic list implementation that only covers pagination,
         // but not sorting or filtering
-        Page<ContactDAO> products = contactRepo.findAll(pageable);
-        return products.stream().map(ContactDTO::fromEntity).toList();
+        Page<ContactDao> products = contactRepo.findAll(pageable);
+        return products.stream().map(ContactDto::fromEntity).toList();
     }
 
     @Override
-    public @Nullable ContactDTO save(ContactDTO value) {
+    public @Nullable ContactDto save(ContactDto value) {
         boolean check = value.id() != null && value.id() > 0;
-        ContactDAO person = check
+        ContactDao person = check
                 ? contactRepo.getReferenceById(value.id())
-                : new ContactDAO();
-        ContactDTO.fromDTO(value, person);
+                : new ContactDao();
+        ContactDto.fromDTO(value, person);
 
         person.setRecordComment(check ? "UPDATE" : "NEW");
-        return ContactDTO.fromEntity(contactRepo.save(person));
+        return ContactDto.fromEntity(contactRepo.save(person));
     }
 
     @Override

@@ -1,16 +1,12 @@
 package com.itbd.application.services.org.allocation;
 
-import com.itbd.application.dao.org.allocation.BatchCoordinatorDAO;
-import com.itbd.application.dao.org.allocation.BatchCourseDAO;
-import com.itbd.application.dao.org.allocation.BatchRoomDAO;
-import com.itbd.application.dao.org.edu.CourseDAO;
-import com.itbd.application.dao.org.place.BuildingDAO;
-import com.itbd.application.dao.org.place.FloorDAO;
-import com.itbd.application.dao.org.place.RoomDAO;
-import com.itbd.application.dao.org.place.SectorDAO;
-import com.itbd.application.dao.user.InstructorDAO;
-import com.itbd.application.dao.user.person.PersonDAO;
-import com.itbd.application.dto.org.allocation.BatchRoomDTO;
+import com.itbd.application.dao.org.allocation.BatchCoordinatorDao;
+import com.itbd.application.dao.org.allocation.BatchCourseDao;
+import com.itbd.application.dao.org.allocation.BatchRoomDao;
+import com.itbd.application.dao.org.edu.CourseDao;
+import com.itbd.application.dao.user.InstructorDao;
+import com.itbd.application.dao.user.person.PersonDao;
+import com.itbd.application.dto.org.allocation.BatchRoomDto;
 import com.itbd.application.repos.org.allocation.BatchCoordinatorRepo;
 import com.itbd.application.repos.org.allocation.BatchRoomRepo;
 import com.vaadin.flow.server.auth.AnonymousAllowed;
@@ -20,7 +16,6 @@ import dev.hilla.Nullable;
 import dev.hilla.crud.CrudService;
 import dev.hilla.crud.JpaFilterConverter;
 import dev.hilla.crud.filter.Filter;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.transaction.annotation.Transactional;
@@ -31,7 +26,7 @@ import java.util.Set;
 
 @BrowserCallable
 @AnonymousAllowed
-public class BatchRoomDtoCrudService implements CrudService<BatchRoomDTO, Long> {
+public class BatchRoomDtoCrudService implements CrudService<BatchRoomDto, Long> {
     private final JpaFilterConverter jpaFilterConverter;
     private final BatchRoomRepo batchRoomRepo;
     private final BatchCoordinatorRepo batchCoordinatorRepo;
@@ -44,28 +39,28 @@ public class BatchRoomDtoCrudService implements CrudService<BatchRoomDTO, Long> 
 
     @Override
     @Nonnull
-    public List<@Nonnull BatchRoomDTO> list(Pageable pageable, @Nullable Filter filter) {
+    public List<@Nonnull BatchRoomDto> list(Pageable pageable, @Nullable Filter filter) {
         // Basic list implementation that only covers pagination,
         // but not sorting or filtering
-        Specification<BatchRoomDAO> spec = filter != null
-                ? jpaFilterConverter.toSpec(filter, BatchRoomDAO.class)
+        Specification<BatchRoomDao> spec = filter != null
+                ? jpaFilterConverter.toSpec(filter, BatchRoomDao.class)
                 : Specification.anyOf();
 //            Page<BatchRoomDAO> persons = batchRoomRepo.findAll(spec, pageable);
-            List<BatchRoomDAO> persons = batchRoomRepo.findAll(spec);
-        return persons.stream().map(this::populate).map(BatchRoomDTO::fromEntity).toList();
+            List<BatchRoomDao> persons = batchRoomRepo.findAll(spec);
+        return persons.stream().map(this::populate).map(BatchRoomDto::fromEntity).toList();
     }
 
     @Override
     @Transactional
-    public @Nullable BatchRoomDTO save(BatchRoomDTO value) {
+    public @Nullable BatchRoomDto save(BatchRoomDto value) {
         boolean check = value.id() != null && value.id() > 0;
-        BatchRoomDAO batchCourse = check
+        BatchRoomDao batchCourse = check
                 ? batchRoomRepo.getReferenceById(value.id())
-                : new BatchRoomDAO();
+                : new BatchRoomDao();
 
         // person.setRecordComment(check ? "UPDATE" : "NEW");
-        BatchRoomDTO.fromDTO(value, batchCourse);
-        return BatchRoomDTO.fromEntity(populate(batchRoomRepo.save(batchCourse)));
+        BatchRoomDto.fromDTO(value, batchCourse);
+        return BatchRoomDto.fromEntity(populate(batchRoomRepo.save(batchCourse)));
     }
 
     @Override
@@ -73,15 +68,15 @@ public class BatchRoomDtoCrudService implements CrudService<BatchRoomDTO, Long> 
         batchRoomRepo.deleteById(id);
     }
 
-    private BatchRoomDAO populate(BatchRoomDAO batchRoom) {
-        BatchCourseDAO batchCourse = batchRoom.getBatchCourse();
-        Set<BatchCoordinatorDAO> coordinatorDAOSet = batchCoordinatorRepo.findByBatchCourse(batchCourse).stream().map(batchCoordinator -> {
-            BatchCourseDAO bc = new BatchCourseDAO();
+    private BatchRoomDao populate(BatchRoomDao batchRoom) {
+        BatchCourseDao batchCourse = batchRoom.getBatchCourse();
+        Set<BatchCoordinatorDao> coordinatorDAOSet = batchCoordinatorRepo.findByBatchCourse(batchCourse).stream().map(batchCoordinator -> {
+            BatchCourseDao bc = new BatchCourseDao();
             bc.setId(batchCourse.getId());
             bc.setVersion(batchCourse.getVersion());
 
-            InstructorDAO instructor = batchCoordinator.getInstructor();
-            PersonDAO person = instructor.getPerson();
+            InstructorDao instructor = batchCoordinator.getInstructor();
+            PersonDao person = instructor.getPerson();
             person.setInstructor(null);
             person.setAddress(null);
             person.setContact(null);
@@ -98,7 +93,7 @@ public class BatchRoomDtoCrudService implements CrudService<BatchRoomDTO, Long> 
             return batchCoordinator;
         }).collect(HashSet::new, HashSet::add, HashSet::addAll);
 
-        CourseDAO course = batchCourse.getCourse();
+        CourseDao course = batchCourse.getCourse();
         course.setBatchCourses(null);
         batchCourse.setCourse(course);
         batchCourse.setBatch(null);

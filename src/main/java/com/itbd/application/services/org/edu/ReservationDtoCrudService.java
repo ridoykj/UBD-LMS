@@ -1,7 +1,7 @@
 package com.itbd.application.services.org.edu;
 
-import com.itbd.application.dao.org.edu.ReservationDAO;
-import com.itbd.application.dto.org.edu.ReservationDTO;
+import com.itbd.application.dao.org.edu.ReservationDao;
+import com.itbd.application.dto.org.edu.ReservationDto;
 import com.itbd.application.repos.org.edu.ReservationRepo;
 import com.vaadin.flow.server.auth.AnonymousAllowed;
 import dev.hilla.BrowserCallable;
@@ -19,7 +19,7 @@ import java.util.List;
 
 @BrowserCallable
 @AnonymousAllowed
-public class ReservationDtoCrudService implements CrudService<ReservationDTO, Long> {
+public class ReservationDtoCrudService implements CrudService<ReservationDto, Long> {
     private final JpaFilterConverter jpaFilterConverter;
     private final ReservationRepo reservationRepo;
 
@@ -30,26 +30,26 @@ public class ReservationDtoCrudService implements CrudService<ReservationDTO, Lo
 
     @Override
     @Nonnull
-    public List<@Nonnull ReservationDTO> list(Pageable pageable, @Nullable Filter filter) {
+    public List<@Nonnull ReservationDto> list(Pageable pageable, @Nullable Filter filter) {
         // Basic list implementation that only covers pagination,
         // but not sorting or filtering
-        Specification<ReservationDAO> spec = filter != null
-                ? jpaFilterConverter.toSpec(filter, ReservationDAO.class)
+        Specification<ReservationDao> spec = filter != null
+                ? jpaFilterConverter.toSpec(filter, ReservationDao.class)
                 : Specification.anyOf();
-        Page<ReservationDAO> persons = reservationRepo.findAll(spec, pageable);
-        return persons.stream().map(ReservationDTO::fromEntity).toList();
+        Page<ReservationDao> persons = reservationRepo.findAll(spec, pageable);
+        return persons.stream().map(ReservationDto::fromEntity).toList();
     }
 
     @Override
     @Transactional
-    public @Nullable ReservationDTO save(ReservationDTO value) {
+    public @Nullable ReservationDto save(ReservationDto value) {
         boolean check = value.id() != null && value.id() > 0;
-        ReservationDAO reservation = check
+        ReservationDao reservation = check
                 ? reservationRepo.getReferenceById(value.id())
-                : new ReservationDAO();
+                : new ReservationDao();
 
-        ReservationDTO.fromDTO(value, reservation);
-        return ReservationDTO.fromEntity(reservationRepo.save(reservation));
+        ReservationDto.fromDTO(value, reservation);
+        return ReservationDto.fromEntity(reservationRepo.save(reservation));
     }
 
     @Override

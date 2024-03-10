@@ -1,7 +1,7 @@
 package com.itbd.application.services.org.academic;
 
-import com.itbd.application.dao.org.academic.AttendanceDAO;
-import com.itbd.application.dto.org.academic.AttendanceDTO;
+import com.itbd.application.dao.org.academic.AttendanceDao;
+import com.itbd.application.dto.org.academic.AttendanceDto;
 import com.itbd.application.repos.org.academic.AttendanceRepo;
 import com.itbd.application.repos.user.person.*;
 import com.vaadin.flow.server.auth.AnonymousAllowed;
@@ -21,7 +21,7 @@ import java.util.List;
 
 @BrowserCallable
 @AnonymousAllowed
-public class AttendanceDtoCrudService implements CrudService<AttendanceDTO, Long> {
+public class AttendanceDtoCrudService implements CrudService<AttendanceDto, Long> {
 
     @Autowired
     private JpaFilterConverter jpaFilterConverter;
@@ -47,27 +47,27 @@ public class AttendanceDtoCrudService implements CrudService<AttendanceDTO, Long
 
     @Override
     @Nonnull
-    public List<@Nonnull AttendanceDTO> list(Pageable pageable, @Nullable Filter filter) {
+    public List<@Nonnull AttendanceDto> list(Pageable pageable, @Nullable Filter filter) {
         // Basic list implementation that only covers pagination,
         // but not sorting or filtering
-        Specification<AttendanceDAO> spec = filter != null
-                ? jpaFilterConverter.toSpec(filter, AttendanceDAO.class)
+        Specification<AttendanceDao> spec = filter != null
+                ? jpaFilterConverter.toSpec(filter, AttendanceDao.class)
                 : Specification.anyOf();
-        Page<AttendanceDAO> persons = personRepo.findAll(spec, pageable);
-        return persons.stream().map(AttendanceDTO::fromEntity).toList();
+        Page<AttendanceDao> persons = personRepo.findAll(spec, pageable);
+        return persons.stream().map(AttendanceDto::fromEntity).toList();
     }
 
     @Override
     @Transactional
-    public @Nullable AttendanceDTO save(AttendanceDTO value) {
+    public @Nullable AttendanceDto save(AttendanceDto value) {
         boolean check = value.id() != null && value.id() > 0;
-        AttendanceDAO person = check
+        AttendanceDao person = check
                 ? personRepo.getReferenceById(value.id())
-                : new AttendanceDAO();
+                : new AttendanceDao();
 
         // person.setRecordComment(check ? "UPDATE" : "NEW");
-        AttendanceDTO.fromDTO(value, person);
-        return AttendanceDTO.fromEntity(personRepo.save(person));
+        AttendanceDto.fromDTO(value, person);
+        return AttendanceDto.fromEntity(personRepo.save(person));
     }
 
     @Override

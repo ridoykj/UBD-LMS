@@ -2,7 +2,6 @@ package com.itbd.application.services.reports;
 
 
 import com.itbd.application.constants.systems.FilePath;
-import com.vaadin.flow.server.StreamResource;
 import lombok.extern.slf4j.Slf4j;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperCompileManager;
@@ -14,12 +13,10 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import javax.sql.DataSource;
-import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.nio.file.Path;
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 

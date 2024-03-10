@@ -1,10 +1,9 @@
 package com.itbd.application.services.org.academic;
 
-import com.itbd.application.dao.org.academic.OrganizationDAO;
-import com.itbd.application.dto.custom.IDashBoardRptDTO;
-import com.itbd.application.dto.org.academic.OrganizationDTO;
+import com.itbd.application.dao.org.academic.OrganizationDao;
+import com.itbd.application.dto.custom.IDashBoardRptDto;
+import com.itbd.application.dto.org.academic.OrganizationDto;
 import com.itbd.application.repos.org.academic.OrganizationRepo;
-import com.itbd.application.repos.user.person.*;
 import com.vaadin.flow.server.auth.AnonymousAllowed;
 import dev.hilla.BrowserCallable;
 import dev.hilla.Nonnull;
@@ -12,7 +11,6 @@ import dev.hilla.Nullable;
 import dev.hilla.crud.CrudService;
 import dev.hilla.crud.JpaFilterConverter;
 import dev.hilla.crud.filter.Filter;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
@@ -22,7 +20,7 @@ import java.util.List;
 
 @BrowserCallable
 @AnonymousAllowed
-public class OrganizationDtoCrudService implements CrudService<OrganizationDTO, Long> {
+public class OrganizationDtoCrudService implements CrudService<OrganizationDto, Long> {
 
     private final JpaFilterConverter jpaFilterConverter;
     private final OrganizationRepo personRepo;
@@ -34,30 +32,30 @@ public class OrganizationDtoCrudService implements CrudService<OrganizationDTO, 
 
     @Override
     @Nonnull
-    public List<@Nonnull OrganizationDTO> list(Pageable pageable, @Nullable Filter filter) {
+    public List<@Nonnull OrganizationDto> list(Pageable pageable, @Nullable Filter filter) {
         // Basic list implementation that only covers pagination,
         // but not sorting or filtering
-        Specification<OrganizationDAO> spec = filter != null
-                ? jpaFilterConverter.toSpec(filter, OrganizationDAO.class)
+        Specification<OrganizationDao> spec = filter != null
+                ? jpaFilterConverter.toSpec(filter, OrganizationDao.class)
                 : Specification.anyOf();
-        Page<OrganizationDAO> persons = personRepo.findAll(spec, pageable);
+        Page<OrganizationDao> persons = personRepo.findAll(spec, pageable);
         return persons.stream().map(o -> {
             o.setDepartments(null);
             return o;
-        }).map(OrganizationDTO::fromEntity).toList();
+        }).map(OrganizationDto::fromEntity).toList();
     }
 
     @Override
     @Transactional
-    public @Nullable OrganizationDTO save(OrganizationDTO value) {
+    public @Nullable OrganizationDto save(OrganizationDto value) {
         boolean check = value.id() != null && value.id() > 0;
-        OrganizationDAO person = check
+        OrganizationDao person = check
                 ? personRepo.getReferenceById(value.id())
-                : new OrganizationDAO();
+                : new OrganizationDao();
 
         // person.setRecordComment(check ? "UPDATE" : "NEW");
-        OrganizationDTO.fromDTO(value, person);
-        return OrganizationDTO.fromEntity(personRepo.save(person));
+        OrganizationDto.fromDTO(value, person);
+        return OrganizationDto.fromEntity(personRepo.save(person));
     }
 
     @Override
@@ -65,7 +63,7 @@ public class OrganizationDtoCrudService implements CrudService<OrganizationDTO, 
         personRepo.deleteById(id);
     }
 
-    public IDashBoardRptDTO getDashBoardRpt() {
-        return IDashBoardRptDTO.fromEntity(personRepo.getDashBoardRpt());
+    public IDashBoardRptDto getDashBoardRpt() {
+        return IDashBoardRptDto.fromEntity(personRepo.getDashBoardRpt());
     }
 }

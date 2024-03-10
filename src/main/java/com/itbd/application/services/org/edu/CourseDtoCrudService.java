@@ -1,7 +1,7 @@
 package com.itbd.application.services.org.edu;
 
-import com.itbd.application.dao.org.edu.CourseDAO;
-import com.itbd.application.dto.org.edu.CourseDTO;
+import com.itbd.application.dao.org.edu.CourseDao;
+import com.itbd.application.dto.org.edu.CourseDto;
 import com.itbd.application.repos.org.edu.CourseRepo;
 import com.vaadin.flow.server.auth.AnonymousAllowed;
 import dev.hilla.BrowserCallable;
@@ -20,7 +20,7 @@ import java.util.List;
 
 @BrowserCallable
 @AnonymousAllowed
-public class CourseDtoCrudService implements CrudService<CourseDTO, Long> {
+public class CourseDtoCrudService implements CrudService<CourseDto, Long> {
 
     @Autowired
     private JpaFilterConverter jpaFilterConverter;
@@ -36,27 +36,27 @@ public class CourseDtoCrudService implements CrudService<CourseDTO, Long> {
 
     @Override
     @Nonnull
-    public List<@Nonnull CourseDTO> list(Pageable pageable, @Nullable Filter filter) {
+    public List<@Nonnull CourseDto> list(Pageable pageable, @Nullable Filter filter) {
         // Basic list implementation that only covers pagination,
         // but not sorting or filtering
-        Specification<CourseDAO> spec = filter != null
-                ? jpaFilterConverter.toSpec(filter, CourseDAO.class)
+        Specification<CourseDao> spec = filter != null
+                ? jpaFilterConverter.toSpec(filter, CourseDao.class)
                 : Specification.anyOf();
-        Page<CourseDAO> persons = courseRepo.findAll(spec, pageable);
-        return persons.stream().map(CourseDTO::fromEntity).toList();
+        Page<CourseDao> persons = courseRepo.findAll(spec, pageable);
+        return persons.stream().map(CourseDto::fromEntity).toList();
     }
 
     @Override
     @Transactional
-    public @Nullable CourseDTO save(CourseDTO value) {
+    public @Nullable CourseDto save(CourseDto value) {
         boolean check = value.id() != null && value.id() > 0;
-        CourseDAO person = check
+        CourseDao person = check
                 ? courseRepo.getReferenceById(value.id())
-                : new CourseDAO();
+                : new CourseDao();
 
         // person.setRecordComment(check ? "UPDATE" : "NEW");
-        CourseDTO.fromDTO(value, person);
-        return CourseDTO.fromEntity(courseRepo.save(person));
+        CourseDto.fromDTO(value, person);
+        return CourseDto.fromEntity(courseRepo.save(person));
     }
 
     @Override

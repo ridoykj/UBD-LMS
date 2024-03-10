@@ -1,7 +1,7 @@
 package com.itbd.application.services.user.person;
 
 import com.itbd.application.dao.user.person.*;
-import com.itbd.application.dto.user.person.PersonMargeDTO;
+import com.itbd.application.dto.user.person.PersonMargeDto;
 import com.itbd.application.repos.user.person.*;
 import com.vaadin.flow.server.auth.AnonymousAllowed;
 import dev.hilla.BrowserCallable;
@@ -20,7 +20,7 @@ import java.util.List;
 
 @BrowserCallable
 @AnonymousAllowed
-public class PersonMargeDtoCrudService implements CrudService<PersonMargeDTO, Long> {
+public class PersonMargeDtoCrudService implements CrudService<PersonMargeDto, Long> {
 
     @Autowired
     private JpaFilterConverter jpaFilterConverter;
@@ -46,34 +46,34 @@ public class PersonMargeDtoCrudService implements CrudService<PersonMargeDTO, Lo
 
     @Override
     @Nonnull
-    public List<@Nonnull PersonMargeDTO> list(Pageable pageable, @Nullable Filter filter) {
+    public List<@Nonnull PersonMargeDto> list(Pageable pageable, @Nullable Filter filter) {
         // Basic list implementation that only covers pagination,
         // but not sorting or filtering
-        Specification<PersonDAO> spec = filter != null
-                ? jpaFilterConverter.toSpec(filter, PersonDAO.class)
+        Specification<PersonDao> spec = filter != null
+                ? jpaFilterConverter.toSpec(filter, PersonDao.class)
                 : Specification.anyOf();
-        Page<PersonDAO> persons = personRepo.findAll(spec, pageable);
+        Page<PersonDao> persons = personRepo.findAll(spec, pageable);
         return persons.stream().map(person -> {
-            person.setAddress(addressRepo.findByPerson(person).orElse(new AddressDAO()));
-            person.setContact(contactRepo.findByPerson(person).orElse(new ContactDAO()));
-            person.setRecord(documentRecordsRepo.findByPerson(person).orElse(new DocumentRecordsDAO()));
-            person.setMedical(medicalRepo.findByPerson(person).orElse(new MedicalDAO()));
-            person.setOccupation(occupationRepo.findByPerson(person).orElse(new OccupationDAO()));
-            return PersonMargeDTO.fromEntity(person);
+            person.setAddress(addressRepo.findByPerson(person).orElse(new AddressDao()));
+            person.setContact(contactRepo.findByPerson(person).orElse(new ContactDao()));
+            person.setRecord(documentRecordsRepo.findByPerson(person).orElse(new DocumentRecordsDao()));
+            person.setMedical(medicalRepo.findByPerson(person).orElse(new MedicalDao()));
+            person.setOccupation(occupationRepo.findByPerson(person).orElse(new OccupationDao()));
+            return PersonMargeDto.fromEntity(person);
         }).toList();
     }
 
     @Override
     @Transactional
-    public @Nullable PersonMargeDTO save(PersonMargeDTO value) {
+    public @Nullable PersonMargeDto save(PersonMargeDto value) {
         boolean check = value.id() != null && value.id() > 0;
-        PersonDAO person = check
+        PersonDao person = check
                 ? personRepo.getReferenceById(value.id())
-                : new PersonDAO();
+                : new PersonDao();
 
         person.setRecordComment(check ? "UPDATE" : "NEW");
-        PersonMargeDTO.fromDTO(value, person);
-        return PersonMargeDTO.fromEntity(personRepo.save(person));
+        PersonMargeDto.fromDTO(value, person);
+        return PersonMargeDto.fromEntity(personRepo.save(person));
     }
 
     @Override

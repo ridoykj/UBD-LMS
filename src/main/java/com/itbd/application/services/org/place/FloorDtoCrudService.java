@@ -1,7 +1,7 @@
 package com.itbd.application.services.org.place;
 
-import com.itbd.application.dao.org.place.FloorDAO;
-import com.itbd.application.dto.org.place.FloorDTO;
+import com.itbd.application.dao.org.place.FloorDao;
+import com.itbd.application.dto.org.place.FloorDto;
 import com.itbd.application.repos.org.place.FloorRepo;
 import com.vaadin.flow.server.auth.AnonymousAllowed;
 import dev.hilla.BrowserCallable;
@@ -20,7 +20,7 @@ import java.util.List;
 
 @BrowserCallable
 @AnonymousAllowed
-public class FloorDtoCrudService implements CrudService<FloorDTO, Long> {
+public class FloorDtoCrudService implements CrudService<FloorDto, Long> {
 
     @Autowired
     private JpaFilterConverter jpaFilterConverter;
@@ -36,27 +36,27 @@ public class FloorDtoCrudService implements CrudService<FloorDTO, Long> {
 
     @Override
     @Nonnull
-    public List<@Nonnull FloorDTO> list(Pageable pageable, @Nullable Filter filter) {
+    public List<@Nonnull FloorDto> list(Pageable pageable, @Nullable Filter filter) {
         // Basic list implementation that only covers pagination,
         // but not sorting or filtering
-        Specification<FloorDAO> spec = filter != null
-                ? jpaFilterConverter.toSpec(filter, FloorDAO.class)
+        Specification<FloorDao> spec = filter != null
+                ? jpaFilterConverter.toSpec(filter, FloorDao.class)
                 : Specification.anyOf();
-        Page<FloorDAO> persons = floorRepo.findAll(spec, pageable);
-        return persons.stream().map(FloorDTO::fromEntity).toList();
+        Page<FloorDao> persons = floorRepo.findAll(spec, pageable);
+        return persons.stream().map(FloorDto::fromEntity).toList();
     }
 
     @Override
     @Transactional
-    public @Nullable FloorDTO save(FloorDTO value) {
+    public @Nullable FloorDto save(FloorDto value) {
         boolean check = value.id() != null && value.id() > 0;
-        FloorDAO person = check
+        FloorDao person = check
                 ? floorRepo.getReferenceById(value.id())
-                : new FloorDAO();
+                : new FloorDao();
 
         // person.setRecordComment(check ? "UPDATE" : "NEW");
-        FloorDTO.fromDTO(value, person);
-        return FloorDTO.fromEntity(floorRepo.save(person));
+        FloorDto.fromDTO(value, person);
+        return FloorDto.fromEntity(floorRepo.save(person));
     }
 
     @Override

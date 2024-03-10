@@ -1,10 +1,10 @@
 package com.itbd.application.services.org.allocation;
 
-import com.itbd.application.dao.org.allocation.BatchCoordinatorDAO;
-import com.itbd.application.dao.org.allocation.BatchCourseDAO;
-import com.itbd.application.dao.user.InstructorDAO;
-import com.itbd.application.dao.user.person.PersonDAO;
-import com.itbd.application.dto.org.allocation.BatchCourseDTO;
+import com.itbd.application.dao.org.allocation.BatchCoordinatorDao;
+import com.itbd.application.dao.org.allocation.BatchCourseDao;
+import com.itbd.application.dao.user.InstructorDao;
+import com.itbd.application.dao.user.person.PersonDao;
+import com.itbd.application.dto.org.allocation.BatchCourseDto;
 import com.itbd.application.repos.org.allocation.BatchCoordinatorRepo;
 import com.itbd.application.repos.org.allocation.BatchCourseRepo;
 import com.vaadin.flow.server.auth.AnonymousAllowed;
@@ -15,7 +15,6 @@ import dev.hilla.crud.CrudService;
 import dev.hilla.crud.JpaFilterConverter;
 import dev.hilla.crud.filter.Filter;
 import dev.hilla.exception.EndpointException;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
@@ -27,7 +26,7 @@ import java.util.Set;
 
 @BrowserCallable
 @AnonymousAllowed
-public class BatchCourseDtoCrudService implements CrudService<BatchCourseDTO, Long> {
+public class BatchCourseDtoCrudService implements CrudService<BatchCourseDto, Long> {
     private final JpaFilterConverter jpaFilterConverter;
     private final BatchCourseRepo batchCourseRepo;
     private final BatchCoordinatorRepo batchCoordinatorRepo;
@@ -40,30 +39,30 @@ public class BatchCourseDtoCrudService implements CrudService<BatchCourseDTO, Lo
 
     @Override
     @Nonnull
-    public List<@Nonnull BatchCourseDTO> list(Pageable pageable, @Nullable Filter filter) {
+    public List<@Nonnull BatchCourseDto> list(Pageable pageable, @Nullable Filter filter) {
         // Basic list implementation that only covers pagination,
         // but not sorting or filtering
         String hello = "41545";
-        Specification<BatchCourseDAO> spec = filter != null
-                ? jpaFilterConverter.toSpec(filter, BatchCourseDAO.class)
+        Specification<BatchCourseDao> spec = filter != null
+                ? jpaFilterConverter.toSpec(filter, BatchCourseDao.class)
                 : Specification.anyOf();
-        Page<BatchCourseDAO> persons = batchCourseRepo.findAll(spec, pageable);
-        return persons.stream().map(this::populate).map(BatchCourseDTO::fromEntity).toList();
+        Page<BatchCourseDao> persons = batchCourseRepo.findAll(spec, pageable);
+        return persons.stream().map(this::populate).map(BatchCourseDto::fromEntity).toList();
     }
 
     @Override
     @Transactional
-    public @Nullable BatchCourseDTO save(BatchCourseDTO value) throws EndpointException {
+    public @Nullable BatchCourseDto save(BatchCourseDto value) throws EndpointException {
         boolean check = value.id() != null && value.id() > 0;
-        BatchCourseDAO batchCourse = check
+        BatchCourseDao batchCourse = check
                 ? batchCourseRepo.getReferenceById(value.id())
-                : new BatchCourseDAO();
+                : new BatchCourseDao();
         if (!check && batchCourseRepo.existsBatchCourseDAOByBatchIdAndCourseId(value.batch().getId(), value.course().getId())) {
             throw new EndpointException("Batch-Course already exists");
         }
         // person.setRecordComment(check ? "UPDATE" : "NEW");
-        BatchCourseDTO.fromDTO(value, batchCourse);
-        return BatchCourseDTO.fromEntity(populate(batchCourseRepo.save(batchCourse)));
+        BatchCourseDto.fromDTO(value, batchCourse);
+        return BatchCourseDto.fromEntity(populate(batchCourseRepo.save(batchCourse)));
     }
 
     @Override
@@ -71,14 +70,14 @@ public class BatchCourseDtoCrudService implements CrudService<BatchCourseDTO, Lo
         batchCourseRepo.deleteById(id);
     }
 
-    private BatchCourseDAO populate(BatchCourseDAO batchCourse) {
-        Set<BatchCoordinatorDAO> coordinatorDAOSet = batchCoordinatorRepo.findByBatchCourse(batchCourse).stream().map(batchCoordinator -> {
-            BatchCourseDAO bc = new BatchCourseDAO();
+    private BatchCourseDao populate(BatchCourseDao batchCourse) {
+        Set<BatchCoordinatorDao> coordinatorDAOSet = batchCoordinatorRepo.findByBatchCourse(batchCourse).stream().map(batchCoordinator -> {
+            BatchCourseDao bc = new BatchCourseDao();
             bc.setId(batchCourse.getId());
             bc.setVersion(batchCourse.getVersion());
 
-            InstructorDAO instructor = batchCoordinator.getInstructor();
-            PersonDAO person = instructor.getPerson();
+            InstructorDao instructor = batchCoordinator.getInstructor();
+            PersonDao person = instructor.getPerson();
             person.setInstructor(null);
             person.setAddress(null);
             person.setContact(null);

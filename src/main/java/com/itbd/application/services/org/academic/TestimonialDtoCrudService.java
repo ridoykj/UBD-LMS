@@ -1,7 +1,7 @@
 package com.itbd.application.services.org.academic;
 
-import com.itbd.application.dao.org.academic.TestimonialDAO;
-import com.itbd.application.dto.org.academic.TestimonialDTO;
+import com.itbd.application.dao.org.academic.TestimonialDao;
+import com.itbd.application.dto.org.academic.TestimonialDto;
 import com.itbd.application.repos.org.academic.TestimonialRepo;
 import com.itbd.application.repos.user.person.*;
 import com.vaadin.flow.server.auth.AnonymousAllowed;
@@ -21,7 +21,7 @@ import java.util.List;
 
 @BrowserCallable
 @AnonymousAllowed
-public class TestimonialDtoCrudService implements CrudService<TestimonialDTO, Long> {
+public class TestimonialDtoCrudService implements CrudService<TestimonialDto, Long> {
 
     @Autowired
     private JpaFilterConverter jpaFilterConverter;
@@ -47,27 +47,27 @@ public class TestimonialDtoCrudService implements CrudService<TestimonialDTO, Lo
 
     @Override
     @Nonnull
-    public List<@Nonnull TestimonialDTO> list(Pageable pageable, @Nullable Filter filter) {
+    public List<@Nonnull TestimonialDto> list(Pageable pageable, @Nullable Filter filter) {
         // Basic list implementation that only covers pagination,
         // but not sorting or filtering
-        Specification<TestimonialDAO> spec = filter != null
-                ? jpaFilterConverter.toSpec(filter, TestimonialDAO.class)
+        Specification<TestimonialDao> spec = filter != null
+                ? jpaFilterConverter.toSpec(filter, TestimonialDao.class)
                 : Specification.anyOf();
-        Page<TestimonialDAO> persons = personRepo.findAll(spec, pageable);
-        return persons.stream().map(TestimonialDTO::fromEntity).toList();
+        Page<TestimonialDao> persons = personRepo.findAll(spec, pageable);
+        return persons.stream().map(TestimonialDto::fromEntity).toList();
     }
 
     @Override
     @Transactional
-    public @Nullable TestimonialDTO save(TestimonialDTO value) {
+    public @Nullable TestimonialDto save(TestimonialDto value) {
         boolean check = value.id() != null && value.id() > 0;
-        TestimonialDAO person = check
+        TestimonialDao person = check
                 ? personRepo.getReferenceById(value.id())
-                : new TestimonialDAO();
+                : new TestimonialDao();
 
         // person.setRecordComment(check ? "UPDATE" : "NEW");
-        TestimonialDTO.fromDTO(value, person);
-        return TestimonialDTO.fromEntity(personRepo.save(person));
+        TestimonialDto.fromDTO(value, person);
+        return TestimonialDto.fromEntity(personRepo.save(person));
     }
 
     @Override

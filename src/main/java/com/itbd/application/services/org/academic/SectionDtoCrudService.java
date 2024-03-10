@@ -1,7 +1,7 @@
 package com.itbd.application.services.org.academic;
 
-import com.itbd.application.dao.org.academic.SectionDAO;
-import com.itbd.application.dto.org.academic.SectionDTO;
+import com.itbd.application.dao.org.academic.SectionDao;
+import com.itbd.application.dto.org.academic.SectionDto;
 import com.itbd.application.repos.org.academic.SectionRepo;
 import com.itbd.application.repos.user.person.*;
 import com.vaadin.flow.server.auth.AnonymousAllowed;
@@ -21,7 +21,7 @@ import java.util.List;
 
 @BrowserCallable
 @AnonymousAllowed
-public class SectionDtoCrudService implements CrudService<SectionDTO, Long> {
+public class SectionDtoCrudService implements CrudService<SectionDto, Long> {
 
     @Autowired
     private JpaFilterConverter jpaFilterConverter;
@@ -47,27 +47,27 @@ public class SectionDtoCrudService implements CrudService<SectionDTO, Long> {
 
     @Override
     @Nonnull
-    public List<@Nonnull SectionDTO> list(Pageable pageable, @Nullable Filter filter) {
+    public List<@Nonnull SectionDto> list(Pageable pageable, @Nullable Filter filter) {
         // Basic list implementation that only covers pagination,
         // but not sorting or filtering
-        Specification<SectionDAO> spec = filter != null
-                ? jpaFilterConverter.toSpec(filter, SectionDAO.class)
+        Specification<SectionDao> spec = filter != null
+                ? jpaFilterConverter.toSpec(filter, SectionDao.class)
                 : Specification.anyOf();
-        Page<SectionDAO> persons = personRepo.findAll(spec, pageable);
-        return persons.stream().map(SectionDTO::fromEntity).toList();
+        Page<SectionDao> persons = personRepo.findAll(spec, pageable);
+        return persons.stream().map(SectionDto::fromEntity).toList();
     }
 
     @Override
     @Transactional
-    public @Nullable SectionDTO save(SectionDTO value) {
+    public @Nullable SectionDto save(SectionDto value) {
         boolean check = value.id() != null && value.id() > 0;
-        SectionDAO person = check
+        SectionDao person = check
                 ? personRepo.getReferenceById(value.id())
-                : new SectionDAO();
+                : new SectionDao();
 
         // person.setRecordComment(check ? "UPDATE" : "NEW");
-        SectionDTO.fromDTO(value, person);
-        return SectionDTO.fromEntity(personRepo.save(person));
+        SectionDto.fromDTO(value, person);
+        return SectionDto.fromEntity(personRepo.save(person));
     }
 
     @Override

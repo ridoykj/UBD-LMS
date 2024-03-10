@@ -1,7 +1,7 @@
 package com.itbd.application.services.user.person.student;
 
-import com.itbd.application.dao.user.StudentDAO;
-import com.itbd.application.dto.user.student.StudentDTO;
+import com.itbd.application.dao.user.StudentDao;
+import com.itbd.application.dto.user.student.StudentDto;
 import com.itbd.application.repos.user.StudentRepo;
 import com.itbd.application.repos.user.person.*;
 import com.vaadin.flow.server.auth.AnonymousAllowed;
@@ -21,7 +21,7 @@ import java.util.List;
 
 @BrowserCallable
 @AnonymousAllowed
-public class StudentDtoCrudService implements CrudService<StudentDTO, Long> {
+public class StudentDtoCrudService implements CrudService<StudentDto, Long> {
 
     @Autowired
     private JpaFilterConverter jpaFilterConverter;
@@ -47,27 +47,27 @@ public class StudentDtoCrudService implements CrudService<StudentDTO, Long> {
 
     @Override
     @Nonnull
-    public List<com.itbd.application.dto.user.student.StudentDTO> list(Pageable pageable, @Nullable Filter filter) {
+    public List<com.itbd.application.dto.user.student.StudentDto> list(Pageable pageable, @Nullable Filter filter) {
         // Basic list implementation that only covers pagination,
         // but not sorting or filtering
-        Specification<StudentDAO> spec = filter != null
-                ? jpaFilterConverter.toSpec(filter, StudentDAO.class)
+        Specification<StudentDao> spec = filter != null
+                ? jpaFilterConverter.toSpec(filter, StudentDao.class)
                 : Specification.anyOf();
-        Page<StudentDAO> persons = personRepo.findAll(spec, pageable);
-        return persons.stream().map(StudentDTO::fromEntity).toList();
+        Page<StudentDao> persons = personRepo.findAll(spec, pageable);
+        return persons.stream().map(StudentDto::fromEntity).toList();
     }
 
     @Override
     @Transactional
-    public @Nullable StudentDTO save(StudentDTO value) {
+    public @Nullable StudentDto save(StudentDto value) {
         boolean check = value.id() != null && value.id() > 0;
-        StudentDAO person = check
+        StudentDao person = check
                 ? personRepo.getReferenceById(value.id())
-                : new StudentDAO();
+                : new StudentDao();
 
         // person.setRecordComment(check ? "UPDATE" : "NEW");
-        StudentDTO.fromDTO(value, person);
-        return StudentDTO.fromEntity(personRepo.save(person));
+        StudentDto.fromDTO(value, person);
+        return StudentDto.fromEntity(personRepo.save(person));
     }
 
     @Override

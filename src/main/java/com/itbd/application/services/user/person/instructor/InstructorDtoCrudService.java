@@ -1,7 +1,7 @@
 package com.itbd.application.services.user.person.instructor;
 
-import com.itbd.application.dao.user.InstructorDAO;
-import com.itbd.application.dto.user.instructor.InstructorDTO;
+import com.itbd.application.dao.user.InstructorDao;
+import com.itbd.application.dto.user.instructor.InstructorDto;
 import com.itbd.application.repos.user.InstructorRepo;
 import com.vaadin.flow.server.auth.AnonymousAllowed;
 import dev.hilla.BrowserCallable;
@@ -20,7 +20,7 @@ import java.util.List;
 
 @BrowserCallable
 @AnonymousAllowed
-public class InstructorDtoCrudService implements CrudService<InstructorDTO, Long> {
+public class InstructorDtoCrudService implements CrudService<InstructorDto, Long> {
     @Autowired
     private JpaFilterConverter jpaFilterConverter;
     @Autowired
@@ -33,27 +33,27 @@ public class InstructorDtoCrudService implements CrudService<InstructorDTO, Long
 
     @Override
     @Nonnull
-    public List<InstructorDTO> list(Pageable pageable, @Nullable Filter filter) {
+    public List<InstructorDto> list(Pageable pageable, @Nullable Filter filter) {
         // Basic list implementation that only covers pagination,
         // but not sorting or filtering
-        Specification<InstructorDAO> spec = filter != null
-                ? jpaFilterConverter.toSpec(filter, InstructorDAO.class)
+        Specification<InstructorDao> spec = filter != null
+                ? jpaFilterConverter.toSpec(filter, InstructorDao.class)
                 : Specification.anyOf();
-        Page<InstructorDAO> instructors = instructorRepo.findAll(spec, pageable);
-        return instructors.stream().map(InstructorDTO::fromEntity).toList();
+        Page<InstructorDao> instructors = instructorRepo.findAll(spec, pageable);
+        return instructors.stream().map(InstructorDto::fromEntity).toList();
     }
 
     @Override
     @Transactional
-    public @Nullable InstructorDTO save(InstructorDTO value) {
+    public @Nullable InstructorDto save(InstructorDto value) {
         boolean check = value.id() != null && value.id() > 0;
-        InstructorDAO person = check
+        InstructorDao person = check
                 ? instructorRepo.getReferenceById(value.id())
-                : new InstructorDAO();
+                : new InstructorDao();
 
         // person.setRecordComment(check ? "UPDATE" : "NEW");
-        InstructorDTO.fromDTO(value, person);
-        return InstructorDTO.fromEntity(instructorRepo.save(person));
+        InstructorDto.fromDTO(value, person);
+        return InstructorDto.fromEntity(instructorRepo.save(person));
     }
 
     @Override

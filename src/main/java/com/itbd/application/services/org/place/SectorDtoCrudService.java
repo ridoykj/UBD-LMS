@@ -1,7 +1,7 @@
 package com.itbd.application.services.org.place;
 
-import com.itbd.application.dao.org.place.SectorDAO;
-import com.itbd.application.dto.org.place.SectorDTO;
+import com.itbd.application.dao.org.place.SectorDao;
+import com.itbd.application.dto.org.place.SectorDto;
 import com.itbd.application.repos.org.place.SectorRepo;
 import com.vaadin.flow.server.auth.AnonymousAllowed;
 import dev.hilla.BrowserCallable;
@@ -20,7 +20,7 @@ import java.util.List;
 
 @BrowserCallable
 @AnonymousAllowed
-public class SectorDtoCrudService implements CrudService<SectorDTO, Long> {
+public class SectorDtoCrudService implements CrudService<SectorDto, Long> {
     @Autowired
     private JpaFilterConverter jpaFilterConverter;
     @Autowired
@@ -34,26 +34,26 @@ public class SectorDtoCrudService implements CrudService<SectorDTO, Long> {
 
     @Override
     @Nonnull
-    public List<@Nonnull SectorDTO> list(Pageable pageable, @Nullable Filter filter) {
+    public List<@Nonnull SectorDto> list(Pageable pageable, @Nullable Filter filter) {
         // Basic list implementation that only covers pagination,
         // but not sorting or filtering
-        Specification<SectorDAO> spec = filter != null
-                ? jpaFilterConverter.toSpec(filter, SectorDAO.class)
+        Specification<SectorDao> spec = filter != null
+                ? jpaFilterConverter.toSpec(filter, SectorDao.class)
                 : Specification.anyOf();
-        Page<SectorDAO> persons = sectorRepo.findAll(spec, pageable);
-        return persons.stream().map(SectorDTO::fromEntity).toList();
+        Page<SectorDao> persons = sectorRepo.findAll(spec, pageable);
+        return persons.stream().map(SectorDto::fromEntity).toList();
     }
 
     @Override
     @Transactional
-    public @Nullable SectorDTO save(SectorDTO value) {
+    public @Nullable SectorDto save(SectorDto value) {
         boolean check = value.id() != null && value.id() > 0;
-        SectorDAO person = check
+        SectorDao person = check
                 ? sectorRepo.getReferenceById(value.id())
-                : new SectorDAO();
+                : new SectorDao();
 
-        SectorDTO.fromDTO(value, person);
-        return SectorDTO.fromEntity(sectorRepo.save(person));
+        SectorDto.fromDTO(value, person);
+        return SectorDto.fromEntity(sectorRepo.save(person));
     }
 
     @Override

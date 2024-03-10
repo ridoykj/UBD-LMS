@@ -1,8 +1,7 @@
 package com.itbd.application.services.org.edu;
 
-import com.itbd.application.dao.org.edu.BatchDAO;
-import com.itbd.application.dao.org.edu.ProgrammeDAO;
-import com.itbd.application.dto.org.edu.BatchDTO;
+import com.itbd.application.dao.org.edu.BatchDao;
+import com.itbd.application.dto.org.edu.BatchDto;
 import com.itbd.application.repos.org.edu.BatchRepo;
 import com.vaadin.flow.server.auth.AnonymousAllowed;
 import dev.hilla.BrowserCallable;
@@ -21,7 +20,7 @@ import java.util.List;
 
 @BrowserCallable
 @AnonymousAllowed
-public class BatchDtoCrudService implements CrudService<BatchDTO, Long> {
+public class BatchDtoCrudService implements CrudService<BatchDto, Long> {
 
     @Autowired
     private JpaFilterConverter jpaFilterConverter;
@@ -37,27 +36,27 @@ public class BatchDtoCrudService implements CrudService<BatchDTO, Long> {
 
     @Override
     @Nonnull
-    public List<@Nonnull BatchDTO> list(Pageable pageable, @Nullable Filter filter) {
+    public List<@Nonnull BatchDto> list(Pageable pageable, @Nullable Filter filter) {
         // Basic list implementation that only covers pagination,
         // but not sorting or filtering
-        Specification<BatchDAO> spec = filter != null
-                ? jpaFilterConverter.toSpec(filter, BatchDAO.class)
+        Specification<BatchDao> spec = filter != null
+                ? jpaFilterConverter.toSpec(filter, BatchDao.class)
                 : Specification.anyOf();
-        Page<BatchDAO> persons = personRepo.findAll(spec, pageable);
-        return persons.stream().map(BatchDTO::fromEntity).toList();
+        Page<BatchDao> persons = personRepo.findAll(spec, pageable);
+        return persons.stream().map(BatchDto::fromEntity).toList();
     }
 
     @Override
     @Transactional
-    public @Nullable BatchDTO save(BatchDTO value) {
+    public @Nullable BatchDto save(BatchDto value) {
         boolean check = value.id() != null && value.id() > 0;
-        BatchDAO person = check
+        BatchDao person = check
                 ? personRepo.getReferenceById(value.id())
-                : new BatchDAO();
+                : new BatchDao();
 
         // person.setRecordComment(check ? "UPDATE" : "NEW");
-        BatchDTO.fromDTO(value, person);
-        return BatchDTO.fromEntity(personRepo.save(person));
+        BatchDto.fromDTO(value, person);
+        return BatchDto.fromEntity(personRepo.save(person));
     }
 
     @Override
