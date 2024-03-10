@@ -1,7 +1,7 @@
 package com.itbd.application.dto.org.academic;
 
-import com.itbd.application.dao.org.academic.OrganizationDAO;
-import com.itbd.application.dao.org.edu.DepartmentDAO;
+import com.itbd.application.dao.org.academic.OrganizationDao;
+import com.itbd.application.dao.org.edu.DepartmentDao;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.data.annotation.Version;
@@ -9,7 +9,7 @@ import org.springframework.data.annotation.Version;
 import java.time.LocalDateTime;
 import java.util.List;
 
-public record OrganizationDTO(
+public record OrganizationDto(
         Long id,
         @Version Long version,
         @NotNull
@@ -48,9 +48,9 @@ public record OrganizationDTO(
         String image,
         String affiliation,
         String creator,
-        List<DepartmentDAO> departments) {
-    public static OrganizationDTO fromEntity(OrganizationDAO organization) {
-        return new OrganizationDTO(
+        List<DepartmentDao> departments) {
+    public static OrganizationDto fromEntity(OrganizationDao organization) {
+        return new OrganizationDto(
                 organization.getId(),
                 organization.getVersion(),
                 organization.getName(),
@@ -90,7 +90,7 @@ public record OrganizationDTO(
                 organization.getDepartments());
     }
 
-    public static void fromDTO(OrganizationDTO organizationDTO, OrganizationDAO organizationDAO) {
+    public static void fromDTO(OrganizationDto organizationDTO, OrganizationDao organizationDAO) {
         organizationDAO.setId(organizationDTO.id());
         organizationDAO.setVersion(organizationDTO.version());
         organizationDAO.setName(organizationDTO.name());

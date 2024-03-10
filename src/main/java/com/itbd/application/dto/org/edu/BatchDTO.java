@@ -1,20 +1,19 @@
 package com.itbd.application.dto.org.edu;
 
-import com.itbd.application.dao.org.allocation.BatchCourseDAO;
-import com.itbd.application.dao.org.edu.BatchDAO;
-import com.itbd.application.dao.org.edu.ProgrammeDAO;
-import com.itbd.application.dao.org.edu.ReservationDAO;
-import com.itbd.application.dao.user.StudentDAO;
+import com.itbd.application.dao.org.allocation.BatchCourseDao;
+import com.itbd.application.dao.org.edu.BatchDao;
+import com.itbd.application.dao.org.edu.ProgrammeDao;
+import com.itbd.application.dao.org.edu.ReservationDao;
+import com.itbd.application.dao.user.StudentDao;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.data.annotation.Version;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.Set;
 
-public record BatchDTO(
+public record BatchDto(
         Long id,
         @Version Long version,
         @NotNull @NotEmpty String name,
@@ -33,14 +32,14 @@ public record BatchDTO(
         Long numberOfPractical,
         Long numberOfCredits,
         Long numberOfSemester,
-        ProgrammeDAO programme,
-        Set<ReservationDAO> reservations,
-        Set<BatchCourseDAO> batchCourses,
-        Set<StudentDAO> students
+        ProgrammeDao programme,
+        Set<ReservationDao> reservations,
+        Set<BatchCourseDao> batchCourses,
+        Set<StudentDao> students
 ) {
 
-    public static BatchDTO fromEntity(BatchDAO batch) {
-        ProgrammeDAO programme = batch.getProgramme();
+    public static BatchDto fromEntity(BatchDao batch) {
+        ProgrammeDao programme = batch.getProgramme();
         programme.setDepartment(null);
         programme.setBatches(null);
 
@@ -49,7 +48,7 @@ public record BatchDTO(
         batch.setStudents(null);
         batch.setBatchCourses(null);
 
-        return new BatchDTO(
+        return new BatchDto(
                 batch.getId(),
                 batch.getVersion(),
                 batch.getName(),
@@ -74,7 +73,7 @@ public record BatchDTO(
                 batch.getStudents());
     }
 
-    public static void fromDTO(BatchDTO batchDTO, BatchDAO batchDAO) {
+    public static void fromDTO(BatchDto batchDTO, BatchDao batchDAO) {
         batchDAO.setId(batchDTO.id());
         batchDAO.setVersion(batchDTO.version());
         batchDAO.setName(batchDTO.name());

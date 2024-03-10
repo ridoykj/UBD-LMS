@@ -1,11 +1,11 @@
 package com.itbd.application.dto.user.person;
 
-import com.itbd.application.dao.user.person.AddressDAO;
+import com.itbd.application.dao.user.person.AddressDao;
 import org.springframework.data.annotation.Version;
 
 import java.time.LocalDateTime;
 
-public record AddressDTO(
+public record AddressDto(
         Long id,
         @Version Long version,
         String birthPlace,
@@ -15,8 +15,8 @@ public record AddressDTO(
         String permanentAddress,
         LocalDateTime createdAt,
         LocalDateTime updatedAt) {
-    public static AddressDTO fromEntity(AddressDAO address) {
-        return new AddressDTO(
+    public static AddressDto fromEntity(AddressDao address) {
+        return new AddressDto(
                 address.getId(),
                 address.getVersion(),
                 address.getBirthPlace(),
@@ -28,7 +28,7 @@ public record AddressDTO(
                 address.getUpdatedAt());
     }
 
-    public static void fromDTO(AddressDTO addressDTO, AddressDAO addressDAO) {
+    public static void fromDTO(AddressDto addressDTO, AddressDao addressDAO) {
         addressDAO.setId(addressDTO.id());
         addressDAO.setVersion(addressDTO.version());
         addressDAO.setBirthPlace(addressDTO.birthPlace());

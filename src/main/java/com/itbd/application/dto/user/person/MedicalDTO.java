@@ -1,13 +1,13 @@
 package com.itbd.application.dto.user.person;
 
 import com.itbd.application.constants.enums.GenderEnum;
-import com.itbd.application.dao.user.person.MedicalDAO;
+import com.itbd.application.dao.user.person.MedicalDao;
 import org.springframework.data.annotation.Version;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
-public record MedicalDTO(
+public record MedicalDto(
         Long id,
         @Version Long version,
         BigDecimal weight,
@@ -16,8 +16,8 @@ public record MedicalDTO(
         GenderEnum gender,
         LocalDateTime createdAt,
         LocalDateTime updatedAt) {
-    public static MedicalDTO fromEntity(MedicalDAO medical) {
-        return new MedicalDTO(
+    public static MedicalDto fromEntity(MedicalDao medical) {
+        return new MedicalDto(
                 medical.getId(),
                 medical.getVersion(),
                 medical.getWeight(),
@@ -28,7 +28,7 @@ public record MedicalDTO(
                 medical.getUpdatedAt());
     }
 
-    public static void fromDTO(MedicalDTO medicalDTO, MedicalDAO medicalDAO) {
+    public static void fromDTO(MedicalDto medicalDTO, MedicalDao medicalDAO) {
         medicalDAO.setId(medicalDTO.id());
         medicalDAO.setVersion(medicalDTO.version());
         medicalDAO.setWeight(medicalDTO.weight());

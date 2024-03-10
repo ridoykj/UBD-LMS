@@ -1,11 +1,11 @@
 package com.itbd.application.dto.user.person;
 
-import com.itbd.application.dao.user.person.OccupationDAO;
+import com.itbd.application.dao.user.person.OccupationDao;
 import org.springframework.data.annotation.Version;
 
 import java.time.LocalDateTime;
 
-public record OccupationDTO(
+public record OccupationDto(
         Long id,
         @Version Long version,
         Long idPersonKey,
@@ -14,8 +14,8 @@ public record OccupationDTO(
         LocalDateTime createdAt,
         LocalDateTime updatedAt
 ) {
-    public static OccupationDTO fromEntity(OccupationDAO occupation) {
-        return new OccupationDTO(
+    public static OccupationDto fromEntity(OccupationDao occupation) {
+        return new OccupationDto(
                 occupation.getId(),
                 occupation.getVersion(),
                 occupation.getPerson().getId(),
@@ -25,7 +25,7 @@ public record OccupationDTO(
                 occupation.getUpdatedAt());
     }
 
-    public static void fromDTO(OccupationDTO occupationDTO, OccupationDAO occupationDAO) {
+    public static void fromDTO(OccupationDto occupationDTO, OccupationDao occupationDAO) {
         occupationDAO.setId(occupationDTO.id());
         occupationDAO.setVersion(occupationDTO.version());
         occupationDAO.setRecords(occupationDTO.records());

@@ -1,11 +1,11 @@
 package com.itbd.application.dto.org.academic;
 
-import com.itbd.application.dao.org.academic.AttendanceDAO;
+import com.itbd.application.dao.org.academic.AttendanceDao;
 import org.springframework.data.annotation.Version;
 
 import java.time.LocalDateTime;
 
-public record AttendanceDTO(
+public record AttendanceDto(
         Long id,
         @Version Long version,
         Long registrationId,
@@ -15,8 +15,8 @@ public record AttendanceDTO(
         String status,
         Boolean present) {
 
-    public static AttendanceDTO fromEntity(AttendanceDAO attendance) {
-        return new AttendanceDTO(
+    public static AttendanceDto fromEntity(AttendanceDao attendance) {
+        return new AttendanceDto(
                 attendance.getId(),
                 attendance.getVersion(),
                 attendance.getRegistrationId(),
@@ -27,7 +27,7 @@ public record AttendanceDTO(
                 attendance.getPresent());
     }
 
-    public static void fromDTO(AttendanceDTO attendanceDTO, AttendanceDAO attendanceDAO) {
+    public static void fromDTO(AttendanceDto attendanceDTO, AttendanceDao attendanceDAO) {
         attendanceDAO.setId(attendanceDTO.id());
         attendanceDAO.setVersion(attendanceDTO.version());
         attendanceDAO.setRegistrationId(attendanceDTO.registrationId());

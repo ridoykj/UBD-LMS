@@ -1,13 +1,13 @@
 package com.itbd.application.dto.user.instructor;
 
 import com.itbd.application.constants.enums.BloodGroupsEnum;
-import com.itbd.application.dao.user.InstructorDAO;
+import com.itbd.application.dao.user.InstructorDao;
 import com.itbd.application.dao.user.person.*;
 import jakarta.persistence.Id;
 
 import java.time.LocalDateTime;
 
-public record InstructorMargeDTO(
+public record InstructorMargeDto(
         @Id Long id,
         // TODO: from PersonDTO
         String givenName,
@@ -28,17 +28,17 @@ public record InstructorMargeDTO(
         String nationality,
         String sponsor,
         String description,
-        AddressDAO address,
-        ContactDAO contact,
-        DocumentRecordsDAO record,
-        MedicalDAO medical,
-        OccupationDAO occupation,
-        InstructorDAO instructor
+        AddressDao address,
+        ContactDao contact,
+        DocumentRecordsDao record,
+        MedicalDao medical,
+        OccupationDao occupation,
+        InstructorDao instructor
 //        StudentDAO student
 
 ) {
 
-    public static void fromDTO(InstructorMargeDTO value, PersonDAO person) {
+    public static void fromDTO(InstructorMargeDto value, PersonDao person) {
         person.setId(value.id());
         person.setGivenName(value.givenName());
         person.setAdditionalName(value.additionalName());
@@ -59,12 +59,12 @@ public record InstructorMargeDTO(
         person.setSponsor(value.sponsor());
         person.setDescription(value.description());
 
-        AddressDAO address = value.address() != null ? value.address() : new AddressDAO();
-        ContactDAO contact = value.contact() != null ? value.contact() : new ContactDAO();
-        DocumentRecordsDAO documentRecords = value.record() != null ? value.record() : new DocumentRecordsDAO();
-        MedicalDAO medical = value.medical() != null ? value.medical() : new MedicalDAO();
-        OccupationDAO occupation = value.occupation() != null ? value.occupation() : new OccupationDAO();
-        InstructorDAO instructor = value.instructor() != null ? value.instructor() : new InstructorDAO();
+        AddressDao address = value.address() != null ? value.address() : new AddressDao();
+        ContactDao contact = value.contact() != null ? value.contact() : new ContactDao();
+        DocumentRecordsDao documentRecords = value.record() != null ? value.record() : new DocumentRecordsDao();
+        MedicalDao medical = value.medical() != null ? value.medical() : new MedicalDao();
+        OccupationDao occupation = value.occupation() != null ? value.occupation() : new OccupationDao();
+        InstructorDao instructor = value.instructor() != null ? value.instructor() : new InstructorDao();
 
         address.setPerson(person);
         contact.setPerson(person);
@@ -81,13 +81,13 @@ public record InstructorMargeDTO(
         person.setInstructor(instructor);
     }
 
-    public static InstructorMargeDTO fromEntity(PersonDAO person) {
-        AddressDAO address = person.getAddress();
-        ContactDAO contact = person.getContact();
-        DocumentRecordsDAO records = person.getRecord();
-        MedicalDAO medical = person.getMedical();
-        OccupationDAO occupation = person.getOccupation();
-        InstructorDAO instructor = person.getInstructor();
+    public static InstructorMargeDto fromEntity(PersonDao person) {
+        AddressDao address = person.getAddress();
+        ContactDao contact = person.getContact();
+        DocumentRecordsDao records = person.getRecord();
+        MedicalDao medical = person.getMedical();
+        OccupationDao occupation = person.getOccupation();
+        InstructorDao instructor = person.getInstructor();
         instructor.setReservations(null);
 
         person.setAddress(address);
@@ -97,7 +97,7 @@ public record InstructorMargeDTO(
         person.setOccupation(occupation);
         person.setInstructor(instructor);
 
-        return new InstructorMargeDTO(
+        return new InstructorMargeDto(
                 person.getId(),
                 person.getGivenName(),
                 person.getAdditionalName(),

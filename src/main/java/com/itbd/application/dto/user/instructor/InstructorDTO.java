@@ -1,11 +1,11 @@
 package com.itbd.application.dto.user.instructor;
 
-import com.itbd.application.dao.user.InstructorDAO;
+import com.itbd.application.dao.user.InstructorDao;
 import com.itbd.application.dao.user.person.*;
 import jakarta.persistence.Id;
 import org.springframework.data.annotation.Version;
 
-public record InstructorDTO(
+public record InstructorDto(
         @Id Long id,
         @Version Long version,
         String name,
@@ -13,9 +13,9 @@ public record InstructorDTO(
         String description,
         String designation,
         String qualification,
-        PersonDAO person) {
+        PersonDao person) {
 
-    public static void fromDTO(InstructorDTO value, InstructorDAO instructor) {
+    public static void fromDTO(InstructorDto value, InstructorDao instructor) {
         instructor.setId(value.id());
         instructor.setVersion(value.version());
         instructor.setName(value.name());
@@ -25,12 +25,12 @@ public record InstructorDTO(
         instructor.setQualification(value.qualification());
 //        instructor.setPerson(value.person());
 
-        PersonDAO person = value.person() != null ? value.person() : new PersonDAO();
-        AddressDAO address = person.getAddress() != null ? person.getAddress() : new AddressDAO();
-        ContactDAO contact = person.getContact() != null ? person.getContact() : new ContactDAO();
-        DocumentRecordsDAO documentRecords = person.getRecord() != null ? person.getRecord() : new DocumentRecordsDAO();
-        MedicalDAO medical = person.getMedical() != null ? person.getMedical() : new MedicalDAO();
-        OccupationDAO occupation = person.getOccupation() != null ? person.getOccupation() : new OccupationDAO();
+        PersonDao person = value.person() != null ? value.person() : new PersonDao();
+        AddressDao address = person.getAddress() != null ? person.getAddress() : new AddressDao();
+        ContactDao contact = person.getContact() != null ? person.getContact() : new ContactDao();
+        DocumentRecordsDao documentRecords = person.getRecord() != null ? person.getRecord() : new DocumentRecordsDao();
+        MedicalDao medical = person.getMedical() != null ? person.getMedical() : new MedicalDao();
+        OccupationDao occupation = person.getOccupation() != null ? person.getOccupation() : new OccupationDao();
 
         address.setPerson(person);
         contact.setPerson(person);
@@ -46,14 +46,14 @@ public record InstructorDTO(
         instructor.setPerson(person);
     }
 
-    public static InstructorDTO fromEntity(InstructorDAO instructor) {
-        PersonDAO person = instructor.getPerson();
+    public static InstructorDto fromEntity(InstructorDao instructor) {
+        PersonDao person = instructor.getPerson();
 
-        AddressDAO address = person.getAddress();
-        ContactDAO contact = person.getContact();
-        DocumentRecordsDAO records = person.getRecord();
-        MedicalDAO medical = person.getMedical();
-        OccupationDAO occupation = person.getOccupation();
+        AddressDao address = person.getAddress();
+        ContactDao contact = person.getContact();
+        DocumentRecordsDao records = person.getRecord();
+        MedicalDao medical = person.getMedical();
+        OccupationDao occupation = person.getOccupation();
 
         person.setAddress(address);
         person.setContact(contact);
@@ -64,7 +64,7 @@ public record InstructorDTO(
 
         instructor.setPerson(person);
         instructor.setReservations(null);
-        return new InstructorDTO(
+        return new InstructorDto(
                 instructor.getId(),
                 instructor.getVersion(),
                 instructor.getName(),

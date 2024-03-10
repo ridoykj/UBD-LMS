@@ -1,15 +1,15 @@
 package com.itbd.application.dto.org.edu;
 
-import com.itbd.application.dao.org.academic.OrganizationDAO;
-import com.itbd.application.dao.org.edu.DepartmentDAO;
-import com.itbd.application.dao.org.edu.ProgrammeDAO;
+import com.itbd.application.dao.org.academic.OrganizationDao;
+import com.itbd.application.dao.org.edu.DepartmentDao;
+import com.itbd.application.dao.org.edu.ProgrammeDao;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.data.annotation.Version;
 
 import java.util.List;
 
-public record DepartmentDTO(
+public record DepartmentDto(
         Long id,
         @Version Long version,
         @NotNull @NotEmpty String name,
@@ -17,11 +17,11 @@ public record DepartmentDTO(
         String description,
         String status,
         String headOfDepartment,
-        List<ProgrammeDAO> programmes,
-        @NotNull OrganizationDAO organization) {
+        List<ProgrammeDao> programmes,
+        @NotNull OrganizationDao organization) {
 
-    public static DepartmentDTO fromEntity(DepartmentDAO department) {
-        return new DepartmentDTO(
+    public static DepartmentDto fromEntity(DepartmentDao department) {
+        return new DepartmentDto(
                 department.getId(),
                 department.getVersion(),
                 department.getName(),
@@ -33,7 +33,7 @@ public record DepartmentDTO(
                 department.getOrganization());
     }
 
-    public static void fromDTO(DepartmentDTO departmentDTO, DepartmentDAO departmentDAO) {
+    public static void fromDTO(DepartmentDto departmentDTO, DepartmentDao departmentDAO) {
         departmentDAO.setId(departmentDTO.id());
         departmentDAO.setVersion(departmentDTO.version());
         departmentDAO.setName(departmentDTO.name());

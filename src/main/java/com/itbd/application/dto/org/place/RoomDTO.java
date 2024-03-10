@@ -1,14 +1,14 @@
 package com.itbd.application.dto.org.place;
 
 import com.itbd.application.constants.enums.RoomTypeEnum;
-import com.itbd.application.dao.org.place.BuildingDAO;
-import com.itbd.application.dao.org.place.FloorDAO;
-import com.itbd.application.dao.org.place.RoomDAO;
+import com.itbd.application.dao.org.place.BuildingDao;
+import com.itbd.application.dao.org.place.FloorDao;
+import com.itbd.application.dao.org.place.RoomDao;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.data.annotation.Version;
 
-public record RoomDTO(
+public record RoomDto(
         Long id,
         @Version Long version,
         @NotNull @NotEmpty String name,
@@ -20,17 +20,17 @@ public record RoomDTO(
         Integer totalRooms,
         String block,
         Integer totalBeds,
-        FloorDAO floor) {
-    public static RoomDTO fromEntity(RoomDAO room) {
-        FloorDAO floor = room.getFloor();
-        BuildingDAO building = floor.getBuilding();
+        FloorDao floor) {
+    public static RoomDto fromEntity(RoomDao room) {
+        FloorDao floor = room.getFloor();
+        BuildingDao building = floor.getBuilding();
         building.setFloors(null);
         building.setSector(null);
 
         floor.setBuilding(building);
         floor.setRooms(null);
         room.setFloor(floor);
-        return new RoomDTO(
+        return new RoomDto(
                 room.getId(),
                 room.getVersion(),
                 room.getName(),
@@ -45,7 +45,7 @@ public record RoomDTO(
                 room.getFloor());
     }
 
-    public static void fromDTO(RoomDTO roomDTO, RoomDAO roomDAO) {
+    public static void fromDTO(RoomDto roomDTO, RoomDao roomDAO) {
         roomDAO.setId(roomDTO.id());
         roomDAO.setVersion(roomDTO.version());
         roomDAO.setName(roomDTO.name());

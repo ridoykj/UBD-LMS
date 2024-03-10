@@ -1,16 +1,16 @@
 package com.itbd.application.dto.org.edu;
 
 import com.itbd.application.constants.enums.ProgrammeTypeEnum;
-import com.itbd.application.dao.org.edu.BatchDAO;
-import com.itbd.application.dao.org.edu.DepartmentDAO;
-import com.itbd.application.dao.org.edu.ProgrammeDAO;
+import com.itbd.application.dao.org.edu.BatchDao;
+import com.itbd.application.dao.org.edu.DepartmentDao;
+import com.itbd.application.dao.org.edu.ProgrammeDao;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.data.annotation.Version;
 
 import java.util.List;
 
-public record ProgrammeDTO(
+public record ProgrammeDto(
         Long id,
         @Version Long version,
         @NotNull @NotEmpty String name,
@@ -18,11 +18,11 @@ public record ProgrammeDTO(
         String code,
         String description,
         String status,
-        @NotNull DepartmentDAO department,
-        List<BatchDAO> batches) {
+        @NotNull DepartmentDao department,
+        List<BatchDao> batches) {
 
-    public static ProgrammeDTO fromEntity(ProgrammeDAO programee) {
-        return new ProgrammeDTO(
+    public static ProgrammeDto fromEntity(ProgrammeDao programee) {
+        return new ProgrammeDto(
                 programee.getId(),
                 programee.getVersion(),
                 programee.getName(),
@@ -34,7 +34,7 @@ public record ProgrammeDTO(
                 programee.getBatches());
     }
 
-    public static void fromDTO(ProgrammeDTO programeeDTO, ProgrammeDAO programeeDAO) {
+    public static void fromDTO(ProgrammeDto programeeDTO, ProgrammeDao programeeDAO) {
         programeeDAO.setId(programeeDTO.id());
         programeeDAO.setVersion(programeeDTO.version());
         programeeDAO.setName(programeeDTO.name());

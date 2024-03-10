@@ -1,9 +1,8 @@
 package com.itbd.application.dto.custom;
 
-import com.itbd.application.dao.custom.IDashBoardRptDAO;
-import com.itbd.application.dto.org.academic.OrganizationDTO;
+import com.itbd.application.dao.custom.IDashBoardRptDao;
 
-public record IDashBoardRptDTO(
+public record IDashBoardRptDto(
         Long sectors,
         Long buildings,
         Long floors,
@@ -15,8 +14,8 @@ public record IDashBoardRptDTO(
         Long courses,
         Long coordinators
 ) {
-    public static IDashBoardRptDTO fromEntity(IDashBoardRptDAO dashBoardRptDAO) {
-        return new IDashBoardRptDTO(
+    public static IDashBoardRptDto fromEntity(IDashBoardRptDao dashBoardRptDAO) {
+        return new IDashBoardRptDto(
                 dashBoardRptDAO.getSectors(),
                 dashBoardRptDAO.getBuildings(),
                 dashBoardRptDAO.getFloors(),

@@ -1,9 +1,8 @@
 package com.itbd.application.dto.user.person;
 
-import com.itbd.application.dao.user.InstructorDAO;
-import com.itbd.application.dao.user.person.AddressDAO;
-import com.itbd.application.dao.user.person.PersonDAO;
-import jakarta.validation.constraints.NotBlank;
+import com.itbd.application.dao.user.InstructorDao;
+import com.itbd.application.dao.user.person.AddressDao;
+import com.itbd.application.dao.user.person.PersonDao;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import nonapi.io.github.classgraph.json.Id;
@@ -12,7 +11,7 @@ import org.springframework.data.annotation.Version;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
-public record PersonDTO(
+public record PersonDto(
         @Id Long id,
         @Version Long version,
         @NotNull @NotEmpty String givenName,
@@ -30,12 +29,12 @@ public record PersonDTO(
         String nationality,
         String sponsor,
         String description,
-        AddressDAO address,
-        InstructorDAO instructor,
+        AddressDao address,
+        InstructorDao instructor,
         LocalDateTime createdAt,
         LocalDateTime updatedAt) {
-    public static PersonDTO fromEntity(PersonDAO person) {
-        return new PersonDTO(
+    public static PersonDto fromEntity(PersonDao person) {
+        return new PersonDto(
                 person.getId(),
                 person.getVersion(),
                 person.getGivenName(),
@@ -59,7 +58,7 @@ public record PersonDTO(
                 person.getUpdatedAt());
     }
 
-    public static void fromDTO(PersonDTO personDTO, PersonDAO personDAO) {
+    public static void fromDTO(PersonDto personDTO, PersonDao personDAO) {
         personDAO.setId(personDTO.id());
         personDAO.setVersion(personDTO.version());
         personDAO.setGivenName(personDTO.givenName());
@@ -78,8 +77,8 @@ public record PersonDTO(
         personDAO.setSponsor(personDTO.sponsor());
         personDAO.setDescription(personDTO.description());
 
-        AddressDAO address = Optional.ofNullable(personDTO.address()).orElse(new AddressDAO());
-        InstructorDAO instructor = Optional.ofNullable(personDTO.instructor()).orElse(new InstructorDAO());
+        AddressDao address = Optional.ofNullable(personDTO.address()).orElse(new AddressDao());
+        InstructorDao instructor = Optional.ofNullable(personDTO.instructor()).orElse(new InstructorDao());
 //        ContactDAO contact = Optional.ofNullable(person.getContacts()).orElse(new ContactDAO());
 //        DocumentRecordsDAO documentRecords = Optional.ofNullable(person.getRecordses())
 //                .orElse(new DocumentRecordsDAO());

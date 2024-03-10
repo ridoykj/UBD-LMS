@@ -1,11 +1,11 @@
 package com.itbd.application.dto.org.place;
 
-import com.itbd.application.dao.org.place.SectorDAO;
+import com.itbd.application.dao.org.place.SectorDao;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.data.annotation.Version;
 
-public record SectorDTO(
+public record SectorDto(
         Long id,
         @Version Long version,
         @NotNull @NotEmpty String name,
@@ -15,9 +15,9 @@ public record SectorDTO(
         String country,
         String contact,
         String description) {
-    public static SectorDTO fromEntity(SectorDAO sector) {
+    public static SectorDto fromEntity(SectorDao sector) {
         sector.setBuildings(null);
-        return new SectorDTO(
+        return new SectorDto(
                 sector.getId(),
                 sector.getVersion(),
                 sector.getName(),
@@ -29,7 +29,7 @@ public record SectorDTO(
                 sector.getDescription());
     }
 
-    public static void fromDTO(SectorDTO sectorDTO, SectorDAO sectorDAO) {
+    public static void fromDTO(SectorDto sectorDTO, SectorDao sectorDAO) {
         sectorDAO.setId(sectorDTO.id());
         sectorDAO.setVersion(sectorDTO.version());
         sectorDAO.setName(sectorDTO.name());

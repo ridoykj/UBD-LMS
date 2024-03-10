@@ -1,17 +1,17 @@
 package com.itbd.application.dto.user.person;
 
-import com.itbd.application.dao.user.person.ContactDAO;
+import com.itbd.application.dao.user.person.ContactDao;
 import org.springframework.data.annotation.Version;
 
-public record ContactDTO(
+public record ContactDto(
         Long id,
         @Version Long version,
         String email,
         String mobile,
         String telephone,
         String faxNumber) {
-    public static ContactDTO fromEntity(ContactDAO contact) {
-        return new ContactDTO(
+    public static ContactDto fromEntity(ContactDao contact) {
+        return new ContactDto(
                 contact.getId(),
                 contact.getVersion(),
                 contact.getEmail(),
@@ -20,7 +20,7 @@ public record ContactDTO(
                 contact.getFaxNumber());
     }
 
-    public static void fromDTO(ContactDTO contactDTO, ContactDAO contactDAO) {
+    public static void fromDTO(ContactDto contactDTO, ContactDao contactDAO) {
         contactDAO.setId(contactDTO.id());
         contactDAO.setVersion(contactDTO.version());
         contactDAO.setEmail(contactDTO.email());

@@ -1,9 +1,9 @@
 package com.itbd.application.dto.org.academic;
 
-import com.itbd.application.dao.org.academic.SectionDAO;
+import com.itbd.application.dao.org.academic.SectionDao;
 import org.springframework.data.annotation.Version;
 
-public record SectionDTO(
+public record SectionDto(
         Long id,
         @Version Long version,
         String name,
@@ -27,8 +27,8 @@ public record SectionDTO(
         Long academicSessionId,
         Long academicTermId) {
 
-    public static SectionDTO fromEntity(SectionDAO section) {
-        return new SectionDTO(
+    public static SectionDto fromEntity(SectionDao section) {
+        return new SectionDto(
                 section.getId(),
                 section.getVersion(),
                 section.getName(),
@@ -53,7 +53,7 @@ public record SectionDTO(
                 section.getAcademicTermId());
     }
 
-    public static void fromDTO(SectionDTO sectionDTO, SectionDAO sectionDAO) {
+    public static void fromDTO(SectionDto sectionDTO, SectionDao sectionDAO) {
         sectionDAO.setId(sectionDTO.id());
         sectionDAO.setVersion(sectionDTO.version());
         sectionDAO.setName(sectionDTO.name());

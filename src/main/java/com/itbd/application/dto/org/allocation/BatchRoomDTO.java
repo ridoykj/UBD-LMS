@@ -2,12 +2,12 @@ package com.itbd.application.dto.org.allocation;
 
 import com.itbd.application.constants.enums.DayTypeEnum;
 import com.itbd.application.constants.enums.EventTypeEnum;
-import com.itbd.application.dao.org.allocation.BatchCourseDAO;
-import com.itbd.application.dao.org.allocation.BatchRoomDAO;
-import com.itbd.application.dao.org.place.BuildingDAO;
-import com.itbd.application.dao.org.place.FloorDAO;
-import com.itbd.application.dao.org.place.RoomDAO;
-import com.itbd.application.dao.org.place.SectorDAO;
+import com.itbd.application.dao.org.allocation.BatchCourseDao;
+import com.itbd.application.dao.org.allocation.BatchRoomDao;
+import com.itbd.application.dao.org.place.BuildingDao;
+import com.itbd.application.dao.org.place.FloorDao;
+import com.itbd.application.dao.org.place.RoomDao;
+import com.itbd.application.dao.org.place.SectorDao;
 import jakarta.persistence.Id;
 import jakarta.persistence.Version;
 import jakarta.validation.constraints.NotNull;
@@ -15,7 +15,7 @@ import jakarta.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
-public record BatchRoomDTO(
+public record BatchRoomDto(
         @Id Long id,
         @Version Long version,
         DayTypeEnum dayName,
@@ -25,19 +25,19 @@ public record BatchRoomDTO(
         LocalTime startTime,
         LocalTime endTime,
         String description,
-        @NotNull BatchCourseDAO batchCourse,
-        @NotNull RoomDAO room
+        @NotNull BatchCourseDao batchCourse,
+        @NotNull RoomDao room
 ) {
 
 
-    public static BatchRoomDTO fromEntity(BatchRoomDAO batchRoom) {
-        RoomDAO room = batchRoom.getRoom();
+    public static BatchRoomDto fromEntity(BatchRoomDao batchRoom) {
+        RoomDao room = batchRoom.getRoom();
         room.setReservations(null);
-        FloorDAO floor = room.getFloor();
+        FloorDao floor = room.getFloor();
         floor.setRooms(null);
-        BuildingDAO building = floor.getBuilding() != null ? floor.getBuilding() : new BuildingDAO();
+        BuildingDao building = floor.getBuilding() != null ? floor.getBuilding() : new BuildingDao();
         building.setFloors(null);
-        SectorDAO sector = building.getSector() != null ? building.getSector() : new SectorDAO();
+        SectorDao sector = building.getSector() != null ? building.getSector() : new SectorDao();
         sector.setBuildings(null);
 
         building.setSector(sector);
@@ -46,7 +46,7 @@ public record BatchRoomDTO(
         room.setBatchRooms(null);
 
         batchRoom.setRoom(room);
-        return new BatchRoomDTO(
+        return new BatchRoomDto(
                 batchRoom.getId(),
                 batchRoom.getVersion(),
                 batchRoom.getDayName(),
@@ -61,7 +61,7 @@ public record BatchRoomDTO(
         );
     }
 
-    public static void fromDTO(BatchRoomDTO value, BatchRoomDAO batchRoom) {
+    public static void fromDTO(BatchRoomDto value, BatchRoomDao batchRoom) {
         batchRoom.setId(value.id());
         batchRoom.setVersion(value.version());
         batchRoom.setDayName(value.dayName());

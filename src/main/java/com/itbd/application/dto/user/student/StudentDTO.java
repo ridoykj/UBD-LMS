@@ -1,11 +1,11 @@
 package com.itbd.application.dto.user.student;
 
-import com.itbd.application.dao.org.edu.BatchDAO;
-import com.itbd.application.dao.user.StudentDAO;
-import com.itbd.application.dao.user.person.PersonDAO;
+import com.itbd.application.dao.org.edu.BatchDao;
+import com.itbd.application.dao.user.StudentDao;
+import com.itbd.application.dao.user.person.PersonDao;
 import org.springframework.data.annotation.Version;
 
-public record StudentDTO(
+public record StudentDto(
         Long id,
         @Version Long version,
         String name,
@@ -14,11 +14,11 @@ public record StudentDTO(
         String guardian,
         String guardianPhone,
         String status,
-        BatchDAO batch,
-        PersonDAO personKey) {
+        BatchDao batch,
+        PersonDao personKey) {
 
-    public static StudentDTO fromEntity(StudentDAO testimonial) {
-        return new StudentDTO(
+    public static StudentDto fromEntity(StudentDao testimonial) {
+        return new StudentDto(
                 testimonial.getId(),
                 testimonial.getVersion(),
                 testimonial.getName(),
@@ -31,7 +31,7 @@ public record StudentDTO(
                 testimonial.getPerson());
     }
 
-    public static void fromDTO(StudentDTO studentDTO, StudentDAO studentDAO) {
+    public static void fromDTO(StudentDto studentDTO, StudentDao studentDAO) {
         studentDAO.setId(studentDTO.id());
         studentDAO.setVersion(studentDTO.version());
         studentDAO.setName(studentDTO.name());

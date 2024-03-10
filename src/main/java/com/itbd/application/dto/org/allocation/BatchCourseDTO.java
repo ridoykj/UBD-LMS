@@ -1,19 +1,18 @@
 package com.itbd.application.dto.org.allocation;
 
-import com.itbd.application.dao.org.allocation.BatchCoordinatorDAO;
-import com.itbd.application.dao.org.allocation.BatchCourseDAO;
-import com.itbd.application.dao.org.edu.BatchDAO;
-import com.itbd.application.dao.org.edu.CourseDAO;
+import com.itbd.application.dao.org.allocation.BatchCoordinatorDao;
+import com.itbd.application.dao.org.allocation.BatchCourseDao;
+import com.itbd.application.dao.org.edu.BatchDao;
+import com.itbd.application.dao.org.edu.CourseDao;
 import jakarta.persistence.Id;
 import jakarta.persistence.Version;
-import jakarta.validation.constraints.NotNull;
 
 import java.math.BigDecimal;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-public record BatchCourseDTO(
+public record BatchCourseDto(
         @Id Long id,
         @Version Long version,
         String name,
@@ -28,13 +27,13 @@ public record BatchCourseDTO(
         String type,
         BigDecimal duration,
         String durationUnit,
-        CourseDAO course,
-        BatchDAO batch,
-        Set<BatchCoordinatorDAO> batchCoordinators
+        CourseDao course,
+        BatchDao batch,
+        Set<BatchCoordinatorDao> batchCoordinators
 ) {
-    public static BatchCourseDTO fromEntity(BatchCourseDAO batchCourse) {
-        BatchDAO batch = batchCourse.getBatch();
-        CourseDAO course = batchCourse.getCourse();
+    public static BatchCourseDto fromEntity(BatchCourseDao batchCourse) {
+        BatchDao batch = batchCourse.getBatch();
+        CourseDao course = batchCourse.getCourse();
 
         batch.setProgramme(null);
         batch.setReservations(null);
@@ -45,7 +44,7 @@ public record BatchCourseDTO(
 
         batchCourse.setBatch(batch);
         batchCourse.setCourse(course);
-        return new BatchCourseDTO(
+        return new BatchCourseDto(
                 batchCourse.getId(),
                 batchCourse.getVersion(),
                 batchCourse.getName(),
@@ -66,7 +65,7 @@ public record BatchCourseDTO(
         );
     }
 
-    public static void fromDTO(BatchCourseDTO value, BatchCourseDAO batchCourse) {
+    public static void fromDTO(BatchCourseDto value, BatchCourseDao batchCourse) {
         batchCourse.setId(value.id());
         batchCourse.setVersion(value.version());
         batchCourse.setName(value.name());
@@ -82,9 +81,9 @@ public record BatchCourseDTO(
         batchCourse.setDuration(value.duration());
         batchCourse.setDurationUnit(value.durationUnit());
 
-        BatchDAO batch = value.batch() != null ? value.batch() : new BatchDAO();
-        CourseDAO course = value.course() != null ? value.course() : new CourseDAO();
-        Set<BatchCoordinatorDAO> batchCoordinators = value.batchCoordinators() != null ? value.batchCoordinators() : new HashSet<>();
+        BatchDao batch = value.batch() != null ? value.batch() : new BatchDao();
+        CourseDao course = value.course() != null ? value.course() : new CourseDao();
+        Set<BatchCoordinatorDao> batchCoordinators = value.batchCoordinators() != null ? value.batchCoordinators() : new HashSet<>();
 
         batch.setBatchCourses(batch.getBatchCourses() != null ? batch.getBatchCourses() : new HashSet<>());
         course.setBatchCourses(course.getBatchCourses() != null ? course.getBatchCourses() : new HashSet<>());

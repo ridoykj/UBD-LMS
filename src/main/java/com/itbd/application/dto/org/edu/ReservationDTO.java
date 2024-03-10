@@ -1,17 +1,16 @@
 package com.itbd.application.dto.org.edu;
 
-import com.itbd.application.dao.org.edu.BatchDAO;
-import com.itbd.application.dao.org.edu.CourseDAO;
-import com.itbd.application.dao.org.edu.ReservationDAO;
-import com.itbd.application.dao.org.place.RoomDAO;
-import com.itbd.application.dao.user.InstructorDAO;
-import com.itbd.application.dao.user.person.PersonDAO;
+import com.itbd.application.dao.org.edu.BatchDao;
+import com.itbd.application.dao.org.edu.ReservationDao;
+import com.itbd.application.dao.org.place.RoomDao;
+import com.itbd.application.dao.user.InstructorDao;
+import com.itbd.application.dao.user.person.PersonDao;
 import nonapi.io.github.classgraph.json.Id;
 import org.springframework.data.annotation.Version;
 
 import java.time.LocalDate;
 
-public record ReservationDTO(
+public record ReservationDto(
         @Id Long id,
         @Version Long version,
         String name,
@@ -26,16 +25,16 @@ public record ReservationDTO(
         LocalDate startDate,
         LocalDate endDate,
         Long duration,
-        BatchDAO batch,
-        RoomDAO room,
-        InstructorDAO instructor) {
+        BatchDao batch,
+        RoomDao room,
+        InstructorDao instructor) {
 
-    public static ReservationDTO fromEntity(ReservationDAO reservation) {
-        BatchDAO batch = reservation.getBatch();
-        RoomDAO room = reservation.getRoom();
-        InstructorDAO instructor = reservation.getInstructor();
+    public static ReservationDto fromEntity(ReservationDao reservation) {
+        BatchDao batch = reservation.getBatch();
+        RoomDao room = reservation.getRoom();
+        InstructorDao instructor = reservation.getInstructor();
 
-        PersonDAO person = instructor.getPerson();
+        PersonDao person = instructor.getPerson();
         person.setAddress(null);
         person.setContact(null);
         person.setRecord(null);
@@ -55,7 +54,7 @@ public record ReservationDTO(
         reservation.setRoom(room);
         reservation.setInstructor(instructor);
 
-        return new ReservationDTO(
+        return new ReservationDto(
                 reservation.getId(),
                 reservation.getVersion(),
                 reservation.getName(),
@@ -75,7 +74,7 @@ public record ReservationDTO(
                 reservation.getInstructor());
     }
 
-    public static void fromDTO(ReservationDTO reservationDTO, ReservationDAO reservationDAO) {
+    public static void fromDTO(ReservationDto reservationDTO, ReservationDao reservationDAO) {
         reservationDAO.setId(reservationDTO.id());
         reservationDAO.setVersion(reservationDTO.version());
         reservationDAO.setName(reservationDTO.name());
@@ -91,9 +90,9 @@ public record ReservationDTO(
         reservationDAO.setEndDate(reservationDTO.endDate());
         reservationDAO.setDuration(reservationDTO.duration());
 
-        BatchDAO batch = reservationDTO.batch() != null ? reservationDTO.batch() : new BatchDAO();
-        RoomDAO room = reservationDTO.room() != null ? reservationDTO.room() : new RoomDAO();
-        InstructorDAO instructor = reservationDTO.instructor() != null ? reservationDTO.instructor() : new InstructorDAO();
+        BatchDao batch = reservationDTO.batch() != null ? reservationDTO.batch() : new BatchDao();
+        RoomDao room = reservationDTO.room() != null ? reservationDTO.room() : new RoomDao();
+        InstructorDao instructor = reservationDTO.instructor() != null ? reservationDTO.instructor() : new InstructorDao();
 
         reservationDAO.setBatch(batch);
         reservationDAO.setRoom(room);

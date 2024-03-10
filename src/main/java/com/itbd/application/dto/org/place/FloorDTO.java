@@ -1,14 +1,12 @@
 package com.itbd.application.dto.org.place;
 
-import com.itbd.application.dao.org.place.BuildingDAO;
-import com.itbd.application.dao.org.place.FloorDAO;
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotBlank;
+import com.itbd.application.dao.org.place.BuildingDao;
+import com.itbd.application.dao.org.place.FloorDao;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.data.annotation.Version;
 
-public record FloorDTO(
+public record FloorDto(
         Long id,
         @Version Long version,
         @NotNull @NotEmpty String name,
@@ -19,14 +17,14 @@ public record FloorDTO(
         String floorColor,
         String floorColorCode,
         Integer totalBlocks,
-        BuildingDAO building
+        BuildingDao building
 ) {
-    public static FloorDTO fromEntity(FloorDAO floor) {
-        BuildingDAO building = floor.getBuilding();
+    public static FloorDto fromEntity(FloorDao floor) {
+        BuildingDao building = floor.getBuilding();
         building.setSector(null);
         building.setFloors(null);
         floor.setBuilding(building);
-        return new FloorDTO(
+        return new FloorDto(
                 floor.getId(),
                 floor.getVersion(),
                 floor.getName(),
@@ -41,7 +39,7 @@ public record FloorDTO(
         );
     }
 
-    public static void fromDTO(FloorDTO value, FloorDAO floorDAO) {
+    public static void fromDTO(FloorDto value, FloorDao floorDAO) {
         floorDAO.setId(value.id());
         floorDAO.setVersion(value.version());
         floorDAO.setName(value.name());

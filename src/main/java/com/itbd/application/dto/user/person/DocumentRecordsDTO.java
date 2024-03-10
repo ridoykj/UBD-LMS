@@ -1,11 +1,11 @@
 package com.itbd.application.dto.user.person;
 
-import com.itbd.application.dao.user.person.DocumentRecordsDAO;
+import com.itbd.application.dao.user.person.DocumentRecordsDao;
 import org.springframework.data.annotation.Version;
 
 import java.time.LocalDateTime;
 
-public record DocumentRecordsDTO(
+public record DocumentRecordsDto(
         Long id,
         @Version Long version,
         Long PersonKey,
@@ -16,8 +16,8 @@ public record DocumentRecordsDTO(
         String rewardRecords,
         LocalDateTime createdAt,
         LocalDateTime updatedAt) {
-    public static DocumentRecordsDTO fromEntity(DocumentRecordsDAO document) {
-        return new DocumentRecordsDTO(
+    public static DocumentRecordsDto fromEntity(DocumentRecordsDao document) {
+        return new DocumentRecordsDto(
                 document.getId(),
                 document.getVersion(),
                 document.getPerson().getId(),
@@ -30,7 +30,7 @@ public record DocumentRecordsDTO(
                 document.getUpdatedAt());
     }
 
-    public static void fromDTO(DocumentRecordsDTO documentRecordsDTO, DocumentRecordsDAO documentRecordsDAO) {
+    public static void fromDTO(DocumentRecordsDto documentRecordsDTO, DocumentRecordsDao documentRecordsDAO) {
         documentRecordsDAO.setId(documentRecordsDTO.id());
         documentRecordsDAO.setVersion(documentRecordsDTO.version());
         documentRecordsDAO.setRecords(documentRecordsDTO.records());

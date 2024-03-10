@@ -1,24 +1,24 @@
 package com.itbd.application.dto.org.allocation;
 
 import com.itbd.application.constants.enums.CoordinatorTypeEnum;
-import com.itbd.application.dao.org.allocation.BatchCoordinatorDAO;
-import com.itbd.application.dao.org.allocation.BatchCourseDAO;
-import com.itbd.application.dao.user.InstructorDAO;
+import com.itbd.application.dao.org.allocation.BatchCoordinatorDao;
+import com.itbd.application.dao.org.allocation.BatchCourseDao;
+import com.itbd.application.dao.user.InstructorDao;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.Version;
 
-public record BatchCoordinatorDTO(
+public record BatchCoordinatorDto(
        @Id Long id,
         @Version Long version,
         CoordinatorTypeEnum type,
-        BatchCourseDAO batchCourse,
-        InstructorDAO instructor
+        BatchCourseDao batchCourse,
+        InstructorDao instructor
 ) {
 
 
-    public static BatchCoordinatorDTO fromEntity(BatchCoordinatorDAO batchCoordinator) {
-        BatchCourseDAO batchCourse = batchCoordinator.getBatchCourse();
-        InstructorDAO instructor = batchCoordinator.getInstructor();
+    public static BatchCoordinatorDto fromEntity(BatchCoordinatorDao batchCoordinator) {
+        BatchCourseDao batchCourse = batchCoordinator.getBatchCourse();
+        InstructorDao instructor = batchCoordinator.getInstructor();
 
         batchCourse.setBatch(null);
         batchCourse.setCourse(null);
@@ -31,7 +31,7 @@ public record BatchCoordinatorDTO(
         batchCoordinator.setBatchCourse(batchCourse);
         batchCoordinator.setInstructor(instructor);
 
-        return new BatchCoordinatorDTO(
+        return new BatchCoordinatorDto(
                 batchCoordinator.getId(),
                 batchCoordinator.getVersion(),
                 batchCoordinator.getType(),
@@ -40,7 +40,7 @@ public record BatchCoordinatorDTO(
         );
     }
 
-    public static void fromDTO(BatchCoordinatorDTO value, BatchCoordinatorDAO batchCoordinator) {
+    public static void fromDTO(BatchCoordinatorDto value, BatchCoordinatorDao batchCoordinator) {
         batchCoordinator.setId(value.id());
         batchCoordinator.setVersion(value.version());
         batchCoordinator.setType(value.type());

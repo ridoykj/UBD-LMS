@@ -1,18 +1,15 @@
 package com.itbd.application.dto.org.edu;
 
-import com.itbd.application.dao.org.allocation.BatchCourseDAO;
-import com.itbd.application.dao.org.edu.CourseDAO;
-import com.itbd.application.dao.org.edu.ProgrammeDAO;
-import com.itbd.application.dao.org.edu.ReservationDAO;
+import com.itbd.application.dao.org.allocation.BatchCourseDao;
+import com.itbd.application.dao.org.edu.CourseDao;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.data.annotation.Version;
 
 import java.math.BigDecimal;
-import java.util.List;
 import java.util.Set;
 
-public record CourseDTO(
+public record CourseDto(
         Long id,
         @Version Long version,
         @NotNull @NotEmpty String name,
@@ -27,12 +24,12 @@ public record CourseDTO(
         String subCategory,
         BigDecimal duration,
         String durationUnit,
-        Set<BatchCourseDAO> batchCourses) {
+        Set<BatchCourseDao> batchCourses) {
 
 
-    public static CourseDTO fromEntity(CourseDAO course) {
+    public static CourseDto fromEntity(CourseDao course) {
         course.setBatchCourses(null);
-        return new CourseDTO(
+        return new CourseDto(
                 course.getId(),
                 course.getVersion(),
                 course.getName(),
@@ -51,7 +48,7 @@ public record CourseDTO(
                );
     }
 
-    public static void fromDTO(CourseDTO courseDTO, CourseDAO courseDAO) {
+    public static void fromDTO(CourseDto courseDTO, CourseDao courseDAO) {
         courseDAO.setId(courseDTO.id());
         courseDAO.setVersion(courseDTO.version());
         courseDAO.setName(courseDTO.name());

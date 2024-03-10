@@ -1,25 +1,25 @@
 package com.itbd.application.dto.user;
 
-import com.itbd.application.dao.user.RolesDAO;
-import com.itbd.application.dao.user.UserDAO;
+import com.itbd.application.dao.resources.RolesDao;
+import com.itbd.application.dao.user.UserDao;
 import org.springframework.data.annotation.Version;
 
 import java.time.LocalDateTime;
 import java.util.Set;
 
-public record UserDTO(
+public record UserDto(
         Long id,
         @Version Long version,
         String username,
         String password,
         String primaryPhone,
         String primaryEmail,
-        Set<RolesDAO> roles,
+        Set<RolesDao> roles,
         String permissions,
         LocalDateTime createdAt,
         LocalDateTime updatedAt) {
-    public static UserDTO fromEntity(UserDAO user) {
-        return new UserDTO(
+    public static UserDto fromEntity(UserDao user) {
+        return new UserDto(
                 user.getId(),
                 user.getVersion(),
                 user.getUsername(),
@@ -32,7 +32,7 @@ public record UserDTO(
                 user.getUpdatedAt());
     }
 
-    public static void fromDTO(UserDTO userDTO, UserDAO userDAO) {
+    public static void fromDTO(UserDto userDTO, UserDao userDAO) {
         userDAO.setId(userDTO.id());
         userDAO.setVersion(userDTO.version());
         userDAO.setUsername(userDTO.username());

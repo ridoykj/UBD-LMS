@@ -1,9 +1,9 @@
 package com.itbd.application.dto.org.place;
 
 import com.itbd.application.constants.enums.BuildingTypeEnum;
-import com.itbd.application.dao.org.place.BuildingDAO;
-import com.itbd.application.dao.org.place.FloorDAO;
-import com.itbd.application.dao.org.place.SectorDAO;
+import com.itbd.application.dao.org.place.BuildingDao;
+import com.itbd.application.dao.org.place.FloorDao;
+import com.itbd.application.dao.org.place.SectorDao;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.data.annotation.Version;
@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
 
-public record BuildingDTO(
+public record BuildingDto(
         Long id,
         @Version Long version,
         @NotNull @NotEmpty String name,
@@ -27,16 +27,16 @@ public record BuildingDTO(
         String buildingColor,
         String buildingColorCode,
         String pincode,
-        List<FloorDAO> floors,
-        SectorDAO sector) {
+        List<FloorDao> floors,
+        SectorDao sector) {
 
-    public static BuildingDTO fromEntity(BuildingDAO building) {
-        SectorDAO sector = building.getSector();
+    public static BuildingDto fromEntity(BuildingDao building) {
+        SectorDao sector = building.getSector();
         sector.setBuildings(null);
         building.setSector(sector);
         building.setFloors(null);
 
-        return new BuildingDTO(
+        return new BuildingDto(
                 building.getId(),
                 building.getVersion(),
                 building.getName(),
@@ -57,7 +57,7 @@ public record BuildingDTO(
                 building.getSector());
     }
 
-    public static void fromDTO(BuildingDTO buildingDTO, BuildingDAO buildingDAO) {
+    public static void fromDTO(BuildingDto buildingDTO, BuildingDao buildingDAO) {
         buildingDAO.setId(buildingDTO.id());
         buildingDAO.setVersion(buildingDTO.version());
         buildingDAO.setName(buildingDTO.name());
