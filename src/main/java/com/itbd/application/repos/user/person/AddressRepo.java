@@ -1,13 +1,13 @@
 package com.itbd.application.repos.user.person;
 
-import com.itbd.application.dao.user.person.AddressDAO;
-import com.itbd.application.dao.user.person.PersonDAO;
+import com.itbd.application.dao.user.person.AddressDao;
+import com.itbd.application.dao.user.person.PersonDao;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;
 
-public interface AddressRepo extends JpaRepository<AddressDAO, Long> {
+public interface AddressRepo extends JpaRepository<AddressDao, Long> {
 
-    Optional<AddressDAO> findByPerson(PersonDAO person);
+    Optional<AddressDao> findByPerson(PersonDao person);
     // Set<AddressDAO> findByPersonKey(PersonDAO person);
 }

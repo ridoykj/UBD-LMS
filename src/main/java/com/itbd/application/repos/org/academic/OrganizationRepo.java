@@ -1,12 +1,12 @@
 package com.itbd.application.repos.org.academic;
 
-import com.itbd.application.dao.custom.IDashBoardRptDAO;
-import com.itbd.application.dao.org.academic.OrganizationDAO;
+import com.itbd.application.dao.custom.IDashBoardRptDao;
+import com.itbd.application.dao.org.academic.OrganizationDao;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 
-public interface OrganizationRepo extends JpaRepository<OrganizationDAO, Long>, JpaSpecificationExecutor<OrganizationDAO> {
+public interface OrganizationRepo extends JpaRepository<OrganizationDao, Long>, JpaSpecificationExecutor<OrganizationDao> {
 
     @Query(value = """
             select * from (
@@ -21,5 +21,5 @@ public interface OrganizationRepo extends JpaRepository<OrganizationDAO, Long>, 
             (select COUNT(*)  as courses from t_edu_course  ) as courses,
             (select COUNT(*)  as coordinators from t_org_instructor) as coordinators
             )""", nativeQuery = true)
-    IDashBoardRptDAO getDashBoardRpt();
+    IDashBoardRptDao getDashBoardRpt();
 }

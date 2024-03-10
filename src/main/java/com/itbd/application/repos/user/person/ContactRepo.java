@@ -1,13 +1,13 @@
 package com.itbd.application.repos.user.person;
 
-import com.itbd.application.dao.user.person.ContactDAO;
-import com.itbd.application.dao.user.person.PersonDAO;
+import com.itbd.application.dao.user.person.ContactDao;
+import com.itbd.application.dao.user.person.PersonDao;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;
 
 
-public interface ContactRepo extends JpaRepository<ContactDAO, Long> {
+public interface ContactRepo extends JpaRepository<ContactDao, Long> {
 
-    Optional<ContactDAO> findByPerson(PersonDAO p);
+    Optional<ContactDao> findByPerson(PersonDao p);
 }
