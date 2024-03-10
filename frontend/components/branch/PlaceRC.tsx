@@ -1,13 +1,13 @@
 
 import { ComboBox, ComboBoxDataProviderCallback, ComboBoxDataProviderParams } from '@hilla/react-components/ComboBox.js';
 import '@vaadin/icons';
-import BuildingDAO from 'Frontend/generated/com/itbd/application/dao/org/place/BuildingDAO';
-import FloorDAO from 'Frontend/generated/com/itbd/application/dao/org/place/FloorDAO';
-import RoomDAO from 'Frontend/generated/com/itbd/application/dao/org/place/RoomDAO';
-import BuildingDTOModel from 'Frontend/generated/com/itbd/application/dto/org/place/BuildingDTOModel';
-import FloorDTOModel from 'Frontend/generated/com/itbd/application/dto/org/place/FloorDTOModel';
-import RoomDTOModel from 'Frontend/generated/com/itbd/application/dto/org/place/RoomDTOModel';
-import SectorDTOModel from 'Frontend/generated/com/itbd/application/dto/org/place/SectorDTOModel';
+import BuildingDao from 'Frontend/generated/com/itbd/application/dao/org/place/BuildingDao';
+import FloorDao from 'Frontend/generated/com/itbd/application/dao/org/place/FloorDao';
+import RoomDao from 'Frontend/generated/com/itbd/application/dao/org/place/RoomDao';
+import BuildingDtoModel from 'Frontend/generated/com/itbd/application/dto/org/place/BuildingDtoModel';
+import FloorDtoModel from 'Frontend/generated/com/itbd/application/dto/org/place/FloorDtoModel';
+import RoomDtoModel from 'Frontend/generated/com/itbd/application/dto/org/place/RoomDtoModel';
+import SectorDtoModel from 'Frontend/generated/com/itbd/application/dto/org/place/SectorDtoModel';
 import PropertyStringFilter from 'Frontend/generated/dev/hilla/crud/filter/PropertyStringFilter';
 import Matcher from 'Frontend/generated/dev/hilla/crud/filter/PropertyStringFilter/Matcher';
 import { BuildingDtoCrudService, FloorDtoCrudService, RoomDtoCrudService, SectorDtoCrudService } from 'Frontend/generated/endpoints';
@@ -26,10 +26,10 @@ type VisibleFields = {
 };
 
 export type PlaceCombobox = {
-  sectorFilter?: BuildingDAO,
-  buildingFilter?: BuildingDAO,
-  floorFilter?: FloorDAO,
-  roomFilter?: RoomDAO,
+  sectorFilter?: BuildingDao,
+  buildingFilter?: BuildingDao,
+  floorFilter?: FloorDao,
+  roomFilter?: RoomDao,
 }
 
 type PlaceProps = {
@@ -46,7 +46,7 @@ export default function PlaceRC({ visibleFields, placeProps, }: {
     () =>
       async (
         params: ComboBoxDataProviderParams,
-        callback: ComboBoxDataProviderCallback<SectorDTOModel>
+        callback: ComboBoxDataProviderCallback<SectorDtoModel>
       ) => {
         const { pagination, filters } = comboBoxLazyFilter(params, 'and', [{
           '@type': 'propertyString',
@@ -66,7 +66,7 @@ export default function PlaceRC({ visibleFields, placeProps, }: {
     () =>
       async (
         params: ComboBoxDataProviderParams,
-        callback: ComboBoxDataProviderCallback<BuildingDTOModel>
+        callback: ComboBoxDataProviderCallback<BuildingDtoModel>
       ) => {
         const child: PropertyStringFilter[] = [
           {
@@ -94,7 +94,7 @@ export default function PlaceRC({ visibleFields, placeProps, }: {
     () =>
       async (
         params: ComboBoxDataProviderParams,
-        callback: ComboBoxDataProviderCallback<FloorDTOModel>
+        callback: ComboBoxDataProviderCallback<FloorDtoModel>
       ) => {
         const child: PropertyStringFilter[] = [
           {
@@ -122,7 +122,7 @@ export default function PlaceRC({ visibleFields, placeProps, }: {
     () =>
       async (
         params: ComboBoxDataProviderParams,
-        callback: ComboBoxDataProviderCallback<RoomDTOModel>
+        callback: ComboBoxDataProviderCallback<RoomDtoModel>
       ) => {
         const child: PropertyStringFilter[] = [
           {

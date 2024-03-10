@@ -1,18 +1,18 @@
 
 import { ComboBox, ComboBoxDataProviderCallback, ComboBoxDataProviderParams } from '@hilla/react-components/ComboBox.js';
 import '@vaadin/icons';
-import OrganizationDAO from 'Frontend/generated/com/itbd/application/dao/org/academic/OrganizationDAO';
-import BatchCourseDAO from 'Frontend/generated/com/itbd/application/dao/org/allocation/BatchCourseDAO';
-import BatchDAO from 'Frontend/generated/com/itbd/application/dao/org/edu/BatchDAO';
-import CourseDAO from 'Frontend/generated/com/itbd/application/dao/org/edu/CourseDAO';
-import DepartmentDAO from 'Frontend/generated/com/itbd/application/dao/org/edu/DepartmentDAO';
-import ProgrammeDAO from 'Frontend/generated/com/itbd/application/dao/org/edu/ProgrammeDAO';
-import OrganizationDTOModel from 'Frontend/generated/com/itbd/application/dto/org/academic/OrganizationDTOModel';
-import BatchCourseDTOModel from 'Frontend/generated/com/itbd/application/dto/org/allocation/BatchCourseDTOModel';
-import BatchDTOModel from 'Frontend/generated/com/itbd/application/dto/org/edu/BatchDTOModel';
-import CourseDTOModel from 'Frontend/generated/com/itbd/application/dto/org/edu/CourseDTOModel';
-import DepartmentDTOModel from 'Frontend/generated/com/itbd/application/dto/org/edu/DepartmentDTOModel';
-import ProgrammeDTOModel from 'Frontend/generated/com/itbd/application/dto/org/edu/ProgrammeDTOModel';
+import OrganizationDao from 'Frontend/generated/com/itbd/application/dao/org/academic/OrganizationDao';
+import BatchCourseDao from 'Frontend/generated/com/itbd/application/dao/org/allocation/BatchCourseDao';
+import BatchDao from 'Frontend/generated/com/itbd/application/dao/org/edu/BatchDao';
+import CourseDao from 'Frontend/generated/com/itbd/application/dao/org/edu/CourseDao';
+import DepartmentDao from 'Frontend/generated/com/itbd/application/dao/org/edu/DepartmentDao';
+import ProgrammeDao from 'Frontend/generated/com/itbd/application/dao/org/edu/ProgrammeDao';
+import OrganizationDtoModel from 'Frontend/generated/com/itbd/application/dto/org/academic/OrganizationDtoModel';
+import BatchCourseDtoModel from 'Frontend/generated/com/itbd/application/dto/org/allocation/BatchCourseDtoModel';
+import BatchDtoModel from 'Frontend/generated/com/itbd/application/dto/org/edu/BatchDtoModel';
+import CourseDtoModel from 'Frontend/generated/com/itbd/application/dto/org/edu/CourseDtoModel';
+import DepartmentDtoModel from 'Frontend/generated/com/itbd/application/dto/org/edu/DepartmentDtoModel';
+import ProgrammeDtoModel from 'Frontend/generated/com/itbd/application/dto/org/edu/ProgrammeDtoModel';
 import PropertyStringFilter from 'Frontend/generated/dev/hilla/crud/filter/PropertyStringFilter';
 import Matcher from 'Frontend/generated/dev/hilla/crud/filter/PropertyStringFilter/Matcher';
 import { BatchCourseDtoCrudService, BatchDtoCrudService, CourseDtoCrudService, DepartmentDtoCrudService, OrganizationDtoCrudService, ProgrammeDtoCrudService } from 'Frontend/generated/endpoints';
@@ -33,12 +33,12 @@ type VisibleFields = {
 };
 
 export type BranchCombobox = {
-  organizationFilter?: OrganizationDAO,
-  departmentFilter?: DepartmentDAO,
-  programmeFilter?: ProgrammeDAO,
-  batchFilter?: BatchDAO,
-  semesterFilter?: BatchCourseDAO,
-  courseFilter?: CourseDAO
+  organizationFilter?: OrganizationDao,
+  departmentFilter?: DepartmentDao,
+  programmeFilter?: ProgrammeDao,
+  batchFilter?: BatchDao,
+  semesterFilter?: BatchCourseDao,
+  courseFilter?: CourseDao
 }
 
 type BranchProps = {
@@ -56,7 +56,7 @@ export default function BranchRC({ visibleFields, branchProps, }: {
     () =>
       async (
         params: ComboBoxDataProviderParams,
-        callback: ComboBoxDataProviderCallback<OrganizationDTOModel>
+        callback: ComboBoxDataProviderCallback<OrganizationDtoModel>
       ) => {
         const { pagination, filters } = comboBoxLazyFilter(params, 'and', [{
           '@type': 'propertyString',
@@ -76,7 +76,7 @@ export default function BranchRC({ visibleFields, branchProps, }: {
     () =>
       async (
         params: ComboBoxDataProviderParams,
-        callback: ComboBoxDataProviderCallback<DepartmentDTOModel>
+        callback: ComboBoxDataProviderCallback<DepartmentDtoModel>
       ) => {
         const child: PropertyStringFilter[] = [
           {
@@ -103,7 +103,7 @@ export default function BranchRC({ visibleFields, branchProps, }: {
     () =>
       async (
         params: ComboBoxDataProviderParams,
-        callback: ComboBoxDataProviderCallback<ProgrammeDTOModel>
+        callback: ComboBoxDataProviderCallback<ProgrammeDtoModel>
       ) => {
         const child: PropertyStringFilter[] = [
           {
@@ -132,7 +132,7 @@ export default function BranchRC({ visibleFields, branchProps, }: {
     () =>
       async (
         params: ComboBoxDataProviderParams,
-        callback: ComboBoxDataProviderCallback<BatchDTOModel>
+        callback: ComboBoxDataProviderCallback<BatchDtoModel>
       ) => {
         const child: PropertyStringFilter[] = [
           {
@@ -159,7 +159,7 @@ export default function BranchRC({ visibleFields, branchProps, }: {
     () =>
       async (
         params: ComboBoxDataProviderParams,
-        callback: ComboBoxDataProviderCallback<BatchCourseDTOModel>
+        callback: ComboBoxDataProviderCallback<BatchCourseDtoModel>
       ) => {
 
         const child: PropertyStringFilter[] = [
@@ -180,9 +180,9 @@ export default function BranchRC({ visibleFields, branchProps, }: {
         const { pagination, filters } = comboBoxLazyFilter(params, 'and', child);
         BatchCourseDtoCrudService.list(pagination, filters).then((result: any) => {
           // console.log('semesterDataProvider', result);
-          const putSemester: BatchCourseDTOModel[] = [];
-          result.map((item: BatchCourseDTOModel) => {
-            if (putSemester.findIndex((i: BatchCourseDTOModel) => i.semester === item.semester) === -1) {
+          const putSemester: BatchCourseDtoModel[] = [];
+          result.map((item: BatchCourseDtoModel) => {
+            if (putSemester.findIndex((i: BatchCourseDtoModel) => i.semester === item.semester) === -1) {
               putSemester.push(item);
             }
           });
@@ -197,7 +197,7 @@ export default function BranchRC({ visibleFields, branchProps, }: {
     () =>
       async (
         params: ComboBoxDataProviderParams,
-        callback: ComboBoxDataProviderCallback<CourseDTOModel>
+        callback: ComboBoxDataProviderCallback<CourseDtoModel>
       ) => {
         const child: PropertyStringFilter[] = [
           {
@@ -235,11 +235,11 @@ export default function BranchRC({ visibleFields, branchProps, }: {
     }));
 
 
-    // department?.setDepartmentFilter((dr) => ({} as DepartmentDAO)); // Reset department combobox   
-    // programme?.setProgrammeFilter((d) => ({} as ProgrammeDAO)); // Reset programme combobox   
-    // batch?.setBatchFilter((d) => ({} as BatchDAO)); // Reset batch combobox
-    // course?.setCourseFilter((d) => ({} as CourseDAO)); // Reset course combobox
-    // semester?.setSemesterFilter((d) => ({} as BatchCourseDAO)); // Reset semester combobox
+    // department?.setDepartmentFilter((dr) => ({} as DepartmentDao)); // Reset department combobox   
+    // programme?.setProgrammeFilter((d) => ({} as ProgrammeDao)); // Reset programme combobox   
+    // batch?.setBatchFilter((d) => ({} as BatchDao)); // Reset batch combobox
+    // course?.setCourseFilter((d) => ({} as CourseDao)); // Reset course combobox
+    // semester?.setSemesterFilter((d) => ({} as BatchCourseDao)); // Reset semester combobox
 
     // organization?.setOrganizationFilter((o) => selectedItem);
   };
@@ -257,10 +257,10 @@ export default function BranchRC({ visibleFields, branchProps, }: {
     }));
 
 
-    // programme?.setProgrammeFilter((d) => ({} as ProgrammeDAO)); // Reset programme combobox   
-    // batch?.setBatchFilter((d) => ({} as BatchDAO)); // Reset batch combobox
-    // course?.setCourseFilter((d) => ({} as CourseDAO)); // Reset course combobox
-    // semester?.setSemesterFilter((d) => ({} as BatchCourseDAO)); // Reset semester combobox
+    // programme?.setProgrammeFilter((d) => ({} as ProgrammeDao)); // Reset programme combobox   
+    // batch?.setBatchFilter((d) => ({} as BatchDao)); // Reset batch combobox
+    // course?.setCourseFilter((d) => ({} as CourseDao)); // Reset course combobox
+    // semester?.setSemesterFilter((d) => ({} as BatchCourseDao)); // Reset semester combobox
     // department?.setDepartmentFilter((d) => selectedItem);
   };
 
@@ -277,9 +277,9 @@ export default function BranchRC({ visibleFields, branchProps, }: {
     }));
 
 
-    // batch?.setBatchFilter((d) => ({} as BatchDAO)); // Reset batch combobox
-    // course?.setCourseFilter((d) => ({} as CourseDAO)); // Reset course combobox
-    // semester?.setSemesterFilter((d) => ({} as BatchCourseDAO)); // Reset semester combobox
+    // batch?.setBatchFilter((d) => ({} as BatchDao)); // Reset batch combobox
+    // course?.setCourseFilter((d) => ({} as CourseDao)); // Reset course combobox
+    // semester?.setSemesterFilter((d) => ({} as BatchCourseDao)); // Reset semester combobox
 
     // programme?.setProgrammeFilter((d) => selectedItem);
   };
@@ -294,8 +294,8 @@ export default function BranchRC({ visibleFields, branchProps, }: {
       batchFilter: selectedItem,
     }));
 
-    // course?.setCourseFilter((d) => ({} as CourseDAO)); // Reset course combobox
-    // semester?.setSemesterFilter((d) => ({} as BatchCourseDAO)); // Reset semester combobox
+    // course?.setCourseFilter((d) => ({} as CourseDao)); // Reset course combobox
+    // semester?.setSemesterFilter((d) => ({} as BatchCourseDao)); // Reset semester combobox
 
     // batch?.setBatchFilter((d) => selectedItem);
   };
