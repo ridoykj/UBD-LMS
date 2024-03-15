@@ -17,14 +17,17 @@ public record AppPermissionDto(
         AppResourceDao resource
 ) {
     public static AppPermissionDto fromEntity(AppPermissionDao appPermission) {
-        RolesDao role = appPermission.getRole();
-        role.setUsers(null);
-        role.setPermissions(null);
-        appPermission.setRole(role);
+//        RolesDao role = appPermission.getRole();
+//        role.setUsers(null);
+//        role.setPermissions(null);
+//        appPermission.setRole(role);
 
-        AppResourceDao resource = appPermission.getResource();
-        resource.setPermissions(null);
-        appPermission.setResource(resource);
+//        AppResourceDao resource = appPermission.getResource();
+//        resource.setPermissions(null);
+//        appPermission.setResource(resource);
+
+        appPermission.setRole(null);
+        appPermission.setResource(null);
         return new AppPermissionDto(
                 appPermission.getResourceId(),
                 appPermission.getRoleId(),
@@ -35,8 +38,8 @@ public record AppPermissionDto(
     }
 
     public static void fromDTO(AppPermissionDto appPermissionDTO, AppPermissionDao appPermissionDAO) {
-        appPermissionDAO.setResourceId(appPermissionDTO.resourceId());
-        appPermissionDAO.setRoleId(appPermissionDTO.roleId());
+//        appPermissionDAO.setResourceId(appPermissionDTO.resourceId());
+//        appPermissionDAO.setRoleId(appPermissionDTO.roleId());
         appPermissionDAO.setVersion(appPermissionDTO.version());
         appPermissionDAO.setAllowed(appPermissionDTO.allowed());
 //        appPermissionDAO.setRole(appPermissionDTO.role());
