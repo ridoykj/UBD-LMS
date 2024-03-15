@@ -30,7 +30,5 @@ public record OccupationDto(
         occupationDAO.setVersion(occupationDTO.version());
         occupationDAO.setRecords(occupationDTO.records());
         occupationDAO.setHasOccupation(occupationDTO.hasOccupation());
-        occupationDAO.setCreatedAt(occupationDTO.createdAt());
-        occupationDAO.setUpdatedAt(occupationDTO.updatedAt());
     }
 }
