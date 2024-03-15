@@ -35,7 +35,5 @@ public record MedicalDto(
         medicalDAO.setHeight(medicalDTO.height());
         medicalDAO.setChildren(medicalDTO.children());
         medicalDAO.setGender(medicalDTO.gender());
-        medicalDAO.setCreatedAt(medicalDTO.createdAt());
-        medicalDAO.setUpdatedAt(medicalDTO.updatedAt());
     }
 }
