@@ -40,7 +40,6 @@ public class ContactDtoCrudService implements CrudService<ContactDto, Long> {
                 : new ContactDao();
         ContactDto.fromDTO(value, person);
 
-        person.setRecordComment(check ? "UPDATE" : "NEW");
         return ContactDto.fromEntity(contactRepo.save(person));
     }
 
