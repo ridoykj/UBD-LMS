@@ -88,9 +88,6 @@ public record PersonDto(
         address.setPerson(personDAO);
         instructor.setPerson(personDAO);
 
-        personDAO.setCreatedAt(personDTO.createdAt());
-        personDAO.setUpdatedAt(personDTO.updatedAt());
-
         personDAO.setAddress(address);
         personDAO.setInstructor(instructor);
     }
