@@ -1,5 +1,10 @@
 package com.itbd.application.controllers;
 
+import com.itbd.application.annotations.AppAccess;
+import com.itbd.application.annotations.RBACAccess;
+import com.itbd.application.constants.enums.appresource.AppPermissionsEnum;
+import com.itbd.application.constants.enums.appresource.AppResourcesEnum;
+import jakarta.annotation.security.RolesAllowed;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Value;
@@ -21,6 +26,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping(value = "/v1/content")
+@RBACAccess
 @Slf4j
 public class DownloadController {
     @Value("${itbd.server.file.source}")
@@ -39,6 +45,8 @@ public class DownloadController {
 
 
     @GetMapping(value = "/byte")
+    @RolesAllowed("USER_STREAM_DOWNLOAD:DOWNLOAD")
+    @AppAccess(resource = AppResourcesEnum.USER_STREAM_DOWNLOAD, action = AppPermissionsEnum.DOWNLOAD, name = "Download", description = "Download file")
     public ResponseEntity<Resource> getByte(@RequestParam String filePath) throws IOException {
 //        log.info("Image request Found!");
         Path path = Path.of(fileSource, urlBase64Decode(filePath));
