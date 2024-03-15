@@ -30,20 +30,6 @@ public record RoleDto(
         rolesDAO.setVersion(roleDTO.version());
         rolesDAO.setName(roleDTO.name());
         rolesDAO.setDescription(roleDTO.description());
-//        rolesDAO.setPermissions(roleDTO.permissions());
-
-//        Set<AppPermissionDao> permissions = roleDTO.permissions().stream().map(appPermissionDao -> {
-//            appPermissionDao.setRole(rolesDAO);
-//            appPermissionDao.setResource(appPermissionDao.getResource());
-//            return appPermissionDao;
-//        }).collect(Collectors.toSet());
-
-//        Set<AppPermissionDao> permissions = roleDTO.permissions().stream().map(appPermissionDao -> {
-////            appPermissionDao.setRole(rolesDAO);  // modify the role property here
-//            return appPermissionDao;
-//        }).collect(Collectors.toSet());
-//        rolesDAO.setPermissions(permissions);
         rolesDAO.setPermissions(roleDTO.permissions());
-//        rolesDAO.setPermissions(roleDTO.permissions());
     }
 }
