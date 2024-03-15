@@ -71,7 +71,6 @@ public class PersonMargeDtoCrudService implements CrudService<PersonMargeDto, Lo
                 ? personRepo.getReferenceById(value.id())
                 : new PersonDao();
 
-        person.setRecordComment(check ? "UPDATE" : "NEW");
         PersonMargeDto.fromDTO(value, person);
         return PersonMargeDto.fromEntity(personRepo.save(person));
     }
