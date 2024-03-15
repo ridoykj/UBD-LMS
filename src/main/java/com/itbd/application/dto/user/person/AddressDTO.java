@@ -36,7 +36,5 @@ public record AddressDto(
         addressDAO.setHomeLocation(addressDTO.homeLocation());
         addressDAO.setPresentAddress(addressDTO.presentAddress());
         addressDAO.setPermanentAddress(addressDTO.permanentAddress());
-        addressDAO.setCreatedAt(addressDTO.createdAt());
-        addressDAO.setUpdatedAt(addressDTO.updatedAt());
     }
 }
