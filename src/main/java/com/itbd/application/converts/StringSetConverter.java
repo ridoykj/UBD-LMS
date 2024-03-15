@@ -27,7 +27,7 @@ public class StringSetConverter implements AttributeConverter<Set<String>, Strin
     @Override
     public Set<String> convertToEntityAttribute(String string) {
         // Convert JSON string back to list
-        if (string == null) {
+        if (string == null || string.isEmpty()) {
             return Collections.emptySet();
         }
         return Stream.of(string.split(",")).collect(Collectors.toSet());
