@@ -37,6 +37,6 @@ public class RolesDao extends AbstractEntity<Long> {
     @JoinTable(name = "t_map_user_roles", joinColumns = @JoinColumn(name = "role_id"), inverseJoinColumns = @JoinColumn(name = "user_id"))
     private Set<UserDao> users = new HashSet<>();
 
-    @OneToMany(mappedBy = "role", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "role", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<AppPermissionDao> permissions = new HashSet<>();
 }
