@@ -46,9 +46,10 @@ public class AppPermissionDtoCrudService implements CrudService<AppPermissionDto
     @Override
     @Transactional
     public @Nullable AppPermissionDto save(AppPermissionDto value) {
-//        boolean check = value.resourceId() != null && value.roleId() != null && !value.resourceId().isEmpty() && value.roleId() > 0;
+        boolean check = value.resourceId() != null && value.roleId() != null && !value.resourceId().isEmpty() && value.roleId() > 0;
         AppPermissionKey key = new AppPermissionKey(value.resourceId(), value.roleId());
-        AppPermissionDao person = permissionRepo.findById(key).orElseGet(AppPermissionDao::new);
+//        AppPermissionDao person = permissionRepo.findById(key).orElseGet(AppPermissionDao::new);
+        AppPermissionDao person = check ? permissionRepo.getReferenceById(key) : new AppPermissionDao();
 
         // person.setRecordComment(check ? "UPDATE" : "NEW");
         AppPermissionDto.fromDTO(value, person);
