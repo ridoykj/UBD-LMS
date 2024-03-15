@@ -41,7 +41,5 @@ public record UserDto(
         userDAO.setPrimaryEmail(userDTO.primaryEmail());
         userDAO.setRoles(userDTO.roles());
         userDAO.setPermissions(userDTO.permissions());
-        userDAO.setCreatedAt(userDTO.createdAt());
-        userDAO.setUpdatedAt(userDTO.updatedAt());
     }
 }
