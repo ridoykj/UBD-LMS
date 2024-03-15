@@ -65,28 +65,6 @@ public class RolesDtoCrudService implements CrudService<RoleDto, Long> {
                 .toList();
     }
 
-    public @Nullable RoleDto get(Long id) {
-        Optional<RolesDao> roleOptional = rolesRepo.findById(id);
-        if (roleOptional.isPresent()) {
-            RolesDao role = roleOptional.get();
-            role.setUsers(null);
-            Set<AppPermissionDao> permissions = permissionRepo.findByRoleId(id);
-            role.setPermissions(processRole(permissions));
-            return RoleDto.fromEntity(role);
-        }
-        return null;
-    }
-
-    private Set<AppPermissionDao> processRole(Set<AppPermissionDao> permissions) {
-        return permissions.stream().map(p -> {
-            AppResourceDao aE = p.getResource();
-            aE.setPermissions(null);
-            p.setRole(null);
-            p.setResource(aE);
-            return p;
-        }).collect(Collectors.toSet());
-    }
-
     @Override
     @Transactional
     public @Nullable RoleDto save(RoleDto value) {
@@ -97,10 +75,7 @@ public class RolesDtoCrudService implements CrudService<RoleDto, Long> {
 
         // person.setRecordComment(check ? "UPDATE" : "NEW");
         RoleDto.fromDTO(value, role);
-
-        RolesDao savedRole = rolesRepo.save(role);
-//        processRole(savedRole.getPermissions());
-        return RoleDto.fromEntity(savedRole);
+        return RoleDto.fromEntity(rolesRepo.save(role));
     }
 
     @Override
@@ -108,8 +83,22 @@ public class RolesDtoCrudService implements CrudService<RoleDto, Long> {
         rolesRepo.deleteById(id);
     }
 
-//    private void initResource(RolesDao roles) {
-//        Set<AppPermissionDao> permissions = resourceRepo.fin(roles.getId());
-//        roles.setPermissions(permissions);
-//    }
+    public @Nullable RoleDto get(Long id) {
+        Optional<RolesDao> roleOptional = rolesRepo.findById(id);
+        if (roleOptional.isPresent()) {
+            RolesDao role = roleOptional.get();
+            role.setUsers(null);
+            Set<AppPermissionDao> permissions = permissionRepo.findByRoleId(id).stream().map(p -> {
+                AppResourceDao aE = p.getResource();
+                aE.setPermissions(null);
+                p.setRole(null);
+                p.setResource(aE);
+                return p;
+            }).collect(Collectors.toSet());
+
+            role.setPermissions(permissions);
+            return RoleDto.fromEntity(role);
+        }
+        return null;
+    }
 }
