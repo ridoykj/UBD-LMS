@@ -41,7 +41,7 @@ const ResourcesView = () => {
     return (
       <>
         <AutoGrid service={AppResourceDtoCrudService} model={AppResourceDtoModel} ref={autoGridRef}
-          visibleColumns={['resourceId', 'name', 'description',]}
+          visibleColumns={['resourceId', 'name', 'actions', 'description',]}
           selectedItems={selectedResourceItems}
           theme="row-stripes"
           columnOptions={{
@@ -50,6 +50,9 @@ const ResourcesView = () => {
               resizable: true,
             }, 'name': {
               header: 'Name',
+              resizable: true,
+            }, 'actions': {
+              header: 'Actions',
               resizable: true,
             }, 'description': {
               header: 'Description',
@@ -84,7 +87,6 @@ const ResourcesView = () => {
         <FormLayout responsiveSteps={responsiveSteps} className="w-fit h-fit p-2">
           <TextField label={'Name'}  {...{ colspan: 2 }} {...field(model.name)} />
           <TextArea label={'Building Type'}  {...{ colspan: 1 }} {...field(model.description)} />
-
         </FormLayout>
       </>
     );
