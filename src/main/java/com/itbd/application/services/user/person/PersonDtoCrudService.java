@@ -72,7 +72,6 @@ public class PersonDtoCrudService implements CrudService<PersonDto, Long> {
 
         PersonDto.fromDTO(value, person);
 
-        person.setRecordComment(check ? "UPDATE" : "NEW");
         return PersonDto.fromEntity(personRepo.save(person));
     }
 
