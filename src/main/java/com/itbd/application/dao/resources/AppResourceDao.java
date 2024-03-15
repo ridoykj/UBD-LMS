@@ -26,7 +26,7 @@ public class AppResourceDao extends AbstractEntity<Long> {
     @Column(name = "id_app_resource_ver", nullable = false)
     private Long version;
 
-    @Column(name = "tx_name", nullable = false, unique = true, updatable = false)
+    @Column(name = "tx_name", nullable = false)
     private String name;
 
     @Convert(converter = StringSetConverter.class)
