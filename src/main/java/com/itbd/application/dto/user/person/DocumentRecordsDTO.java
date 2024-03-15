@@ -38,8 +38,5 @@ public record DocumentRecordsDto(
         documentRecordsDAO.setNationalRecords(documentRecordsDTO.nationalRecords());
         documentRecordsDAO.setMedicalRecords(documentRecordsDTO.medicalRecords());
         documentRecordsDAO.setEmploymentRecords(documentRecordsDTO.rewardRecords());
-        documentRecordsDAO.setCreatedAt(documentRecordsDTO.createdAt());
-        documentRecordsDAO.setUpdatedAt(documentRecordsDTO.updatedAt());
-
     }
 }
