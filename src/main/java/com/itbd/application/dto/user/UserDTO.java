@@ -2,6 +2,7 @@ package com.itbd.application.dto.user;
 
 import com.itbd.application.dao.resources.RolesDao;
 import com.itbd.application.dao.user.UserDao;
+import com.itbd.application.dao.user.person.PersonDao;
 import org.springframework.data.annotation.Version;
 
 import java.time.LocalDateTime;
@@ -19,6 +20,10 @@ public record UserDto(
         LocalDateTime createdAt,
         LocalDateTime updatedAt) {
     public static UserDto fromEntity(UserDao user) {
+//        RolesDao roles = user.getRoles().stream().findFirst().orElse(null);
+        PersonDao person = user.getPerson();
+        user.setRoles(null);
+        user.setPerson(person);
         return new UserDto(
                 user.getId(),
                 user.getVersion(),
