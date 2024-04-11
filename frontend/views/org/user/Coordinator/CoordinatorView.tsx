@@ -13,7 +13,6 @@ import GenderEnum from "Frontend/generated/com/itbd/application/constants/enums/
 import InstructorDto from "Frontend/generated/com/itbd/application/dto/user/instructor/InstructorDto";
 import InstructorDtoModel from "Frontend/generated/com/itbd/application/dto/user/instructor/InstructorDtoModel";
 import React, { useState } from "react";
-import { Resizable, ResizeCallbackData } from 'react-resizable';
 
 import { Upload, UploadSuccessEvent } from "@hilla/react-components/Upload.js";
 import SideCrudRC from "Frontend/components/layout/splitlayout/SideCrudRC";
@@ -54,10 +53,6 @@ const CoordinatorView = () => {
 
     function showSidebarSlide() {
         const [width, setWidth] = useState(200);
-
-        const handleResize = (e: React.SyntheticEvent<Element, Event>, data: ResizeCallbackData) => {
-            setWidth(data.size.width);
-        };
         // const handleResize = (event, { element, size }) => {
         //     setWidth(size.width);
         // };
@@ -70,7 +65,7 @@ const CoordinatorView = () => {
                         <FaX />
                     </button>
                     <h3 className="mt-20 text-4xl font-semibold text-white">I am a sidebar</h3>
-                    <div style={{ width, border: '1px solid black' }}>
+                    <div className="border-1 border-black">
                         Sidebar content
                     </div>
                 </div>
