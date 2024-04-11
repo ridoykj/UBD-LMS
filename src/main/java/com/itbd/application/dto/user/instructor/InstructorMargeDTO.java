@@ -2,6 +2,7 @@ package com.itbd.application.dto.user.instructor;
 
 import com.itbd.application.constants.enums.BloodGroupsEnum;
 import com.itbd.application.dao.user.InstructorDao;
+import com.itbd.application.dao.user.UserDao;
 import com.itbd.application.dao.user.person.*;
 import jakarta.persistence.Id;
 
@@ -88,6 +89,8 @@ public record InstructorMargeDto(
         MedicalDao medical = person.getMedical();
         OccupationDao occupation = person.getOccupation();
         InstructorDao instructor = person.getInstructor();
+        UserDao user = person.getUser();
+        user.setRoles(null);
         instructor.setReservations(null);
 
         person.setAddress(address);
@@ -96,6 +99,7 @@ public record InstructorMargeDto(
         person.setMedical(medical);
         person.setOccupation(occupation);
         person.setInstructor(instructor);
+        person.setUser(user);
 
         return new InstructorMargeDto(
                 person.getId(),
