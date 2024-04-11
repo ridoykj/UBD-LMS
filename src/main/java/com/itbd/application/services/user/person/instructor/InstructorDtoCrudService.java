@@ -10,7 +10,6 @@ import dev.hilla.Nullable;
 import dev.hilla.crud.CrudService;
 import dev.hilla.crud.JpaFilterConverter;
 import dev.hilla.crud.filter.Filter;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
@@ -21,15 +20,15 @@ import java.util.List;
 @BrowserCallable
 @AnonymousAllowed
 public class InstructorDtoCrudService implements CrudService<InstructorDto, Long> {
-    @Autowired
-    private JpaFilterConverter jpaFilterConverter;
-    @Autowired
-    private InstructorRepo instructorRepo;
-    // public PersonMargeDtoCrudService(BatchRepo personRepo, AddressRepo
-    // addressRepo) {
-    // this.personRepo = personRepo;
-    // this.addressRepo = addressRepo;
-    // }
+    private final JpaFilterConverter jpaFilterConverter;
+
+    private final InstructorRepo instructorRepo;
+
+    public InstructorDtoCrudService(JpaFilterConverter jpaFilterConverter,
+                                    InstructorRepo instructorRepo) {
+        this.jpaFilterConverter = jpaFilterConverter;
+        this.instructorRepo = instructorRepo;
+    }
 
     @Override
     @Nonnull
