@@ -1,8 +1,8 @@
 package com.itbd.application.services.user.person;
 
-import com.itbd.application.dao.user.person.*;
+import com.itbd.application.dao.user.person.PersonDao;
 import com.itbd.application.dto.user.person.PersonMargeDto;
-import com.itbd.application.repos.user.person.*;
+import com.itbd.application.repos.user.person.PersonRepo;
 import com.vaadin.flow.server.auth.AnonymousAllowed;
 import dev.hilla.BrowserCallable;
 import dev.hilla.Nonnull;
@@ -10,7 +10,6 @@ import dev.hilla.Nullable;
 import dev.hilla.crud.CrudService;
 import dev.hilla.crud.JpaFilterConverter;
 import dev.hilla.crud.filter.Filter;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
@@ -22,27 +21,14 @@ import java.util.List;
 @AnonymousAllowed
 public class PersonMargeDtoCrudService implements CrudService<PersonMargeDto, Long> {
 
-    @Autowired
-    private JpaFilterConverter jpaFilterConverter;
+    private final JpaFilterConverter jpaFilterConverter;
 
-    @Autowired
-    private PersonRepo personRepo;
-    @Autowired
-    private AddressRepo addressRepo;
-    @Autowired
-    private ContactRepo contactRepo;
-    @Autowired
-    private DocumentRecordsRepo documentRecordsRepo;
-    @Autowired
-    private MedicalRepo medicalRepo;
-    @Autowired
-    private OccupationRepo occupationRepo;
+    private final PersonRepo personRepo;
 
-    // public PersonMargeDtoCrudService(PersonRepo personRepo, AddressRepo
-    // addressRepo) {
-    // this.personRepo = personRepo;
-    // this.addressRepo = addressRepo;
-    // }
+    public PersonMargeDtoCrudService(JpaFilterConverter jpaFilterConverter, PersonRepo personRepo) {
+        this.jpaFilterConverter = jpaFilterConverter;
+        this.personRepo = personRepo;
+    }
 
     @Override
     @Nonnull
@@ -53,14 +39,7 @@ public class PersonMargeDtoCrudService implements CrudService<PersonMargeDto, Lo
                 ? jpaFilterConverter.toSpec(filter, PersonDao.class)
                 : Specification.anyOf();
         Page<PersonDao> persons = personRepo.findAll(spec, pageable);
-        return persons.stream().map(person -> {
-            person.setAddress(addressRepo.findByPerson(person).orElse(new AddressDao()));
-            person.setContact(contactRepo.findByPerson(person).orElse(new ContactDao()));
-            person.setRecord(documentRecordsRepo.findByPerson(person).orElse(new DocumentRecordsDao()));
-            person.setMedical(medicalRepo.findByPerson(person).orElse(new MedicalDao()));
-            person.setOccupation(occupationRepo.findByPerson(person).orElse(new OccupationDao()));
-            return PersonMargeDto.fromEntity(person);
-        }).toList();
+        return persons.stream().map(PersonMargeDto::fromEntity).toList();
     }
 
     @Override
