@@ -16,17 +16,17 @@ import BuildingView from './views/org/place/BuildingView';
 import FloorView from './views/org/place/FloorView';
 import RoomView from './views/org/place/RoomView';
 import SectorView from './views/org/place/SectorView';
-import AuthorizationView from './views/org/user/AuthorizationView';
+import AuthorizationView from './views/permission/authorization/AuthorizationView';
 import CoordinatorView from './views/org/user/Coordinator/CoordinatorView';
 import StudentView from './views/org/user/StudentView';
 import TimeTableView from './views/org/timesheet/class_sheet/TimeTableView';
 import ProfileView from './views/profile/ProfileView';
 import ShopView from './views/shop/ShopView';
-import UserView from './views/users/UserView';
 import BatchCourseView from './views/org/allocation/BatchCourseView';
 import HomeView from './views/home/HomeView';
 import RoleView from './views/permission/role/RoleView';
 import ResourcesView from './views/permission/resource/ResourceView';
+import UserView from './views/org/user/users/UserView';
 
 const AboutView = lazy(async () => import('Frontend/views/about/AboutView.js'));
 
@@ -65,15 +65,16 @@ export const routes: RouteObject[] = [
 
       { path: 'time_sheet/class', element: <TimeTableView />, handle: { title: 'Time Sheet' } },
 
-      { path: 'user/authorization', element: <AuthorizationView />, handle: { title: 'Authorization' } },
+      { path: 'user/users', element: <UserView />, handle: { title: 'Users' } },
       { path: 'user/coordinators', element: <CoordinatorView />, handle: { title: 'Coordinator' } },
       { path: 'user/students', element: <StudentView />, handle: { title: 'Student' } },
 
       { path: 'permission/roles', element: <RoleView />, handle: { title: 'Roles' } },
       { path: 'permission/resources', element: <ResourcesView />, handle: { title: 'Resources' } },
+      { path: 'permission/authorization', element: <AuthorizationView />, handle: { title: 'Authorization' } },
 
-      { path: 'users', element: <UserView />, handle: { title: 'Users' } },
-      { path: 'profiles', element: <ProfileView />, handle: { title: 'profiles' } },
+      // { path: 'users', element: <UserView />, handle: { title: 'Users' } },
+      // { path: 'profiles', element: <ProfileView />, handle: { title: 'profiles' } },
     ],
   },
 ];
