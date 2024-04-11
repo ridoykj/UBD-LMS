@@ -40,11 +40,6 @@ export default function MainLayout() {
                 { name: 'Floor', icon: <FaBarsStaggered />, route: 'place/floor' },
                 { name: 'Room', icon: <FaDoorOpen />, route: 'place/room' }
               ]} />
-              <RNavItemRC name='User' icon={<FaUser />} route='' subItems={[
-                { name: 'Coordinator', icon: <FaUserTie />, route: 'user/coordinators' },
-                { name: 'Student', icon: <FaUserGraduate />, route: 'user/students' },
-                { name: 'Authorization', icon: <FaKey />, route: 'user/authorization' }
-              ]} />
               <RNavItemRC name='Allocation' icon={<FaBezierCurve />} route='' subItems={[
                 { name: 'Batch-Course', icon: <FaCodeCompare />, route: 'allocation/batch_course' },
                 // { name: 'Course-Coordinator', icon: <FaCodeCompare />, route: '/default' },
@@ -54,9 +49,15 @@ export default function MainLayout() {
                 { name: 'Examination', icon: <FaCalendarDay />, route: 'default' },
                 { name: 'Attendance', icon: <FaCalendarDay />, route: 'default' },
               ]} />
+              <RNavItemRC name='User' icon={<FaUser />} route='' subItems={[                
+                { name: 'Users', icon: <FaKey />, route: 'user/users' },
+                { name: 'Coordinator', icon: <FaUserTie />, route: 'user/coordinators' },
+                { name: 'Student', icon: <FaUserGraduate />, route: 'user/students' },
+              ]} />
               <RNavItemRC name='Permission' icon={<FaLock />} route='' subItems={[
-                { name: 'Role', icon: <FaUserShield />, route: 'permission/roles' },
                 { name: 'Resources', icon: <FaFileShield />, route: 'permission/resources' },
+                { name: 'Role', icon: <FaUserShield />, route: 'permission/roles' },
+                { name: 'Authorization', icon: <FaKey />, route: 'permission/authorization' }
               ]} />
               {/* <RNavItemRC name='Report' icon={<FaClipboard />} route='' subItems={[
                 { name: 'Result', icon: <FaReceipt />, route: '/default' },
