@@ -1,11 +1,10 @@
 package com.itbd.application.dto.user.person;
 
-import com.itbd.application.constants.enums.GenderEnum;
+import com.itbd.application.constants.enums.BloodGroupsEnum;
 import com.itbd.application.dao.user.person.*;
 import jakarta.persistence.Id;
 import org.springframework.data.annotation.Version;
 
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
@@ -29,34 +28,12 @@ public record PersonMargeDto(
         String sponsor,
         String description,
 
-        // TODO: from AddressDTO
-        String birthPlace,
-        String deathPlace,
-        String homeLocation,
-        String presentAddress,
-        String permanentAddress,
-
-        // TODO: from ContactDTO
-        String email,
-        String mobile,
-        String telephone,
-        String faxNumber,
-
-        // TODO: from DocumentRecordsDTO
-        String records,
-        String educationRecords,
-        String nationalRecords,
-        String medicalRecords,
-        String rewardRecords,
-
-        // TODO: from MedicalDTO
-        BigDecimal weight,
-        BigDecimal height,
-        Long children,
-        GenderEnum gender,
-
-        // TODO: from OccupationDTO
-        String occupationRecords) {
+        AddressDao address,
+        ContactDao contact,
+        DocumentRecordsDao record,
+        MedicalDao medical,
+        OccupationDao occupation
+) {
 
     public static void fromDTO(PersonMargeDto value, PersonDao person) {
         person.setId(value.id());
@@ -84,33 +61,10 @@ public record PersonMargeDto(
         MedicalDao medical = Optional.ofNullable(person.getMedical()).orElse(new MedicalDao());
         OccupationDao occupation = Optional.ofNullable(person.getOccupation()).orElse(new OccupationDao());
 
-        address.setBirthPlace(value.birthPlace());
-        address.setDeathPlace(value.deathPlace());
-        address.setHomeLocation(value.homeLocation());
-        address.setPresentAddress(value.presentAddress());
-        address.setPermanentAddress(value.permanentAddress());
         address.setPerson(person);
-
-        contact.setEmail(value.email());
-        contact.setMobile(value.mobile());
-        contact.setTelephone(value.telephone());
-        contact.setFaxNumber(value.faxNumber());
         contact.setPerson(person);
-
-        documentRecords.setRecords(value.records());
-        documentRecords.setEducationRecords(value.educationRecords());
-        documentRecords.setNationalRecords(value.nationalRecords());
-        documentRecords.setMedicalRecords(value.medicalRecords());
-        documentRecords.setEmploymentRecords(value.rewardRecords());
         documentRecords.setPerson(person);
-
-        medical.setWeight(value.weight());
-        medical.setHeight(value.height());
-        medical.setChildren(value.children());
-        medical.setGender(value.gender());
         medical.setPerson(person);
-
-        occupation.setRecords(value.occupationRecords());
         occupation.setPerson(person);
 
         person.setAddress(address);
@@ -121,12 +75,21 @@ public record PersonMargeDto(
     }
 
     public static PersonMargeDto fromEntity(PersonDao person) {
-        AddressDao address = Optional.ofNullable(person.getAddress()).orElse(new AddressDao());
-        ContactDao contact = Optional.ofNullable(person.getContact()).orElse(new ContactDao());
+        AddressDao address = person.getAddress();
+        ContactDao contact = person.getContact();
+        DocumentRecordsDao record = person.getRecord();
+        MedicalDao medical = person.getMedical();
+        OccupationDao occupation = person.getOccupation();
         DocumentRecordsDao documentRecords = Optional.ofNullable(person.getRecord())
                 .orElse(new DocumentRecordsDao());
-        MedicalDao medical = Optional.ofNullable(person.getMedical()).orElse(new MedicalDao());
-        OccupationDao occupation = Optional.ofNullable(person.getOccupation()).orElse(new OccupationDao());
+
+        person.setAddress(address);
+        person.setContact(contact);
+        person.setRecord(record);
+        person.setMedical(medical);
+        person.setOccupation(occupation);
+        person.setRecord(documentRecords);
+
 
         return new PersonMargeDto(
                 person.getId(),
@@ -147,28 +110,11 @@ public record PersonMargeDto(
                 person.getSponsor(),
                 person.getDescription(),
 
-                address.getBirthPlace(),
-                address.getDeathPlace(),
-                address.getHomeLocation(),
-                address.getPresentAddress(),
-                address.getPermanentAddress(),
-
-                contact.getEmail(),
-                contact.getMobile(),
-                contact.getTelephone(),
-                contact.getFaxNumber(),
-
-                documentRecords.getRecords(),
-                documentRecords.getEducationRecords(),
-                documentRecords.getNationalRecords(),
-                documentRecords.getMedicalRecords(),
-                documentRecords.getEmploymentRecords(),
-
-                medical.getWeight(),
-                medical.getHeight(),
-                medical.getChildren(),
-                medical.getGender(),
-
-                occupation.getRecords());
+                address,
+                contact,
+                record,
+                medical,
+                occupation
+        );
     }
 }
