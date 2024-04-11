@@ -34,7 +34,7 @@ public class RolesDao extends AbstractEntity<Long> {
     private String description;
 
     @ManyToMany
-    @JoinTable(name = "t_map_user_roles", joinColumns = @JoinColumn(name = "role_id"), inverseJoinColumns = @JoinColumn(name = "user_id"))
+    @JoinTable(name = "t_map_user_roles", joinColumns = @JoinColumn(name = "id_roles_key"), inverseJoinColumns = @JoinColumn(name = "id_user_key"))
     private Set<UserDao> users = new HashSet<>();
 
     @OneToMany(mappedBy = "role", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
