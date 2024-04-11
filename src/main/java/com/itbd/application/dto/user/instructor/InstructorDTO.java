@@ -1,6 +1,7 @@
 package com.itbd.application.dto.user.instructor;
 
 import com.itbd.application.dao.user.InstructorDao;
+import com.itbd.application.dao.user.UserDao;
 import com.itbd.application.dao.user.person.*;
 import jakarta.persistence.Id;
 import org.springframework.data.annotation.Version;
@@ -31,12 +32,14 @@ public record InstructorDto(
         DocumentRecordsDao documentRecords = person.getRecord() != null ? person.getRecord() : new DocumentRecordsDao();
         MedicalDao medical = person.getMedical() != null ? person.getMedical() : new MedicalDao();
         OccupationDao occupation = person.getOccupation() != null ? person.getOccupation() : new OccupationDao();
+        UserDao user = person.getUser() != null ? person.getUser() : new UserDao();
 
         address.setPerson(person);
         contact.setPerson(person);
         documentRecords.setPerson(person);
         medical.setPerson(person);
         occupation.setPerson(person);
+        user.setPerson(person);
         person.setAddress(address);
         person.setContact(contact);
         person.setRecord(documentRecords);
@@ -61,6 +64,7 @@ public record InstructorDto(
         person.setMedical(medical);
         person.setOccupation(occupation);
         person.setInstructor(null);
+        person.setUser(null);
 
         instructor.setPerson(person);
         instructor.setReservations(null);
