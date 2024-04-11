@@ -21,16 +21,16 @@ public class Users {
 
     public record User(int id, String firstName, String lastName, String email, String profession) {
         public User {
-            if (firstName == null || firstName.isBlank()) {
+            if (firstName.isBlank()) {
                 throw new IllegalArgumentException("First name cannot be blank");
             }
-            if (lastName == null || lastName.isBlank()) {
+            if (lastName.isBlank()) {
                 throw new IllegalArgumentException("Last name cannot be blank");
             }
-            if (email == null || email.isBlank()) {
+            if (email.isBlank()) {
                 throw new IllegalArgumentException("Email cannot be blank");
             }
-            if (profession == null || profession.isBlank()) {
+            if (profession.isBlank()) {
                 throw new IllegalArgumentException("Profession cannot be blank");
             }
         }
