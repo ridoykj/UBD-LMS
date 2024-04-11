@@ -12,7 +12,7 @@ import lombok.Setter;
 import java.util.HashSet;
 import java.util.Set;
 
-@Entity(name = "t_user")
+@Entity(name = "t_app_user")
 @Getter
 @Setter
 public class UserDao extends AbstractEntity<Long> {
@@ -54,6 +54,6 @@ public class UserDao extends AbstractEntity<Long> {
     private PersonDao person;
 
     @ManyToMany
-    @JoinTable(name = "t_map_user_roles", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
+    @JoinTable(name = "t_map_user_roles", joinColumns = @JoinColumn(name = "id_user_key"), inverseJoinColumns = @JoinColumn(name = "id_roles_key"))
     private Set<RolesDao> roles = new HashSet<>();
 }
