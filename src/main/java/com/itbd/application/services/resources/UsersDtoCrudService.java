@@ -1,8 +1,8 @@
-package com.itbd.application.services.user.person;
+package com.itbd.application.services.resources;
 
-import com.itbd.application.dao.user.person.PersonDao;
-import com.itbd.application.dto.user.person.PersonMargeDto;
-import com.itbd.application.repos.user.person.PersonRepo;
+import com.itbd.application.dao.user.UserDao;
+import com.itbd.application.dto.user.UserDto;
+import com.itbd.application.repos.user.UserRepo;
 import com.vaadin.flow.server.auth.AnonymousAllowed;
 import dev.hilla.BrowserCallable;
 import dev.hilla.Nonnull;
@@ -19,43 +19,43 @@ import java.util.List;
 
 @BrowserCallable
 @AnonymousAllowed
-public class PersonMargeDtoCrudService implements CrudService<PersonMargeDto, Long> {
+public class UsersDtoCrudService implements CrudService<UserDto, Long> {
 
     private final JpaFilterConverter jpaFilterConverter;
 
-    private final PersonRepo personRepo;
+    private final UserRepo userRepo;
 
-    public PersonMargeDtoCrudService(JpaFilterConverter jpaFilterConverter, PersonRepo personRepo) {
+    public UsersDtoCrudService(JpaFilterConverter jpaFilterConverter, UserRepo userRepo) {
         this.jpaFilterConverter = jpaFilterConverter;
-        this.personRepo = personRepo;
+        this.userRepo = userRepo;
     }
 
     @Override
     @Nonnull
-    public List<@Nonnull PersonMargeDto> list(Pageable pageable, @Nullable Filter filter) {
+    public List<@Nonnull UserDto> list(Pageable pageable, @Nullable Filter filter) {
         // Basic list implementation that only covers pagination,
         // but not sorting or filtering
-        Specification<PersonDao> spec = filter != null
-                ? jpaFilterConverter.toSpec(filter, PersonDao.class)
+        Specification<UserDao> spec = filter != null
+                ? jpaFilterConverter.toSpec(filter, UserDao.class)
                 : Specification.anyOf();
-        Page<PersonDao> persons = personRepo.findAll(spec, pageable);
-        return persons.stream().map(PersonMargeDto::fromEntity).toList();
+        Page<UserDao> persons = userRepo.findAll(spec, pageable);
+        return persons.stream().map(UserDto::fromEntity).toList();
     }
 
     @Override
     @Transactional
-    public @Nullable PersonMargeDto save(PersonMargeDto value) {
+    public @Nullable UserDto save(UserDto value) {
         boolean check = value.id() != null && value.id() > 0;
-        PersonDao person = check
-                ? personRepo.getReferenceById(value.id())
-                : new PersonDao();
+        UserDao person = check
+                ? userRepo.getReferenceById(value.id())
+                : new UserDao();
 
-        PersonMargeDto.fromDTO(value, person);
-        return PersonMargeDto.fromEntity(personRepo.save(person));
+        UserDto.fromDTO(value, person);
+        return UserDto.fromEntity(userRepo.save(person));
     }
 
     @Override
     public void delete(Long id) {
-        personRepo.deleteById(id);
+        userRepo.deleteById(id);
     }
 }
